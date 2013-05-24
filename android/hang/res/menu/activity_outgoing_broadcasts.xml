@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_edit_outgoing_broadcasts"
+        android:icon="@drawable/ic_action_edit"
+        android:onClick="toggleDeleteButtons"
+        android:showAsAction="always"
+        android:title="@string/edit"/>
+    <item
+        android:id="@+id/menu_add_outgoing_broadcast"
+        android:icon="@drawable/ic_action_add"
+        android:onClick="addNewOutgoingBroadcasts"
+        android:showAsAction="always"
+        android:title="@string/add"/>
+
+</menu>

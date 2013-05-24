@@ -1,0 +1,63 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="687" measuredH="540" mockupW="282" mockupH="510">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::iPhone" x="405" y="30" w="-1" h="-1" measuredW="282" measuredH="510" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="432" y="129" w="227" h="38" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>10066329</borderColor>
+        <color>14001853</color>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Icon" x="623" y="132" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>profile%26bm%3Bprofile.bmml%26bm%3Bprofile.bmml%26bm%3Bprofile.bmml</href>
+        <icon>ContactIcon%7Cmedium</icon>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22218%2C102%2C250%2C134%22%20href%3D%22profile.bmml%22%20alt%3D%22profile%22%20id%3D%222%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="477" y="138" w="-1" h="-1" measuredW="39" measuredH="24" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>hang</text>
+      </controlProperties>
+    </control>
+    <control controlID="4" controlTypeID="com.balsamiq.mockups::Image" x="440" y="133" w="30" h="30" measuredW="512" measuredH="512" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <src>./assets/ic_launcher-web.png</src>
+      </controlProperties>
+    </control>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::ButtonBar" x="432" y="166" w="228" h="29" measuredW="215" measuredH="29" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <hrefs>home_friends%26bm%3Bhome_friends.bmml%26bm%3Bhome_friends.bmml%26bm%3Bhome_friends.bmml%2C%2Chome_proposal%26bm%3Bhome_proposal.bmml%26bm%3Bhome_proposal.bmml%26bm%3Bhome_proposal.bmml</hrefs>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2227%2C136%2C102%2C165%22%20href%3D%22home_friends.bmml%22%20alt%3D%22home_friends%22%20id%3D%225_0%22/%3E%0A%3Carea%20shape%3D%22rect%22%20coords%3D%22171%2C136%2C253%2C165%22%20href%3D%22home_proposal.bmml%22%20alt%3D%22home_proposal%22%20id%3D%225_1%22/%3E%0A</map>
+        <selectedIndex>1</selectedIndex>
+        <text>Friends%2C%20Status%2C%20Proposal</text>
+      </controlProperties>
+    </control>
+    <control controlID="12" controlTypeID="com.balsamiq.mockups::Button" x="447" y="424" w="197" h="27" measuredW="54" measuredH="27" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>14001853</color>
+        <state>disabled</state>
+        <text>Done</text>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::ButtonBar" x="483" y="204" w="-1" h="-1" measuredW="127" measuredH="32" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <italic>false</italic>
+        <size>16</size>
+        <text>Free%2C%20Busy</text>
+        <underline>false</underline>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="529" y="235" w="-1" h="-1" measuredW="34" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <text>until%3A</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::iPhonePicker" x="432" y="256" w="-1" h="-1" measuredW="227" measuredH="160" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>8%2C00%0A9%2C01%2C%20AM%0A10%2C02%2C%20PM%0A11%2C03%0A12%2C04</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

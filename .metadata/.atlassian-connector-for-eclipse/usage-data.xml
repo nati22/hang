@@ -1,0 +1,51 @@
+<interactionEvent>
+  <kind>JOB</kind>
+  <date>2012-12-20 10:15:27.636 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.internal.jira.core</pluginId>
+  <eventId>logout</eventId>
+</interactionEvent><interactionEvent>
+  <kind>JOB</kind>
+  <date>2012-12-20 10:15:27.650 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.internal.jira.core</pluginId>
+  <eventId>logout</eventId>
+</interactionEvent><interactionEvent>
+  <kind>PREFERENCE</kind>
+  <date>2012-12-20 13:51:06.493 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.monitor.core</pluginId>
+  <eventId>system info: os-arch</eventId>
+  <details>x86_64</details>
+</interactionEvent><interactionEvent>
+  <kind>PREFERENCE</kind>
+  <date>2012-12-20 13:51:06.506 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.monitor.core</pluginId>
+  <eventId>system info: os</eventId>
+  <details>macosx</details>
+</interactionEvent><interactionEvent>
+  <kind>PREFERENCE</kind>
+  <date>2012-12-20 13:51:06.508 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.monitor.core</pluginId>
+  <eventId>system info: org.eclipse.core.runtime</eventId>
+  <details>3.8.0.v20120521-2346</details>
+</interactionEvent><interactionEvent>
+  <kind>PREFERENCE</kind>
+  <date>2012-12-20 13:51:06.509 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.monitor.core</pluginId>
+  <eventId>system info: connector-version</eventId>
+  <details>3.0.6.v20120628</details>
+</interactionEvent><interactionEvent>
+  <kind>PREFERENCE</kind>
+  <date>2012-12-20 13:51:06.509 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.monitor.core</pluginId>
+  <eventId>system info: plugins</eventId>
+  <details>{monitor.core=3.0.6.v20120628, commons.core=3.0.6.v20120628, commons.ui=3.0.6.v20120628, monitor.ui=3.0.6.v20120628, jira.ui=3.0.6.v20120628, branding.ui=3.0.6.v20120628, jira.core=3.0.6.v20120628}</details>
+</interactionEvent><interactionEvent>
+  <kind>JOB</kind>
+  <date>2012-12-20 13:56:23.348 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.internal.jira.core</pluginId>
+  <eventId>logout</eventId>
+</interactionEvent><interactionEvent>
+  <kind>JOB</kind>
+  <date>2012-12-20 13:56:23.356 PST</date>
+  <pluginId>com.atlassian.connector.eclipse.internal.jira.core</pluginId>
+  <eventId>logout</eventId>
+</interactionEvent>

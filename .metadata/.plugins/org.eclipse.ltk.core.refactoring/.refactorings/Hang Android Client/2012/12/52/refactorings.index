@@ -1,0 +1,39 @@
+1356732630668	Delete element
+1356732910267	Move compilation unit
+1356733391867	Delete element
+1356734683723	Rename package 'com.kikitapp'
+1356734692296	Move compilation units
+1356734804970	Rename type 'Constants'
+1356734934140	Rename type 'Strings'
+1356734940908	Rename field 'KEY_USER_PHONE_NUMBER'
+1356735136827	Rename method 'startRegisterConfirmationActivity'
+1356737638964	Delete element
+1356738286480	Move compilation unit
+1356739243077	Delete element
+1356740611885	Rename type 'RegistrationDetailsActivity'
+1356740632155	Rename resource 'activity_registration_details.xml'
+1356740853841	Move compilation unit
+1356763489996	Move compilation unit
+1356763524721	Move compilation unit
+1356763529517	Delete elements
+1356765117305	Rename package 'com.kickitapp.model'
+1356765122253	Rename package 'com.kikitapp.activity'
+1356767330583	Delete element
+1356768596615	Move compilation unit
+1356768664099	Rename package 'com.kikitapp.network'
+1356768667913	Rename package 'com.kikitapp.util'
+1356768676529	Rename package 'com.kickitapp.android.model'
+1356768688723	Delete element
+1356768710479	Delete element
+1356768727035	Move compilation unit
+1356770316222	Delete element
+1356774154042	Move compilation unit
+1356774158042	Delete element
+1356774208383	Delete element
+1356774670960	Delete element
+1356774678734	Delete element
+1356775226957	Move compilation units
+1356775440032	Rename resource 'create_proposal_later.xml'
+1356775444782	Rename resource 'create_proposal_now.xml'
+1356775973833	Move compilation unit
+1356775991255	Delete element

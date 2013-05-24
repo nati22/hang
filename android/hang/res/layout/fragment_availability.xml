@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/setAvailabilityView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/your_proposal_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/my_current_availability"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/separatorTitleFromProfile"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/your_proposal_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray" />
+
+    <View
+        android:id="@+id/separatorProfileFromBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profilePictureViewMyicon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray" />
+
+    <View
+        android:id="@+id/separator01"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profilePictureView1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray" />
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/imageView2"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/imageView1"
+        android:layout_toRightOf="@+id/imageView1"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" />
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/imageView1"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/textView1"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" />
+
+    <Button
+        android:id="@+id/Button03"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Button02"
+        android:layout_below="@+id/textViewFriendName"
+        android:layout_toRightOf="@+id/Button02"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/Button04"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/separatorProfileFromBottom"
+        android:layout_alignTop="@+id/Button03"
+        android:layout_toRightOf="@+id/Button03"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureViewMyicon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/separatorTitleFromProfile"
+        android:layout_marginTop="5dp"
+        android:contentDescription="User Icon"
+        android:src="@drawable/ic_action_profile_icon" >
+    </com.facebook.widget.ProfilePictureView>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/your_proposal_title"
+        android:layout_below="@+id/separatorProfileFromBottom"
+        android:layout_marginTop="15dp"
+        android:text="Nudged me:" />
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureView1"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_toRightOf="@+id/imageView1"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" >
+    </com.facebook.widget.ProfilePictureView>
+
+    <Button
+        android:id="@+id/Button01"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Button04"
+        android:layout_below="@+id/textViewFriendName"
+        android:layout_toRightOf="@+id/Button04"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/imageView3"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_toLeftOf="@+id/imageView2"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" >
+    </com.facebook.widget.ProfilePictureView>
+
+    <TextView
+        android:id="@+id/textViewFriendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profilePictureViewMyicon"
+        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@+id/profilePictureViewMyicon"
+        android:text="User Name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/Button02"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/separatorProfileFromBottom"
+        android:layout_alignLeft="@+id/textViewFriendName"
+        android:layout_below="@+id/textViewFriendName"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/separator01"
+        android:layout_below="@+id/separatorProfileFromBottom"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/Button05"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Button01"
+        android:layout_below="@+id/textViewFriendName"
+        android:layout_toRightOf="@+id/Button01"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/buttonUpdateMyAvailability"
+        style="@style/ButtonAppTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/imageView2"
+        android:layout_toRightOf="@+id/view1"
+        android:text="@string/update_my_availability"
+        android:textSize="13sp" />
+
+</RelativeLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureViewMyIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:contentDescription="User Icon"
+        android:src="@drawable/ic_action_profile_icon" />
+
+    <TextView
+        android:id="@+id/textViewMyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/profilePictureViewMyIcon"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/profilePictureViewMyIcon"
+        android:text="User Name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/textViewMyStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewMyName"
+        android:layout_below="@+id/textViewMyName"
+        android:text="Unknown Status"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@android:color/darker_gray" />
+
+    <View
+        android:id="@+id/separatorMyStatusFromButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/profilePictureViewMyIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:background="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/buttonOutgoingBroadcasts"
+        style="@style/ButtonAppTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:layout_below="@+id/separatorMyStatusFromButtons"
+        android:background="@android:color/transparent"
+        android:onClick="startOutgoingBroadcastsActivity"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="0 Outgoing Broadcasts"
+        android:textSize="13sp" />
+
+    <View
+        android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
+        android:layout_alignTop="@+id/buttonIncomingBroadcasts"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/darker_gray" />
+
+    <Button
+        android:id="@+id/buttonIncomingBroadcasts"
+        style="@style/ButtonAppTheme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
+        android:layout_alignLeft="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:onClick="startIncomingBroadcastsActivity"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="0 Incoming Broadcasts"
+        android:textSize="13sp" />
+
+    <View
+        android:id="@+id/separatorButtonsFromBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_below="@+id/buttonIncomingBroadcasts"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:background="@android:color/darker_gray" />
+
+    <com.facebook.widget.LoginButton
+        android:id="@+id/facebookLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
+
+</RelativeLayout>

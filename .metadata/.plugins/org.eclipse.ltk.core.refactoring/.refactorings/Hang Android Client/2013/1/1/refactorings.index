@@ -1,0 +1,18 @@
+1357190593736	Delete element
+1357190643871	Rename resource 'activity_create_proposal.xml'
+1357190657372	Rename resource 'OLD_activity_create_proposal.xml'
+1357192182596	Rename type 'GAETasks'
+1357192193388	Rename type 'DBTasks'
+1357192202424	Rename type 'DBAsyncTasks'
+1357192211662	Rename type 'XMPPTasks'
+1357192304783	Delete element
+1357192432392	Rename type 'XMPPAsyncTasks'
+1357193603081	Delete element
+1357194486375	Move compilation unit
+1357194685458	Delete element
+1357196118743	Move compilation unit
+1357196154697	Rename type 'NetworkUtils'
+1357312377687	Rename type 'DatabaseAsyncTasks'
+1357312852723	Rename type 'NetworkCheck'
+1357348258685	Rename type 'IncomingBroadcasts'
+1357361028419	Rename type 'NetworkTools'

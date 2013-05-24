@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureViewMyicon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="User Icon"
+        android:src="@drawable/ic_action_profile_icon" />
+
+    <TextView
+        android:id="@+id/textViewFriendName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="3dp"
+        android:layout_toRightOf="@+id/profilePictureViewMyicon"
+        android:text="User Name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="18sp" />
+
+    <View
+        android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/buttonFriendProposal"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_action_proposal"
+        android:contentDescription="@string/proposal"
+        android:focusable="false"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/Button01"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonStatus1"
+        android:layout_below="@+id/textViewFriendName"
+        android:layout_toRightOf="@+id/buttonStatus1"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/Button02"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Button01"
+        android:layout_alignTop="@+id/Button01"
+        android:layout_toRightOf="@+id/Button01"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/Button03"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/Button02"
+        android:layout_alignTop="@+id/Button02"
+        android:layout_toRightOf="@+id/Button02"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+    <Button
+        android:id="@+id/buttonStatus1"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/profilePictureViewMyicon"
+        android:layout_alignLeft="@+id/textViewFriendName"
+        android:layout_below="@+id/textViewFriendName"
+        android:background="@drawable/green_button"
+        android:clickable="false"
+        android:focusable="false"
+        android:text="3 PM"
+        android:textSize="12sp" />
+
+</RelativeLayout>

@@ -1,0 +1,1 @@
+python ../server/google-appengine-sdk/appcfg.py rollback ../server/hang/

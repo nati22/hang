@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/menu_manage_broadcasts"
+        android:icon="@drawable/broadcast_white_black"
+        android:showAsAction="always|withText"
+        android:title="@string/manage_broadcasts"/>
+    <item
+        android:id="@+id/menu_settings"
+        android:icon="@drawable/monotone_cog_settings_gear"
+        android:showAsAction="always|withText"
+        android:title="@string/menu_settings"/>
+
+</menu>

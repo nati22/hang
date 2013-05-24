@@ -1,0 +1,246 @@
+21:50:02 **** Build of configuration Debug for project Milestone 1 ****
+make all 
+Building file: ../src/Board.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Board.d" -MT"src/Board.d" -o "src/Board.o" "../src/Board.cpp"
+In file included from ../src/Board.cpp:8:
+../src/Board.h:9: warning: ignoring #pragma warning 
+Finished building: ../src/Board.cpp
+ 
+Building file: ../src/BoardTest.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/BoardTest.d" -MT"src/BoardTest.d" -o "src/BoardTest.o" "../src/BoardTest.cpp"
+In file included from ../src/BoardTest.cpp:5:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+In file included from ../src/BoardTest.cpp:6:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/BoardTest.cpp:5:
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+Finished building: ../src/BoardTest.cpp
+ 
+Building file: ../src/CheckersBoard.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/CheckersBoard.d" -MT"src/CheckersBoard.d" -o "src/CheckersBoard.o" "../src/CheckersBoard.cpp"
+In file included from ../src/CheckersBoard.h:2,
+                 from ../src/CheckersBoard.cpp:1:
+../src/board.h:9: warning: ignoring #pragma warning 
+Finished building: ../src/CheckersBoard.cpp
+ 
+Building file: ../src/CheckersDlg.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/CheckersDlg.d" -MT"src/CheckersDlg.d" -o "src/CheckersDlg.o" "../src/CheckersDlg.cpp"
+Finished building: ../src/CheckersDlg.cpp
+ 
+Building file: ../src/CheckersMove.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/CheckersMove.d" -MT"src/CheckersMove.d" -o "src/CheckersMove.o" "../src/CheckersMove.cpp"
+In file included from ../src/CheckersMove.h:2,
+                 from ../src/CheckersMove.cpp:1:
+../src/Board.h:9: warning: ignoring #pragma warning 
+Finished building: ../src/CheckersMove.cpp
+ 
+Building file: ../src/CheckersView.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/CheckersView.d" -MT"src/CheckersView.d" -o "src/CheckersView.o" "../src/CheckersView.cpp"
+In file included from ../src/view.h:5,
+                 from ../src/CheckersView.h:2,
+                 from ../src/CheckersView.cpp:1:
+../src/Board.h:9: warning: ignoring #pragma warning 
+Finished building: ../src/CheckersView.cpp
+ 
+Building file: ../src/Class.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Class.d" -MT"src/Class.d" -o "src/Class.o" "../src/Class.cpp"
+Finished building: ../src/Class.cpp
+ 
+Building file: ../src/Dialog.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/Dialog.d" -MT"src/Dialog.d" -o "src/Dialog.o" "../src/Dialog.cpp"
+Finished building: ../src/Dialog.cpp
+ 
+Building file: ../src/OthelloBoard.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/OthelloBoard.d" -MT"src/OthelloBoard.d" -o "src/OthelloBoard.o" "../src/OthelloBoard.cpp"
+In file included from ../src/View.h:5,
+                 from ../src/OthelloView.h:4,
+                 from ../src/OthelloBoard.cpp:4:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/OthelloBoard.h:6,
+                 from ../src/OthelloBoard.cpp:5:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+../src/OthelloBoard.cpp: In member function 'virtual void OthelloBoard::ApplyMove(Board::Move*)':
+../src/OthelloBoard.cpp:82: warning: array subscript has type 'char'
+../src/OthelloBoard.cpp:82: warning: array subscript has type 'char'
+../src/OthelloBoard.cpp:85: warning: array subscript has type 'char'
+../src/OthelloBoard.cpp:85: warning: array subscript has type 'char'
+../src/OthelloBoard.cpp:86: warning: array subscript has type 'char'
+../src/OthelloBoard.cpp:86: warning: array subscript has type 'char'
+../src/BasicKey.h: At global scope:
+../src/BasicKey.h: In instantiation of 'Class BasicKey<5u>::mClass':
+../src/BasicKey.h:28:   instantiated from 'const Class* BasicKey<X>::GetClass() const [with unsigned int X = 5u]'
+../src/OthelloBoard.cpp:347:   instantiated from here
+../src/BasicKey.h:49: warning: deprecated conversion from string constant to 'char*'
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: control reaches end of non-void function
+Finished building: ../src/OthelloBoard.cpp
+ 
+Building file: ../src/OthelloDlg.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/OthelloDlg.d" -MT"src/OthelloDlg.d" -o "src/OthelloDlg.o" "../src/OthelloDlg.cpp"
+In file included from ../src/OthelloBoard.h:6,
+                 from ../src/OthelloDlg.cpp:2:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+In file included from ../src/OthelloBoard.h:7,
+                 from ../src/OthelloDlg.cpp:2:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/OthelloBoard.h:6,
+                 from ../src/OthelloDlg.cpp:2:
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+Finished building: ../src/OthelloDlg.cpp
+ 
+Building file: ../src/OthelloMove.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/OthelloMove.d" -MT"src/OthelloMove.d" -o "src/OthelloMove.o" "../src/OthelloMove.cpp"
+In file included from ../src/OthelloMove.cpp:1:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+In file included from ../src/OthelloBoard.h:7,
+                 from ../src/OthelloMove.h:7,
+                 from ../src/OthelloMove.cpp:2:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/OthelloMove.cpp:1:
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+../src/OthelloMove.cpp: In member function 'virtual OthelloMove::operator std::string() const':
+../src/OthelloMove.cpp:47: warning: deprecated conversion from string constant to 'char*'
+../src/OthelloMove.cpp: In member function 'virtual void OthelloMove::operator=(const std::string&)':
+../src/OthelloMove.cpp:56: warning: comparison is always true due to limited range of data type
+../src/OthelloMove.cpp:61: warning: deprecated conversion from string constant to 'char*'
+../src/OthelloMove.cpp:65: warning: deprecated conversion from string constant to 'char*'
+Finished building: ../src/OthelloMove.cpp
+ 
+Building file: ../src/OthelloView.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/OthelloView.d" -MT"src/OthelloView.d" -o "src/OthelloView.o" "../src/OthelloView.cpp"
+In file included from ../src/View.h:5,
+                 from ../src/OthelloView.h:4,
+                 from ../src/OthelloView.cpp:1:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/OthelloBoard.h:6,
+                 from ../src/OthelloView.cpp:2:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+Finished building: ../src/OthelloView.cpp
+ 
+Building file: ../src/PylosBoard.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/PylosBoard.d" -MT"src/PylosBoard.d" -o "src/PylosBoard.o" "../src/PylosBoard.cpp"
+In file included from ../src/PylosBoard.h:9,
+                 from ../src/PylosDlg.h:6,
+                 from ../src/PylosBoard.cpp:4:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+In file included from ../src/PylosBoard.h:10,
+                 from ../src/PylosDlg.h:6,
+                 from ../src/PylosBoard.cpp:4:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/PylosBoard.h:9,
+                 from ../src/PylosDlg.h:6,
+                 from ../src/PylosBoard.cpp:4:
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+../src/BasicKey.h: At global scope:
+../src/BasicKey.h: In instantiation of 'Class BasicKey<2u>::mClass':
+../src/BasicKey.h:28:   instantiated from 'const Class* BasicKey<X>::GetClass() const [with unsigned int X = 2u]'
+../src/PylosBoard.cpp:723:   instantiated from here
+../src/BasicKey.h:49: warning: deprecated conversion from string constant to 'char*'
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: control reaches end of non-void function
+Finished building: ../src/PylosBoard.cpp
+ 
+Building file: ../src/PylosDlg.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/PylosDlg.d" -MT"src/PylosDlg.d" -o "src/PylosDlg.o" "../src/PylosDlg.cpp"
+In file included from ../src/PylosBoard.h:9,
+                 from ../src/PylosDlg.h:6,
+                 from ../src/PylosDlg.cpp:1:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+In file included from ../src/PylosBoard.h:10,
+                 from ../src/PylosDlg.h:6,
+                 from ../src/PylosDlg.cpp:1:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/PylosBoard.h:9,
+                 from ../src/PylosDlg.h:6,
+                 from ../src/PylosDlg.cpp:1:
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+Finished building: ../src/PylosDlg.cpp
+ 
+Building file: ../src/PylosMove.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/PylosMove.d" -MT"src/PylosMove.d" -o "src/PylosMove.o" "../src/PylosMove.cpp"
+In file included from ../src/PylosMove.cpp:1:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+In file included from ../src/PylosBoard.h:10,
+                 from ../src/PylosMove.h:7,
+                 from ../src/PylosMove.cpp:2:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/PylosMove.cpp:1:
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+../src/PylosMove.cpp: In member function 'virtual PylosMove::operator std::string() const':
+../src/PylosMove.cpp:80: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp:86: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp:91: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp:95: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp: In member function 'virtual void PylosMove::operator=(const std::string&)':
+../src/PylosMove.cpp:156: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp:158: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp:193: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp:195: warning: deprecated conversion from string constant to 'char*'
+../src/PylosMove.cpp:198: warning: deprecated conversion from string constant to 'char*'
+Finished building: ../src/PylosMove.cpp
+ 
+Building file: ../src/PylosView.cpp
+Invoking: GCC C++ Compiler
+g++ -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/PylosView.d" -MT"src/PylosView.d" -o "src/PylosView.o" "../src/PylosView.cpp"
+In file included from ../src/View.h:5,
+                 from ../src/PylosView.h:11,
+                 from ../src/PylosView.cpp:8:
+../src/Board.h:9: warning: ignoring #pragma warning 
+In file included from ../src/PylosBoard.h:9,
+                 from ../src/PylosView.cpp:9:
+../src/MyLib.h:9: warning: ignoring #pragma warning 
+../src/MyLib.h: In function 'int EndianXfer(int)':
+../src/MyLib.h:88: warning: no return statement in function returning non-void
+../src/MyLib.h: In function 'uint EndianXfer(uint)':
+../src/MyLib.h:89: warning: no return statement in function returning non-void
+Finished building: ../src/PylosView.cpp
+ 
+Building target: Milestone 1
+Invoking: MacOS X C++ Linker
+g++  -o "Milestone 1"  ./src/Board.o ./src/BoardTest.o ./src/CheckersBoard.o ./src/CheckersDlg.o ./src/CheckersMove.o ./src/CheckersView.o ./src/Class.o ./src/Dialog.o ./src/OthelloBoard.o ./src/OthelloDlg.o ./src/OthelloMove.o ./src/OthelloView.o ./src/PylosBoard.o ./src/PylosDlg.o ./src/PylosMove.o ./src/PylosView.o   
+Finished building target: Milestone 1
+ 
+
+21:50:07 Build Finished (took 4s.786ms)
+

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/description_label"
+        style="@style/TextAppearance.Sherlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/pressed_hang"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp"
+        android:text="@string/description"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:textStyle="italic|bold" />
+
+    <EditText
+        android:id="@+id/textViewDescription"
+        style="@style/EditTextAppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/description_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:hint="@string/description_hint"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/location_label"
+        style="@style/TextAppearance.Sherlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewDescription"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/pressed_hang"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp"
+        android:text="@string/location"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:textStyle="italic|bold" />
+
+    <EditText
+        android:id="@+id/textViewLocation"
+        style="@style/EditTextAppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/location_label"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="5dp"
+        android:hint="@string/location_hint"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/start_time_label"
+        style="@style/TextAppearance.Sherlock"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/textViewLocation"
+        android:layout_below="@id/textViewLocation"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/pressed_hang"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="2dp"
+        android:text="@string/start_time"
+        android:textColor="@android:color/black"
+        android:textSize="14sp"
+        android:textStyle="italic|bold" />
+
+    <TimePicker
+        android:id="@+id/start_time_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/start_time_label"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp" />
+
+    <Button
+        android:id="@+id/buttonCreateProposal"
+        style="@style/ButtonAppTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/start_time_picker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/create_new_proposal" />
+
+</RelativeLayout>

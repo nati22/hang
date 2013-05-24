@@ -1,0 +1,83 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="646" measuredH="553" mockupW="282" mockupH="510">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::iPhone" x="364" y="43" w="-1" h="-1" measuredW="282" measuredH="510" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="5" controlTypeID="com.balsamiq.mockups::Button" x="509" y="249" w="104" h="44" measuredW="89" measuredH="36" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>14001853</color>
+        <href>profile_incoming_broadcasts%26bm%3Bprofile_incoming_broadcasts.bmml%26bm%3Bprofile_incoming_broadcasts.bmml%26bm%3Bprofile_incoming_broadcasts.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%22145%2C206%2C249%2C250%22%20href%3D%22profile_incoming_broadcasts.bmml%22%20alt%3D%22profile_incoming_broadcasts%22%20id%3D%225%22/%3E</map>
+        <size>13</size>
+        <text>6%20Incoming%20%5CrBroadcasts</text>
+      </controlProperties>
+    </control>
+    <control controlID="8" controlTypeID="com.balsamiq.mockups::Button" x="410" y="427" w="191" h="27" measuredW="63" measuredH="27" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>13576743</color>
+        <text>Logout</text>
+      </controlProperties>
+    </control>
+    <control controlID="9" controlTypeID="__group__" x="397" y="190" w="216" h="50" measuredW="216" measuredH="50" zOrder="1" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="216" h="50" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="9">
+          <controlProperties>
+            <borderColor>6710886</borderColor>
+            <color>14001853</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="7" y="9" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="9">
+          <controlProperties>
+            <icon>EmoticonIcon%7Cmedium</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="45" y="6" w="76" h="18" measuredW="76" measuredH="21" zOrder="2" locked="false" isInGroup="9">
+          <controlProperties>
+            <bold>true</bold>
+            <text>Girum%20Ibssa</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="45" y="24" w="87" h="15" measuredW="87" measuredH="18" zOrder="3" locked="false" isInGroup="9">
+          <controlProperties>
+            <bold>true</bold>
+            <color>40463</color>
+            <size>11</size>
+            <text>Free%20for%202%20hours</text>
+          </controlProperties>
+        </control>
+        <control controlID="4" controlTypeID="com.balsamiq.mockups::Label" x="134" y="6" w="77" h="44" measuredW="57" measuredH="16" zOrder="4" locked="false" isInGroup="9">
+          <controlProperties>
+            <size>9</size>
+            <text>%28No%20Proposal%29</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="10" controlTypeID="com.balsamiq.mockups::Canvas" x="391" y="142" w="226" h="38" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>10066329</borderColor>
+        <color>14001853</color>
+      </controlProperties>
+    </control>
+    <control controlID="13" controlTypeID="com.balsamiq.mockups::Icon" x="397" y="149" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>home_friends%26bm%3Bhome_friends.bmml%26bm%3Bhome_friends.bmml%26bm%3Bhome_friends.bmml</href>
+        <icon>JumpBackIcon%7Csmall</icon>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2233%2C106%2C57%2C130%22%20href%3D%22home_friends.bmml%22%20alt%3D%22home_friends%22%20id%3D%2213%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="14" controlTypeID="com.balsamiq.mockups::Label" x="434" y="149" w="-1" h="-1" measuredW="75" measuredH="24" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>My%20Profile</text>
+      </controlProperties>
+    </control>
+    <control controlID="15" controlTypeID="com.balsamiq.mockups::Button" x="397" y="249" w="104" h="44" measuredW="89" measuredH="36" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <color>14001853</color>
+        <href>profile_outgoing_broadcasts%26bm%3Bprofile_outgoing_broadcasts.bmml%26bm%3Bprofile_outgoing_broadcasts.bmml%26bm%3Bprofile_outgoing_broadcasts.bmml</href>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2233%2C206%2C137%2C250%22%20href%3D%22profile_outgoing_broadcasts.bmml%22%20alt%3D%22profile_outgoing_broadcasts%22%20id%3D%2215%22/%3E</map>
+        <size>13</size>
+        <text>3%20Outgoing%20%5CrBroadcasts</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>

@@ -1,0 +1,169 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="646" measuredH="553" mockupW="282" mockupH="510">
+  <controls>
+    <control controlID="0" controlTypeID="com.balsamiq.mockups::iPhone" x="364" y="43" w="-1" h="-1" measuredW="282" measuredH="510" zOrder="0" locked="false" isInGroup="-1"/>
+    <control controlID="1" controlTypeID="com.balsamiq.mockups::Canvas" x="391" y="142" w="226" h="38" measuredW="100" measuredH="70" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderColor>10066329</borderColor>
+        <color>14001853</color>
+      </controlProperties>
+    </control>
+    <control controlID="2" controlTypeID="com.balsamiq.mockups::Icon" x="397" y="149" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <href>proposal_leech%26bm%3Bproposal_leech.bmml%26bm%3Bproposal_leech.bmml%26bm%3Bproposal_leech.bmml</href>
+        <icon>JumpBackIcon%7Csmall</icon>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2233%2C106%2C57%2C130%22%20href%3D%22proposal_leech.bmml%22%20alt%3D%22proposal_leech%22%20id%3D%222%22/%3E</map>
+      </controlProperties>
+    </control>
+    <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="452" y="149" w="-1" h="-1" measuredW="107" measuredH="24" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <size>16</size>
+        <text>Who%27s%20Coming</text>
+      </controlProperties>
+    </control>
+    <control controlID="10" controlTypeID="__group__" x="391" y="251" w="228" h="44" measuredW="228" measuredH="44" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <map>%3Carea%20shape%3D%22rect%22%20coords%3D%2227%2C208%2C255%2C252%22%20href%3D%22proposal_leech.bmml%22%20alt%3D%22proposal_leech%22%20id%3D%2210%22/%3E</map>
+      </controlProperties>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="228" h="44" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="10">
+          <controlProperties>
+            <color>14001853</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="7" y="6" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="10">
+          <controlProperties>
+            <icon>ContactIcon%7Cmedium</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="41" y="4" w="-1" h="-1" measuredW="64" measuredH="21" zOrder="2" locked="false" isInGroup="10">
+          <controlProperties>
+            <bold>true</bold>
+            <text>Luol%20Deng</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="11" controlTypeID="__group__" x="391" y="188" w="228" h="21" measuredW="228" measuredH="21" zOrder="5" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="228" h="21" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="11">
+          <controlProperties>
+            <color>14540253</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="6" y="1" w="-1" h="-1" measuredW="211" measuredH="20" zOrder="1" locked="false" isInGroup="11">
+          <controlProperties>
+            <bold>true</bold>
+            <color>0</color>
+            <size>12</size>
+            <text>Interested%20%282%20people%2C%201%20mutual%20friend%29</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="12" controlTypeID="__group__" x="391" y="209" w="228" h="44" measuredW="228" measuredH="44" zOrder="6" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="228" h="44" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="12">
+          <controlProperties>
+            <color>14001853</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="7" y="6" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="12">
+          <controlProperties>
+            <icon>ContactIcon%7Cmedium</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="41" y="4" w="-1" h="-1" measuredW="107" measuredH="21" zOrder="2" locked="false" isInGroup="12">
+          <controlProperties>
+            <bold>true</bold>
+            <text>Girum%20Ibssa%20%28Me%29</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="41" y="21" w="-1" h="-1" measuredW="96" measuredH="20" zOrder="3" locked="false" isInGroup="12">
+          <controlProperties>
+            <bold>true</bold>
+            <color>40463</color>
+            <italic>false</italic>
+            <size>12</size>
+            <text>Free%20for%202%20hours</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="13" controlTypeID="__group__" x="391" y="365" w="228" h="44" measuredW="228" measuredH="44" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties/>
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="228" h="44" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="13">
+          <controlProperties>
+            <color>14001853</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="7" y="6" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="13">
+          <controlProperties>
+            <icon>ContactIcon%7Cmedium</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="41" y="4" w="-1" h="-1" measuredW="77" measuredH="21" zOrder="2" locked="false" isInGroup="13">
+          <controlProperties>
+            <bold>true</bold>
+            <text>Nobell%20Ibssa</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="41" y="21" w="-1" h="-1" measuredW="178" measuredH="20" zOrder="3" locked="false" isInGroup="13">
+          <controlProperties>
+            <bold>true</bold>
+            <color>6710886</color>
+            <italic>false</italic>
+            <size>12</size>
+            <text>Stale%20status.%20Click%20to%20nudge%20me%21</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="14" controlTypeID="__group__" x="391" y="302" w="228" h="21" measuredW="228" measuredH="21" zOrder="8" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="228" h="21" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="14">
+          <controlProperties>
+            <color>14540253</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Label" x="6" y="1" w="-1" h="-1" measuredW="221" measuredH="20" zOrder="1" locked="false" isInGroup="14">
+          <controlProperties>
+            <bold>true</bold>
+            <color>0</color>
+            <size>12</size>
+            <text>Confirmed%20%282%20people%2C%202%20mutual%20friends%29</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+    <control controlID="15" controlTypeID="__group__" x="391" y="323" w="228" h="44" measuredW="228" measuredH="44" zOrder="9" locked="false" isInGroup="-1">
+      <groupChildrenDescriptors>
+        <control controlID="0" controlTypeID="com.balsamiq.mockups::Canvas" x="0" y="0" w="228" h="44" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="15">
+          <controlProperties>
+            <color>14001853</color>
+          </controlProperties>
+        </control>
+        <control controlID="1" controlTypeID="com.balsamiq.mockups::Icon" x="7" y="6" w="-1" h="-1" measuredW="32" measuredH="32" zOrder="1" locked="false" isInGroup="15">
+          <controlProperties>
+            <icon>ContactIcon%7Cmedium</icon>
+          </controlProperties>
+        </control>
+        <control controlID="2" controlTypeID="com.balsamiq.mockups::Label" x="41" y="4" w="-1" h="-1" measuredW="65" measuredH="21" zOrder="2" locked="false" isInGroup="15">
+          <controlProperties>
+            <bold>true</bold>
+            <text>Aklil%20Ibssa</text>
+          </controlProperties>
+        </control>
+        <control controlID="3" controlTypeID="com.balsamiq.mockups::Label" x="41" y="21" w="-1" h="-1" measuredW="95" measuredH="20" zOrder="3" locked="false" isInGroup="15">
+          <controlProperties>
+            <bold>true</bold>
+            <color>40463</color>
+            <italic>false</italic>
+            <size>12</size>
+            <text>Free%20for%207%20hours</text>
+          </controlProperties>
+        </control>
+      </groupChildrenDescriptors>
+    </control>
+  </controls>
+</mockup>
