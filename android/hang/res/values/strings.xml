@@ -89,10 +89,12 @@
     <string name="confirm_proposal_button">Post</string>
     <string name="my_current_availability">My Current Availability</string>
     <string name="my_current_proposal">My Current Proposal</string>
+    <string name="unknown_proposal">Unknown Proposal</string>
+    <string name="someones_proposal">%s\'s current Proposal</string>
     <string name="refresh">Refresh</string>
     <string name="confirm_delete_proposal">Are you sure you want to delete your proposal?</string>
     <string name="remove_proposal_button">Delete Proposal</string>
     <string name="cancel">Cancel</string>
-    <string name="new_messages">%d New Messages</string>
+    <string name="no_proposal">No Proposal.</string>
 
 </resources>

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -17,6 +19,7 @@ import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
+import com.hangapp.newandroid.activity.ProfileActivity;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Color;
@@ -92,9 +95,11 @@ public final class FriendsFragment extends SherlockFragment implements
 			StickyListHeadersAdapter {
 		private List<User> friends;
 		private LayoutInflater inflater;
+		private Context context;
 
 		public FriendsAdapter(Context context, List<User> friends) {
 			inflater = LayoutInflater.from(context);
+			this.context = context;
 			this.friends = friends;
 		}
 
@@ -117,7 +122,7 @@ public final class FriendsFragment extends SherlockFragment implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 
-			User user = friends.get(position);
+			final User user = friends.get(position);
 
 			// Inflate the View if necessary.
 			if (convertView == null) {
@@ -126,7 +131,7 @@ public final class FriendsFragment extends SherlockFragment implements
 						null);
 
 				holder.profilePictureView = (ProfilePictureView) convertView
-						.findViewById(R.id.profilePictureViewMyicon);
+						.findViewById(R.id.profilePictureViewIcon);
 				holder.textView1 = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
 				// holder.textView2 = (TextView) convertView
@@ -139,23 +144,20 @@ public final class FriendsFragment extends SherlockFragment implements
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			// Set the TextViews.
+			// Populate the Views.
 			holder.profilePictureView.setProfileId(user.getJid());
-
 			holder.textView1.setText(user.getFullName());
 
-			Availability availability = user.getAvailability();
-			// holder.textView2.setText(availability != null ? availability
-			// .getDescription() : "Unknown Availability");
-
-			// Enable the Proposal button if and only if the User has a
-			// Proposal that is not null.
-			// if (user.getProposal() != null) {
-			// holder.imageView.setVisibility(View.VISIBLE);
-			// } else {
-			// holder.imageView.setVisibility(View.INVISIBLE);
-			// }
-			//
+			// Set the OnClickListener
+			convertView.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View arg0) {
+					Intent proposalLeechIntent = new Intent(context,
+							ProfileActivity.class);
+					proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
+					context.startActivity(proposalLeechIntent);
+				}
+			});
 
 			return convertView;
 		}

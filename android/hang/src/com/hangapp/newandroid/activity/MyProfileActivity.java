@@ -85,7 +85,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 			onSessionStateChange(session, session.getState(), null);
 		}
 
-		String myJid = Utils.getDefaultUserJID(this);
+		String myJid = database.getMyJid();
 		profilePictureView.setProfileId(myJid);
 
 		textViewMyName.setText(database.getMyFullName());

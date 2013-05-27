@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureViewMyicon"
+        android:id="@+id/profilePictureViewIcon"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentLeft="true"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="3dp"
-        android:layout_toRightOf="@+id/profilePictureViewMyicon"
+        android:layout_toRightOf="@+id/profilePictureViewIcon"
         android:text="User Name"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="18sp" />

@@ -11,14 +11,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.internal.bj.j;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
-import com.hangapp.newandroid.util.Utils;
 
 public final class RestClientImpl implements RestClient {
 
@@ -56,7 +54,7 @@ public final class RestClientImpl implements RestClient {
 	@Override
 	public void updateMyAvailability(Availability status) {
 
-		String jid = Utils.getDefaultUserJID(context);
+		String jid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR, status
@@ -73,7 +71,7 @@ public final class RestClientImpl implements RestClient {
 	@Override
 	public void updateMyProposal(Proposal proposal) {
 
-		String jid = Utils.getDefaultUserJID(context);
+		String jid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION,
@@ -104,7 +102,7 @@ public final class RestClientImpl implements RestClient {
 
 	@Override
 	public void deleteMyProposal() {
-		String jid = Utils.getDefaultUserJID(context);
+		String jid = database.getMyJid();
 
 		new DeleteMyProposalAsyncTask(database, context, jid).execute();
 
@@ -114,7 +112,7 @@ public final class RestClientImpl implements RestClient {
 	@Override
 	public void getMyData() {
 
-		String jid = Utils.getDefaultUserJID(context);
+		String jid = database.getMyJid();
 
 		if (jid == null) {
 			HangLog.toastE(context, "RestClientImpl",
@@ -130,7 +128,7 @@ public final class RestClientImpl implements RestClient {
 	@Override
 	public void addBroadcastee(String broadcasteeJID) {
 
-		String myJid = Utils.getDefaultUserJID(context);
+		String myJid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));

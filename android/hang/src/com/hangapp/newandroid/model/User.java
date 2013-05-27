@@ -311,7 +311,6 @@ public final class User implements Comparable<User>, Parcelable {
 	}
 
 	public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
-
 		@Override
 		public User createFromParcel(Parcel in) {
 			return new User(in);
@@ -321,12 +320,10 @@ public final class User implements Comparable<User>, Parcelable {
 		public User[] newArray(int size) {
 			return new User[size];
 		}
-
 	};
 
 	@Override
 	public int describeContents() {
 		return 0;
 	}
-
 }

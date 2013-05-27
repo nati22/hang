@@ -89,7 +89,7 @@ public class IncomingBroadcastsActivity extends BaseFragmentActivity implements
 
 			// Reference Views.
 			ProfilePictureView profilePictureView = (ProfilePictureView) convertView
-					.findViewById(R.id.profilePictureViewMyicon);
+					.findViewById(R.id.profilePictureViewIcon);
 			TextView textViewIncomingBroadcastName = (TextView) convertView
 					.findViewById(R.id.textViewIncomingBroadcastName);
 			TextView textViewIncomingBroadcastStatus = (TextView) convertView

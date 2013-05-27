@@ -19,8 +19,9 @@ public final class Keys {
 	public static final String INCOMING = "inc";
 	public static final String LIBRARY = "lib";
 	public static final String REGISTRATION_ID = "regid";
-
 	public static final String FRIENDS = "friends";
+	public static final String HOST_JID = "host_jid";
+	
 	/**
 	 * Instead of converting directly from Date objects to Strings and vice
 	 * versa, Android wants us to use DateFormat objects which require a

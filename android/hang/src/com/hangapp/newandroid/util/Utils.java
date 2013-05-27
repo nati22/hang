@@ -27,18 +27,4 @@ public final class Utils {
 
 		return activeNetworkInfo != null;
 	}
-
-	/**
-	 * Returns the Default User's JID from {@link SharedPreferences}, or null if
-	 * not set.
-	 * 
-	 * @param context
-	 * @return
-	 */
-	public static String getDefaultUserJID(Context context) {
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
-		return prefs.getString(Keys.JID, null);
-	}
 }
