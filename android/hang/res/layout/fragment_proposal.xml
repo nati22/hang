@@ -258,15 +258,4 @@
         android:layout_below="@+id/your_prop_desc_title"
         android:background="@android:color/darker_gray" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/buttonChat"
-        android:layout_marginLeft="3dp"
-        android:layout_toRightOf="@+id/buttonChat"
-        android:text="@string/new_messages"
-        android:textColor="@color/red"
-        android:textSize="12sp" />
-
 </RelativeLayout>

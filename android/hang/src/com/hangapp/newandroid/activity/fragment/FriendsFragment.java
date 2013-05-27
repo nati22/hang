@@ -22,13 +22,14 @@ import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Color;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
+import com.hangapp.newandroid.util.Keys;
 
 public final class FriendsFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
 
 	private StickyListHeadersListView listViewFriends;
 
-	private List<User> incomingBroadcasts = new ArrayList<User>();
+	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
 	private FriendsAdapter adapter;
 
 	private Database database;
@@ -42,6 +43,14 @@ public final class FriendsFragment extends SherlockFragment implements
 
 		// Setup listener.
 		database.addIncomingBroadcastsListener(this);
+
+		// Reload the incoming broadcasts from savedInstanceState.
+		if (savedInstanceState != null) {
+			ArrayList<User> savedIncomingBroadcasts = savedInstanceState
+					.getParcelableArrayList(Keys.FRIENDS);
+			incomingBroadcasts.clear();
+			incomingBroadcasts.addAll(savedIncomingBroadcasts);
+		}
 	}
 
 	@Override
@@ -63,6 +72,13 @@ public final class FriendsFragment extends SherlockFragment implements
 		listViewFriends.setEmptyView(view.findViewById(android.R.id.empty));
 
 		return view;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		outState.putParcelableArrayList(Keys.FRIENDS, incomingBroadcasts);
 	}
 
 	@Override
@@ -113,8 +129,8 @@ public final class FriendsFragment extends SherlockFragment implements
 						.findViewById(R.id.profilePictureViewMyicon);
 				holder.textView1 = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
-//				holder.textView2 = (TextView) convertView
-//						.findViewById(R.id.textViewFriendStatus);
+				// holder.textView2 = (TextView) convertView
+				// .findViewById(R.id.textViewFriendStatus);
 				holder.imageView = (ImageView) convertView
 						.findViewById(R.id.buttonFriendProposal);
 
@@ -129,18 +145,18 @@ public final class FriendsFragment extends SherlockFragment implements
 			holder.textView1.setText(user.getFullName());
 
 			Availability availability = user.getAvailability();
-//			holder.textView2.setText(availability != null ? availability
-//					.getDescription() : "Unknown Availability");
+			// holder.textView2.setText(availability != null ? availability
+			// .getDescription() : "Unknown Availability");
 
 			// Enable the Proposal button if and only if the User has a
 			// Proposal that is not null.
-//			if (user.getProposal() != null) {
-//				holder.imageView.setVisibility(View.VISIBLE);
-//			} else {
-//				holder.imageView.setVisibility(View.INVISIBLE);
-//			}
-//			
-			
+			// if (user.getProposal() != null) {
+			// holder.imageView.setVisibility(View.VISIBLE);
+			// } else {
+			// holder.imageView.setVisibility(View.INVISIBLE);
+			// }
+			//
+
 			return convertView;
 		}
 
@@ -162,11 +178,11 @@ public final class FriendsFragment extends SherlockFragment implements
 			Availability availability = friends.get(position).getAvailability();
 			String headerText = null;
 
-			if (availability != null && availability.getColor() == Color.GREEN) {
+			if (availability != null && availability.getColor() == Color.FREE) {
 				headerText = "Free to hang";
 				holder.text1.setTextColor(android.graphics.Color.GREEN);
 			} else if (availability != null
-					&& availability.getColor() == Color.RED) {
+					&& availability.getColor() == Color.BUSY) {
 				headerText = "Busy, can't hang";
 				holder.text1.setTextColor(android.graphics.Color.RED);
 			} else {
@@ -181,10 +197,10 @@ public final class FriendsFragment extends SherlockFragment implements
 		public long getHeaderId(int position) {
 			Availability availability = friends.get(position).getAvailability();
 
-			if (availability != null && availability.getColor() == Color.GREEN) {
+			if (availability != null && availability.getColor() == Color.FREE) {
 				return 0;
 			} else if (availability != null
-					&& availability.getColor() == Color.RED) {
+					&& availability.getColor() == Color.BUSY) {
 				return 1;
 			} else {
 				return 2;

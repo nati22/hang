@@ -58,7 +58,7 @@ public final class Availability implements Comparable<Availability> {
 		String description = "";
 
 		switch (color) {
-		case GREEN:
+		case FREE:
 			description += "Free";
 
 			int currentHours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
@@ -77,7 +77,7 @@ public final class Availability implements Comparable<Availability> {
 			}
 
 			break;
-		case RED:
+		case BUSY:
 			description += "Busy";
 			description += " until ";
 			description += DateFormat.format("h:mm aa", expirationDate);
@@ -147,11 +147,11 @@ public final class Availability implements Comparable<Availability> {
 	}
 
 	/**
-	 * Inner class enum describing each of the colors, as opposed to having a
+	 * Inner class enum describing each of the availabilities, as opposed to having a
 	 * separate file for this.
 	 */
 	public enum Color {
-		GREEN(0), RED(1);
+		FREE(0), BUSY(1);
 
 		private Color(int value) {
 			this.value = value;

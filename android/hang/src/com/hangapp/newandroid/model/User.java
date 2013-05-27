@@ -12,11 +12,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.hangapp.newandroid.util.Keys;
 
-public final class User implements Comparable<User> {
+public final class User implements Comparable<User>, Parcelable {
 	/**
 	 * A {@link User}'s JID is his Facebook ID.
 	 */
@@ -287,4 +289,44 @@ public final class User implements Comparable<User> {
 
 		return users;
 	}
+
+	/*
+	 * Parcelable.
+	 */
+	public User(Parcel in) {
+		readFromParcel(in);
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		out.writeString(jid);
+		out.writeString(firstName);
+		out.writeString(lastName);
+	}
+
+	private void readFromParcel(Parcel in) {
+		jid = in.readString();
+		firstName = in.readString();
+		lastName = in.readString();
+	}
+
+	public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+
+		@Override
+		public User createFromParcel(Parcel in) {
+			return new User(in);
+		}
+
+		@Override
+		public User[] newArray(int size) {
+			return new User[size];
+		}
+
+	};
+
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
 }

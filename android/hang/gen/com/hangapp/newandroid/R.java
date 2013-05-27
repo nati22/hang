@@ -1459,7 +1459,7 @@ containing a value of this type.
         public static final int trash_recyclebin_empty_closed=0x7f020154;
     }
     public static final class id {
-        public static final int Button01=0x7f050049;
+        public static final int Button01=0x7f050048;
         public static final int Button02=0x7f05004a;
         public static final int Button03=0x7f05004b;
         public static final int Button04=0x7f050085;
@@ -1518,7 +1518,7 @@ containing a value of this type.
         public static final int buttonIncomingBroadcasts=0x7f050041;
         public static final int buttonOutgoingBroadcasts=0x7f05003f;
         public static final int buttonRoster=0x7f050099;
-        public static final int buttonStatus1=0x7f050048;
+        public static final int buttonStatus1=0x7f050049;
         public static final int buttonUpdateMyAvailability=0x7f050089;
         public static final int cancel_delete_proposal=0x7f050079;
         public static final int com_facebook_login_activity_progress_bar=0x7f050055;
@@ -1549,7 +1549,7 @@ containing a value of this type.
         public static final int confirm_your_proposal_location=0x7f050073;
         public static final int confirm_your_proposal_time=0x7f050075;
         public static final int confirmed=0x7f05007b;
-        public static final int datepickerbutton=0x7f0500a2;
+        public static final int datepickerbutton=0x7f0500a1;
         public static final int description_label=0x7f050068;
         public static final int disableHome=0x7f05000f;
         public static final int edit_query=0x7f05002c;
@@ -1570,10 +1570,10 @@ containing a value of this type.
         public static final int listViewIncomingBroadcasts=0x7f05003a;
         public static final int listViewOutgoingBroadcasts=0x7f050044;
         public static final int location_label=0x7f05006a;
-        public static final int menu_add_outgoing_broadcast=0x7f0500a7;
-        public static final int menu_edit_outgoing_broadcasts=0x7f0500a6;
-        public static final int menu_profile=0x7f0500a5;
-        public static final int menu_refresh=0x7f0500a4;
+        public static final int menu_add_outgoing_broadcast=0x7f0500a6;
+        public static final int menu_edit_outgoing_broadcasts=0x7f0500a5;
+        public static final int menu_profile=0x7f0500a4;
+        public static final int menu_refresh=0x7f0500a3;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int picker_fragment=0x7f050038;
@@ -1602,7 +1602,6 @@ containing a value of this type.
         public static final int tabMode=0x7f050009;
         public static final int terrain=0x7f050003;
         public static final int textView1=0x7f050084;
-        public static final int textView2=0x7f0500a1;
         public static final int textViewAppName=0x7f05008c;
         public static final int textViewDescription=0x7f050069;
         public static final int textViewFriendName=0x7f050046;
@@ -1614,7 +1613,7 @@ containing a value of this type.
         public static final int textViewMyStatus=0x7f05003d;
         public static final int textViewOutgoingBroadcastName=0x7f050050;
         public static final int textViewOutgoingBroadcastStatus=0x7f050051;
-        public static final int timepickerbutton=0x7f0500a3;
+        public static final int timepickerbutton=0x7f0500a2;
         public static final int toggleButtonFilterBroadcast=0x7f05004f;
         public static final int useLogo=0x7f05000a;
         public static final int view1=0x7f050087;
