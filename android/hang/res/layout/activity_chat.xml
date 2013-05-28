@@ -116,7 +116,7 @@
         android:focusableInTouchMode="true"
         android:orientation="horizontal" />
 
-    <AutoCompleteTextView
+    <EditText
         android:id="@+id/editTextChatMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -126,10 +126,10 @@
         android:layout_toLeftOf="@+id/buttonSendMessage"
         android:ems="10"
         android:focusableInTouchMode="true"
-        android:inputType="textAutoCorrect"
+        android:inputType="text"
         android:nextFocusLeft="@+id/editTextChatMessage"
         android:nextFocusUp="@+id/editTextChatMessage" >
-    </AutoCompleteTextView>
+    </EditText>
 
     <Button
         android:id="@+id/buttonSendMessage"
@@ -137,8 +137,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:onClick="sendMessage"
         android:layout_alignParentRight="true"
+        android:onClick="sendMessage"
         android:text="@string/send" />
 
 </RelativeLayout>

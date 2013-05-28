@@ -1,6 +1,5 @@
 package com.hangapp.newandroid.network.xmpp;
 
-import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
 import android.content.Context;
