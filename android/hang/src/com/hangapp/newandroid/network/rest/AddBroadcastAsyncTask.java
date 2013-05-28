@@ -7,7 +7,7 @@ import org.apache.http.NameValuePair;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.User;
 
 public class AddBroadcastAsyncTask extends BasePutRequestAsyncTask<User> {
@@ -15,10 +15,10 @@ public class AddBroadcastAsyncTask extends BasePutRequestAsyncTask<User> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String BROADCAST_URI_SUFFIX = "/broadcast";
 
-	private Database database;
+	private UserDatabase database;
 	private RestClient restClient;
 
-	protected AddBroadcastAsyncTask(Database database, RestClient restClient,
+	protected AddBroadcastAsyncTask(UserDatabase database, RestClient restClient,
 			Context context, String jid, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + BROADCAST_URI_SUFFIX,
 				parameters);

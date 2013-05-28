@@ -5,7 +5,7 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
@@ -16,7 +16,7 @@ public class ProfileActivity extends BaseFragmentActivity {
 	private ProfilePictureView profilePictureView;
 	private TextView textViewFriendName;
 
-	private Database database;
+	private UserDatabase database;
 
 	private User friend;
 
@@ -26,16 +26,16 @@ public class ProfileActivity extends BaseFragmentActivity {
 		setContentView(R.layout.activity_profile);
 
 		// Instantiate dependencies
-		database = Database.getInstance();
+		database = UserDatabase.getInstance();
 
 		// Set who the friend is.
 		String hostJid = getIntent().getStringExtra(Keys.HOST_JID);
 		friend = database.getIncomingUser(hostJid);
 
-		// Friend not in Database sanity check.
+		// Friend not in UserDatabase sanity check.
 		if (friend == null) {
 			HangLog.toastE(this, "ProfileActivity.onCreate", "Host with jid: "
-					+ hostJid + " was null in the Database.");
+					+ hostJid + " was null in the UserDatabase.");
 			finish();
 		}
 

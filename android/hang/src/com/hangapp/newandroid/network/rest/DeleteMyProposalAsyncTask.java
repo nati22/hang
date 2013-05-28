@@ -3,16 +3,16 @@ package com.hangapp.newandroid.network.rest;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 
 public final class DeleteMyProposalAsyncTask extends
 		BaseDeleteRequestAsyncTask<String> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/proposal";
 
-	private Database database;
+	private UserDatabase database;
 
-	protected DeleteMyProposalAsyncTask(Database database, Context context,
+	protected DeleteMyProposalAsyncTask(UserDatabase database, Context context,
 			String jid) {
 		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX);
 

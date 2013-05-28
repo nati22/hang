@@ -7,16 +7,16 @@ import org.apache.http.NameValuePair;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.Proposal;
 
 public class SetProposalAsyncTask extends BasePutRequestAsyncTask<Proposal> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/proposal";
 
-	private Database database;
+	private UserDatabase database;
 
-	protected SetProposalAsyncTask(Database database, Context context,
+	protected SetProposalAsyncTask(UserDatabase database, Context context,
 			String jid, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX, parameters);
 

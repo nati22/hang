@@ -14,7 +14,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
@@ -38,7 +38,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 	private Button buttonOutgoingBroadcasts;
 	private Button buttonIncomingBroadcasts;
 
-	private Database database;
+	private UserDatabase database;
 
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
@@ -68,7 +68,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Instantiate dependencies.
-		database = Database.getInstance();
+		database = UserDatabase.getInstance();
 	};
 
 	@Override

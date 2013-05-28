@@ -3,13 +3,10 @@ package com.hangapp.newandroid.activity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Message;
-import org.jivesoftware.smack.packet.Packet;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +16,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.model.callback.MucMessageListener;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.Keys;
 
 public class ChatActivity extends BaseFragmentActivity implements
-		PacketListener {
+		MucMessageListener {
 
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
@@ -34,7 +32,7 @@ public class ChatActivity extends BaseFragmentActivity implements
 	private String mucName;
 	private List<Message> messages = new ArrayList<Message>();
 
-	private Database database;
+	private UserDatabase database;
 	private XMPP xmpp;
 
 	@Override
@@ -47,14 +45,14 @@ public class ChatActivity extends BaseFragmentActivity implements
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Instantiate dependencies
-		database = Database.getInstance();
+		database = UserDatabase.getInstance();
 		xmpp = XMPP.getInstance();
 
 		mucName = getIntent().getStringExtra(Keys.HOST_JID);
 
 		// Join the Muc.
 		String myJid = database.getMyJid();
-		xmpp.joinMuc(mucName, myJid, this);
+		xmpp.joinMuc(mucName, myJid);
 
 		// Reference Views.
 		editTextChatMessage = (EditText) findViewById(R.id.editTextChatMessage);
@@ -63,23 +61,24 @@ public class ChatActivity extends BaseFragmentActivity implements
 		// Setup adapter.
 		adapter = new MessageAdapter(this, R.id.listViewChatCells, messages);
 		listViewChatCells.setAdapter(adapter);
+
+		xmpp.addMucMessageListener(mucName, this);
 	}
 
 	@Override
-	public void processPacket(Packet packet) {
-		if (packet instanceof Message) {
-			final Message message = (Message) packet;
-			Log.i("ChatActivity.processPacket",
-					"Got message: " + message.getBody());
+	protected void onResume() {
+		super.onResume();
 
-			runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					messages.add(message);
-					adapter.notifyDataSetChanged();
-				}
-			});
-		}
+		messages.clear();
+		messages.addAll(xmpp.getAllMessages(mucName));
+		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		xmpp.removeMucMessageListener(mucName, this);
 	}
 
 	public void sendMessage(View v) {
@@ -117,5 +116,12 @@ public class ChatActivity extends BaseFragmentActivity implements
 
 			return convertView;
 		}
+	}
+
+	@Override
+	public void onMucMessageUpdate(String mucName, List<Message> messages) {
+		messages.clear();
+		messages.addAll(messages);
+		adapter.notifyDataSetChanged();
 	}
 }

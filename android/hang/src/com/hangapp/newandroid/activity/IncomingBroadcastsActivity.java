@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
@@ -28,7 +28,7 @@ public class IncomingBroadcastsActivity extends BaseFragmentActivity implements
 	private ListView listViewIncomingBroadcasts;
 	private IncomingBroadcastsArrayAdapter adapter;
 
-	private Database database;
+	private UserDatabase database;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class IncomingBroadcastsActivity extends BaseFragmentActivity implements
 		setContentView(R.layout.activity_incoming_broadcasts);
 
 		// Instantiate dependencies
-		database = Database.getInstance();
+		database = UserDatabase.getInstance();
 
 		// Enable the "Up" button.
 		getSupportActionBar().setHomeButtonEnabled(true);

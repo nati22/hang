@@ -10,7 +10,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.Keys;
@@ -18,12 +18,12 @@ import com.hangapp.newandroid.util.Keys;
 public final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 
-	private Database database;
+	private UserDatabase database;
 	private GoogleCloudMessaging gcm;
 	private SharedPreferences prefs;
 	private String newUserJid;
 
-	protected NewUserAsyncTask(Database database, GoogleCloudMessaging gcm,
+	protected NewUserAsyncTask(UserDatabase database, GoogleCloudMessaging gcm,
 			SharedPreferences prefs, Context context, User newUser,
 			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + newUser.getJid(), parameters);

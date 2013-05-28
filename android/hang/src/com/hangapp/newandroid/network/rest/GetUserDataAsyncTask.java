@@ -2,16 +2,16 @@ package com.hangapp.newandroid.network.rest;
 
 import android.content.Context;
 
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.User;
 
 public final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 	private static final String URL_SUFFIX = "/users/";
 
-	private Database database;
+	private UserDatabase database;
 
-	protected GetUserDataAsyncTask(Database database, Context context,
+	protected GetUserDataAsyncTask(UserDatabase database, Context context,
 			String jid) {
 		super(context, URL_SUFFIX + jid);
 

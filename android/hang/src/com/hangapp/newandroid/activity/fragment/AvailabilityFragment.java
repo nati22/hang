@@ -7,20 +7,20 @@ import android.view.ViewGroup;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.database.UserDatabase;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.util.HangLog;
 
 public class AvailabilityFragment extends SherlockFragment {
 
-	private Database database;
+	private UserDatabase database;
 
 	private Availability myAvailability;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		database = Database.getInstance();
+		database = UserDatabase.getInstance();
 	}
 
 	@Override

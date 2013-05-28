@@ -8,6 +8,7 @@ import com.hangapp.newandroid.util.HangLog;
 
 public class SendMucMessageAsyncTask extends BaseXmppAsyncTask<MultiUserChat> {
 
+	private XMPP xmpp;
 	private MultiUserChat muc;
 	private String mucName;
 	private String message;
@@ -15,6 +16,7 @@ public class SendMucMessageAsyncTask extends BaseXmppAsyncTask<MultiUserChat> {
 	protected SendMucMessageAsyncTask(MultiUserChat muc, String mucName,
 			String message, Context context) {
 		super(null, null, context);
+		this.xmpp = XMPP.getInstance();
 		this.muc = muc;
 		this.mucName = mucName;
 		this.message = message;

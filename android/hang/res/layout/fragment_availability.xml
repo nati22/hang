@@ -40,7 +40,7 @@
             <Button
                 android:id="@+id/Button00"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:background="@drawable/green_button"
                 android:focusable="false"
                 android:text="3 PM"
@@ -49,7 +49,7 @@
             <Button
                 android:id="@+id/Button01"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:background="@drawable/green_button"
                 android:focusable="false"
                 android:text="3 PM"
@@ -58,7 +58,7 @@
             <Button
                 android:id="@+id/Button02"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:background="@drawable/green_button"
                 android:focusable="false"
                 android:text="3 PM"
@@ -67,7 +67,7 @@
             <Button
                 android:id="@+id/Button03"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:background="@drawable/green_button"
                 android:focusable="false"
                 android:text="3 PM"
@@ -76,7 +76,7 @@
             <Button
                 android:id="@+id/Button04"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:background="@drawable/green_button"
                 android:focusable="false"
                 android:text="3 PM"
@@ -85,7 +85,7 @@
             <Button
                 android:id="@+id/Button05"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:background="@drawable/green_button"
                 android:focusable="false"
                 android:text="3 PM"
@@ -94,7 +94,7 @@
             <Button
                 android:id="@+id/Button06"
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:background="@drawable/green_button"
                 android:focusable="false"
                 android:text="3 PM"
