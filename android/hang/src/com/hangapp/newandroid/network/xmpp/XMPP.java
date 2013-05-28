@@ -82,13 +82,13 @@ public class XMPP {
 		MultiUserChat muc = mucs.get(mucName);
 
 		if (muc == null) {
-			muc = new MultiUserChat(xmppConnection, myJid + "@conference."
+			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
 					+ XMPP.JABBER_SERVER_URL);
 			mucs.put(mucName, muc);
 		}
 
-		new JoinMucAsyncTask(muc, mucName, myJid, messageListener,
-				xmppConnection, context).execute();
+		new JoinMucAsyncTask(muc, myJid, messageListener, xmppConnection,
+				context).execute();
 	}
 
 	public void sendMessage(String mucName, String message) {

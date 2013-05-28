@@ -1,6 +1,5 @@
 package com.hangapp.newandroid.network.xmpp;
 
-import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smackx.muc.MultiUserChat;
@@ -12,15 +11,13 @@ import com.hangapp.newandroid.util.HangLog;
 public class JoinMucAsyncTask extends BaseXmppAsyncTask<MultiUserChat> {
 
 	private MultiUserChat muc;
-	private String mucName;
 	private PacketListener messageListener;
 
-	protected JoinMucAsyncTask(MultiUserChat muc, String mucName, String myJid,
+	protected JoinMucAsyncTask(MultiUserChat muc, String myJid,
 			PacketListener messageListener, XMPPConnection xmppConnection,
 			Context context) {
 		super(myJid, xmppConnection, context);
 		this.muc = muc;
-		this.mucName = mucName;
 		this.messageListener = messageListener;
 	}
 

@@ -68,11 +68,17 @@ public class ChatActivity extends BaseFragmentActivity implements
 	@Override
 	public void processPacket(Packet packet) {
 		if (packet instanceof Message) {
-			Message message = (Message) packet;
+			final Message message = (Message) packet;
 			Log.i("ChatActivity.processPacket",
 					"Got message: " + message.getBody());
 
-			messages.add(message);
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					messages.add(message);
+					adapter.notifyDataSetChanged();
+				}
+			});
 		}
 	}
 
