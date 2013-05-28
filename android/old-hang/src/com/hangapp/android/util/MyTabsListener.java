@@ -1,7 +1,7 @@
 package com.hangapp.android.util;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;

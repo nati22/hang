@@ -164,6 +164,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 					database.setMyUserData(me.getJid(), me.getFirstName(),
 							me.getLastName());
 					restClient.registerNewUser(me);
+					
 				}
 			}
 		});

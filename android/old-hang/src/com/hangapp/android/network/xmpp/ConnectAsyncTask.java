@@ -27,11 +27,11 @@
 //			}
 //			xmppConnection.connect();
 //
-//			// Add a ConnectionListener here, so that you know immediately
+//			// Add a MyConnectionListener here, so that you know immediately
 //			// when
 //			// you lose your connection to the XMPP server
-//			// TODO: The ConnectionListener here needs to be its own class.
-//			xmppConnection.addConnectionListener(new ConnectionListener() {
+//			// TODO: The MyConnectionListener here needs to be its own class.
+//			xmppConnection.addConnectionListener(new MyConnectionListener() {
 //				public void reconnectionSuccessful() {
 //					Log.d("XMPPConnection: reconnectionSuccessful");
 //				}

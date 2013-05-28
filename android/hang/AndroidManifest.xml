@@ -71,6 +71,7 @@
             android:label="@string/profile" >
         </activity>
         <activity android:name=".activity.ChatActivity" android:label="@string/chat"></activity>
+        <service android:name=".network.xmpp.XMPPService"></service>
     </application>
 
 </manifest>

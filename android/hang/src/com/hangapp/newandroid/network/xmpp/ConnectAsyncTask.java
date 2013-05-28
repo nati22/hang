@@ -1,0 +1,46 @@
+package com.hangapp.newandroid.network.xmpp;
+
+import org.jivesoftware.smack.XMPPConnection;
+
+import android.content.Context;
+
+import com.hangapp.newandroid.util.HangLog;
+
+public class ConnectAsyncTask extends BaseXmppAsyncTask<XMPPConnection> {
+
+	private static MyConnectionListener mConnectionListener = new MyConnectionListener();
+
+	protected ConnectAsyncTask(XMPPConnection xmppConnection, Context context) {
+		super(xmppConnection, context);
+	}
+
+	@Override
+	public XMPPConnection call() throws Exception {
+		if (xmppConnection.isConnected()) {
+			throw new Exception(
+					"Will not connect to XMPPManager: Already connected");
+		}
+
+		xmppConnection.connect();
+
+		if (xmppConnection.isConnected()) {
+			return xmppConnection;
+		} else {
+			throw new Exception("XMPPConnection did NOT connect to the server.");
+		}
+	}
+
+	@Override
+	protected void onSuccess(XMPPConnection result) {
+		HangLog.toastD(context, "ConnectAsyncTask.onSuccess",
+				"Connected to XMPP server.");
+
+		// If the Connection succeeded, then add your ConnectionListener.
+		result.removeConnectionListener(mConnectionListener);
+		result.addConnectionListener(mConnectionListener);
+
+		new LoginAsyncTask("girum", "password", xmppConnection, context)
+				.execute();
+	}
+
+}
