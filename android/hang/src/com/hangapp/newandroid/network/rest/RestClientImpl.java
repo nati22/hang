@@ -48,6 +48,7 @@ public final class RestClientImpl implements RestClient {
 		new NewUserAsyncTask(database, gcm, prefs, context, newUser, parameters)
 				.execute();
 
+		
 		// TODO: Send a tickle to my recipients.
 	}
 

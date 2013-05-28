@@ -14,8 +14,5 @@ public class BaseApplication extends Application {
 
 		// Initialize the Database.
 		Database.getInstance().initialize(getApplicationContext());
-
-		// Start the XMPPManager service.
-		startService(new Intent(this, XMPPService.class));
 	}
 }

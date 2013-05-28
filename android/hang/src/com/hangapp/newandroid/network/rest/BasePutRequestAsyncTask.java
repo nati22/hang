@@ -38,7 +38,7 @@ public abstract class BasePutRequestAsyncTask<ResultT> extends
 
 	private String uri = null;
 
-	private Context context;
+	protected Context context;
 
 	// protected BasePutRequestAsyncTask(Context context, String uriSuffix) {
 	// super(context);

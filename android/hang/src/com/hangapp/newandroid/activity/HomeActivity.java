@@ -26,6 +26,7 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
+import com.hangapp.newandroid.network.xmpp.XMPPService;
 import com.hangapp.newandroid.util.Keys;
 import com.hangapp.newandroid.util.TabsAdapter;
 
@@ -164,7 +165,6 @@ public final class HomeActivity extends SherlockFragmentActivity {
 					database.setMyUserData(me.getJid(), me.getFirstName(),
 							me.getLastName());
 					restClient.registerNewUser(me);
-					
 				}
 			}
 		});

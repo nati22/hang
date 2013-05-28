@@ -4,6 +4,9 @@ import org.jivesoftware.smack.SmackAndroid;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smackx.ConfigureProviderManager;
 
+import com.hangapp.newandroid.util.HangLog;
+import com.hangapp.newandroid.util.Keys;
+
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -21,17 +24,32 @@ public class XMPPService extends Service {
 		// Setup aSmack.
 		SmackAndroid.init(getApplicationContext());
 		ConfigureProviderManager.configureProviderManager();
+
+		// Initialize the XMPPConnection itself. Point it to our EC2 server.
+		xmppConnection = new XMPPConnection(JABBER_SERVER_URL);
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i("XMPPService.onStartCommand", "Connecting to XMPPManager...");
 
-		// Initialize the XMPPConnection itself. Point it to our EC2 server.
-		xmppConnection = new XMPPConnection(JABBER_SERVER_URL);
+		String myJid = intent.getStringExtra(Keys.JID);
 
-		// Attempt to connect to the server.
-		new ConnectAsyncTask(xmppConnection, this).execute();
+		if (xmppConnection == null) {
+			HangLog.toastE(this, "XMPPService.onStartCommand",
+					"Fatal error: XMPPConnection was null");
+			return Service.START_NOT_STICKY;
+		}
+
+		if (!xmppConnection.isConnected()) {
+			// Attempt to connect to the server.
+			new ConnectAsyncTask(myJid, xmppConnection, this).execute();
+		} else if (!xmppConnection.isAuthenticated()) {
+			new LoginAsyncTask("girum", "password", xmppConnection, this);
+		} else {
+			Log.e("XMPPService.onStartCommand",
+					"Requested a start of XMPP service, but user is already authenticated");
+		}
 
 		return Service.START_NOT_STICKY;
 	}
@@ -40,6 +58,8 @@ public class XMPPService extends Service {
 	public IBinder onBind(Intent intent) {
 		// TODO for communication return IBinder implementation
 		Log.i("XMPPService.onBind", "XMPPService onBind called.");
+
+		// String myJid = intent.getStringExtra(Keys.JID);
 
 		return null;
 	}

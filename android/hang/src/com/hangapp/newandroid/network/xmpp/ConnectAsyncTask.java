@@ -10,8 +10,13 @@ public class ConnectAsyncTask extends BaseXmppAsyncTask<XMPPConnection> {
 
 	private static MyConnectionListener mConnectionListener = new MyConnectionListener();
 
-	protected ConnectAsyncTask(XMPPConnection xmppConnection, Context context) {
+	private String myJid;
+
+	protected ConnectAsyncTask(String myJid, XMPPConnection xmppConnection,
+			Context context) {
 		super(xmppConnection, context);
+
+		this.myJid = myJid;
 	}
 
 	@Override
