@@ -1,5 +1,6 @@
 package com.hangapp.newandroid.network.xmpp;
 
+import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 
 import android.content.Context;
@@ -10,13 +11,9 @@ public class ConnectAsyncTask extends BaseXmppAsyncTask<XMPPConnection> {
 
 	private static MyConnectionListener mConnectionListener = new MyConnectionListener();
 
-	private String myJid;
-
 	protected ConnectAsyncTask(String myJid, XMPPConnection xmppConnection,
 			Context context) {
-		super(xmppConnection, context);
-
-		this.myJid = myJid;
+		super(myJid, xmppConnection, context);
 	}
 
 	@Override
@@ -26,6 +23,7 @@ public class ConnectAsyncTask extends BaseXmppAsyncTask<XMPPConnection> {
 					"Will not connect to XMPPManager: Already connected");
 		}
 
+		SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 		xmppConnection.connect();
 
 		if (xmppConnection.isConnected()) {
@@ -44,8 +42,7 @@ public class ConnectAsyncTask extends BaseXmppAsyncTask<XMPPConnection> {
 		result.removeConnectionListener(mConnectionListener);
 		result.addConnectionListener(mConnectionListener);
 
-		new LoginAsyncTask("girum", "password", xmppConnection, context)
-				.execute();
+		new LoginAsyncTask(myJid, xmppConnection, context).execute();
 	}
 
 }

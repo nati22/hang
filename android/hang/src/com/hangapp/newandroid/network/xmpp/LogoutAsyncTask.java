@@ -8,8 +8,9 @@ import com.hangapp.newandroid.util.HangLog;
 
 public class LogoutAsyncTask extends BaseXmppAsyncTask<Boolean> {
 
-	protected LogoutAsyncTask(XMPPConnection xmppConnection, Context context) {
-		super(xmppConnection, context);
+	protected LogoutAsyncTask(String myJid, XMPPConnection xmppConnection,
+			Context context) {
+		super(myJid, xmppConnection, context);
 	}
 
 	@Override

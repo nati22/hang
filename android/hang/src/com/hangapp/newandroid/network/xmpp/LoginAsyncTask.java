@@ -8,19 +8,14 @@ import com.hangapp.newandroid.util.HangLog;
 
 public class LoginAsyncTask extends BaseXmppAsyncTask<XMPPConnection> {
 
-	private String username;
-	private String password;
-
-	protected LoginAsyncTask(String username, String password,
-			XMPPConnection xmppConnection, Context context) {
-		super(xmppConnection, context);
-		this.username = username;
-		this.password = password;
+	protected LoginAsyncTask(String myJid, XMPPConnection xmppConnection,
+			Context context) {
+		super(myJid, xmppConnection, context);
 	}
 
 	@Override
 	public XMPPConnection call() throws Exception {
-		xmppConnection.login(username, password);
+		xmppConnection.login(myJid, myJid);
 
 		if (xmppConnection.isAuthenticated()) {
 			return xmppConnection;
@@ -35,5 +30,16 @@ public class LoginAsyncTask extends BaseXmppAsyncTask<XMPPConnection> {
 
 		HangLog.toastD(context, "LoginAsyncTask.onSuccess",
 				"XMPPConnection is authenticated");
+	}
+
+	@Override
+	protected void onException(Exception e) throws RuntimeException {
+		super.onException(e);
+
+		HangLog.toastE(context, "LoginAsyncTask.onException",
+				"XMPPConnection did not authenticate: attempting to register");
+		
+		new RegisterJabberUserAsyncTask(myJid, xmppConnection, context)
+				.execute();
 	}
 }

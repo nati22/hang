@@ -9,10 +9,13 @@ import com.hangapp.newandroid.util.SafeAsyncTask;
 
 public class BaseXmppAsyncTask<T> extends SafeAsyncTask<T> {
 
+	protected String myJid;
 	protected XMPPConnection xmppConnection;
 	protected Context context;
 
-	protected BaseXmppAsyncTask(XMPPConnection xmppConnection, Context context) {
+	protected BaseXmppAsyncTask(String myJid, XMPPConnection xmppConnection,
+			Context context) {
+		this.myJid = myJid;
 		this.xmppConnection = xmppConnection;
 		this.context = context;
 	}

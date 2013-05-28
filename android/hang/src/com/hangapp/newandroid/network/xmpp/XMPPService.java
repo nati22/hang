@@ -45,7 +45,7 @@ public class XMPPService extends Service {
 			// Attempt to connect to the server.
 			new ConnectAsyncTask(myJid, xmppConnection, this).execute();
 		} else if (!xmppConnection.isAuthenticated()) {
-			new LoginAsyncTask("girum", "password", xmppConnection, this);
+			new LoginAsyncTask(myJid, xmppConnection, this).execute();
 		} else {
 			Log.e("XMPPService.onStartCommand",
 					"Requested a start of XMPP service, but user is already authenticated");
@@ -68,7 +68,8 @@ public class XMPPService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 
-		new LogoutAsyncTask(xmppConnection, getApplicationContext()).execute();
+		new LogoutAsyncTask(null, xmppConnection, getApplicationContext())
+				.execute();
 	}
 
 }
