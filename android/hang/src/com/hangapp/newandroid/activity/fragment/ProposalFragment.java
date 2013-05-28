@@ -52,16 +52,6 @@ public class ProposalFragment extends SherlockFragment {
 		buttonDeleteProposal = (ImageView) view
 				.findViewById(R.id.buttonDeleteProposal);
 
-		// Set OnClickListeners
-		buttonChat.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent chatActivityIntent = new Intent(getActivity(),
-						ChatActivity.class);
-				startActivity(chatActivityIntent);
-			}
-		});
-
 		// Populate member datum, based on if it's your Proposal or not.
 		if (getActivity() instanceof HomeActivity) {
 			// If this Fragment is within HomeActivity, then it's your Proposal.
@@ -69,19 +59,39 @@ public class ProposalFragment extends SherlockFragment {
 			proposal = db.getMyProposal();
 			textViewProposalTitle
 					.setText(getString(R.string.my_current_proposal));
+			buttonChat.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// Start the ChatActivity.
+					Intent chatActivityIntent = new Intent(getActivity(),
+							ChatActivity.class);
+					chatActivityIntent.putExtra(Keys.HOST_JID, db.getMyJid());
+					startActivity(chatActivityIntent);
+				}
+			});
 			buttonDeleteProposal.setVisibility(View.VISIBLE);
 		} else if (getActivity() instanceof ProfileActivity) {
 			// If this Fragment is within ProfileActivity, then it's someone
 			// else's Proposal. Retrieve this User.
 			String hostJid = getActivity().getIntent().getStringExtra(
 					Keys.HOST_JID);
-			User host = db.getIncomingUser(hostJid);
+			final User host = db.getIncomingUser(hostJid);
 
 			// Set Proposal member datum.
 			proposal = host.getProposal();
 			String proposalTitle = String.format(
 					getString(R.string.someones_proposal), host.getFirstName());
 			textViewProposalTitle.setText(proposalTitle);
+			buttonChat.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// Start the ChatActivity.
+					Intent chatActivityIntent = new Intent(getActivity(),
+							ChatActivity.class);
+					chatActivityIntent.putExtra(Keys.HOST_JID, host.getJid());
+					startActivity(chatActivityIntent);
+				}
+			});
 			buttonDeleteProposal.setVisibility(View.INVISIBLE);
 		} else {
 			Log.e("ProposalFragment.onCreateView",
@@ -90,5 +100,4 @@ public class ProposalFragment extends SherlockFragment {
 
 		return view;
 	}
-
 }

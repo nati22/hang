@@ -21,6 +21,7 @@ import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.model.callback.MyStatusListener;
 import com.hangapp.newandroid.model.callback.MyUserDataListener;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
+import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Utils;
@@ -134,7 +135,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 					"MyProfileActivity.onSessionStateChange",
 					"Logged out, cleared database");
 			database.clear();
-
+			XMPP.getInstance().logout();
 			finish();
 		}
 	}

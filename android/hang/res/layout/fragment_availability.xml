@@ -14,25 +14,6 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
-    <View
-        android:id="@+id/separator01"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_below="@+id/profilePictureView1"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/darker_gray" />
-
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/imageView2"
-        style="@style/ButtonAppTheme"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignTop="@+id/imageView1"
-        android:layout_toRightOf="@+id/imageView1"
-        android:background="@drawable/roster"
-        android:contentDescription="@string/roster" />
-
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/imageView1"
         style="@style/ButtonAppTheme"
@@ -43,28 +24,6 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/roster"
         android:contentDescription="@string/roster" />
-
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureView1"
-        style="@style/ButtonAppTheme"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/imageView2"
-        android:layout_toRightOf="@+id/imageView1"
-        android:background="@drawable/roster"
-        android:contentDescription="@string/roster" >
-    </com.facebook.widget.ProfilePictureView>
-
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/imageView3"
-        style="@style/ButtonAppTheme"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@+id/imageView2"
-        android:layout_toLeftOf="@+id/imageView2"
-        android:background="@drawable/roster"
-        android:contentDescription="@string/roster" >
-    </com.facebook.widget.ProfilePictureView>
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
@@ -159,12 +118,46 @@
         android:layout_below="@+id/horizontalScrollView1"
         android:background="@android:color/darker_gray" />
 
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/imageView3"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView1"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" >
+    </com.facebook.widget.ProfilePictureView>
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureView1"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/imageView3"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" >
+    </com.facebook.widget.ProfilePictureView>
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/imageView2"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/profilePictureView1"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" >
+    </com.facebook.widget.ProfilePictureView>
+
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/separatorProfileFromBottom"
+        android:layout_marginTop="22dp"
         android:text="Nudged me:" />
 
 </RelativeLayout>
