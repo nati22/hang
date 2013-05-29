@@ -7,6 +7,7 @@ import org.jivesoftware.smack.packet.Message;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,12 +63,13 @@ public class ChatActivity extends BaseFragmentActivity implements
 		adapter = new MessageAdapter(this, R.id.listViewChatCells, messages);
 		listViewChatCells.setAdapter(adapter);
 
-		xmpp.addMucMessageListener(mucName, this);
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		xmpp.addMucMessageListener(mucName, this);
 
 		messages.clear();
 		messages.addAll(xmpp.getAllMessages(mucName));
@@ -75,9 +77,8 @@ public class ChatActivity extends BaseFragmentActivity implements
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-
+	protected void onPause() {
+		super.onPause();
 		xmpp.removeMucMessageListener(mucName, this);
 	}
 
@@ -120,8 +121,19 @@ public class ChatActivity extends BaseFragmentActivity implements
 
 	@Override
 	public void onMucMessageUpdate(String mucName, List<Message> messages) {
-		messages.clear();
-		messages.addAll(messages);
+		Log.d("ChatActivity.onMucMessageUpdate", "Muc Message updated!");
+
+		for (Message message : messages) {
+			Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "
+					+ message.getBody());
+		}
+
+		this.messages.clear();
+		this.messages.addAll(messages);
 		adapter.notifyDataSetChanged();
+
+		listViewChatCells
+				.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+		listViewChatCells.setStackFromBottom(true);
 	}
 }

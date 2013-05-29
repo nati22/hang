@@ -14,7 +14,6 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 import android.content.Context;
 import android.util.Log;
 
-import com.google.android.gms.internal.da;
 import com.hangapp.newandroid.database.MessagesDataSource;
 import com.hangapp.newandroid.model.callback.MucMessageListener;
 import com.hangapp.newandroid.util.HangLog;

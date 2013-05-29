@@ -16,9 +16,9 @@ public class MessagesDataSource {
 	// UserDatabase fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
-	private String[] allColumns = { MySQLiteHelper.COLUMN_ID,
-			MySQLiteHelper.COLUMN_PACKET_ID, MySQLiteHelper.COLUMN_MUC_NAME,
-			MySQLiteHelper.COLUMN_MESSAGE_FROM, MySQLiteHelper.COLUMN_MESSAGE_BODY };
+	private String[] allColumns = { MySQLiteHelper.COLUMN_PACKET_ID,
+			MySQLiteHelper.COLUMN_MUC_NAME, MySQLiteHelper.COLUMN_MESSAGE_FROM,
+			MySQLiteHelper.COLUMN_MESSAGE_BODY };
 
 	public MessagesDataSource(Context context) {
 		dbHelper = new MySQLiteHelper(context);
@@ -32,48 +32,43 @@ public class MessagesDataSource {
 		dbHelper.close();
 	}
 
-	public Message createMessage(String mucName, Message message) {
+	public boolean createMessage(String mucName, Message message) {
 		ContentValues values = new ContentValues();
 		values.put(MySQLiteHelper.COLUMN_PACKET_ID, message.getPacketID());
 		values.put(MySQLiteHelper.COLUMN_MUC_NAME, mucName);
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_FROM, message.getFrom());
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_BODY, message.getBody());
 
-		long insertId = database.insert(MySQLiteHelper.TABLE_MESSAGES, null,
-				values);
-		Cursor cursor = database.query(MySQLiteHelper.TABLE_MESSAGES,
-				allColumns, MySQLiteHelper.COLUMN_ID + " = " + insertId, null,
-				null, null, null);
-		cursor.moveToFirst();
-		Message newMessage = cursorToMessage(cursor);
-		cursor.close();
-
-		return newMessage;
+		return database.insert(MySQLiteHelper.TABLE_MESSAGES, null, values) != -1;
 	}
 
 	public List<Message> getAllMessages(String mucName) {
 		List<Message> messages = new ArrayList<Message>();
 
+		final String WHERE_CLAUSE = MySQLiteHelper.COLUMN_MUC_NAME + " = '"
+				+ mucName + "'";
+
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_MESSAGES,
-				allColumns, null, null, null, null, null);
+				allColumns, WHERE_CLAUSE, null, null, null, null);
 
 		cursor.moveToFirst();
 		while (!cursor.isAfterLast()) {
-			Message message = cursorToMessage(cursor);
+			Message message = retrieveMessageFromCursor(cursor);
 			messages.add(message);
 			cursor.moveToNext();
 		}
+
 		// Make sure to close the cursor
 		cursor.close();
 		return messages;
 	}
 
-	private Message cursorToMessage(Cursor cursor) {
+	private Message retrieveMessageFromCursor(Cursor cursor) {
 		Message message = new Message();
 
-		message.setPacketID(cursor.getString(1));
-		message.setFrom(cursor.getString(3));
-		message.setBody(cursor.getString(4));
+		message.setPacketID(cursor.getString(0));
+		message.setFrom(cursor.getString(2));
+		message.setBody(cursor.getString(3));
 
 		return message;
 	}
