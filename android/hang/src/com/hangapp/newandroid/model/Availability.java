@@ -4,8 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.util.Log;
+
+import com.hangapp.newandroid.util.Keys;
 
 public final class Availability {
+
+	/**
+	 * Inner enum describing each of Availability block.
+	 */
+	public enum Status {
+		FREE(0), BUSY(1);
+
+		private Status(int value) {
+			this.value = value;
+		}
+
+		int value;
+	}
 
 	private Map<DateTime, Status> statuses = new HashMap<DateTime, Availability.Status>();
 
@@ -17,18 +36,52 @@ public final class Availability {
 		return statuses.get(dateTime);
 	}
 
-	/**
-	 * Inner class enum describing each of the availabilities, as opposed to
-	 * having a separate file for this.
-	 */
-	public enum Status {
-		FREE(0), BUSY(1);
+	public void removeStatus(DateTime dateTime) {
+		statuses.remove(dateTime);
+	}
 
-		private Status(int value) {
-			this.value = value;
+	public String toJson() {
+		// Before serializing this Availability, clear out any expired Statuses.
+		clearExpiredStatuses();
+
+		// Get ready to serialize.
+		JSONObject statusesJsonObject = new JSONObject();
+		JSONArray freeJsonArray = new JSONArray();
+		JSONArray busyJsonObject = new JSONArray();
+
+		// Attempt to serialize.
+		try {
+			for (DateTime time : statuses.keySet()) {
+				Status status = statuses.get(time);
+
+				switch (status) {
+				case FREE:
+					freeJsonArray.put(time.toString());
+					break;
+				case BUSY:
+					busyJsonObject.put(time.toString());
+					break;
+				default:
+					throw new Exception("Unknown status: " + status.toString());
+				}
+			}
+
+			statusesJsonObject.put(Keys.FREE, freeJsonArray);
+			statusesJsonObject.put(Keys.BUSY, busyJsonObject);
+
+			return statusesJsonObject.toString();
+		} catch (Exception e) {
+			Log.e("Availability.toJson()", e.getMessage());
+			return null;
 		}
+	}
 
-		int value;
+	private void clearExpiredStatuses() {
+		for (DateTime time : statuses.keySet()) {
+			if (time.isBefore(new DateTime())) {
+				statuses.remove(time);
+			}
+		}
 	}
 
 }

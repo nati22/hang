@@ -163,24 +163,45 @@
         android:layout_below="@+id/horizontalScrollView1"
         android:background="@android:color/darker_gray" />
 
+    <Button
+        android:id="@+id/buttonDone"
+        style="@style/ButtonAppTheme"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_below="@+id/separatorProfileFromBottom"
+        android:layout_toLeftOf="@+id/buttonCancel"
+        android:background="@drawable/done"
+        android:onClick="makeAvailabilityClean"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/buttonCancel"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignBaseline="@+id/buttonDone"
+        android:layout_alignBottom="@+id/buttonDone"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/cancel"
+        android:onClick="makeAvailabilityClean"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/buttonDone"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Nudged me:" />
+
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/imageView3"
         style="@style/ButtonAppTheme"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/imageView1"
         android:layout_below="@+id/imageView1"
-        android:background="@drawable/roster"
-        android:contentDescription="@string/roster" >
-    </com.facebook.widget.ProfilePictureView>
-
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureView1"
-        style="@style/ButtonAppTheme"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/imageView3"
         android:background="@drawable/roster"
         android:contentDescription="@string/roster" >
     </com.facebook.widget.ProfilePictureView>
@@ -190,19 +211,21 @@
         style="@style/ButtonAppTheme"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/profilePictureView1"
         android:layout_below="@+id/profilePictureView1"
         android:background="@drawable/roster"
         android:contentDescription="@string/roster" >
     </com.facebook.widget.ProfilePictureView>
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/separatorProfileFromBottom"
-        android:layout_marginTop="22dp"
-        android:text="Nudged me:" />
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureView1"
+        style="@style/ButtonAppTheme"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignLeft="@+id/imageView3"
+        android:layout_below="@+id/imageView3"
+        android:background="@drawable/roster"
+        android:contentDescription="@string/roster" >
+    </com.facebook.widget.ProfilePictureView>
 
 </RelativeLayout>

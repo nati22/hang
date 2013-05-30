@@ -21,6 +21,8 @@ public final class Keys {
 	public static final String REGISTRATION_ID = "regid";
 	public static final String FRIENDS = "friends";
 	public static final String HOST_JID = "host_jid";
+	public static final String FREE = "free";
+	public static final String BUSY = "busy";
 	
 	/**
 	 * Instead of converting directly from Date objects to Strings and vice

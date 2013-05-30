@@ -2,7 +2,6 @@ package com.hangapp.newandroid.activity.fragment;
 
 import org.joda.time.DateTime;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,25 +16,24 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.util.AvailabilityButton;
-import com.hangapp.newandroid.util.HangLog;
 
 public final class AvailabilityFragment extends SherlockFragment {
 
 	private AvailabilityButton[] buttonsAvailability;
+	private Button buttonDone;
+	private Button buttonCancel;
 
 	private Database database;
 
 	private Availability myAvailability;
 	private AvailabilityButtonOnClickListener availabilityOnClickListener = new AvailabilityButtonOnClickListener();
 
-	private Drawable greyDrawable;
-	private Drawable greenDrawable;
-	private Drawable redDrawable;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		database = Database.getInstance();
+
+		myAvailability = new Availability();
 	}
 
 	@Override
@@ -71,18 +69,27 @@ public final class AvailabilityFragment extends SherlockFragment {
 						.findViewById(R.id.buttonAvailability10),
 				(AvailabilityButton) view
 						.findViewById(R.id.buttonAvailability11) };
+		buttonDone = (Button) view.findViewById(R.id.buttonDone);
+		buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
 
+		buttonDone.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				makeAvailabilityClean();
+			}
+		});
+
+		buttonCancel.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				makeAvailabilityClean();
+			}
+		});
+
+		// Set the OnClickListeners.
 		for (Button button : buttonsAvailability) {
 			button.setOnClickListener(availabilityOnClickListener);
 		}
-
-		// Grab ConstantState objects for each of the possible color buttons
-		// (used for comparison later).
-		greyDrawable = getResources().getDrawable(R.drawable.button_grey);
-		greenDrawable = getResources().getDrawable(R.drawable.button_green);
-		redDrawable = getResources().getDrawable(R.drawable.button_red);
-
-		myAvailability = new Availability();
 
 		return view;
 	}
@@ -91,10 +98,7 @@ public final class AvailabilityFragment extends SherlockFragment {
 	public void onResume() {
 		super.onResume();
 
-		HangLog.toastD(getActivity(), "AvailabilityFragment.onResume",
-				"My Jid: " + database.getMyJid());
-
-		populateAvailabilityButtons();
+		initializeAvailabilityButtons();
 	}
 
 	class AvailabilityButtonOnClickListener implements OnClickListener {
@@ -105,6 +109,9 @@ public final class AvailabilityFragment extends SherlockFragment {
 			// None -> Free.
 			if (availabilityButton.getState() == null) {
 				availabilityButton.setState(Status.FREE);
+				myAvailability.putStatus(availabilityButton.getTime(),
+						Status.FREE);
+				makeAvailabilityDirty();
 				return;
 			}
 
@@ -112,27 +119,48 @@ public final class AvailabilityFragment extends SherlockFragment {
 			// Free -> Busy.
 			case FREE:
 				availabilityButton.setState(Status.BUSY);
+				myAvailability.putStatus(availabilityButton.getTime(),
+						Status.BUSY);
+				makeAvailabilityDirty();
 				return;
 				// Busy -> None.
 			case BUSY:
 				availabilityButton.setState(null);
+				myAvailability.removeStatus(availabilityButton.getTime());
+				makeAvailabilityDirty();
 				return;
 			default:
 				Log.e("AvailabilityButtonOnClickListener", "Unknown state: "
 						+ availabilityButton.getState().toString());
+				return;
 			}
 		}
 	}
 
-	private void populateAvailabilityButtons() {
-		// Populate the Views based on the current time.
-		DateTime currentTime = new DateTime();
+	private void initializeAvailabilityButtons() {
+		// Find the instant of time RIGHT NOW.
+		DateTime rightNow = new DateTime();
 
-		// Set the time of the buttons.
+		// Construct a new DateTime that is only as accurate as the current
+		// hour.
+		DateTime rightNowNoMinutes = new DateTime(rightNow.getYear(),
+				rightNow.getMonthOfYear(), rightNow.getDayOfMonth(),
+				rightNow.getHourOfDay(), 0);
+
+		// Set the time of each button.
 		for (AvailabilityButton buttonAvailability : buttonsAvailability) {
-			buttonAvailability.setTime(currentTime);
-			currentTime = currentTime.plusHours(1);
+			buttonAvailability.setTime(rightNowNoMinutes);
+			rightNowNoMinutes = rightNowNoMinutes.plusHours(1);
 		}
 	}
 
+	private void makeAvailabilityDirty() {
+		buttonDone.setVisibility(View.VISIBLE);
+		buttonCancel.setVisibility(View.VISIBLE);
+	}
+
+	private void makeAvailabilityClean() {
+		buttonDone.setVisibility(View.INVISIBLE);
+		buttonCancel.setVisibility(View.INVISIBLE);
+	}
 }

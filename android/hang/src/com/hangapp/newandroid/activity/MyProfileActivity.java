@@ -76,7 +76,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		super.onResume();
 		uiHelper.onResume();
 
-		OldAvailability myStatus = database.getMyAvailability();
+		OldAvailability myStatus = database.getMyOldAvailability();
 
 		// For scenarios where the main activity is launched and user
 		// session is not null, the session state change notification

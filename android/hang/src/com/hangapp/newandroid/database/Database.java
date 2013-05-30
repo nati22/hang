@@ -107,7 +107,7 @@ public final class Database {
 		return myUserDataListeners.remove(listener);
 	}
 
-	public void setMyAvailability(OldAvailability status) {
+	public void setMyOldAvailability(OldAvailability status) {
 		if (status == null || status.getExpirationDate() == null
 				|| status.getExpirationDate().before(new Date())) {
 			Log.v("Database.setStatus",
@@ -140,7 +140,7 @@ public final class Database {
 	 * @return User's current {@link OldAvailability}. Returns null if there is
 	 *         no OldAvailability yet, or if the OldAvailability has expired.
 	 */
-	public OldAvailability getMyAvailability() {
+	public OldAvailability getMyOldAvailability() {
 
 		OldAvailability.Color statusColor = OldAvailability.parseColor(prefs
 				.getString(Keys.AVAILABILITY_COLOR, null));
