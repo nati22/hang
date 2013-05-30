@@ -28,76 +28,121 @@
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/separatorTitleFromProfile" >
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal" >
 
-            <Button
-                android:id="@+id/Button00"
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability00"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:background="@drawable/green_button"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
                 android:focusable="false"
-                android:text="3 PM"
+                android:text="@string/time"
                 android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/Button01"
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability01"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:background="@drawable/green_button"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
                 android:focusable="false"
-                android:text="3 PM"
+                android:text="@string/time"
                 android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/Button02"
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability02"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:background="@drawable/green_button"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
                 android:focusable="false"
-                android:text="3 PM"
+                android:text="@string/time"
                 android:textSize="12sp" />
 
-            <Button
-                android:id="@+id/Button03"
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability03"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:background="@drawable/green_button"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
                 android:focusable="false"
-                android:text="3 PM"
+                android:text="@string/time"
                 android:textSize="12sp" />
-            
-            <Button
-                android:id="@+id/Button04"
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability04"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:background="@drawable/green_button"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
                 android:focusable="false"
-                android:text="3 PM"
+                android:text="@string/time"
                 android:textSize="12sp" />
-            
-            <Button
-                android:id="@+id/Button05"
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability05"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:background="@drawable/green_button"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
                 android:focusable="false"
-                android:text="3 PM"
+                android:text="@string/time"
                 android:textSize="12sp" />
-            
-            <Button
-                android:id="@+id/Button06"
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability06"
                 android:layout_width="50dp"
-                android:layout_height="60dp"
-                android:background="@drawable/green_button"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
                 android:focusable="false"
-                android:text="3 PM"
+                android:text="@string/time"
+                android:textSize="12sp" />
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability07"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
+                android:focusable="false"
+                android:text="@string/time"
+                android:textSize="12sp" />
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability08"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
+                android:focusable="false"
+                android:text="@string/time"
+                android:textSize="12sp" />
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability09"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
+                android:focusable="false"
+                android:text="@string/time"
+                android:textSize="12sp" />
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability10"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
+                android:focusable="false"
+                android:text="@string/time"
+                android:textSize="12sp" />
+
+            <com.hangapp.newandroid.util.AvailabilityButton
+                android:id="@+id/buttonAvailability11"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_grey"
+                android:focusable="false"
+                android:text="@string/time"
                 android:textSize="12sp" />
         </LinearLayout>
     </HorizontalScrollView>

@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class MessagesDataSource {
 
-	// UserDatabase fields
+	// Database fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
 	private String[] allColumns = { MySQLiteHelper.COLUMN_PACKET_ID,

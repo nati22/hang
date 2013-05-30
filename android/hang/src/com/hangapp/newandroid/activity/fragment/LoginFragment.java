@@ -14,7 +14,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.Keys;
@@ -22,7 +22,7 @@ import com.hangapp.newandroid.util.Keys;
 public class LoginFragment extends SherlockFragment {
 
 	private SharedPreferences prefs;
-	private UserDatabase database;
+	private Database database;
 	private RestClient restClient;
 
 	// Facebook SDK member variables.
@@ -46,7 +46,7 @@ public class LoginFragment extends SherlockFragment {
 		// Instantiate dependencies.
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
 				.getApplicationContext());
-		database = UserDatabase.getInstance();
+		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getActivity()
 				.getApplicationContext());
 	}

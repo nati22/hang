@@ -7,7 +7,7 @@ import org.apache.http.NameValuePair;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 
 public class SetStatusAsyncTask extends BasePutRequestAsyncTask<Availability> {
@@ -15,9 +15,9 @@ public class SetStatusAsyncTask extends BasePutRequestAsyncTask<Availability> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/status";
 
-	private UserDatabase database;
+	private Database database;
 
-	protected SetStatusAsyncTask(UserDatabase database, Context context,
+	protected SetStatusAsyncTask(Database database, Context context,
 			String jid, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX, parameters);
 

@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.callback.MucMessageListener;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
@@ -33,7 +33,7 @@ public class ChatActivity extends BaseFragmentActivity implements
 	private String mucName;
 	private List<Message> messages = new ArrayList<Message>();
 
-	private UserDatabase database;
+	private Database database;
 	private XMPP xmpp;
 
 	@Override
@@ -46,7 +46,7 @@ public class ChatActivity extends BaseFragmentActivity implements
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Instantiate dependencies
-		database = UserDatabase.getInstance();
+		database = Database.getInstance();
 		xmpp = XMPP.getInstance();
 
 		mucName = getIntent().getStringExtra(Keys.HOST_JID);
@@ -98,8 +98,10 @@ public class ChatActivity extends BaseFragmentActivity implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
-			// TODO: Inflate the correct Type of cell, since it could be either
-			// an incoming message or outgoing message.
+			// Inflate the cell if necessary.
+			// TODO: The cell Type could be different, based on if it's an
+			// incoming
+			// or outgoing cell.
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getContext()).inflate(
 						R.layout.cell_incoming_message, null);
@@ -131,9 +133,5 @@ public class ChatActivity extends BaseFragmentActivity implements
 		this.messages.clear();
 		this.messages.addAll(messages);
 		adapter.notifyDataSetChanged();
-
-		listViewChatCells
-				.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-		listViewChatCells.setStackFromBottom(true);
 	}
 }

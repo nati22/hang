@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
@@ -23,12 +23,12 @@ public final class RestClientImpl implements RestClient {
 	static final String GCM_SENDER_ID = "369775641911";
 	static final String GCM_API_KEY = "AIzaSyAJtklyMjzyHNfRC2Ratkoh3ziFodaZWZU";
 
-	private UserDatabase database;
+	private Database database;
 	private Context context;
 	private SharedPreferences prefs;
 	private GoogleCloudMessaging gcm;
 
-	public RestClientImpl(UserDatabase database, Context context) {
+	public RestClientImpl(Database database, Context context) {
 		this.context = context;
 
 		// Set dependencies.

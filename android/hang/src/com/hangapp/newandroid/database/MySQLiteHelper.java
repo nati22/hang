@@ -16,7 +16,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 	private static final String DATABASE_NAME = "messages.db";
 	private static final int DATABASE_VERSION = 1;
 
-	// UserDatabase creation sql statement
+	// Database creation sql statement
 	private static final String DATABASE_CREATE = "create table "
 			+ TABLE_MESSAGES + "(" + COLUMN_PACKET_ID
 			+ " text primary key not null, " + COLUMN_MUC_NAME

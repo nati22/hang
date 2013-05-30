@@ -22,7 +22,7 @@ import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.fragment.AvailabilityFragment;
 import com.hangapp.newandroid.activity.fragment.FriendsFragment;
 import com.hangapp.newandroid.activity.fragment.ProposalFragment;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
@@ -35,7 +35,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 	private TabsAdapter mTabsAdapter;
 
 	private SharedPreferences prefs;
-	private UserDatabase database;
+	private Database database;
 	private RestClient restClient;
 
 	// Facebook SDK member variables.
@@ -55,8 +55,8 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		// Initialize dependencies.
 		prefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
-		database = UserDatabase.getInstance();
-		restClient = new RestClientImpl(UserDatabase.getInstance(),
+		database = Database.getInstance();
+		restClient = new RestClientImpl(Database.getInstance(),
 				getApplicationContext());
 
 		// Initialize the ViewPager and set it to be the ContentView of this

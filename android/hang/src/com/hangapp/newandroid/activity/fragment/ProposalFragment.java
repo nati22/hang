@@ -15,7 +15,7 @@ import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.activity.HomeActivity;
 import com.hangapp.newandroid.activity.ProfileActivity;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.Keys;
@@ -28,14 +28,14 @@ public class ProposalFragment extends SherlockFragment {
 
 	private Proposal proposal;
 
-	private UserDatabase db;
+	private Database db;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Instantiate dependencies.
-		db = UserDatabase.getInstance();
+		db = Database.getInstance();
 	}
 
 	@Override

@@ -13,7 +13,7 @@ import com.facebook.model.GraphUser;
 import com.facebook.widget.FriendPickerFragment;
 import com.facebook.widget.PickerFragment;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
@@ -24,7 +24,7 @@ public class AddOutgoingBroadcastActivity extends BaseFragmentActivity {
 	public static final Uri FRIEND_PICKER = Uri.parse("picker://friend");
 	private FriendPickerFragment friendPickerFragment;
 
-	private UserDatabase database;
+	private Database database;
 	private RestClient restClient;
 
 	@Override
@@ -37,7 +37,7 @@ public class AddOutgoingBroadcastActivity extends BaseFragmentActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Instantiate dependencies.
-		database = UserDatabase.getInstance();
+		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
 
 		Bundle args = getIntent().getExtras();

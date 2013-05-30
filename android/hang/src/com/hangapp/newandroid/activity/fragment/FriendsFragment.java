@@ -20,7 +20,7 @@ import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ProfileActivity;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Color;
 import com.hangapp.newandroid.model.User;
@@ -35,14 +35,14 @@ public final class FriendsFragment extends SherlockFragment implements
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
 	private FriendsAdapter adapter;
 
-	private UserDatabase database;
+	private Database database;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Instantiate dependencies.
-		database = UserDatabase.getInstance();
+		database = Database.getInstance();
 
 		// Setup listener.
 		database.addIncomingBroadcastsListener(this);

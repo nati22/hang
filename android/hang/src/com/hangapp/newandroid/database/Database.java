@@ -26,9 +26,9 @@ import com.hangapp.newandroid.util.Keys;
  * Singleton that maintains several Lists of Listeners to it. This class
  * persists client-side user data.
  */
-public final class UserDatabase {
+public final class Database {
 
-	private static UserDatabase instance = new UserDatabase();
+	private static Database instance = new Database();
 
 	private SharedPreferences prefs;
 
@@ -46,10 +46,10 @@ public final class UserDatabase {
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
 
 	/** Private constructor */
-	private UserDatabase() {
+	private Database() {
 	}
 
-	public static final synchronized UserDatabase getInstance() {
+	public static final synchronized Database getInstance() {
 		return instance;
 	}
 
@@ -109,7 +109,7 @@ public final class UserDatabase {
 	public void setMyAvailability(Availability status) {
 		if (status == null || status.getExpirationDate() == null
 				|| status.getExpirationDate().before(new Date())) {
-			Log.v("UserDatabase.setStatus",
+			Log.v("Database.setStatus",
 					"Called setStatus on null status / null status expiration date");
 
 			// Notify listeners
@@ -161,7 +161,7 @@ public final class UserDatabase {
 // TODO: We need a way to store time, interested users, confirmed users
 	public void setMyProposal(Proposal proposal) {
 		if (proposal == null) {
-			Log.v("UserDatabase.setProposal",
+			Log.v("Database.setProposal",
 					"Called setProposal() with null proposal");
 
 			// Notify listeners

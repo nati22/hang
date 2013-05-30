@@ -24,7 +24,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.database.UserDatabase;
+import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
@@ -36,7 +36,7 @@ public class OutgoingBroadcastsActivity extends BaseFragmentActivity implements
 	private static final int REAUTH_ACTIVITY_CODE = 100;
 	private List<User> outgoingBroadcasts = new ArrayList<User>();
 
-	private UserDatabase database;
+	private Database database;
 
 	private ListView listViewOutgoingBroadcasts;
 	private OutgoingBroadcastsArrayAdapter adapter;
@@ -56,7 +56,7 @@ public class OutgoingBroadcastsActivity extends BaseFragmentActivity implements
 		setContentView(R.layout.activity_outgoing_broadcasts);
 
 		// Instantiate dependencies.
-		database = UserDatabase.getInstance();
+		database = Database.getInstance();
 
 		// Enable the "Up" button.
 		getSupportActionBar().setHomeButtonEnabled(true);
