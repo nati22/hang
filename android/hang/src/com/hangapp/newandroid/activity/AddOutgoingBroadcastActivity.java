@@ -19,7 +19,7 @@ import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
 
-public class AddOutgoingBroadcastActivity extends BaseFragmentActivity {
+public final class AddOutgoingBroadcastActivity extends BaseFragmentActivity {
 
 	public static final Uri FRIEND_PICKER = Uri.parse("picker://friend");
 	private FriendPickerFragment friendPickerFragment;

@@ -11,7 +11,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class MessagesDataSource {
+public final class MessagesDataSource {
 
 	// Database fields
 	private SQLiteDatabase database;

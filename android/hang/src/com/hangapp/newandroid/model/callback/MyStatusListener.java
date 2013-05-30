@@ -1,8 +1,8 @@
 package com.hangapp.newandroid.model.callback;
 
-import com.hangapp.newandroid.model.Availability;
+import com.hangapp.newandroid.model.OldAvailability;
 
 public interface MyStatusListener {
 
-	public void onMyStatusUpdate(Availability status);
+	public void onMyStatusUpdate(OldAvailability status);
 }

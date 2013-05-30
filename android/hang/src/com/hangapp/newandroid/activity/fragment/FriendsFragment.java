@@ -21,8 +21,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ProfileActivity;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.Availability;
-import com.hangapp.newandroid.model.Availability.Color;
+import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.OldAvailability.Color;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.util.Keys;
@@ -177,7 +177,7 @@ public final class FriendsFragment extends SherlockFragment implements
 				holder = (HeaderViewHolder) convertView.getTag();
 			}
 
-			Availability availability = friends.get(position).getAvailability();
+			OldAvailability availability = friends.get(position).getAvailability();
 			String headerText = null;
 
 			if (availability != null && availability.getColor() == Color.FREE) {
@@ -197,7 +197,7 @@ public final class FriendsFragment extends SherlockFragment implements
 
 		@Override
 		public long getHeaderId(int position) {
-			Availability availability = friends.get(position).getAvailability();
+			OldAvailability availability = friends.get(position).getAvailability();
 
 			if (availability != null && availability.getColor() == Color.FREE) {
 				return 0;

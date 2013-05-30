@@ -10,23 +10,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.NewAvailability;
-import com.hangapp.newandroid.model.NewAvailability.Status;
+import com.hangapp.newandroid.model.Availability;
+import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.util.AvailabilityButton;
 import com.hangapp.newandroid.util.HangLog;
 
-public class AvailabilityFragment extends SherlockFragment {
+public final class AvailabilityFragment extends SherlockFragment {
 
 	private AvailabilityButton[] buttonsAvailability;
 
 	private Database database;
 
-	private NewAvailability myAvailability;
+	private Availability myAvailability;
+	private AvailabilityButtonOnClickListener availabilityOnClickListener = new AvailabilityButtonOnClickListener();
 
 	private Drawable greyDrawable;
 	private Drawable greenDrawable;
@@ -72,7 +72,6 @@ public class AvailabilityFragment extends SherlockFragment {
 				(AvailabilityButton) view
 						.findViewById(R.id.buttonAvailability11) };
 
-		AvailabilityOnClickListener availabilityOnClickListener = new AvailabilityOnClickListener();
 		for (Button button : buttonsAvailability) {
 			button.setOnClickListener(availabilityOnClickListener);
 		}
@@ -83,7 +82,7 @@ public class AvailabilityFragment extends SherlockFragment {
 		greenDrawable = getResources().getDrawable(R.drawable.button_green);
 		redDrawable = getResources().getDrawable(R.drawable.button_red);
 
-		myAvailability = new NewAvailability();
+		myAvailability = new Availability();
 
 		return view;
 	}
@@ -98,7 +97,7 @@ public class AvailabilityFragment extends SherlockFragment {
 		populateAvailabilityButtons();
 	}
 
-	class AvailabilityOnClickListener implements OnClickListener {
+	class AvailabilityButtonOnClickListener implements OnClickListener {
 		@Override
 		public void onClick(View button) {
 			AvailabilityButton availabilityButton = (AvailabilityButton) button;
@@ -114,12 +113,12 @@ public class AvailabilityFragment extends SherlockFragment {
 			case FREE:
 				availabilityButton.setState(Status.BUSY);
 				return;
-				// Busy -> Free.
+				// Busy -> None.
 			case BUSY:
 				availabilityButton.setState(null);
 				return;
 			default:
-				Log.e("AvailabilityOnClickListener", "Unknown state: "
+				Log.e("AvailabilityButtonOnClickListener", "Unknown state: "
 						+ availabilityButton.getState().toString());
 			}
 		}
@@ -129,11 +128,9 @@ public class AvailabilityFragment extends SherlockFragment {
 		// Populate the Views based on the current time.
 		DateTime currentTime = new DateTime();
 
-		Toast.makeText(getActivity(), currentTime.toString(), Toast.LENGTH_LONG)
-				.show();
-
-		for (Button buttonAvailability : buttonsAvailability) {
-			buttonAvailability.setText(currentTime.toString("h aa"));
+		// Set the time of the buttons.
+		for (AvailabilityButton buttonAvailability : buttonsAvailability) {
+			buttonAvailability.setTime(currentTime);
 			currentTime = currentTime.plusHours(1);
 		}
 	}

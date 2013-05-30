@@ -25,7 +25,7 @@ public final class User implements Comparable<User>, Parcelable {
 	private String jid;
 	private String firstName;
 	private String lastName;
-	private Availability availability;
+	private OldAvailability availability;
 	private Proposal proposal;
 	private List<User> incomingBroadcasts;
 	private List<User> outgoingBroadcasts;
@@ -53,7 +53,7 @@ public final class User implements Comparable<User>, Parcelable {
 		return firstName + " " + lastName;
 	}
 
-	public Availability getAvailability() {
+	public OldAvailability getAvailability() {
 		return availability;
 	}
 
@@ -61,7 +61,7 @@ public final class User implements Comparable<User>, Parcelable {
 		return proposal;
 	}
 
-	public void setAvailability(Availability status) {
+	public void setAvailability(OldAvailability status) {
 		this.availability = status;
 	}
 
@@ -131,7 +131,7 @@ public final class User implements Comparable<User>, Parcelable {
 
 	public static User parseUser(String userJsonString) throws JSONException {
 		User user = null;
-		Availability status = null;
+		OldAvailability status = null;
 		Proposal proposal = null;
 
 		JSONObject userJsonObject = new JSONObject(userJsonString);
@@ -152,7 +152,7 @@ public final class User implements Comparable<User>, Parcelable {
 			date = null;
 		}
 
-		status = new Availability(statusColor, date);
+		status = new OldAvailability(statusColor, date);
 
 		String proposalDescription = userJsonObject
 				.getString(Keys.PROPOSAL_DESCRIPTION);
@@ -249,7 +249,7 @@ public final class User implements Comparable<User>, Parcelable {
 						Date.parse(statusExpirationDateString));
 			}
 
-			Availability availability = new Availability(statusColor,
+			OldAvailability availability = new OldAvailability(statusColor,
 					expirationDate);
 
 			User user = new User(jid, firstName, lastName);

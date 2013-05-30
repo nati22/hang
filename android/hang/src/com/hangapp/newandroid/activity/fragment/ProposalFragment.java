@@ -20,7 +20,7 @@ import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.Keys;
 
-public class ProposalFragment extends SherlockFragment {
+public final class ProposalFragment extends SherlockFragment {
 
 	private TextView textViewProposalTitle;
 	private ImageView buttonChat;

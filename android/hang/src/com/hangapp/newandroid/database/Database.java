@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.hangapp.newandroid.model.Availability;
+import com.hangapp.newandroid.model.OldAvailability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
@@ -23,8 +23,9 @@ import com.hangapp.newandroid.util.BaseApplication;
 import com.hangapp.newandroid.util.Keys;
 
 /**
- * Singleton that maintains several Lists of Listeners to it. This class
- * persists client-side user data.
+ * This class persists client-side user data. It is a Singleton that maintains
+ * several Lists of Listeners to it, where a Listener is an object that
+ * "observes" this Singleton.
  */
 public final class Database {
 
@@ -106,7 +107,7 @@ public final class Database {
 		return myUserDataListeners.remove(listener);
 	}
 
-	public void setMyAvailability(Availability status) {
+	public void setMyAvailability(OldAvailability status) {
 		if (status == null || status.getExpirationDate() == null
 				|| status.getExpirationDate().before(new Date())) {
 			Log.v("Database.setStatus",
@@ -136,19 +137,19 @@ public final class Database {
 	}
 
 	/**
-	 * @return User's current {@link Availability}. Returns null if there is no
-	 *         Availability yet, or if the Availability has expired.
+	 * @return User's current {@link OldAvailability}. Returns null if there is
+	 *         no OldAvailability yet, or if the OldAvailability has expired.
 	 */
-	public Availability getMyAvailability() {
+	public OldAvailability getMyAvailability() {
 
-		Availability.Color statusColor = Availability.parseColor(prefs
+		OldAvailability.Color statusColor = OldAvailability.parseColor(prefs
 				.getString(Keys.AVAILABILITY_COLOR, null));
 		String dateString = prefs.getString(Keys.AVAILABILITY_EXPIRATION_DATE,
 				null);
 		Date expirationDate = dateString != null ? new Date(Date.parse(prefs
 				.getString(Keys.AVAILABILITY_EXPIRATION_DATE, null))) : null;
 
-		Availability myAvailability = new Availability(statusColor,
+		OldAvailability myAvailability = new OldAvailability(statusColor,
 				expirationDate);
 
 		if (!myAvailability.isActive()) {
@@ -158,7 +159,7 @@ public final class Database {
 		return myAvailability;
 	}
 
-// TODO: We need a way to store time, interested users, confirmed users
+	// TODO: We need a way to store time, interested users, confirmed users
 	public void setMyProposal(Proposal proposal) {
 		if (proposal == null) {
 			Log.v("Database.setProposal",
@@ -178,9 +179,10 @@ public final class Database {
 
 		editor.putString(Keys.PROPOSAL_DESCRIPTION, proposal.getDescription());
 		editor.putString(Keys.PROPOSAL_LOCATION, proposal.getLocation());
-	/*	editor.putString(Keys.PROPOSAL_TIME, proposal.getStartTime()
-				.toGMTString()); 
-*/
+		/*
+		 * editor.putString(Keys.PROPOSAL_TIME, proposal.getStartTime()
+		 * .toGMTString());
+		 */
 		editor.commit();
 
 		// Notify listeners

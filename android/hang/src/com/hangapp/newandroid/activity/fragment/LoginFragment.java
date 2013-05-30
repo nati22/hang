@@ -17,9 +17,8 @@ import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
-import com.hangapp.newandroid.util.Keys;
 
-public class LoginFragment extends SherlockFragment {
+public final class LoginFragment extends SherlockFragment {
 
 	private SharedPreferences prefs;
 	private Database database;

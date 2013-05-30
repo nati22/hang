@@ -8,12 +8,12 @@ import android.util.Log;
 import android.widget.Button;
 
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.model.NewAvailability;
+import com.hangapp.newandroid.model.Availability;
 
 public class AvailabilityButton extends Button {
 
-	private DateTime dateTime;
-	private NewAvailability.Status state;
+	private DateTime time;
+	private Availability.Status state;
 
 	public AvailabilityButton(Context context) {
 		super(context);
@@ -27,7 +27,7 @@ public class AvailabilityButton extends Button {
 		super(context, attrs, defStyle);
 	}
 
-	public void setState(NewAvailability.Status newState) {
+	public void setState(Availability.Status newState) {
 		this.state = newState;
 
 		if (newState == null) {
@@ -49,7 +49,16 @@ public class AvailabilityButton extends Button {
 		}
 	}
 
-	public NewAvailability.Status getState() {
+	public Availability.Status getState() {
 		return state;
+	}
+
+	public DateTime getTime() {
+		return time;
+	}
+
+	public void setTime(DateTime dateTime) {
+		this.time = dateTime;
+		setText(dateTime.toString("h aa"));
 	}
 }

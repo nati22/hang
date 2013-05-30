@@ -8,9 +8,9 @@ import android.content.Context;
 import android.util.Log;
 
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.Availability;
+import com.hangapp.newandroid.model.OldAvailability;
 
-public class SetStatusAsyncTask extends BasePutRequestAsyncTask<Availability> {
+public class SetStatusAsyncTask extends BasePutRequestAsyncTask<OldAvailability> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/status";
@@ -26,7 +26,7 @@ public class SetStatusAsyncTask extends BasePutRequestAsyncTask<Availability> {
 	}
 
 	@Override
-	public Availability call() throws Exception {
+	public OldAvailability call() throws Exception {
 		// Execute the PUT request
 		super.call();
 

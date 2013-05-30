@@ -11,7 +11,7 @@ import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 
-public class ProfileActivity extends BaseFragmentActivity {
+public final class ProfileActivity extends BaseFragmentActivity {
 
 	private ProfilePictureView profilePictureView;
 	private TextView textViewFriendName;

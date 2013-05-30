@@ -25,13 +25,13 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.Availability;
+import com.hangapp.newandroid.model.OldAvailability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 
-public class OutgoingBroadcastsActivity extends BaseFragmentActivity implements
-		OutgoingBroadcastsListener {
+public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
+		implements OutgoingBroadcastsListener {
 
 	private static final int REAUTH_ACTIVITY_CODE = 100;
 	private List<User> outgoingBroadcasts = new ArrayList<User>();
@@ -139,7 +139,7 @@ public class OutgoingBroadcastsActivity extends BaseFragmentActivity implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			User outgoingBroadcast = getItem(position);
-			Availability hisStatus = outgoingBroadcast.getAvailability();
+			OldAvailability hisStatus = outgoingBroadcast.getAvailability();
 
 			// Inflate if necessary.
 			if (convertView == null) {
@@ -163,7 +163,7 @@ public class OutgoingBroadcastsActivity extends BaseFragmentActivity implements
 					.getFullName());
 			textViewOutgoingBroadcastStatus
 					.setText(hisStatus != null ? hisStatus.getDescription()
-							: "Unknown Availability");
+							: "Unknown OldAvailability");
 
 			// Show/hide the "Delete" button if we need to.
 			if (showDeleteButtons) {

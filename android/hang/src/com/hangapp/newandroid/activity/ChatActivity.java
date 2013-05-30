@@ -23,7 +23,7 @@ import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.Keys;
 
-public class ChatActivity extends BaseFragmentActivity implements
+public final class ChatActivity extends BaseFragmentActivity implements
 		MucMessageListener {
 
 	private EditText editTextChatMessage;
