@@ -89,7 +89,7 @@ class UserRequestHandler(webapp2.RequestHandler):
 
             # If their JSON info isn't in the Library, add it
             if inc_jid not in library_json:
-                library_json[inc_jid] = incoming_broadcast.get_stranger_json()
+                library_json[inc_jid] = incoming_broadcast.get_partial_json()
 
             # Add the Interested Users of the Incoming Broadcaster to our library
             # TODO: Later we should only be retrieving their fn, ln, jid, (maybe their icon?) 
@@ -113,7 +113,7 @@ class UserRequestHandler(webapp2.RequestHandler):
             out_jid = outgoing_broadcast.key().name()
             outgoing_broadcasts_jids.append(out_jid)
             if out_jid not in library_json:
-                library_json[out_jid] = outgoing_broadcast.get_partial_json()
+                library_json[out_jid] = outgoing_broadcast.get_stranger_json()
         
         # Convert the interested users to JSON objects    
         interested_users_jids = []
@@ -121,7 +121,7 @@ class UserRequestHandler(webapp2.RequestHandler):
             int_jid = interested_user.key().name()
             interested_users_jids.append(int_jid)
             if int_jid not in library_json:
-                library_json[int_jid] = interested_user.get_partial_json()
+                library_json[int_jid] = interested_user.get_stranger_json()
             
         # Convert the interested users to JSON objects    
         confirmed_users_jids = []
@@ -129,7 +129,7 @@ class UserRequestHandler(webapp2.RequestHandler):
             conf_jid = confirmed_user.key().name()
             confirmed_users_jids.append(conf_jid)
             if conf_jid not in library_json:
-                library_json[conf_jid] = confirmed_user.get_partial_json()
+                library_json[conf_jid] = confirmed_user.get_stranger_json()
         
         # Format the user into a JSON object
         user_json_object = {

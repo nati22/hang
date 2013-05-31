@@ -181,15 +181,15 @@ public final class User implements Comparable<User>, Parcelable {
 		// Populate IncomingBroadcast strings
 		List<String> incomingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < incomingBroadcastsJsonArray.length(); i++) {
-			incomingBroadcastsStrings.add(incomingBroadcastsJsonArray
-					.getString(i));
+			incomingBroadcastsStrings
+					.add(incomingBroadcastsJsonArray.getString(i));
 		}
 
 		// Populate OutgoingBroadcast strings
 		List<String> outgoingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < outgoingBroadcastsJsonArray.length(); i++) {
-			outgoingBroadcastsStrings.add(outgoingBroadcastsJsonArray
-					.getString(i));
+			outgoingBroadcastsStrings
+					.add(outgoingBroadcastsJsonArray.getString(i));
 		}
 
 		// Parse the Library.
@@ -208,8 +208,7 @@ public final class User implements Comparable<User>, Parcelable {
 		return user;
 	}
 
-	public static User parseUserName(String userJsonString)
-			throws JSONException {
+	public static User parseUserName(String userJsonString) throws JSONException {
 		User user = null;
 
 		JSONObject userJsonObject = new JSONObject(userJsonString);
@@ -230,47 +229,60 @@ public final class User implements Comparable<User>, Parcelable {
 		Iterator<?> keys = library.keys();
 
 		while (keys.hasNext()) {
-			JSONObject userJsonObject = library.getJSONObject((String) keys
-					.next());
+			JSONObject userJsonObject = library
+					.getJSONObject((String) keys.next());
 
 			String jid = userJsonObject.getString(Keys.JID);
 			String firstName = userJsonObject.getString(Keys.FIRST_NAME);
 			String lastName = userJsonObject.getString(Keys.LAST_NAME);
 
-			String statusColor = userJsonObject
-					.getString(Keys.AVAILABILITY_COLOR);
+			String statusColor = userJsonObject.getString(Keys.AVAILABILITY_COLOR);
 			String statusExpirationDateString = userJsonObject
 					.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
 
 			Date expirationDate = null;
 
 			if (!statusExpirationDateString.equals("null")) {
-				expirationDate = new Date(
-						Date.parse(statusExpirationDateString));
+				expirationDate = new Date(Date.parse(statusExpirationDateString));
 			}
 
 			Availability availability = new Availability(statusColor,
 					expirationDate);
 
 			User user = new User(jid, firstName, lastName);
+
+			// TODO: Use new Availability model.
 			user.setAvailability(availability);
 
 			try {
+				// Parsing proposal detail fields
 				String proposalDescription = userJsonObject
 						.getString(Keys.PROPOSAL_DESCRIPTION);
 				String proposalLocation = userJsonObject
 						.getString(Keys.PROPOSAL_LOCATION);
 				String proposalStartTimeString = userJsonObject
 						.getString(Keys.PROPOSAL_TIME);
+
+				// Sanity checks on the Strings we just parsed
+				if (proposalDescription.equals("null")) {
+					throw new JSONException("proposalDescription is \"null\"");
+				} else if (proposalLocation.equals("null")) {
+					throw new JSONException("proposalLocation is \"null\"");
+				} else if (proposalStartTimeString.equals("null")) {
+					throw new JSONException("proposalStartTimeString is \"null\"");
+				}
+
+				// TODO: Switch to JodaTime (IN YO FACE)
 				Date proposalStartTime = new Date(
 						Date.parse(proposalStartTimeString));
 
 				Proposal proposal = new Proposal(proposalDescription,
 						proposalLocation, proposalStartTime);
 				user.setProposal(proposal);
+				
 			} catch (JSONException e) {
 				Log.e("User.parseLibrary", "User " + user.firstName
-						+ " had no proposal");
+						+ " had no proposal: " + e.getMessage());
 			}
 
 			users.put(jid, user);
