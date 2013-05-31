@@ -10,24 +10,25 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Proposal;
-import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.Keys;
 
-public final class ProposalFragment extends SherlockFragment {
+public final class MyProposalFragment extends SherlockFragment {
 
 	private ScrollView scrollViewProposal;
 	private RelativeLayout emptyView;
-
+	private ImageView imageViewNoProposal;
 	private TextView textViewProposalTitle;
 	private ImageView buttonChat;
+	private ImageView buttonDeleteProposal;
 
-	private Proposal hostProposal;
+	private Proposal myProposal;
 
 	private Database database;
 
@@ -52,28 +53,45 @@ public final class ProposalFragment extends SherlockFragment {
 		scrollViewProposal = (ScrollView) view
 				.findViewById(R.id.scrollViewProposal);
 		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
+		imageViewNoProposal = (ImageView) view
+				.findViewById(R.id.imageViewNoProposal);
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
+		buttonDeleteProposal = (ImageView) view
+				.findViewById(R.id.buttonDeleteProposal);
 
 		// Populate member datum
-		String hostJid = getActivity().getIntent()
-				.getStringExtra(Keys.HOST_JID);
-		final User host = database.getIncomingUser(hostJid);
+		myProposal = database.getMyProposal();
+		textViewProposalTitle.setText(getString(R.string.my_current_proposal));
 
-		// Set Proposal member datum.
-		hostProposal = host.getProposal();
-		String proposalTitle = String.format(
-				getString(R.string.someones_proposal), host.getFirstName());
-		textViewProposalTitle.setText(proposalTitle);
-
-		// Set OnClickListeners.
+		// Set the OnClickListeners.
+		imageViewNoProposal.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Open the Create New Proposal dialog.
+				Toast.makeText(
+						getActivity(),
+						"Here is where we should open the CreateProposalDialog",
+						Toast.LENGTH_SHORT).show();
+			}
+		});
 		buttonChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// Start the ChatActivity.
 				Intent chatActivityIntent = new Intent(getActivity(),
 						ChatActivity.class);
-				chatActivityIntent.putExtra(Keys.HOST_JID, host.getJid());
+				chatActivityIntent.putExtra(Keys.HOST_JID, database.getMyJid());
 				startActivity(chatActivityIntent);
+			}
+		});
+		buttonDeleteProposal.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Open the Delete Proposal dialog.
+				Toast.makeText(
+						getActivity(),
+						"Here is where we should open the DeleteProposalDialog",
+						Toast.LENGTH_SHORT).show();
 			}
 		});
 
@@ -84,9 +102,10 @@ public final class ProposalFragment extends SherlockFragment {
 	public void onResume() {
 		super.onResume();
 
-		// TODO: Load host proposal from the database.
+		// Load up my Proposal from the database.
+		myProposal = database.getMyProposal();
 
-		if (hostProposal == null) {
+		if (myProposal == null) {
 			scrollViewProposal.setVisibility(View.INVISIBLE);
 			emptyView.setVisibility(View.VISIBLE);
 		}
