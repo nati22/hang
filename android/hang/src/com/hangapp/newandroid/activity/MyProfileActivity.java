@@ -15,7 +15,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.model.callback.MyStatusListener;
@@ -76,7 +76,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		super.onResume();
 		uiHelper.onResume();
 
-		OldAvailability myStatus = database.getMyOldAvailability();
+		Availability myStatus = database.getMyOldAvailability();
 
 		// For scenarios where the main activity is launched and user
 		// session is not null, the session state change notification
@@ -91,7 +91,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 
 		textViewMyName.setText(database.getMyFullName());
 		textViewMyStatus.setText(myStatus != null ? myStatus.getDescription()
-				: "No OldAvailability");
+				: "No Availability");
 
 		database.addMyUserDataListener(this);
 		onOutgoingBroadcastsUpdate(database.getMyOutgoingBroadcasts());
@@ -146,9 +146,9 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 	}
 
 	@Override
-	public void onMyStatusUpdate(OldAvailability status) {
+	public void onMyStatusUpdate(Availability status) {
 		textViewMyStatus.setText(status != null ? status.getDescription()
-				: "No OldAvailability.");
+				: "No Availability.");
 	}
 
 	public void startOutgoingBroadcastsActivity(View v) {

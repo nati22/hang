@@ -13,7 +13,6 @@ import android.widget.Button;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.util.AvailabilityButton;
 
@@ -25,7 +24,6 @@ public final class AvailabilityFragment extends SherlockFragment {
 
 	private Database database;
 
-	private Availability myAvailability;
 	private AvailabilityButtonOnClickListener availabilityOnClickListener = new AvailabilityButtonOnClickListener();
 
 	@Override
@@ -33,7 +31,6 @@ public final class AvailabilityFragment extends SherlockFragment {
 		super.onCreate(savedInstanceState);
 		database = Database.getInstance();
 
-		myAvailability = new Availability();
 	}
 
 	@Override
@@ -109,8 +106,6 @@ public final class AvailabilityFragment extends SherlockFragment {
 			// None -> Free.
 			if (availabilityButton.getState() == null) {
 				availabilityButton.setState(Status.FREE);
-				myAvailability.putStatus(availabilityButton.getTime(),
-						Status.FREE);
 				makeAvailabilityDirty();
 				return;
 			}
@@ -119,14 +114,11 @@ public final class AvailabilityFragment extends SherlockFragment {
 			// Free -> Busy.
 			case FREE:
 				availabilityButton.setState(Status.BUSY);
-				myAvailability.putStatus(availabilityButton.getTime(),
-						Status.BUSY);
 				makeAvailabilityDirty();
 				return;
 				// Busy -> None.
 			case BUSY:
 				availabilityButton.setState(null);
-				myAvailability.removeStatus(availabilityButton.getTime());
 				makeAvailabilityDirty();
 				return;
 			default:

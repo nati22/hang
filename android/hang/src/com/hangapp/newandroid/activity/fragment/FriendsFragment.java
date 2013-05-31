@@ -21,8 +21,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ProfileActivity;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.OldAvailability;
-import com.hangapp.newandroid.model.OldAvailability.Color;
+import com.hangapp.newandroid.model.Availability;
+import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.util.Keys;
@@ -177,14 +177,14 @@ public final class FriendsFragment extends SherlockFragment implements
 				holder = (HeaderViewHolder) convertView.getTag();
 			}
 
-			OldAvailability availability = friends.get(position).getAvailability();
+			Availability availability = friends.get(position).getAvailability();
 			String headerText = null;
 
-			if (availability != null && availability.getColor() == Color.FREE) {
+			if (availability != null && availability.getColor() == Status.FREE) {
 				headerText = "Free to hang";
 				holder.text1.setTextColor(android.graphics.Color.GREEN);
 			} else if (availability != null
-					&& availability.getColor() == Color.BUSY) {
+					&& availability.getColor() == Status.BUSY) {
 				headerText = "Busy, can't hang";
 				holder.text1.setTextColor(android.graphics.Color.RED);
 			} else {
@@ -197,12 +197,12 @@ public final class FriendsFragment extends SherlockFragment implements
 
 		@Override
 		public long getHeaderId(int position) {
-			OldAvailability availability = friends.get(position).getAvailability();
+			Availability availability = friends.get(position).getAvailability();
 
-			if (availability != null && availability.getColor() == Color.FREE) {
+			if (availability != null && availability.getColor() == Status.FREE) {
 				return 0;
 			} else if (availability != null
-					&& availability.getColor() == Color.BUSY) {
+					&& availability.getColor() == Status.BUSY) {
 				return 1;
 			} else {
 				return 2;

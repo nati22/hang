@@ -11,7 +11,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
@@ -107,7 +107,7 @@ public final class Database {
 		return myUserDataListeners.remove(listener);
 	}
 
-	public void setMyOldAvailability(OldAvailability status) {
+	public void setMyOldAvailability(Availability status) {
 		if (status == null || status.getExpirationDate() == null
 				|| status.getExpirationDate().before(new Date())) {
 			Log.v("Database.setStatus",
@@ -137,19 +137,19 @@ public final class Database {
 	}
 
 	/**
-	 * @return User's current {@link OldAvailability}. Returns null if there is
-	 *         no OldAvailability yet, or if the OldAvailability has expired.
+	 * @return User's current {@link Availability}. Returns null if there is
+	 *         no Availability yet, or if the Availability has expired.
 	 */
-	public OldAvailability getMyOldAvailability() {
+	public Availability getMyOldAvailability() {
 
-		OldAvailability.Color statusColor = OldAvailability.parseColor(prefs
+		Availability.Status statusColor = Availability.parseStatus(prefs
 				.getString(Keys.AVAILABILITY_COLOR, null));
 		String dateString = prefs.getString(Keys.AVAILABILITY_EXPIRATION_DATE,
 				null);
 		Date expirationDate = dateString != null ? new Date(Date.parse(prefs
 				.getString(Keys.AVAILABILITY_EXPIRATION_DATE, null))) : null;
 
-		OldAvailability myAvailability = new OldAvailability(statusColor,
+		Availability myAvailability = new Availability(statusColor,
 				expirationDate);
 
 		if (!myAvailability.isActive()) {

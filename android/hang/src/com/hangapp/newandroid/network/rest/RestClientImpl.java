@@ -12,7 +12,7 @@ import android.preference.PreferenceManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.HangLog;
@@ -53,7 +53,7 @@ public final class RestClientImpl implements RestClient {
 	}
 
 	@Override
-	public void updateMyAvailability(OldAvailability status) {
+	public void updateMyAvailability(Availability status) {
 
 		String jid = database.getMyJid();
 
