@@ -1,10 +1,11 @@
 package com.hangapp.newandroid.database;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.joda.time.DateTime;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -15,8 +16,8 @@ import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
+import com.hangapp.newandroid.model.callback.MyAvailabilityListener;
 import com.hangapp.newandroid.model.callback.MyProposalListener;
-import com.hangapp.newandroid.model.callback.MyStatusListener;
 import com.hangapp.newandroid.model.callback.MyUserDataListener;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.newandroid.util.BaseApplication;
@@ -42,7 +43,7 @@ public final class Database {
 
 	private List<IncomingBroadcastsListener> incomingBroadcastsListeners = new ArrayList<IncomingBroadcastsListener>();
 	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
-	private List<MyStatusListener> myStatusListeners = new ArrayList<MyStatusListener>();
+	private List<MyAvailabilityListener> myStatusListeners = new ArrayList<MyAvailabilityListener>();
 	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
 
@@ -91,11 +92,11 @@ public final class Database {
 		return myProposalListeners.remove(listener);
 	}
 
-	public boolean addMyStatusListener(MyStatusListener listener) {
+	public boolean addMyStatusListener(MyAvailabilityListener listener) {
 		return myStatusListeners.add(listener);
 	}
 
-	public boolean removeMyStatusListener(MyStatusListener listener) {
+	public boolean removeMyStatusListener(MyAvailabilityListener listener) {
 		return myStatusListeners.remove(listener);
 	}
 
@@ -107,15 +108,15 @@ public final class Database {
 		return myUserDataListeners.remove(listener);
 	}
 
-	public void setMyOldAvailability(Availability status) {
+	public void setMyAvailability(Availability status) {
 		if (status == null || status.getExpirationDate() == null
-				|| status.getExpirationDate().before(new Date())) {
+				|| status.getExpirationDate().isBefore(new DateTime())) {
 			Log.v("Database.setStatus",
-					"Called setStatus on null status / null status expiration date");
+					"Called setStatus on null status or null expiration date");
 
 			// Notify listeners
-			for (MyStatusListener myStatusListener : myStatusListeners) {
-				myStatusListener.onMyStatusUpdate(status);
+			for (MyAvailabilityListener myStatusListener : myStatusListeners) {
+				myStatusListener.onMyAvailabilityUpdate(status);
 			}
 
 			return;
@@ -127,27 +128,38 @@ public final class Database {
 		prefsEditor.putString(Keys.AVAILABILITY_COLOR, status.getColor()
 				.toString());
 		prefsEditor.putString(Keys.AVAILABILITY_EXPIRATION_DATE, status
-				.getExpirationDate().toGMTString());
+				.getExpirationDate().toString());
 		prefsEditor.commit();
 
 		// Notify listeners
-		for (MyStatusListener myStatusListener : myStatusListeners) {
-			myStatusListener.onMyStatusUpdate(status);
+		for (MyAvailabilityListener myStatusListener : myStatusListeners) {
+			myStatusListener.onMyAvailabilityUpdate(status);
 		}
 	}
 
 	/**
-	 * @return User's current {@link Availability}. Returns null if there is
-	 *         no Availability yet, or if the Availability has expired.
+	 * @return User's current {@link Availability}. Returns null if there is no
+	 *         Availability yet, or if the Availability has expired.
 	 */
-	public Availability getMyOldAvailability() {
+	public Availability getMyAvailability() {
 
 		Availability.Status statusColor = Availability.parseStatus(prefs
 				.getString(Keys.AVAILABILITY_COLOR, null));
 		String dateString = prefs.getString(Keys.AVAILABILITY_EXPIRATION_DATE,
 				null);
-		Date expirationDate = dateString != null ? new Date(Date.parse(prefs
-				.getString(Keys.AVAILABILITY_EXPIRATION_DATE, null))) : null;
+
+		if (statusColor == null) {
+			Log.e("Database.getMyAvailability",
+					"Couldn't getMyAvailability: statusColor in SharedPrefs was null");
+			return null;
+		}
+		if (dateString == null) {
+			Log.e("Database.getMyAvailability",
+					"Couldn't getMyAvailability: dateString in SharedPrefs was null");
+			return null;
+		}
+
+		DateTime expirationDate = DateTime.parse(dateString);
 
 		Availability myAvailability = new Availability(statusColor,
 				expirationDate);

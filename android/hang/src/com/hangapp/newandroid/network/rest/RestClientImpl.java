@@ -48,7 +48,6 @@ public final class RestClientImpl implements RestClient {
 		new NewUserAsyncTask(database, gcm, prefs, context, newUser, parameters)
 				.execute();
 
-		
 		// TODO: Send a tickle to my recipients.
 	}
 
@@ -62,9 +61,9 @@ public final class RestClientImpl implements RestClient {
 				.getColor().toString()));
 		parameters.add(new BasicNameValuePair(
 				Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
-						.toGMTString()));
+						.toString()));
 
-		new SetStatusAsyncTask(database, context, jid, parameters).execute();
+		new SetAvailabilityAsyncTask(database, context, jid, parameters).execute();
 
 		// TODO: Send a tickle to my recipients
 	}

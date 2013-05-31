@@ -1,10 +1,6 @@
 package com.hangapp.newandroid.model;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import android.text.format.DateFormat;
-import android.util.Log;
+import org.joda.time.DateTime;
 
 public final class Availability implements Comparable<Availability> {
 
@@ -14,7 +10,7 @@ public final class Availability implements Comparable<Availability> {
 	public static final Integer DEFAULT_STATUS_DURATION = 2;
 
 	private Status status;
-	private Date expirationDate;
+	private DateTime expirationDate;
 
 	/**
 	 * Convenience constructor that takes a String for the Availability Status
@@ -29,7 +25,7 @@ public final class Availability implements Comparable<Availability> {
 	 * @param Date
 	 *            expirationDate
 	 */
-	public Availability(String statusString, Date expirationDate) {
+	public Availability(String statusString, DateTime expirationDate) {
 		this.status = parseStatus(statusString);
 		this.expirationDate = expirationDate;
 	}
@@ -45,47 +41,47 @@ public final class Availability implements Comparable<Availability> {
 	 * @param Date
 	 *            expirationDate
 	 */
-	public Availability(Status color, Date expirationDate) {
+	public Availability(Status color, DateTime expirationDate) {
 		this.status = color;
 		this.expirationDate = expirationDate;
 	}
 
 	public String getDescription() {
-		if (!isActive()) {
-			return "No Availability.";
-		}
+//		if (!isActive()) {
+//			return "No Availability.";
+//		}
 
 		String description = "";
 
-		switch (status) {
-		case FREE:
-			description += "Free";
-
-			int currentHours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-
-			Calendar expirationDateCalendar = Calendar.getInstance();
-			expirationDateCalendar.setTime(expirationDate);
-
-			int expirationDateHours = expirationDateCalendar
-					.get(Calendar.HOUR_OF_DAY);
-			int difference = expirationDateHours - currentHours;
-
-			if (difference == 1) {
-				description += " for " + difference + " hour.";
-			} else {
-				description += " for " + difference + " hours.";
-			}
-
-			break;
-		case BUSY:
-			description += "Busy";
-			description += " until ";
-			description += DateFormat.format("h:mm aa", expirationDate);
-			break;
-		default:
-			Log.e("Availability.getDescription", "Unknown status status: "
-					+ status.toString());
-		}
+//		switch (status) {
+//		case FREE:
+//			description += "Free";
+//
+//			int currentHours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+//
+//			Calendar expirationDateCalendar = Calendar.getInstance();
+//			expirationDateCalendar.setTime(expirationDate);
+//
+//			int expirationDateHours = expirationDateCalendar
+//					.get(Calendar.HOUR_OF_DAY);
+//			int difference = expirationDateHours - currentHours;
+//
+//			if (difference == 1) {
+//				description += " for " + difference + " hour.";
+//			} else {
+//				description += " for " + difference + " hours.";
+//			}
+//
+//			break;
+//		case BUSY:
+//			description += "Busy";
+//			description += " until ";
+//			description += DateFormat.format("h:mm aa", expirationDate);
+//			break;
+//		default:
+//			Log.e("Availability.getDescription", "Unknown status status: "
+//					+ status.toString());
+//		}
 
 		return description;
 	}
@@ -98,7 +94,7 @@ public final class Availability implements Comparable<Availability> {
 		return status;
 	}
 
-	public Date getExpirationDate() {
+	public DateTime getExpirationDate() {
 		return expirationDate;
 	}
 
@@ -114,7 +110,7 @@ public final class Availability implements Comparable<Availability> {
 		this.status = parseStatus(colorString);
 	}
 
-	public void setExpirationDate(Date expirationDate) {
+	public void setExpirationDate(DateTime expirationDate) {
 		this.expirationDate = expirationDate;
 	}
 
@@ -144,7 +140,7 @@ public final class Availability implements Comparable<Availability> {
 	 * @return True if this status is active.
 	 */
 	public boolean isActive() {
-		return expirationDate != null && expirationDate.after(new Date());
+		return expirationDate != null && expirationDate.isAfter(new DateTime());
 	}
 
 	/**

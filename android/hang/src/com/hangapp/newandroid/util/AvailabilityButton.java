@@ -12,6 +12,7 @@ import com.hangapp.newandroid.model.Availability;
 
 public class AvailabilityButton extends Button {
 
+	private int id;
 	private DateTime time;
 	private Availability.Status state;
 
@@ -47,6 +48,14 @@ public class AvailabilityButton extends Button {
 					"Unknown new state: " + newState.toString());
 			return;
 		}
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Availability.Status getState() {

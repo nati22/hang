@@ -18,7 +18,7 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
-import com.hangapp.newandroid.model.callback.MyStatusListener;
+import com.hangapp.newandroid.model.callback.MyAvailabilityListener;
 import com.hangapp.newandroid.model.callback.MyUserDataListener;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.newandroid.network.xmpp.XMPP;
@@ -27,7 +27,7 @@ import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Utils;
 
 public final class MyProfileActivity extends BaseFragmentActivity implements
-		MyUserDataListener, MyStatusListener, IncomingBroadcastsListener,
+		MyUserDataListener, MyAvailabilityListener, IncomingBroadcastsListener,
 		OutgoingBroadcastsListener {
 
 	private UiLifecycleHelper uiHelper;
@@ -76,7 +76,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		super.onResume();
 		uiHelper.onResume();
 
-		Availability myStatus = database.getMyOldAvailability();
+		Availability myStatus = database.getMyAvailability();
 
 		// For scenarios where the main activity is launched and user
 		// session is not null, the session state change notification
@@ -146,7 +146,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 	}
 
 	@Override
-	public void onMyStatusUpdate(Availability status) {
+	public void onMyAvailabilityUpdate(Availability status) {
 		textViewMyStatus.setText(status != null ? status.getDescription()
 				: "No Availability.");
 	}
