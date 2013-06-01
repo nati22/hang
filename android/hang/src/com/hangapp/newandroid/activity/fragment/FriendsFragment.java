@@ -134,7 +134,7 @@ public final class FriendsFragment extends SherlockFragment implements
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
-						.findViewById(R.id.profilePictureViewIcon);
+						.findViewById(R.id.profilePictureView);
 				holder.textViewFriendName = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
 				holder.buttonsAvailability = new AvailabilityButton[] {

@@ -149,7 +149,7 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 
 			// Reference Views.
 			ProfilePictureView profilePictureView = (ProfilePictureView) convertView
-					.findViewById(R.id.profilePictureViewIcon);
+					.findViewById(R.id.profilePictureView);
 			TextView textViewOutgoingBroadcastName = (TextView) convertView
 					.findViewById(R.id.textViewOutgoingBroadcastName);
 			TextView textViewOutgoingBroadcastStatus = (TextView) convertView

@@ -16,7 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/profilePictureViewIcon"
+        android:layout_toRightOf="@+id/profilePictureView"
         android:paddingBottom="1dp"
         android:paddingTop="1dp"
         android:text="@string/no_user_name"
@@ -24,7 +24,7 @@
         android:textSize="14sp" />
 
     <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureViewIcon"
+        android:id="@+id/profilePictureView"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_alignParentLeft="true"
@@ -38,7 +38,7 @@
         android:layout_height="50dp"
         android:layout_below="@+id/textViewFriendName"
         android:layout_toLeftOf="@+id/buttonFriendProposal"
-        android:layout_toRightOf="@+id/profilePictureViewIcon" >
+        android:layout_toRightOf="@+id/profilePictureView" >
 
         <com.hangapp.newandroid.util.AvailabilityButton
             android:id="@+id/buttonAvailability0"

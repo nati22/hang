@@ -95,5 +95,7 @@
     <string name="remove_proposal_button">Delete Proposal</string>
     <string name="cancel">Cancel</string>
     <string name="no_proposal">No Proposal</string>
+    <string name="click_icon_to_nudge">Click icon to nudge</string>
+    <string name="nudged">Nudged.</string>
 
 </resources>

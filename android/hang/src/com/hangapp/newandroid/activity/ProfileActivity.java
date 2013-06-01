@@ -47,18 +47,32 @@ public final class ProfileActivity extends BaseFragmentActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Reference Views.
-		profilePictureView = (ProfilePictureView) findViewById(R.id.profilePictureViewIcon);
+		profilePictureView = (ProfilePictureView) findViewById(R.id.profilePictureView);
 		textViewFriendName = (TextView) findViewById(R.id.textViewFriendName);
 		buttonsAvailability = new AvailabilityButton[] {
-				(AvailabilityButton) findViewById(R.id.buttonAvailability0),
-				(AvailabilityButton) findViewById(R.id.buttonAvailability1),
-				(AvailabilityButton) findViewById(R.id.buttonAvailability2),
-				(AvailabilityButton) findViewById(R.id.buttonAvailability3),
-				(AvailabilityButton) findViewById(R.id.buttonAvailability4) };
+				(AvailabilityButton) findViewById(R.id.buttonAvailability00),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability01),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability02),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability03),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability04),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability05),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability06),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability07),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability08),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability09),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability10),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability11) };
 
 		// Populate Views.
 		profilePictureView.setProfileId(friend.getJid());
 		textViewFriendName.setText(friend.getFullName());
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// Update the Availability strip's views.
 		Utils.initializeAvailabilityButtons(buttonsAvailability);
 		Utils.updateAvailabilityStripColors(buttonsAvailability,
 				friend.getAvailability(), this);
