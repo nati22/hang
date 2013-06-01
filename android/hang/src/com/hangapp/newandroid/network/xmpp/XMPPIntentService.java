@@ -261,6 +261,18 @@ public final class XMPPIntentService extends IntentService {
 	protected void joinMuc(String mucName, String myJid) {
 		MultiUserChat muc = mucs.get(mucName);
 
+		if (!xmppConnection.isConnected()) {
+			Log.e("XMPPPIntentService.joinMuc()",
+					"Failed to join muc: not connected");
+			return;
+		}
+
+		if (!xmppConnection.isAuthenticated()) {
+			Log.e("XMPPPIntentService.joinMuc()",
+					"Failed to join muc: not authenticated");
+			return;
+		}
+
 		if (muc == null) {
 			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
 					+ XMPP_SERVER_URL);
@@ -272,6 +284,7 @@ public final class XMPPIntentService extends IntentService {
 		} catch (XMPPException e) {
 			Log.e("XMPPPIntentService.joinMuc()",
 					"Failed to join muc: " + e.getMessage());
+			return;
 		}
 
 		Log.d("XMPPIntentService.joinMuc()",
