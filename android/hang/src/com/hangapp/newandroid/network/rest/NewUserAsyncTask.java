@@ -12,7 +12,6 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
-import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.Keys;
 
 public final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
@@ -48,13 +47,13 @@ public final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 					registrationId));
 		}
 
-		// Start the XMPP service, regardless of whether or not you already
+		// TODO: Start the XMPP service, regardless of whether or not you already
 		// exist on our App Engine server.
 		// TODO: This is an "unbound service". That is to say, the service that
 		// is created this way exists forever, until the application is stopped.
 		// If a user logs out and then logs back in, there will be two XMPP
 		// services in existence. Fix this.
-		XMPP.getInstance().attemptToConnectAndLogin(newUserJid);
+//		XMPP.getInstance().attemptToConnectAndLogin(newUserJid);
 		// Intent xmppServiceIntent = new Intent(context, XMPP.class);
 		// xmppServiceIntent.putExtra(Keys.JID, newUserJid);
 		// context.startService(xmppServiceIntent);

@@ -28,6 +28,7 @@ import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.Keys;
 import com.hangapp.newandroid.util.TabsAdapter;
+import com.hangapp.newandroid.util.Utils;
 
 public final class HomeActivity extends SherlockFragmentActivity {
 
@@ -161,9 +162,17 @@ public final class HomeActivity extends SherlockFragmentActivity {
 
 					User me = new User(graphUser.getId(), graphUser
 							.getFirstName(), graphUser.getLastName());
+
+					// Save the "me" User object into the database.
 					database.setMyUserData(me.getJid(), me.getFirstName(),
 							me.getLastName());
+
+					// Register the "me" User object into our server.
 					restClient.registerNewUser(me);
+
+					// Attempt to connect to XMPP using the new "me" JID.
+					Utils.startConnectIntent(me.getJid(),
+							getApplicationContext());
 				}
 			}
 		});

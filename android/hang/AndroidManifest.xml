@@ -67,11 +67,15 @@
             android:name="com.hangapp.newandroid.activity.AddOutgoingBroadcastActivity"
             android:label="@string/add_outgoing_broadcast" >
         </activity>
-        <activity android:name=".activity.ProfileActivity"
+        <activity
+            android:name=".activity.ProfileActivity"
             android:label="@string/profile" >
         </activity>
-        <activity android:name=".activity.ChatActivity" android:label="@string/chat"></activity>
-        <service android:name=".network.xmpp.XMPPService"></service>
+        <activity
+            android:name=".activity.ChatActivity"
+            android:label="@string/chat" >
+        </activity>
+        <service android:name=".network.xmpp.XMPPIntentService"></service>
     </application>
 
 </manifest>

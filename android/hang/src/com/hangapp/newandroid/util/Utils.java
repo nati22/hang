@@ -3,11 +3,13 @@ package com.hangapp.newandroid.util;
 import org.joda.time.DateTime;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.hangapp.newandroid.model.Availability;
+import com.hangapp.newandroid.network.xmpp.XMPPIntentService;
 
 public final class Utils {
 	public static final String BASE_URL = "http://therealhangapp.appspot.com/rest";
@@ -96,4 +98,17 @@ public final class Utils {
 		}
 	}
 
+	public static void startConnectIntent(String myJid, Context context) {
+		Intent connectIntent = new Intent(context, XMPPIntentService.class);
+		connectIntent.putExtra(Keys.MESSAGE, Keys.XMPP_CONNECT);
+		connectIntent.putExtra(Keys.JID, myJid);
+		context.startService(connectIntent);
+	}
+
+	public static void startLoginIntent(String myJid, Context context) {
+		Intent loginIntent = new Intent(context, XMPPIntentService.class);
+		loginIntent.putExtra(Keys.MESSAGE, Keys.XMPP_LOGIN);
+		loginIntent.putExtra(Keys.JID, myJid);
+		context.startService(loginIntent);
+	}
 }
