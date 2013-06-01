@@ -1,7 +1,5 @@
 package com.hangapp.newandroid.activity.fragment;
 
-import org.joda.time.DateTime;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,9 +17,9 @@ import com.hangapp.newandroid.model.callback.MyAvailabilityListener;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.AvailabilityButton;
-import com.hangapp.newandroid.util.HangLog;
+import com.hangapp.newandroid.util.Utils;
 
-public final class AvailabilityFragment extends SherlockFragment implements
+public final class MyAvailabilityFragment extends SherlockFragment implements
 		MyAvailabilityListener {
 
 	private AvailabilityButton[] buttonsAvailability;
@@ -115,7 +113,9 @@ public final class AvailabilityFragment extends SherlockFragment implements
 		// Retrieve my current Availability from the database.
 		myCurrentAvailability = database.getMyAvailability();
 
-		initializeAvailabilityButtons();
+		Utils.initializeAvailabilityButtons(buttonsAvailability);
+		Utils.updateAvailabilityStripColors(buttonsAvailability,
+				myCurrentAvailability, getActivity());
 	}
 
 	@Override
@@ -151,33 +151,14 @@ public final class AvailabilityFragment extends SherlockFragment implements
 		}
 	}
 
-	private void initializeAvailabilityButtons() {
-		// Find the instant of time RIGHT NOW.
-		DateTime rightNow = new DateTime();
-
-		// Construct a new DateTime that is only as accurate as the current
-		// hour.
-		DateTime rightNowTruncated = new DateTime(rightNow.getYear(),
-				rightNow.getMonthOfYear(), rightNow.getDayOfMonth(),
-				rightNow.getHourOfDay(), 0);
-
-		// Set the time of each button.
-		for (AvailabilityButton buttonAvailability : buttonsAvailability) {
-			buttonAvailability.setTime(rightNowTruncated);
-			rightNowTruncated = rightNowTruncated.plusHours(1);
-		}
-
-		// TODO: Update the colors of the Availability strip.
-		updateAvailabilityStripColors(myCurrentAvailability);
-	}
-
 	private void changeAvailabilityButtonStates(AvailabilityButton buttton,
 			Availability.Status newState) {
 		// Initialize the potential new Availability.
 		myNewAvailability = new Availability(newState, buttton.getTime());
 
 		// Update the colors of the Availability strip.
-		updateAvailabilityStripColors(buttton.getId(), newState);
+		Utils.updateAvailabilityStripColors(buttonsAvailability,
+				buttton.getId(), newState);
 
 		// Enable the "Edit" buttons in case the user changes his mind.
 		buttonDone.setVisibility(View.VISIBLE);
@@ -207,54 +188,15 @@ public final class AvailabilityFragment extends SherlockFragment implements
 		myNewAvailability = null;
 
 		// Update the UI to reflect the old Availability again.
-		updateAvailabilityStripColors(myCurrentAvailability);
-	}
-
-	private boolean updateAvailabilityStripColors(Availability availability) {
-		if (availability == null) {
-			HangLog.toastE(getActivity(),
-					"AvailabilityFragment.updateAvailabilityStripColors",
-					"Couldn't udpateAvailabilityStripColors: Availability given was null");
-			return false;
-		}
-
-		// Search for the AvailabilityButton that corresponds to the
-		// Availability's expiration date.
-		for (AvailabilityButton button : buttonsAvailability) {
-			if (button.getTime().isEqual(availability.getExpirationDate())) {
-				updateAvailabilityStripColors(button.getId(),
-						availability.getColor());
-				return true;
-			}
-		}
-
-		// If this method gets here, then the for loop failed to find the
-		// AvailabilityButton that we wanted. Show an error message.
-		HangLog.toastE(getActivity(),
-				"AvailabilityFragment.updateAvailabilityStripColors",
-				"Couldn't find Availability button for expiration date: "
-						+ availability.getExpirationDate());
-		return false;
-	}
-
-	private void updateAvailabilityStripColors(int middleButtonId,
-			Availability.Status newState) {
-
-		// This button and all buttons to the left of this button should be set
-		// to the new state.
-		for (int i = 0; i <= middleButtonId; i++) {
-			buttonsAvailability[i].setState(newState);
-		}
-
-		// Every button to the right of this button should be set to null state.
-		for (int i = middleButtonId + 1; i < buttonsAvailability.length; i++) {
-			buttonsAvailability[i].setState(null);
-		}
+		Utils.updateAvailabilityStripColors(buttonsAvailability,
+				myCurrentAvailability, getActivity());
 	}
 
 	@Override
 	public void onMyAvailabilityUpdate(Availability newAvailability) {
 		myCurrentAvailability = newAvailability;
-		initializeAvailabilityButtons();
+		Utils.initializeAvailabilityButtons(buttonsAvailability);
+		Utils.updateAvailabilityStripColors(buttonsAvailability,
+				newAvailability, getActivity());
 	}
 }

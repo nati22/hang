@@ -25,7 +25,9 @@ import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
+import com.hangapp.newandroid.util.AvailabilityButton;
 import com.hangapp.newandroid.util.Keys;
+import com.hangapp.newandroid.util.Utils;
 
 public final class FriendsFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
@@ -130,13 +132,21 @@ public final class FriendsFragment extends SherlockFragment implements
 				convertView = inflater.inflate(R.layout.cell_friend_fragment,
 						null);
 
+				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
 						.findViewById(R.id.profilePictureViewIcon);
-				holder.textView1 = (TextView) convertView
+				holder.textViewFriendName = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
-				// holder.textView2 = (TextView) convertView
-				// .findViewById(R.id.textViewFriendStatus);
-				holder.imageView = (ImageView) convertView
+				holder.buttonsAvailability = new AvailabilityButton[] {
+						(AvailabilityButton) convertView
+								.findViewById(R.id.buttonAvailability0),
+						(AvailabilityButton) convertView
+								.findViewById(R.id.buttonAvailability1),
+						(AvailabilityButton) convertView
+								.findViewById(R.id.buttonAvailability2),
+						(AvailabilityButton) convertView
+								.findViewById(R.id.buttonAvailability3) };
+				holder.imageViewProposalIcon = (ImageView) convertView
 						.findViewById(R.id.buttonFriendProposal);
 
 				convertView.setTag(holder);
@@ -146,9 +156,17 @@ public final class FriendsFragment extends SherlockFragment implements
 
 			// Populate the Views.
 			holder.profilePictureView.setProfileId(user.getJid());
-			holder.textView1.setText(user.getFullName());
+			holder.textViewFriendName.setText(user.getFullName());
+			Utils.initializeAvailabilityButtons(holder.buttonsAvailability);
+			Utils.updateAvailabilityStripColors(holder.buttonsAvailability,
+					user.getAvailability(), context);
+			if (user.getProposal() != null) {
+				holder.imageViewProposalIcon.setVisibility(View.VISIBLE);
+			} else {
+				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
+			}
 
-			// Set the OnClickListener
+			// Set the OnClickListener for the cell.
 			convertView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
@@ -215,9 +233,9 @@ public final class FriendsFragment extends SherlockFragment implements
 
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
-			TextView textView1;
-			TextView textView2;
-			ImageView imageView;
+			TextView textViewFriendName;
+			AvailabilityButton[] buttonsAvailability;
+			ImageView imageViewProposalIcon;
 		}
 	}
 
@@ -227,4 +245,5 @@ public final class FriendsFragment extends SherlockFragment implements
 		this.incomingBroadcasts.addAll(incomingBroadcasts);
 		adapter.notifyDataSetChanged();
 	}
+
 }

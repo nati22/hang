@@ -15,7 +15,7 @@
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/Button02"
+        android:id="@+id/buttonAvailability2"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/fragment1"
@@ -28,12 +28,12 @@
         android:textSize="12sp" />
 
     <Button
-        android:id="@+id/Button03"
+        android:id="@+id/buttonAvailability3"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button02"
-        android:layout_alignTop="@+id/Button02"
-        android:layout_toRightOf="@+id/Button02"
+        android:layout_alignBottom="@+id/buttonAvailability2"
+        android:layout_alignTop="@+id/buttonAvailability2"
+        android:layout_toRightOf="@+id/buttonAvailability2"
         android:background="@drawable/button_green"
         android:clickable="false"
         android:focusable="false"
@@ -44,9 +44,9 @@
         android:id="@+id/Button04"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button03"
-        android:layout_alignTop="@+id/Button03"
-        android:layout_toRightOf="@+id/Button03"
+        android:layout_alignBottom="@+id/buttonAvailability3"
+        android:layout_alignTop="@+id/buttonAvailability3"
+        android:layout_toRightOf="@+id/buttonAvailability3"
         android:background="@drawable/button_green"
         android:clickable="false"
         android:focusable="false"
@@ -54,7 +54,7 @@
         android:textSize="12sp" />
 
     <Button
-        android:id="@+id/Button01"
+        android:id="@+id/buttonAvailability1"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/Button04"
@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/fragment1"
         android:layout_below="@+id/textViewFriendName"
-        android:layout_toRightOf="@+id/Button01"
+        android:layout_toRightOf="@+id/buttonAvailability1"
         android:background="@drawable/button_green"
         android:clickable="false"
         android:focusable="false"

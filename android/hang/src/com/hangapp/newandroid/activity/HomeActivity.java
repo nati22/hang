@@ -19,7 +19,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.activity.fragment.AvailabilityFragment;
+import com.hangapp.newandroid.activity.fragment.MyAvailabilityFragment;
 import com.hangapp.newandroid.activity.fragment.FriendsFragment;
 import com.hangapp.newandroid.activity.fragment.MyProposalFragment;
 import com.hangapp.newandroid.database.Database;
@@ -77,7 +77,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 				FriendsFragment.class, null);
 		mTabsAdapter.addTab(
 				bar.newTab().setIcon(R.drawable.ic_action_availability),
-				AvailabilityFragment.class, null);
+				MyAvailabilityFragment.class, null);
 		mTabsAdapter.addTab(
 				bar.newTab().setIcon(R.drawable.ic_action_proposal),
 				MyProposalFragment.class, null);

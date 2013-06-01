@@ -44,7 +44,7 @@ public class AvailabilityButton extends Button {
 			setBackgroundResource(R.drawable.button_red);
 			return;
 		default:
-			Log.e("AvailabilityFragment",
+			Log.e("MyAvailabilityFragment",
 					"Unknown new state: " + newState.toString());
 			return;
 		}

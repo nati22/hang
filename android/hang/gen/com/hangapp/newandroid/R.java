@@ -1461,9 +1461,6 @@ containing a value of this type.
         public static final int trash_recyclebin_empty_closed=0x7f020156;
     }
     public static final class id {
-        public static final int Button01=0x7f050059;
-        public static final int Button02=0x7f050055;
-        public static final int Button03=0x7f050057;
         public static final int Button04=0x7f050058;
         public static final int Button05=0x7f05005a;
         public static final int abs__action_bar=0x7f050026;
@@ -1508,6 +1505,7 @@ containing a value of this type.
         public static final int are_you_sure_title=0x7f050086;
         public static final int autocompleteTextViewHelper=0x7f050044;
         public static final int buttonAddMoreOutgoingBroadcasts=0x7f05009e;
+        public static final int buttonAvailability0=0x7f05005c;
         public static final int buttonAvailability00=0x7f05008d;
         public static final int buttonAvailability01=0x7f05008e;
         public static final int buttonAvailability02=0x7f05008f;
@@ -1518,8 +1516,11 @@ containing a value of this type.
         public static final int buttonAvailability07=0x7f050094;
         public static final int buttonAvailability08=0x7f050095;
         public static final int buttonAvailability09=0x7f050096;
+        public static final int buttonAvailability1=0x7f050059;
         public static final int buttonAvailability10=0x7f050097;
         public static final int buttonAvailability11=0x7f050098;
+        public static final int buttonAvailability2=0x7f050055;
+        public static final int buttonAvailability3=0x7f050057;
         public static final int buttonCancel=0x7f050085;
         public static final int buttonCancelDeleteProposal=0x7f050088;
         public static final int buttonChat=0x7f0500ad;
@@ -1532,7 +1533,6 @@ containing a value of this type.
         public static final int buttonOutgoingBroadcasts=0x7f05004d;
         public static final int buttonRoster=0x7f05003c;
         public static final int buttonSendMessage=0x7f050045;
-        public static final int buttonStatus1=0x7f05005c;
         public static final int com_facebook_login_activity_progress_bar=0x7f05006a;
         public static final int com_facebook_picker_activity_circle=0x7f050069;
         public static final int com_facebook_picker_checkbox=0x7f05006c;
