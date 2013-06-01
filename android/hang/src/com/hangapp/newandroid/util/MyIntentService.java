@@ -11,6 +11,7 @@ public class MyIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent arg0) {
+		HangLog.toastD(getApplicationContext(), "MyIntentService", "Intent Received");
 	}
 
 }
