@@ -15,8 +15,8 @@ import com.hangapp.newandroid.model.callback.MucMessageListener;
 import com.hangapp.newandroid.util.Keys;
 
 /**
- * Client-facing XMPP interface. This class uses {@link XMPPIntentService} to
- * work.
+ * Front-facing XMPP interface. This class uses {@link XMPPIntentService} in the
+ * background.
  */
 public class XMPP {
 

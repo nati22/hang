@@ -19,8 +19,9 @@ import com.hangapp.newandroid.util.BaseApplication;
 import com.hangapp.newandroid.util.Keys;
 
 /**
- * This {@link IntentService} handles all of our XMPP logic for us. Send
- * messages to it via the {@link startService} method call. <br />
+ * This helper class is an {@link IntentService}, and it handles all of our
+ * background XMPP logic for us. You should interface with this class via the
+ * {@link XMPP} class. <br />
  * <br />
  * It is driven by a constant queue of Intent messages sent from either
  * <ol>
