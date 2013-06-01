@@ -7,14 +7,17 @@ import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
+import com.hangapp.newandroid.util.AvailabilityButton;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
+import com.hangapp.newandroid.util.Utils;
 
 public final class ProfileActivity extends BaseFragmentActivity {
 
 	private ProfilePictureView profilePictureView;
 	private TextView textViewFriendName;
+	private AvailabilityButton[] buttonsAvailability;
 
 	private Database database;
 
@@ -46,9 +49,18 @@ public final class ProfileActivity extends BaseFragmentActivity {
 		// Reference Views.
 		profilePictureView = (ProfilePictureView) findViewById(R.id.profilePictureViewIcon);
 		textViewFriendName = (TextView) findViewById(R.id.textViewFriendName);
+		buttonsAvailability = new AvailabilityButton[] {
+				(AvailabilityButton) findViewById(R.id.buttonAvailability0),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability1),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability2),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability3),
+				(AvailabilityButton) findViewById(R.id.buttonAvailability4) };
 
 		// Populate Views.
 		profilePictureView.setProfileId(friend.getJid());
 		textViewFriendName.setText(friend.getFullName());
+		Utils.initializeAvailabilityButtons(buttonsAvailability);
+		Utils.updateAvailabilityStripColors(buttonsAvailability,
+				friend.getAvailability(), this);
 	}
 }
