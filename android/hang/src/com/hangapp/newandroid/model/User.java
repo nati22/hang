@@ -1,13 +1,12 @@
 package com.hangapp.newandroid.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,7 +24,7 @@ public final class User implements Comparable<User>, Parcelable {
 	private String jid;
 	private String firstName;
 	private String lastName;
-	private OldAvailability availability;
+	private Availability availability;
 	private Proposal proposal;
 	private List<User> incomingBroadcasts;
 	private List<User> outgoingBroadcasts;
@@ -53,7 +52,7 @@ public final class User implements Comparable<User>, Parcelable {
 		return firstName + " " + lastName;
 	}
 
-	public OldAvailability getAvailability() {
+	public Availability getAvailability() {
 		return availability;
 	}
 
@@ -61,7 +60,7 @@ public final class User implements Comparable<User>, Parcelable {
 		return proposal;
 	}
 
-	public void setAvailability(OldAvailability status) {
+	public void setAvailability(Availability status) {
 		this.availability = status;
 	}
 
@@ -131,7 +130,7 @@ public final class User implements Comparable<User>, Parcelable {
 
 	public static User parseUser(String userJsonString) throws JSONException {
 		User user = null;
-		OldAvailability status = null;
+		Availability availability = null;
 		Proposal proposal = null;
 
 		JSONObject userJsonObject = new JSONObject(userJsonString);
@@ -140,38 +139,47 @@ public final class User implements Comparable<User>, Parcelable {
 		String firstName = userJsonObject.getString(Keys.FIRST_NAME);
 		String lastName = userJsonObject.getString(Keys.LAST_NAME);
 
+		user = new User(jid, firstName, lastName);
+
 		String statusColor = userJsonObject.getString(Keys.AVAILABILITY_COLOR);
 		String statusExpirationDateString = userJsonObject
 				.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
 
-		Date date;
+		DateTime date;
 		if (statusExpirationDateString != null
 				&& !statusExpirationDateString.equals("null")) {
-			date = new Date(Date.parse(statusExpirationDateString));
+			date = DateTime.parse(statusExpirationDateString);
 		} else {
 			date = null;
 		}
 
-		status = new OldAvailability(statusColor, date);
+		availability = new Availability(statusColor, date);
+		user.setAvailability(availability);
 
+		// Grab the Proposal String fields from JSON
 		String proposalDescription = userJsonObject
 				.getString(Keys.PROPOSAL_DESCRIPTION);
 		String proposalLocation = userJsonObject
 				.getString(Keys.PROPOSAL_LOCATION);
-		String proposalTime = userJsonObject.getString(Keys.PROPOSAL_TIME);
+		String proposalStartTimeString = userJsonObject
+				.getString(Keys.PROPOSAL_TIME);
 
-		// FIXME: Use the real Date.
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.HOUR_OF_DAY, 1);
-
-		if (!proposalDescription.equals("null")) {
+		// Sanity checks on string fields.
+		if (proposalDescription.equals("null")) {
+			Log.e("User.parseUser", "Proposal description was \"null\"");
+		} else if (proposalLocation.equals("null")) {
+			Log.e("User.parseUser", "Proposal location was \"null\"");
+		} else if (proposalStartTimeString.equals("null")) {
+			Log.e("User.parseUser", "Proposal start time was \"null\"");
+		} else {
+			// If all the sanity checks passed, then parse and create the
+			// Proposal object.
+			DateTime proposalStartTime = DateTime.parse(userJsonObject
+					.getString(Keys.PROPOSAL_TIME));
 			proposal = new Proposal(proposalDescription, proposalLocation,
-					calendar.getTime());
+					proposalStartTime);
+			user.setProposal(proposal);
 		}
-
-		user = new User(jid, firstName, lastName);
-		user.setAvailability(status);
-		user.setProposal(proposal);
 
 		JSONArray incomingBroadcastsJsonArray = userJsonObject
 				.getJSONArray(Keys.INCOMING);
@@ -181,15 +189,15 @@ public final class User implements Comparable<User>, Parcelable {
 		// Populate IncomingBroadcast strings
 		List<String> incomingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < incomingBroadcastsJsonArray.length(); i++) {
-			incomingBroadcastsStrings
-					.add(incomingBroadcastsJsonArray.getString(i));
+			incomingBroadcastsStrings.add(incomingBroadcastsJsonArray
+					.getString(i));
 		}
 
 		// Populate OutgoingBroadcast strings
 		List<String> outgoingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < outgoingBroadcastsJsonArray.length(); i++) {
-			outgoingBroadcastsStrings
-					.add(outgoingBroadcastsJsonArray.getString(i));
+			outgoingBroadcastsStrings.add(outgoingBroadcastsJsonArray
+					.getString(i));
 		}
 
 		// Parse the Library.
@@ -208,7 +216,8 @@ public final class User implements Comparable<User>, Parcelable {
 		return user;
 	}
 
-	public static User parseUserName(String userJsonString) throws JSONException {
+	public static User parseUserName(String userJsonString)
+			throws JSONException {
 		User user = null;
 
 		JSONObject userJsonObject = new JSONObject(userJsonString);
@@ -229,24 +238,25 @@ public final class User implements Comparable<User>, Parcelable {
 		Iterator<?> keys = library.keys();
 
 		while (keys.hasNext()) {
-			JSONObject userJsonObject = library
-					.getJSONObject((String) keys.next());
+			JSONObject userJsonObject = library.getJSONObject((String) keys
+					.next());
 
 			String jid = userJsonObject.getString(Keys.JID);
 			String firstName = userJsonObject.getString(Keys.FIRST_NAME);
 			String lastName = userJsonObject.getString(Keys.LAST_NAME);
 
-			String statusColor = userJsonObject.getString(Keys.AVAILABILITY_COLOR);
+			String statusColor = userJsonObject
+					.getString(Keys.AVAILABILITY_COLOR);
 			String statusExpirationDateString = userJsonObject
 					.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
 
-			Date expirationDate = null;
+			DateTime expirationDate = null;
 
 			if (!statusExpirationDateString.equals("null")) {
-				expirationDate = new Date(Date.parse(statusExpirationDateString));
+				expirationDate = DateTime.parse(statusExpirationDateString);
 			}
 
-			OldAvailability availability = new OldAvailability(statusColor,
+			Availability availability = new Availability(statusColor,
 					expirationDate);
 
 			User user = new User(jid, firstName, lastName);
@@ -269,17 +279,18 @@ public final class User implements Comparable<User>, Parcelable {
 				} else if (proposalLocation.equals("null")) {
 					throw new JSONException("proposalLocation is \"null\"");
 				} else if (proposalStartTimeString.equals("null")) {
-					throw new JSONException("proposalStartTimeString is \"null\"");
+					throw new JSONException(
+							"proposalStartTimeString is \"null\"");
 				}
 
 				// TODO: Switch to JodaTime (IN YO FACE)
-				Date proposalStartTime = new Date(
-						Date.parse(proposalStartTimeString));
+				DateTime proposalStartTime = DateTime
+						.parse(proposalStartTimeString);
 
 				Proposal proposal = new Proposal(proposalDescription,
 						proposalLocation, proposalStartTime);
 				user.setProposal(proposal);
-				
+
 			} catch (JSONException e) {
 				Log.e("User.parseLibrary", "User " + user.firstName
 						+ " had no proposal: " + e.getMessage());

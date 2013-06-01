@@ -8,16 +8,17 @@ import android.content.Context;
 import android.util.Log;
 
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.Availability;
 
-public class SetStatusAsyncTask extends BasePutRequestAsyncTask<OldAvailability> {
+public class SetAvailabilityAsyncTask extends
+		BasePutRequestAsyncTask<Availability> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/status";
 
 	private Database database;
 
-	protected SetStatusAsyncTask(Database database, Context context,
+	protected SetAvailabilityAsyncTask(Database database, Context context,
 			String jid, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX, parameters);
 
@@ -26,12 +27,12 @@ public class SetStatusAsyncTask extends BasePutRequestAsyncTask<OldAvailability>
 	}
 
 	@Override
-	public OldAvailability call() throws Exception {
+	public Availability call() throws Exception {
 		// Execute the PUT request
 		super.call();
 
 		// TODO: Try to parse the resulting JSON
-		Log.e("SetStatusAsyncTask", "Should parse " + responseString);
+		Log.e("SetAvailabilityAsyncTask", "Should parse " + responseString);
 
 		return null;
 	}

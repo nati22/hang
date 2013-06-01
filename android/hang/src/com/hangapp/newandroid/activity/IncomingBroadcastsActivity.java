@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
@@ -78,7 +78,7 @@ public final class IncomingBroadcastsActivity extends BaseFragmentActivity imple
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			User incomingBroadcast = getItem(position);
-			OldAvailability hisStatus = incomingBroadcast.getAvailability();
+			Availability hisStatus = incomingBroadcast.getAvailability();
 
 			// Inflate if necessary.
 			if (convertView == null) {
@@ -101,7 +101,7 @@ public final class IncomingBroadcastsActivity extends BaseFragmentActivity imple
 					.getFullName());
 			textViewIncomingBroadcastStatus
 					.setText(hisStatus != null ? hisStatus.getDescription()
-							: "Unknown OldAvailability");
+							: "Unknown Availability");
 
 			return convertView;
 		}

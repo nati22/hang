@@ -4,26 +4,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureViewIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="User Icon"
-        android:src="@drawable/ic_action_profile_icon" />
-
-    <TextView
-        android:id="@+id/textViewFriendName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="3dp"
-        android:layout_toRightOf="@+id/profilePictureViewIcon"
-        android:text="User Name"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="16sp" />
-
     <View
         android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
         android:layout_width="0dp"
@@ -31,69 +11,85 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
+    <TextView
+        android:id="@+id/textViewFriendName"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/profilePictureViewIcon"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        android:text="@string/no_user_name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="14sp" />
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureViewIcon"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/profile"
+        android:src="@drawable/ic_action_profile_icon" >
+    </com.facebook.widget.ProfilePictureView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_below="@+id/textViewFriendName"
+        android:layout_toLeftOf="@+id/buttonFriendProposal"
+        android:layout_toRightOf="@+id/profilePictureViewIcon" >
+
+        <com.hangapp.newandroid.util.AvailabilityButton
+            android:id="@+id/buttonAvailability0"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_grey"
+            android:clickable="false"
+            android:focusable="false"
+            android:text="@string/time"
+            android:textSize="12sp" />
+
+        <com.hangapp.newandroid.util.AvailabilityButton
+            android:id="@+id/buttonAvailability1"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_grey"
+            android:clickable="false"
+            android:focusable="false"
+            android:text="@string/time"
+            android:textSize="12sp" />
+
+        <com.hangapp.newandroid.util.AvailabilityButton
+            android:id="@+id/buttonAvailability2"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_grey"
+            android:clickable="false"
+            android:focusable="false"
+            android:text="@string/time"
+            android:textSize="12sp" />
+
+        <com.hangapp.newandroid.util.AvailabilityButton
+            android:id="@+id/buttonAvailability3"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/button_grey"
+            android:clickable="false"
+            android:focusable="false"
+            android:text="@string/time"
+            android:textSize="12sp" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/buttonFriendProposal"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_below="@+id/textViewFriendName"
         android:background="@drawable/ic_action_proposal"
         android:contentDescription="@string/proposal"
         android:focusable="false"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/Button01"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonStatus1"
-        android:layout_below="@+id/textViewFriendName"
-        android:layout_toRightOf="@+id/buttonStatus1"
-        android:background="@drawable/button_green"
-        android:clickable="false"
-        android:focusable="false"
-        android:text="3 PM"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/Button02"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button01"
-        android:layout_alignTop="@+id/Button01"
-        android:layout_toRightOf="@+id/Button01"
-        android:background="@drawable/button_green"
-        android:clickable="false"
-        android:focusable="false"
-        android:text="3 PM"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/Button03"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/Button02"
-        android:layout_alignTop="@+id/Button02"
-        android:layout_toRightOf="@+id/Button02"
-        android:background="@drawable/button_green"
-        android:clickable="false"
-        android:focusable="false"
-        android:text="3 PM"
-        android:textSize="12sp" />
-
-    <Button
-        android:id="@+id/buttonStatus1"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/profilePictureViewIcon"
-        android:layout_alignLeft="@+id/textViewFriendName"
-        android:layout_below="@+id/textViewFriendName"
-        android:background="@drawable/button_green"
-        android:clickable="false"
-        android:focusable="false"
-        android:text="3 PM"
         android:textSize="12sp" />
 
 </RelativeLayout>

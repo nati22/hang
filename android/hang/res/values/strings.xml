@@ -36,9 +36,8 @@
     <string name="nudge_this_user">Click to nudge me</string>
     <string name="char_limit"> (%d char limit)</string>
     <string name="home">Home</string>
-    <string name="sample_user_name">Default user</string>
-    <string name="sample_user_status">Default user status</string>
-    <string name="sample_user_proposal">Default proposal text</string>
+    <string name="no_user_name">No user name</string>
+    <string name="no_user_availability">No Availability</string>
     <string name="free">Free</string>
     <string name="busy">Busy</string>
     <string name="how_long_will_you_be_free">How long will you be free?</string>
@@ -95,6 +94,6 @@
     <string name="confirm_delete_proposal">Are you sure you want to delete your proposal?</string>
     <string name="remove_proposal_button">Delete Proposal</string>
     <string name="cancel">Cancel</string>
-    <string name="no_proposal">No Proposal.</string>
+    <string name="no_proposal">No Proposal</string>
 
 </resources>

@@ -2,13 +2,14 @@ package com.hangapp.newandroid.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 public final class Proposal {
 	private String description;
 	private String location;
-	private Date startTime;
+	private DateTime startTime;
 	private List<User> interestedUsers;
 	private List<User> confirmedUsers;
 
@@ -20,7 +21,7 @@ public final class Proposal {
 	 */
 	public static final Integer PROPOSAL_DURATION = 2;
 
-	public Proposal(String description, String location, Date time) {
+	public Proposal(String description, String location, DateTime time) {
 		this.description = description;
 		this.location = location;
 		this.startTime = time;
@@ -38,7 +39,7 @@ public final class Proposal {
 		return location;
 	}
 
-	public Date getStartTime() {
+	public DateTime getStartTime() {
 		return startTime;
 	}
 
@@ -59,13 +60,15 @@ public final class Proposal {
 	}
 
 	public boolean isActive() {
-		if (startTime == null) {
-			return false;
-		}
-		Date expirationDate = (Date) startTime.clone();
-		expirationDate.setHours(expirationDate.getHours() + PROPOSAL_DURATION);
-
-		return new Date().before(expirationDate);
+//		if (startTime == null) {
+//			return false;
+//		}
+//		Date expirationDate = (Date) startTime.clone();
+//		expirationDate.setHours(expirationDate.getHours() + PROPOSAL_DURATION);
+//
+//		return new Date().before(expirationDate);
+		
+		return false;
 	}
 
 	public static boolean descriptionIsValid(String proposalDescription) {

@@ -12,7 +12,7 @@ import android.preference.PreferenceManager;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.HangLog;
@@ -48,12 +48,11 @@ public final class RestClientImpl implements RestClient {
 		new NewUserAsyncTask(database, gcm, prefs, context, newUser, parameters)
 				.execute();
 
-		
 		// TODO: Send a tickle to my recipients.
 	}
 
 	@Override
-	public void updateMyAvailability(OldAvailability status) {
+	public void updateMyAvailability(Availability status) {
 
 		String jid = database.getMyJid();
 
@@ -62,9 +61,10 @@ public final class RestClientImpl implements RestClient {
 				.getColor().toString()));
 		parameters.add(new BasicNameValuePair(
 				Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
-						.toGMTString()));
+						.toString()));
 
-		new SetStatusAsyncTask(database, context, jid, parameters).execute();
+		new SetAvailabilityAsyncTask(database, context, jid, parameters)
+				.execute();
 
 		// TODO: Send a tickle to my recipients
 	}
@@ -80,7 +80,7 @@ public final class RestClientImpl implements RestClient {
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_LOCATION, proposal
 				.getLocation()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_TIME, proposal
-				.getStartTime().toGMTString()));
+				.getStartTime().toString()));
 
 		if (!proposal.getInterested().isEmpty()) {
 			for (User interestedUser : proposal.getInterested()) {

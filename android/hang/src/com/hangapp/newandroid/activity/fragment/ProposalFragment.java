@@ -2,19 +2,18 @@ package com.hangapp.newandroid.activity.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
-import com.hangapp.newandroid.activity.HomeActivity;
-import com.hangapp.newandroid.activity.ProfileActivity;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
@@ -22,20 +21,22 @@ import com.hangapp.newandroid.util.Keys;
 
 public final class ProposalFragment extends SherlockFragment {
 
+	private ScrollView scrollViewProposal;
+	private RelativeLayout emptyView;
+
 	private TextView textViewProposalTitle;
 	private ImageView buttonChat;
-	private ImageView buttonDeleteProposal;
 
-	private Proposal proposal;
+	private Proposal hostProposal;
 
-	private Database db;
+	private Database database;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Instantiate dependencies.
-		db = Database.getInstance();
+		database = Database.getInstance();
 	}
 
 	@Override
@@ -48,56 +49,47 @@ public final class ProposalFragment extends SherlockFragment {
 		// Reference views.
 		textViewProposalTitle = (TextView) view
 				.findViewById(R.id.textViewProposalTitle);
+		scrollViewProposal = (ScrollView) view
+				.findViewById(R.id.scrollViewProposal);
+		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
-		buttonDeleteProposal = (ImageView) view
-				.findViewById(R.id.buttonDeleteProposal);
 
-		// Populate member datum, based on if it's your Proposal or not.
-		if (getActivity() instanceof HomeActivity) {
-			// If this Fragment is within HomeActivity, then it's your Proposal.
-			// Set Proposal member datum straight away.
-			proposal = db.getMyProposal();
-			textViewProposalTitle
-					.setText(getString(R.string.my_current_proposal));
-			buttonChat.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// Start the ChatActivity.
-					Intent chatActivityIntent = new Intent(getActivity(),
-							ChatActivity.class);
-					chatActivityIntent.putExtra(Keys.HOST_JID, db.getMyJid());
-					startActivity(chatActivityIntent);
-				}
-			});
-			buttonDeleteProposal.setVisibility(View.VISIBLE);
-		} else if (getActivity() instanceof ProfileActivity) {
-			// If this Fragment is within ProfileActivity, then it's someone
-			// else's Proposal. Retrieve this User.
-			String hostJid = getActivity().getIntent().getStringExtra(
-					Keys.HOST_JID);
-			final User host = db.getIncomingUser(hostJid);
+		// Populate member datum
+		String hostJid = getActivity().getIntent()
+				.getStringExtra(Keys.HOST_JID);
+		final User host = database.getIncomingUser(hostJid);
 
-			// Set Proposal member datum.
-			proposal = host.getProposal();
-			String proposalTitle = String.format(
-					getString(R.string.someones_proposal), host.getFirstName());
-			textViewProposalTitle.setText(proposalTitle);
-			buttonChat.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// Start the ChatActivity.
-					Intent chatActivityIntent = new Intent(getActivity(),
-							ChatActivity.class);
-					chatActivityIntent.putExtra(Keys.HOST_JID, host.getJid());
-					startActivity(chatActivityIntent);
-				}
-			});
-			buttonDeleteProposal.setVisibility(View.INVISIBLE);
-		} else {
-			Log.e("ProposalFragment.onCreateView",
-					"ProposalFragment called from within unknown Activity");
-		}
+		// Set Proposal member datum.
+		hostProposal = host.getProposal();
+		String proposalTitle = String.format(
+				getString(R.string.someones_proposal), host.getFirstName());
+		textViewProposalTitle.setText(proposalTitle);
+
+		// Set OnClickListeners.
+		buttonChat.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Start the ChatActivity.
+				Intent chatActivityIntent = new Intent(getActivity(),
+						ChatActivity.class);
+				chatActivityIntent.putExtra(Keys.HOST_JID, host.getJid());
+				startActivity(chatActivityIntent);
+			}
+		});
 
 		return view;
 	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// TODO: Load host proposal from the database.
+
+		if (hostProposal == null) {
+			scrollViewProposal.setVisibility(View.INVISIBLE);
+			emptyView.setVisibility(View.VISIBLE);
+		}
+	}
+
 }

@@ -34,7 +34,7 @@ public final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 	@Override
 	protected void onSuccess(User me) throws Exception {
 		// Save the user data in the database.
-		database.setMyOldAvailability(me.getAvailability());
+		database.setMyAvailability(me.getAvailability());
 		database.setMyProposal(me.getProposal());
 		database.setIncomingBroadcasts(me.getIncomingBroadcasts());
 		database.setMyOutgoingBroadcasts(me.getOutgoingBroadcasts());

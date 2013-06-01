@@ -25,7 +25,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.OldAvailability;
+import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
@@ -139,7 +139,7 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			User outgoingBroadcast = getItem(position);
-			OldAvailability hisStatus = outgoingBroadcast.getAvailability();
+			Availability hisStatus = outgoingBroadcast.getAvailability();
 
 			// Inflate if necessary.
 			if (convertView == null) {
@@ -163,7 +163,7 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 					.getFullName());
 			textViewOutgoingBroadcastStatus
 					.setText(hisStatus != null ? hisStatus.getDescription()
-							: "Unknown OldAvailability");
+							: "Unknown Availability");
 
 			// Show/hide the "Delete" button if we need to.
 			if (showDeleteButtons) {
