@@ -149,7 +149,7 @@ public final class FriendsFragment extends SherlockFragment implements
 			holder.textView1.setText(user.getFullName());
 
 			// Set the OnClickListener
-			convertView.setOnClickListener(new OnClickListener() {
+			holder.imageView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View arg0) {
 					Intent proposalLeechIntent = new Intent(context,
