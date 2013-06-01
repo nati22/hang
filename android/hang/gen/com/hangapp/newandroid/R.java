@@ -1620,11 +1620,11 @@ containing a value of this type.
         public static final int textViewFriendsListHeader=0x7f050068;
         public static final int textViewIncomingBroadcastName=0x7f050069;
         public static final int textViewIncomingBroadcastStatus=0x7f05006a;
+        public static final int textViewInterested=0x7f050071;
         public static final int textViewMessageBody=0x7f05006c;
         public static final int textViewMessageFrom=0x7f05006d;
         public static final int textViewMyName=0x7f05004a;
         public static final int textViewMyStatus=0x7f05004b;
-        public static final int textViewNoProposal=0x7f050071;
         public static final int textViewOutgoingBroadcastName=0x7f05006e;
         public static final int textViewOutgoingBroadcastStatus=0x7f05006f;
         public static final int textViewProposalDescription=0x7f0500a4;

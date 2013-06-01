@@ -16,7 +16,7 @@
         android:visibility="gone" >
 
         <TextView
-            android:id="@+id/textViewNoProposal"
+            android:id="@+id/textViewInterested"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -29,7 +29,7 @@
             android:id="@+id/imageViewNoProposal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/textViewNoProposal"
+            android:layout_above="@+id/textViewInterested"
             android:layout_centerHorizontal="true"
             android:contentDescription="@string/proposal"
             android:src="@drawable/ic_action_proposal" />
@@ -83,6 +83,7 @@
                 android:layout_alignBottom="@id/your_prop_desc_title"
                 android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@id/separatorLeftRight"
+                android:maxLines="1"
                 android:text="@string/no_proposal"
                 android:textSize="12sp" />
 
@@ -135,16 +136,6 @@
                 android:layout_centerHorizontal="true" />
 
             <TextView
-                android:id="@+id/textViewNoProposal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textViewProposalTitle"
-                android:layout_below="@+id/separatorTopBottom"
-                android:layout_marginTop="20dp"
-                android:text="@string/interested"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <TextView
                 android:id="@+id/your_prop_desc_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -163,6 +154,7 @@
                 android:layout_alignBaseline="@+id/your_prop_time_title"
                 android:layout_alignBottom="@+id/your_prop_time_title"
                 android:layout_alignLeft="@+id/textViewProposalDescription"
+                android:maxLines="1"
                 android:text="@string/no_time"
                 android:textSize="12sp" />
 
@@ -173,6 +165,7 @@
                 android:layout_alignBaseline="@+id/your_prop_loc_title"
                 android:layout_alignBottom="@+id/your_prop_loc_title"
                 android:layout_alignLeft="@+id/textViewProposalDescription"
+                android:maxLines="1"
                 android:text="@string/no_location"
                 android:textSize="12sp" />
 
@@ -188,9 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/textViewNoProposal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" >
+                android:layout_below="@+id/textViewInterested" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -283,9 +274,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/textViewConfirmed"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp" >
+                android:layout_below="@+id/textViewConfirmed" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -349,6 +338,16 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/chat"
                 android:contentDescription="@string/chat" />
+
+            <TextView
+                android:id="@+id/textViewInterested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/separatorTopBottom"
+                android:layout_marginTop="15dp"
+                android:text="@string/interested"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
         </RelativeLayout>
     </ScrollView>
 

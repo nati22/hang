@@ -23,8 +23,8 @@
             style="@style/ButtonAppTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignLeft="@+id/textViewNoProposal"
-            android:layout_below="@+id/textViewNoProposal"
+            android:layout_alignLeft="@+id/textViewInterested"
+            android:layout_below="@+id/textViewInterested"
             android:layout_marginTop="5dp"
             android:background="@drawable/roster"
             android:contentDescription="@string/roster" />
@@ -190,7 +190,7 @@
             android:visibility="invisible" />
 
         <TextView
-            android:id="@+id/textViewNoProposal"
+            android:id="@+id/textViewInterested"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
