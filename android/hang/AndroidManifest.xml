@@ -12,12 +12,13 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <permission
-        android:name="com.example.gcm.permission.C2D_MESSAGE"
+        android:name="com.hangapp.newandroid.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.hangapp.newandroid.permission.C2D_MESSAGE" />
 
     <application
         android:name="com.hangapp.newandroid.util.BaseApplication"
@@ -35,7 +36,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
 
-                <category android:name="com.example.gcm" />
+                <category android:name="com.hangapp.newandroid" />
             </intent-filter>
         </receiver>
 
@@ -75,7 +76,9 @@
             android:name=".activity.ChatActivity"
             android:label="@string/chat" >
         </activity>
-        <service android:name=".network.xmpp.XMPPIntentService"></service>
+
+        <service android:name=".network.xmpp.XMPPIntentService" >
+        </service>
     </application>
 
 </manifest>

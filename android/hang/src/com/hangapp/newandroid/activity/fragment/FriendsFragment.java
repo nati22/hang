@@ -166,8 +166,9 @@ public final class FriendsFragment extends SherlockFragment implements
 				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
 			}
 
-			// Set the OnClickListener for the cell.
-			convertView.setOnClickListener(new OnClickListener() {
+			// Set the OnClickListener
+			holder.imageViewProposalIcon.setOnClickListener(new OnClickListener() {
+
 				@Override
 				public void onClick(View arg0) {
 					Intent proposalLeechIntent = new Intent(context,

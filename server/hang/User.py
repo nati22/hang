@@ -261,3 +261,25 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             # If we couldn't grab the DELETE request parameters, then show an error.
             self.response.write('Invalid inputs: Couldn\'t grab the DELETE request parameters.\n')
             return
+
+class NudgeRequestHandler(webapp2.RequestHandler):
+    def put(self, jid):
+        try:
+            # Grab the PUT request parameters and put them into variables.
+            param_target = self.request.get('target')
+
+    #        push_token = ''
+    #        android_payload = ''
+
+    #        gcm_message = GCMMessage(push_token, android_payload)
+    #        gcm_conn = GCMConnection()
+    #        logging.info("Attempting to send Android push notification %s to push_token %s." % (repr(android_payload), repr(push_token)))
+    #        gcm_conn.notify_device(gcm_message)
+
+
+            self.response.write("nudge successful")
+
+        except (TypeError, ValueError):
+            # If we couldn't grab the PUT request parameters, then show an error.
+            self.response.write('Invalid inputs: Couldn\'t grab the PUT request parameters.\n')
+            return
