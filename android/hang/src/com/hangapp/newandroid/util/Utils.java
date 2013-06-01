@@ -49,10 +49,10 @@ public final class Utils {
 			AvailabilityButton[] availabilityButtons,
 			Availability availability, Context context) {
 		if (availability == null) {
-			HangLog.toastE(context,
-					"MyAvailabilityFragment.updateAvailabilityStripColors",
-					"Couldn't udpateAvailabilityStripColors: Availability given was null");
-			return false;
+			for (AvailabilityButton button : availabilityButtons) {
+				button.setState(null);
+			}
+			return true;
 		}
 
 		if (availability.getExpirationDate() == null) {
@@ -66,7 +66,7 @@ public final class Utils {
 		for (AvailabilityButton button : availabilityButtons) {
 			if (button.getTime().isEqual(availability.getExpirationDate())) {
 				Utils.updateAvailabilityStripColors(availabilityButtons,
-						button.getId(), availability.getColor());
+						button.getId(), availability.getStatus());
 				return true;
 			}
 		}

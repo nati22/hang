@@ -200,11 +200,11 @@ public final class FriendsFragment extends SherlockFragment implements
 			Availability availability = friends.get(position).getAvailability();
 			String headerText = null;
 
-			if (availability != null && availability.getColor() == Status.FREE) {
+			if (availability != null && availability.getStatus() == Status.FREE) {
 				headerText = "Free to hang";
 				holder.text1.setTextColor(android.graphics.Color.GREEN);
 			} else if (availability != null
-					&& availability.getColor() == Status.BUSY) {
+					&& availability.getStatus() == Status.BUSY) {
 				headerText = "Busy, can't hang";
 				holder.text1.setTextColor(android.graphics.Color.RED);
 			} else {
@@ -219,10 +219,10 @@ public final class FriendsFragment extends SherlockFragment implements
 		public long getHeaderId(int position) {
 			Availability availability = friends.get(position).getAvailability();
 
-			if (availability != null && availability.getColor() == Status.FREE) {
+			if (availability != null && availability.getStatus() == Status.FREE) {
 				return 0;
 			} else if (availability != null
-					&& availability.getColor() == Status.BUSY) {
+					&& availability.getStatus() == Status.BUSY) {
 				return 1;
 			} else {
 				return 2;

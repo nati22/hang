@@ -31,4 +31,18 @@ class StatusRequestHandler(webapp2.RequestHandler):
             # If we had an error, then show it
             self.response.write('Invalid inputs')
             return
+        
+    def delete(self, jid):
+        
+        key_user = db.Key.from_path('User', jid)
+        
+        user = db.get(key_user)
+        
+        user.status_color = None
+        user.status_expiration_date = None
+
+        user.put()
+        
+        self.response.write("Deleted %s's status.\n" % user.first_name)    
+        
             

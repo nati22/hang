@@ -86,7 +86,7 @@ public final class Availability implements Comparable<Availability> {
 		return description;
 	}
 
-	public Status getColor() {
+	public Status getStatus() {
 		if (status == null || !isActive()) {
 			return null;
 		}
@@ -98,7 +98,7 @@ public final class Availability implements Comparable<Availability> {
 		return expirationDate;
 	}
 
-	public void setColor(Status color) {
+	public void setStatus(Status color) {
 		this.status = color;
 	}
 

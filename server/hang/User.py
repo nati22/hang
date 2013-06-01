@@ -20,11 +20,17 @@ class User(db.Model):
     proposal_interested = db.ListProperty(db.Key)
     proposal_confirmed = db.ListProperty(db.Key)
     library = db.ListProperty(db.Key)
-    
 
     # We need the get_partial_json to be able to print out just jids of the int and conf
     # users so jid String Lists seems the way to go. The other alternative I can think of
     # is to embarassingly request the jids using the int/conf Keys programmatically.
+    #
+    # (Note from Girum): You should indeed make this property a db.ListProperty(db.Key)
+    # instead of db.ListProperty(str) like you have now. db.Key objects contain their 
+    # string name within them as a field, so it is very cheap to retrieve their JIDs 
+    # programmatically. Use <key_object>.name() to cheaply retrieve the JID from the Key 
+    # object (example in User's GET request handler, when I convert incoming_broadcast_keys
+    # to JSON objects.
     proposal_interested_jids = db.ListProperty(str)
     proposal_confirmed_jids = db.ListProperty(str)
 

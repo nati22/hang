@@ -131,30 +131,52 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 			// Cast the button that was clicked to an AvailabilityButton.
 			AvailabilityButton availabilityButton = (AvailabilityButton) button;
 
-			// None -> Free.
-			if (availabilityButton.getState() == null) {
+			if (myCurrentAvailability == null && myNewAvailability == null) {
 				changeAvailabilityButtonStates(availabilityButton, Status.FREE);
+				return;
 			}
-			// Free -> Busy.
-			else if (availabilityButton.getState() == Status.FREE) {
-				changeAvailabilityButtonStates(availabilityButton, Status.BUSY);
+
+			if (myNewAvailability == null) {
+				myNewAvailability = myCurrentAvailability;
 			}
-			// Busy -> None.
-			else if (availabilityButton.getState() == Status.BUSY) {
-				changeAvailabilityButtonStates(availabilityButton, null);
+
+			// Assume that the new Status color is the same as the
+			// current Status. The bar should only toggle if you click the
+			// rightmost button.
+			if (availabilityButton.getTime().isEqual(
+					myNewAvailability.getExpirationDate())) {
+				// None -> Free.
+				if (availabilityButton.getState() == null) {
+					myNewAvailability.setStatus(Status.FREE);
+				}
+				// Free -> Busy.
+				else if (availabilityButton.getState() == Status.FREE) {
+					myNewAvailability.setStatus(Status.BUSY);
+				}
+				// Busy -> None.
+				else if (availabilityButton.getState() == Status.BUSY) {
+					myNewAvailability = null;
+				} else {
+					Log.e("AvailabilityButtonOnClickListener",
+							"Unknown state: "
+									+ availabilityButton.getState().toString());
+				}
 			}
-			// Error case.
-			else {
-				Log.e("AvailabilityButtonOnClickListener", "Unknown state: "
-						+ availabilityButton.getState().toString());
-			}
+
+			changeAvailabilityButtonStates(availabilityButton,
+					myNewAvailability != null ? myNewAvailability.getStatus()
+							: null);
 		}
 	}
 
 	private void changeAvailabilityButtonStates(AvailabilityButton buttton,
 			Availability.Status newState) {
-		// Initialize the potential new Availability.
-		myNewAvailability = new Availability(newState, buttton.getTime());
+		// Initialize the potential new Availability
+		if (newState != null) {
+			myNewAvailability = new Availability(newState, buttton.getTime());
+		} else {
+			myNewAvailability = null;
+		}
 
 		// Update the colors of the Availability strip.
 		Utils.updateAvailabilityStripColors(buttonsAvailability,

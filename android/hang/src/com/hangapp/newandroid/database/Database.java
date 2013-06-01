@@ -108,32 +108,37 @@ public final class Database {
 		return myUserDataListeners.remove(listener);
 	}
 
-	public void setMyAvailability(Availability status) {
-		if (status == null || status.getExpirationDate() == null
-				|| status.getExpirationDate().isBefore(new DateTime())) {
+	public void setMyAvailability(Availability availability) {
+		if (availability == null || availability.getExpirationDate() == null
+				|| availability.getExpirationDate().isBefore(new DateTime())) {
 			Log.v("Database.setStatus",
 					"Called setStatus on null status or null expiration date");
 
 			// Notify listeners
 			for (MyAvailabilityListener myStatusListener : myStatusListeners) {
-				myStatusListener.onMyAvailabilityUpdate(status);
+				myStatusListener.onMyAvailabilityUpdate(availability);
 			}
 
 			return;
 		}
 
-		SharedPreferences.Editor prefsEditor = prefs.edit();
+		if (availability.getStatus() == null
+				|| availability.getExpirationDate() == null) {
+			deleteMyAvailability();
+			return;
+		}
 
-		// Store serialized object instead?
-		prefsEditor.putString(Keys.AVAILABILITY_COLOR, status.getColor()
+		SharedPreferences.Editor prefsEditor = prefs.edit();
+		prefsEditor.putString(Keys.AVAILABILITY_COLOR, availability.getStatus()
 				.toString());
-		prefsEditor.putString(Keys.AVAILABILITY_EXPIRATION_DATE, status
+		prefsEditor.putString(Keys.AVAILABILITY_EXPIRATION_DATE, availability
 				.getExpirationDate().toString());
+
 		prefsEditor.commit();
 
 		// Notify listeners
 		for (MyAvailabilityListener myStatusListener : myStatusListeners) {
-			myStatusListener.onMyAvailabilityUpdate(status);
+			myStatusListener.onMyAvailabilityUpdate(availability);
 		}
 	}
 
@@ -169,6 +174,15 @@ public final class Database {
 		}
 
 		return myAvailability;
+	}
+
+	public void deleteMyAvailability() {
+		SharedPreferences.Editor prefsEditor = prefs.edit();
+
+		prefsEditor.remove(Keys.AVAILABILITY_COLOR);
+		prefsEditor.remove(Keys.AVAILABILITY_EXPIRATION_DATE);
+
+		prefsEditor.commit();
 	}
 
 	// TODO: We need a way to store time, interested users, confirmed users

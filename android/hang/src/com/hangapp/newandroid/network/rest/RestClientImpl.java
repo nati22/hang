@@ -53,18 +53,21 @@ public final class RestClientImpl implements RestClient {
 
 	@Override
 	public void updateMyAvailability(Availability status) {
-
 		String jid = database.getMyJid();
 
-		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR, status
-				.getColor().toString()));
-		parameters.add(new BasicNameValuePair(
-				Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
-						.toString()));
+		if (status != null) {
+			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
-		new SetAvailabilityAsyncTask(database, context, jid, parameters)
-				.execute();
+			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR,
+					status.getStatus().toString()));
+			parameters.add(new BasicNameValuePair(
+					Keys.AVAILABILITY_EXPIRATION_DATE, status
+							.getExpirationDate().toString()));
+			new SetAvailabilityAsyncTask(database, context, jid, parameters)
+					.execute();
+		} else {
+			new DeleteMyAvailabilityAsyncTask(database, context, jid).execute();
+		}
 
 		// TODO: Send a tickle to my recipients
 	}
