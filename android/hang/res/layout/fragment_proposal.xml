@@ -77,7 +77,7 @@
                 android:background="@android:color/darker_gray" />
 
             <TextView
-                android:id="@+id/your_proposal_description"
+                android:id="@+id/textViewProposalDescription"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/your_prop_desc_title"
@@ -157,22 +157,22 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/your_proposal_time"
+                android:id="@+id/textViewProposalStartTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/your_prop_time_title"
                 android:layout_alignBottom="@+id/your_prop_time_title"
-                android:layout_alignLeft="@+id/your_proposal_description"
+                android:layout_alignLeft="@+id/textViewProposalDescription"
                 android:text="@string/no_time"
                 android:textSize="12sp" />
 
             <TextView
-                android:id="@+id/your_proposal_location"
+                android:id="@+id/textViewProposalLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/your_prop_loc_title"
                 android:layout_alignBottom="@+id/your_prop_loc_title"
-                android:layout_alignLeft="@+id/your_proposal_description"
+                android:layout_alignLeft="@+id/textViewProposalDescription"
                 android:text="@string/no_location"
                 android:textSize="12sp" />
 

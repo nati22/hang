@@ -1,8 +1,6 @@
 package com.hangapp.newandroid.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -132,7 +130,7 @@ public final class User implements Comparable<User>, Parcelable {
 
 	public static User parseUser(String userJsonString) throws JSONException {
 		User user = null;
-		Availability status = null;
+		Availability availability = null;
 		Proposal proposal = null;
 
 		JSONObject userJsonObject = new JSONObject(userJsonString);
@@ -140,6 +138,8 @@ public final class User implements Comparable<User>, Parcelable {
 		String jid = userJsonObject.getString(Keys.JID);
 		String firstName = userJsonObject.getString(Keys.FIRST_NAME);
 		String lastName = userJsonObject.getString(Keys.LAST_NAME);
+
+		user = new User(jid, firstName, lastName);
 
 		String statusColor = userJsonObject.getString(Keys.AVAILABILITY_COLOR);
 		String statusExpirationDateString = userJsonObject
@@ -153,26 +153,33 @@ public final class User implements Comparable<User>, Parcelable {
 			date = null;
 		}
 
-		status = new Availability(statusColor, date);
+		availability = new Availability(statusColor, date);
+		user.setAvailability(availability);
 
+		// Grab the Proposal String fields from JSON
 		String proposalDescription = userJsonObject
 				.getString(Keys.PROPOSAL_DESCRIPTION);
 		String proposalLocation = userJsonObject
 				.getString(Keys.PROPOSAL_LOCATION);
-		String proposalTime = userJsonObject.getString(Keys.PROPOSAL_TIME);
+		String proposalStartTimeString = userJsonObject
+				.getString(Keys.PROPOSAL_TIME);
 
-		// FIXME: Use the real Date.
-		Calendar calendar = Calendar.getInstance();
-		calendar.add(Calendar.HOUR_OF_DAY, 1);
-
-		if (!proposalDescription.equals("null")) {
+		// Sanity checks on string fields.
+		if (proposalDescription.equals("null")) {
+			Log.e("User.parseUser", "Proposal description was \"null\"");
+		} else if (proposalLocation.equals("null")) {
+			Log.e("User.parseUser", "Proposal location was \"null\"");
+		} else if (proposalStartTimeString.equals("null")) {
+			Log.e("User.parseUser", "Proposal start time was \"null\"");
+		} else {
+			// If all the sanity checks passed, then parse and create the
+			// Proposal object.
+			DateTime proposalStartTime = DateTime.parse(userJsonObject
+					.getString(Keys.PROPOSAL_TIME));
 			proposal = new Proposal(proposalDescription, proposalLocation,
-					calendar.getTime());
+					proposalStartTime);
+			user.setProposal(proposal);
 		}
-
-		user = new User(jid, firstName, lastName);
-		user.setAvailability(status);
-		user.setProposal(proposal);
 
 		JSONArray incomingBroadcastsJsonArray = userJsonObject
 				.getJSONArray(Keys.INCOMING);
@@ -277,8 +284,8 @@ public final class User implements Comparable<User>, Parcelable {
 				}
 
 				// TODO: Switch to JodaTime (IN YO FACE)
-				Date proposalStartTime = new Date(
-						Date.parse(proposalStartTimeString));
+				DateTime proposalStartTime = DateTime
+						.parse(proposalStartTimeString);
 
 				Proposal proposal = new Proposal(proposalDescription,
 						proposalLocation, proposalStartTime);

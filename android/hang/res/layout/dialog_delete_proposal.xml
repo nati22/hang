@@ -12,7 +12,7 @@
         android:text="@string/confirm_delete_proposal" />
 
     <Button
-        android:id="@+id/confirm_delete_proposal"
+        android:id="@+id/buttonConfirmDeleteProposal"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_below="@id/are_you_sure_title"
@@ -31,7 +31,7 @@
         android:layout_centerHorizontal="true" />
 
     <Button
-        android:id="@+id/cancel_delete_proposal"
+        android:id="@+id/buttonCancelDeleteProposal"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_below="@id/are_you_sure_title"

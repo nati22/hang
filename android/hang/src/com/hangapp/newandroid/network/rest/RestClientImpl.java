@@ -63,7 +63,8 @@ public final class RestClientImpl implements RestClient {
 				Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
 						.toString()));
 
-		new SetAvailabilityAsyncTask(database, context, jid, parameters).execute();
+		new SetAvailabilityAsyncTask(database, context, jid, parameters)
+				.execute();
 
 		// TODO: Send a tickle to my recipients
 	}
@@ -79,7 +80,7 @@ public final class RestClientImpl implements RestClient {
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_LOCATION, proposal
 				.getLocation()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_TIME, proposal
-				.getStartTime().toGMTString()));
+				.getStartTime().toString()));
 
 		if (!proposal.getInterested().isEmpty()) {
 			for (User interestedUser : proposal.getInterested()) {
