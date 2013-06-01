@@ -9,11 +9,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.hangapp.newandroid.R;
+import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.network.rest.RestClient;
+import com.hangapp.newandroid.network.rest.RestClientImpl;
 
 public class DeleteProposalDialogFragment extends DialogFragment {
 
 	private Button buttonConfirmDeleteProposal;
 	private Button buttonCancelDeleteProposal;
+
+	private Database database;
+	private RestClient restClient;
 
 	public DeleteProposalDialogFragment() {
 	}
@@ -23,6 +29,11 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 			Bundle savedInstanceState) {
 		View view = inflater
 				.inflate(R.layout.dialog_delete_proposal, container);
+
+		// Instantiate dependencies
+		database = Database.getInstance();
+		restClient = new RestClientImpl(database, getActivity()
+				.getApplicationContext());
 
 		// Reference Views.
 		buttonConfirmDeleteProposal = (Button) view
@@ -34,12 +45,13 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 		buttonConfirmDeleteProposal.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DeleteProposalDialogFragment.this.dismiss();
+				deleteMyProposal();
 			}
 		});
 		buttonCancelDeleteProposal.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// Dismiss the dialog without doing anything.
 				DeleteProposalDialogFragment.this.dismiss();
 			}
 		});
@@ -48,5 +60,18 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 		getDialog().setTitle(getString(R.string.delete_proposal));
 
 		return view;
+	}
+
+	private void deleteMyProposal() {
+
+		// Delete my Proposal from the database, notifying any observers in the
+		// process.
+		database.deleteMyProposal();
+
+		// Send a DELETE request to the server to delete my Proposal
+		restClient.deleteMyProposal();
+
+		// Dismiss the modal dialog.
+		dismiss();
 	}
 }
