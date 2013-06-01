@@ -1564,7 +1564,7 @@ containing a value of this type.
         public static final int helper=0x7f05008e;
         public static final int homeAsUp=0x7f05000c;
         public static final int horizontalScrollView1=0x7f050039;
-        public static final int horizontalScrollView2=0x7f0500ac;
+        public static final int horizontalScrollView2=0x7f0500ab;
         public static final int hybrid=0x7f050004;
         public static final int imageView3=0x7f050098;
         public static final int imageViewAppLogo=0x7f05009e;
@@ -1618,7 +1618,7 @@ containing a value of this type.
         public static final int textView2=0x7f050071;
         public static final int textViewAppName=0x7f05009d;
         public static final int textViewClickIconToNudge=0x7f050053;
-        public static final int textViewConfirmed=0x7f0500ab;
+        public static final int textViewConfirmed=0x7f0500ac;
         public static final int textViewFriendName=0x7f050054;
         public static final int textViewFriendsListHeader=0x7f050067;
         public static final int textViewIncomingBroadcastName=0x7f050068;

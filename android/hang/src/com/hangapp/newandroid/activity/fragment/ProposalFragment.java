@@ -17,6 +17,8 @@ import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
+import com.hangapp.newandroid.network.rest.RestClient;
+import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.Keys;
 
 public final class ProposalFragment extends SherlockFragment {
@@ -37,6 +39,7 @@ public final class ProposalFragment extends SherlockFragment {
 	private User host;
 
 	private Database database;
+	private RestClient restClient;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +47,8 @@ public final class ProposalFragment extends SherlockFragment {
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
+		restClient = new RestClientImpl(database, getActivity()
+				.getApplicationContext());
 	}
 
 	@Override
@@ -83,15 +88,19 @@ public final class ProposalFragment extends SherlockFragment {
 		imageViewInterested.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity().getApplicationContext(),
-						"Interested...", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Interested...",
+						Toast.LENGTH_SHORT).show();
+
+				addMeToHostInterestedList();
 			}
 		});
 		imageViewConfirmed.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity().getApplicationContext(),
-						"Confirmed...", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Confirmed...",
+						Toast.LENGTH_SHORT).show();
+
+				addMeToHostConfirmedList();
 			}
 		});
 		buttonChat.setOnClickListener(new OnClickListener() {
@@ -134,6 +143,26 @@ public final class ProposalFragment extends SherlockFragment {
 			scrollViewProposal.setVisibility(View.INVISIBLE);
 			emptyView.setVisibility(View.VISIBLE);
 		}
+	}
+
+	private void addMeToHostInterestedList() {
+		removeMeFromHostConfirmedList();
+
+		// TODO
+	}
+
+	private void removeMeFromHostInterestedList() {
+		// TODO
+	}
+
+	private void addMeToHostConfirmedList() {
+		removeMeFromHostInterestedList();
+
+		// TODO
+	}
+
+	private void removeMeFromHostConfirmedList() {
+		// TODO
 	}
 
 }

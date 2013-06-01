@@ -86,16 +86,16 @@ public final class RestClientImpl implements RestClient {
 				.getStartTime().toString()));
 
 		if (!proposal.getInterested().isEmpty()) {
-			for (User interestedUser : proposal.getInterested()) {
+			for (String interestedUserJid : proposal.getInterested()) {
 				parameters.add(new BasicNameValuePair(Keys.PROPOSAL_INTERESTED,
-						interestedUser.getJid().toString()));
+						interestedUserJid));
 			}
 		}
 
 		if (!proposal.getConfirmed().isEmpty()) {
-			for (User confirmedUser : proposal.getConfirmed()) {
+			for (String confirmedUserJid : proposal.getConfirmed()) {
 				parameters.add(new BasicNameValuePair(Keys.PROPOSAL_CONFIRMED,
-						confirmedUser.getJid().toString()));
+						confirmedUserJid));
 			}
 		}
 

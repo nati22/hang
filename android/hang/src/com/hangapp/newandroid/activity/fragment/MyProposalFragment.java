@@ -36,7 +36,6 @@ public final class MyProposalFragment extends SherlockFragment implements
 	private ImageView buttonDeleteProposal;
 
 	private Proposal myProposal;
-
 	private Database database;
 
 	@Override

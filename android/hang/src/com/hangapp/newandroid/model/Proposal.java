@@ -10,8 +10,8 @@ public final class Proposal {
 	private String description;
 	private String location;
 	private DateTime startTime;
-	private List<User> interestedUsers;
-	private List<User> confirmedUsers;
+	private List<String> interestedUsers;
+	private List<String> confirmedUsers;
 
 	public static final int DESCRIPTION_MAX_CHARS = 100;
 	public static final int LOCATION_MAX_CHARS = 50;
@@ -25,10 +25,10 @@ public final class Proposal {
 		this.description = description;
 		this.location = location;
 		this.startTime = time;
-		
+
 		// We need at least an empty list to check for Users
-		this.interestedUsers = new ArrayList<User>();
-		this.confirmedUsers = new ArrayList<User>();
+		this.interestedUsers = new ArrayList<String>();
+		this.confirmedUsers = new ArrayList<String>();
 	}
 
 	public String getDescription() {
@@ -43,31 +43,40 @@ public final class Proposal {
 		return startTime;
 	}
 
-	public List<User> getInterested() {
+	public List<String> getInterested() {
 		return interestedUsers;
 	}
 
-	public void setInterested(List<User> interestedUsers) {
-		this.interestedUsers = interestedUsers;
+	public void addInterested(String interestedUserJid) {
+		interestedUsers.add(interestedUserJid);
 	}
 
-	public List<User> getConfirmed() {
+	public void removeInterested(String uninterestedUserJid) {
+		interestedUsers.remove(uninterestedUserJid);
+	}
+
+	public List<String> getConfirmed() {
 		return confirmedUsers;
 	}
 
-	public void setConfirmed(List<User> confirmedUsers) {
-		this.confirmedUsers = confirmedUsers;
+	public void addConfirmed(String confirmedUserJid) {
+		confirmedUsers.add(confirmedUserJid);
+	}
+
+	public void removeConfirmed(String unconfirmedUserJid) {
+		confirmedUsers.remove(unconfirmedUserJid);
 	}
 
 	public boolean isActive() {
-//		if (startTime == null) {
-//			return false;
-//		}
-//		Date expirationDate = (Date) startTime.clone();
-//		expirationDate.setHours(expirationDate.getHours() + PROPOSAL_DURATION);
-//
-//		return new Date().before(expirationDate);
-		
+		// if (startTime == null) {
+		// return false;
+		// }
+		// Date expirationDate = (Date) startTime.clone();
+		// expirationDate.setHours(expirationDate.getHours() +
+		// PROPOSAL_DURATION);
+		//
+		// return new Date().before(expirationDate);
+
 		return false;
 	}
 

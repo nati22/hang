@@ -294,7 +294,7 @@ public final class Database {
 		// (nati) If defaultuser stops broadcasting could this be a problem?
 		return outgoingMap.get(jid);
 	}
-
+	
 	public void setMyUserData(String jid, String firstName, String lastName) {
 		SharedPreferences.Editor editor = prefs.edit();
 
