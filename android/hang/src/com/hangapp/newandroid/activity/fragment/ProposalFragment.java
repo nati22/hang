@@ -15,7 +15,6 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.Keys;
 
@@ -25,9 +24,14 @@ public final class ProposalFragment extends SherlockFragment {
 	private RelativeLayout emptyView;
 
 	private TextView textViewProposalTitle;
+	private TextView textViewProposalDescription;
+	private TextView textViewProposalLocation;
+	private TextView textViewProposalStartTime;
 	private ImageView buttonChat;
+	private ImageView buttonDeleteProposal;
 
-	private Proposal hostProposal;
+	private String hostJid;
+	private User host;
 
 	private Database database;
 
@@ -49,21 +53,24 @@ public final class ProposalFragment extends SherlockFragment {
 		// Reference views.
 		textViewProposalTitle = (TextView) view
 				.findViewById(R.id.textViewProposalTitle);
+		textViewProposalDescription = (TextView) view
+				.findViewById(R.id.textViewProposalDescription);
+		textViewProposalLocation = (TextView) view
+				.findViewById(R.id.textViewProposalLocation);
+		textViewProposalStartTime = (TextView) view
+				.findViewById(R.id.textViewProposalStartTime);
 		scrollViewProposal = (ScrollView) view
 				.findViewById(R.id.scrollViewProposal);
 		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
+		buttonDeleteProposal = (ImageView) view
+				.findViewById(R.id.buttonDeleteProposal);
+
+		// Hide the "delete" button, since this isn't your own Proposal.
+		buttonDeleteProposal.setVisibility(View.INVISIBLE);
 
 		// Populate member datum
-		String hostJid = getActivity().getIntent()
-				.getStringExtra(Keys.HOST_JID);
-		final User host = database.getIncomingUser(hostJid);
-
-		// Set Proposal member datum.
-		hostProposal = host.getProposal();
-		String proposalTitle = String.format(
-				getString(R.string.someones_proposal), host.getFirstName());
-		textViewProposalTitle.setText(proposalTitle);
+		hostJid = getActivity().getIntent().getStringExtra(Keys.HOST_JID);
 
 		// Set OnClickListeners.
 		buttonChat.setOnClickListener(new OnClickListener() {
@@ -72,7 +79,7 @@ public final class ProposalFragment extends SherlockFragment {
 				// Start the ChatActivity.
 				Intent chatActivityIntent = new Intent(getActivity(),
 						ChatActivity.class);
-				chatActivityIntent.putExtra(Keys.HOST_JID, host.getJid());
+				chatActivityIntent.putExtra(Keys.HOST_JID, hostJid);
 				startActivity(chatActivityIntent);
 			}
 		});
@@ -84,9 +91,25 @@ public final class ProposalFragment extends SherlockFragment {
 	public void onResume() {
 		super.onResume();
 
-		// TODO: Load host proposal from the database.
+		// Reload the host (and his Proposal) from the database.
+		host = database.getIncomingUser(hostJid);
 
-		if (hostProposal == null) {
+		if (host.getProposal() != null) {
+			// Turn off the Empty View.
+			scrollViewProposal.setVisibility(View.VISIBLE);
+			emptyView.setVisibility(View.INVISIBLE);
+
+			// Populate the Views.
+			String proposalTitle = String.format(
+					getString(R.string.someones_proposal), host.getFirstName());
+			textViewProposalTitle.setText(proposalTitle);
+			textViewProposalDescription.setText(host.getProposal()
+					.getDescription());
+			textViewProposalLocation.setText(host.getProposal().getLocation());
+			textViewProposalStartTime.setText(host.getProposal().getStartTime()
+					.toString("h aa"));
+		} else {
+			// Turn on the Empty View.
 			scrollViewProposal.setVisibility(View.INVISIBLE);
 			emptyView.setVisibility(View.VISIBLE);
 		}

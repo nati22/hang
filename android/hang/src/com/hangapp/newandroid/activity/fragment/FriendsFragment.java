@@ -160,24 +160,25 @@ public final class FriendsFragment extends SherlockFragment implements
 			Utils.initializeAvailabilityButtons(holder.buttonsAvailability);
 			Utils.updateAvailabilityStripColors(holder.buttonsAvailability,
 					user.getAvailability(), context);
+
+			// If the user has a Proposal, then show the Proposal icon and set
+			// the OnClickListener for the entire cell.
 			if (user.getProposal() != null) {
 				holder.imageViewProposalIcon.setVisibility(View.VISIBLE);
+				convertView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						Intent proposalLeechIntent = new Intent(context,
+								ProfileActivity.class);
+						proposalLeechIntent.putExtra(Keys.HOST_JID,
+								user.getJid());
+						context.startActivity(proposalLeechIntent);
+					}
+				});
 			} else {
 				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
+				convertView.setOnClickListener(null);
 			}
-
-			// Set the OnClickListener
-			holder.imageViewProposalIcon
-					.setOnClickListener(new OnClickListener() {
-						@Override
-						public void onClick(View arg0) {
-							Intent proposalLeechIntent = new Intent(context,
-									ProfileActivity.class);
-							proposalLeechIntent.putExtra(Keys.HOST_JID,
-									user.getJid());
-							context.startActivity(proposalLeechIntent);
-						}
-					});
 
 			return convertView;
 		}
