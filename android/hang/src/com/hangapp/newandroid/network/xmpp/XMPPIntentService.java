@@ -1,19 +1,22 @@
 package com.hangapp.newandroid.network.xmpp;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.jivesoftware.smack.AccountManager;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.SmackAndroid;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.ConfigureProviderManager;
+import org.jivesoftware.smackx.muc.MultiUserChat;
 
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
-import com.hangapp.newandroid.database.MessagesDataSource;
 import com.hangapp.newandroid.util.BaseApplication;
 import com.hangapp.newandroid.util.Keys;
-import com.hangapp.newandroid.util.Utils;
 
 /**
  * This {@link IntentService} handles all of our XMPP logic for us. Send
@@ -42,17 +45,18 @@ public final class XMPPIntentService extends IntentService {
 	private static XMPPConnection xmppConnection;
 
 	/**
+	 * Hold a reference to the front-facing XMPP object.
+	 */
+	private static XMPP xmpp;
+
+	/**
 	 * Share a single {@link MyConnectionListener} object for the
 	 * {@link XMPPConnection}, instead of instantiating a new one every time you
 	 * connect to XMPP.
 	 */
 	private static MyConnectionListener mConnectionListener = new MyConnectionListener();
 
-	/**
-	 * The <a href="http://en.wikipedia.org/wiki/Data_access_object">Data Access
-	 * Object</a> to our SQLite database for XMPP messages.
-	 */
-	private static MessagesDataSource messagesDataSource;
+	private Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
 
 	public XMPPIntentService() {
 		super("XMPPIntentService");
@@ -60,6 +64,9 @@ public final class XMPPIntentService extends IntentService {
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
+		// Instantiate your dependency on the front-facing XMPP object
+		xmpp = XMPP.getInstance();
+
 		// Figure out which message the Intent is sending.
 		int message = intent.getIntExtra(Keys.MESSAGE, 0);
 		Log.d("TAG", "XMPPIntentService started with intent message: "
@@ -73,6 +80,10 @@ public final class XMPPIntentService extends IntentService {
 			return;
 		}
 
+		// Pull out other extras. Sanity check them later, when you need them.
+		String mucName = intent.getStringExtra(Keys.MUC_NAME);
+		String mucMessage = intent.getStringExtra(Keys.MUC_MESSAGE);
+
 		// Start the correct method based on which message was passed into the
 		// Intent.
 		switch (message) {
@@ -80,7 +91,7 @@ public final class XMPPIntentService extends IntentService {
 			connect(myJid);
 			return;
 		case Keys.XMPP_REGISTER:
-			register();
+			register(myJid);
 			return;
 		case Keys.XMPP_LOGIN:
 			login(myJid);
@@ -89,10 +100,34 @@ public final class XMPPIntentService extends IntentService {
 			logout();
 			return;
 		case Keys.XMPP_JOIN_MUC:
-			joinMuc();
+			// Sanity check the mucName, now that you need it.
+			if (mucName == null) {
+				Log.e("XMPPIntentService",
+						"Can't join muc: Intent was passed a null MUC name");
+				return;
+			}
+
+			joinMuc(mucName, myJid);
+			return;
+		case Keys.XMPP_LEAVE_MUC:
+			// Sanity check the mucName, now that you need it.
+			if (mucName == null) {
+				Log.e("XMPPIntentService",
+						"Can't leave XMPP muc: Intent was passed a null muc name");
+				return;
+			}
+
+			leaveMuc(mucName);
 			return;
 		case Keys.XMPP_SEND_MUC_MESSAGE:
-			sendMucMessage();
+			// Sanity check the mucMessage, now that you need it.
+			if (mucMessage == null) {
+				Log.e("XMPPIntentService",
+						"Can't send XMPP muc message: Intent was passed a null muc message");
+				return;
+			}
+
+			sendMucMessage(mucName, mucMessage);
 			return;
 		default:
 			Log.e("XMPPPIntentService.onHandleIntent",
@@ -118,7 +153,7 @@ public final class XMPPIntentService extends IntentService {
 			Log.e("XMPPIntentService.connect()", "Already connected");
 
 			// Already connected, so attempt to login.
-			Utils.startLoginIntent(myJid, getApplicationContext());
+			xmpp.login(myJid, getApplicationContext());
 			return;
 		}
 
@@ -130,7 +165,7 @@ public final class XMPPIntentService extends IntentService {
 			Log.e("XMPPIntentService.connect()", e.getMessage());
 
 			// Attempt to connect again?
-			Utils.startConnectIntent(myJid, getApplicationContext());
+			xmpp.connect(myJid, getApplicationContext());
 			return;
 		}
 
@@ -142,17 +177,45 @@ public final class XMPPIntentService extends IntentService {
 			xmppConnection.addConnectionListener(mConnectionListener);
 
 			// Attempt to login.
-			Utils.startLoginIntent(myJid, getApplicationContext());
+			xmpp.login(myJid, getApplicationContext());
 			return;
 		} else {
 			// If XMPPConnection isn't connected even after connect() passed,
 			// then attempt to connect again.
-			Utils.startConnectIntent(myJid, getApplicationContext());
+			xmpp.connect(myJid, getApplicationContext());
 			return;
 		}
 	}
 
-	protected void register() {
+	protected void register(String myJid) {
+		// If you try to login without being connected, then try to connect
+		// again.
+		if (!xmppConnection.isConnected()) {
+			Log.e("XMPPIntentService.register()", "Can't login: not connected");
+
+			// Not connected, so attempt to connect.
+			xmpp.connect(myJid, getApplicationContext());
+			return;
+		}
+
+		// If you try to register when you're already authenticated, then you're
+		// done -- you don't have to register because you're already logged in.
+		if (xmppConnection.isAuthenticated()) {
+			Log.e("XMPPIntentService.register()",
+					"Can't register: already authenticated");
+			// Do nothing.
+			return;
+		}
+
+		try {
+			AccountManager accountManager = xmppConnection.getAccountManager();
+			accountManager.createAccount(myJid, myJid);
+		} catch (XMPPException e) {
+			Log.e("XMPPIntentService.register()",
+					"Can't register new XMPP user: " + e.getMessage());
+			xmpp.connect(myJid, getApplicationContext());
+			return;
+		}
 
 	}
 
@@ -162,8 +225,8 @@ public final class XMPPIntentService extends IntentService {
 		if (!xmppConnection.isConnected()) {
 			Log.e("XMPPIntentService.login()", "Can't login: not connected");
 
-			// Already connected, so attempt to login.
-			Utils.startConnectIntent(myJid, getApplicationContext());
+			// Not connected, so attempt to connect.
+			xmpp.connect(myJid, getApplicationContext());
 			return;
 		}
 
@@ -186,7 +249,7 @@ public final class XMPPIntentService extends IntentService {
 			// Do nothing.
 		} else {
 			// If login failed, then start over from connect().
-			Utils.startConnectIntent(myJid, getApplicationContext());
+			xmpp.connect(myJid, getApplicationContext());
 		}
 	}
 
@@ -194,12 +257,46 @@ public final class XMPPIntentService extends IntentService {
 
 	}
 
-	protected void joinMuc() {
+	protected void joinMuc(String mucName, String myJid) {
+		MultiUserChat muc = mucs.get(mucName);
 
+		if (muc == null) {
+			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
+					+ XMPP_SERVER_URL);
+			mucs.put(mucName, muc);
+		}
+
+		try {
+			muc.join(myJid);
+		} catch (XMPPException e) {
+			Log.e("XMPPPIntentService.joinMuc()",
+					"Failed to join muc: " + e.getMessage());
+		}
+
+		Log.d("XMPPIntentService.joinMuc()",
+				"Joined XMPP muc: " + muc.getRoom());
+		muc.addMessageListener(new MessageListener(mucName));
 	}
 
-	protected void sendMucMessage() {
+	protected void leaveMuc(String mucName) {
+		MultiUserChat muc = mucs.get(mucName);
 
+		if (muc == null) {
+			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
+					+ XMPP_SERVER_URL);
+			mucs.put(mucName, muc);
+		}
+
+		muc.leave();
 	}
 
+	protected void sendMucMessage(String mucName, String message) {
+		MultiUserChat muc = mucs.get(mucName);
+		try {
+			muc.sendMessage(message);
+		} catch (XMPPException e) {
+			Log.e("XMPPIntentService.sendMucMessage()",
+					"Couldn't send XMPP muc message: " + e.getMessage());
+		}
+	}
 }

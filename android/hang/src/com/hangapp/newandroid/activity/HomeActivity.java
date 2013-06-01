@@ -19,16 +19,16 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.hangapp.newandroid.R;
-import com.hangapp.newandroid.activity.fragment.MyAvailabilityFragment;
 import com.hangapp.newandroid.activity.fragment.FriendsFragment;
+import com.hangapp.newandroid.activity.fragment.MyAvailabilityFragment;
 import com.hangapp.newandroid.activity.fragment.MyProposalFragment;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
+import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.Keys;
 import com.hangapp.newandroid.util.TabsAdapter;
-import com.hangapp.newandroid.util.Utils;
 
 public final class HomeActivity extends SherlockFragmentActivity {
 
@@ -38,6 +38,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 	private SharedPreferences prefs;
 	private Database database;
 	private RestClient restClient;
+	private XMPP xmpp;
 
 	// Facebook SDK member variables.
 	private UiLifecycleHelper uiHelper;
@@ -59,6 +60,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		database = Database.getInstance();
 		restClient = new RestClientImpl(Database.getInstance(),
 				getApplicationContext());
+		xmpp = XMPP.getInstance();
 
 		// Initialize the ViewPager and set it to be the ContentView of this
 		// Activity.
@@ -171,8 +173,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 					restClient.registerNewUser(me);
 
 					// Attempt to connect to XMPP using the new "me" JID.
-					Utils.startConnectIntent(me.getJid(),
-							getApplicationContext());
+					xmpp.connect(me.getJid(), getApplicationContext());
 				}
 			}
 		});

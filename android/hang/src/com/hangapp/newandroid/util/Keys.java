@@ -23,7 +23,9 @@ public final class Keys {
 	public static final String HOST_JID = "host_jid";
 	public static final String FREE = "free";
 	public static final String BUSY = "busy";
-	
+	public static final String MUC_NAME = "muc_name";
+	public static final String MUC_MESSAGE = "muc_message";
+
 	/*
 	 * IntentService message codes.
 	 */
@@ -33,10 +35,9 @@ public final class Keys {
 	public static final int XMPP_LOGIN = 102;
 	public static final int XMPP_LOGOUT = 103;
 	public static final int XMPP_JOIN_MUC = 104;
-	public static final int XMPP_SEND_MUC_MESSAGE = 105;
-	
-	
-	
+	public static final int XMPP_LEAVE_MUC = 105;
+	public static final int XMPP_SEND_MUC_MESSAGE = 106;
+
 	/**
 	 * Instead of converting directly from Date objects to Strings and vice
 	 * versa, Android wants us to use DateFormat objects which require a

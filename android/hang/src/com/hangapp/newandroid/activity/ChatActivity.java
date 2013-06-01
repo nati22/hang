@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.callback.MucMessageListener;
+import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.Keys;
 
@@ -33,7 +34,7 @@ public final class ChatActivity extends BaseFragmentActivity implements
 	private List<Message> messages = new ArrayList<Message>();
 
 	private Database database;
-//	private XMPP xmpp;
+	private XMPP xmpp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +47,13 @@ public final class ChatActivity extends BaseFragmentActivity implements
 
 		// Instantiate dependencies
 		database = Database.getInstance();
-//		xmpp = XMPP.getInstance();
+		xmpp = XMPP.getInstance();
 
 		mucName = getIntent().getStringExtra(Keys.HOST_JID);
 
 		// Join the Muc.
 		String myJid = database.getMyJid();
-//		xmpp.joinMuc(mucName, myJid);
+		xmpp.joinMuc(mucName, myJid, getApplicationContext());
 
 		// Reference Views.
 		editTextChatMessage = (EditText) findViewById(R.id.editTextChatMessage);
@@ -67,22 +68,22 @@ public final class ChatActivity extends BaseFragmentActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-//		xmpp.addMucMessageListener(mucName, this);
+		xmpp.addMucMessageListener(mucName, this);
 
 		messages.clear();
-//		messages.addAll(xmpp.getAllMessages(mucName));
+		messages.addAll(xmpp.getAllMessages(mucName));
 		adapter.notifyDataSetChanged();
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-//		xmpp.removeMucMessageListener(mucName, this);
+		xmpp.removeMucMessageListener(mucName, this);
 	}
 
 	public void sendMessage(View v) {
-//		xmpp.sendMessage(mucName, editTextChatMessage.getText().toString());
+		xmpp.sendMessage(mucName, editTextChatMessage.getText().toString(),
+				getApplicationContext());
 		editTextChatMessage.setText("");
 	}
 

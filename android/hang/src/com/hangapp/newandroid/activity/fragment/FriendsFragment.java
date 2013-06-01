@@ -167,16 +167,17 @@ public final class FriendsFragment extends SherlockFragment implements
 			}
 
 			// Set the OnClickListener
-			holder.imageViewProposalIcon.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View arg0) {
-					Intent proposalLeechIntent = new Intent(context,
-							ProfileActivity.class);
-					proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
-					context.startActivity(proposalLeechIntent);
-				}
-			});
+			holder.imageViewProposalIcon
+					.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View arg0) {
+							Intent proposalLeechIntent = new Intent(context,
+									ProfileActivity.class);
+							proposalLeechIntent.putExtra(Keys.HOST_JID,
+									user.getJid());
+							context.startActivity(proposalLeechIntent);
+						}
+					});
 
 			return convertView;
 		}
