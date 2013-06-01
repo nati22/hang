@@ -13,27 +13,6 @@
         android:contentDescription="User Icon"
         android:src="@drawable/ic_action_profile_icon" />
 
-    <TextView
-        android:id="@+id/textViewMyName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profilePictureViewMyIcon"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/profilePictureViewMyIcon"
-        android:text="User Name"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/textViewMyStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewMyName"
-        android:layout_below="@+id/textViewMyName"
-        android:text="Unknown Status"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/darker_gray" />
-
     <View
         android:id="@+id/separatorMyStatusFromButtons"
         android:layout_width="wrap_content"
@@ -54,7 +33,7 @@
         android:onClick="startOutgoingBroadcastsActivity"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="0 Outgoing Broadcasts"
+        android:text="@string/outgoing_broadcasts"
         android:textSize="13sp" />
 
     <View
@@ -78,7 +57,7 @@
         android:onClick="startIncomingBroadcastsActivity"
         android:paddingLeft="15dp"
         android:paddingRight="15dp"
-        android:text="0 Incoming Broadcasts"
+        android:text="@string/incoming_broadcasts"
         android:textSize="13sp" />
 
     <View
@@ -99,5 +78,15 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
+
+    <TextView
+        android:id="@+id/textViewMyName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/facebookLoginButton"
+        android:layout_alignTop="@+id/profilePictureViewMyIcon"
+        android:text="@string/no_user_name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="18sp" />
 
 </RelativeLayout>

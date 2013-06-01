@@ -30,6 +30,8 @@ public final class MyProposalFragment extends SherlockFragment implements
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
+	private ImageView imageViewInterested;
+	private ImageView imageViewConfirmed;
 	private ImageView buttonChat;
 	private ImageView buttonDeleteProposal;
 
@@ -66,6 +68,10 @@ public final class MyProposalFragment extends SherlockFragment implements
 		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
 		imageViewNoProposal = (ImageView) view
 				.findViewById(R.id.imageViewNoProposal);
+		imageViewInterested = (ImageView) view
+				.findViewById(R.id.imageViewInterested);
+		imageViewConfirmed = (ImageView) view
+				.findViewById(R.id.imageViewConfirmed);
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
 		buttonDeleteProposal = (ImageView) view
 				.findViewById(R.id.buttonDeleteProposal);
@@ -73,6 +79,11 @@ public final class MyProposalFragment extends SherlockFragment implements
 		// Populate member datum
 		myProposal = database.getMyProposal();
 		textViewProposalTitle.setText(getString(R.string.my_current_proposal));
+
+		// Disable the Interested and Confirmed buttons, since this is your own
+		// Proposal
+		imageViewInterested.setVisibility(View.GONE);
+		imageViewConfirmed.setVisibility(View.GONE);
 
 		// Set the OnClickListeners.
 		imageViewNoProposal.setOnClickListener(new OnClickListener() {

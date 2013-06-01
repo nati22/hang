@@ -15,24 +15,21 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
-import com.hangapp.newandroid.model.callback.MyAvailabilityListener;
 import com.hangapp.newandroid.model.callback.MyUserDataListener;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
 
 public final class MyProfileActivity extends BaseFragmentActivity implements
-		MyUserDataListener, MyAvailabilityListener, IncomingBroadcastsListener,
+		MyUserDataListener, IncomingBroadcastsListener,
 		OutgoingBroadcastsListener {
 
 	private UiLifecycleHelper uiHelper;
 
 	private ProfilePictureView profilePictureView;
 	private TextView textViewMyName;
-	private TextView textViewMyStatus;
 	private Button buttonOutgoingBroadcasts;
 	private Button buttonIncomingBroadcasts;
 
@@ -57,7 +54,6 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		// Reference views
 		profilePictureView = (ProfilePictureView) findViewById(R.id.profilePictureViewMyIcon);
 		textViewMyName = (TextView) findViewById(R.id.textViewMyName);
-		textViewMyStatus = (TextView) findViewById(R.id.textViewMyStatus);
 		buttonOutgoingBroadcasts = (Button) findViewById(R.id.buttonOutgoingBroadcasts);
 		buttonIncomingBroadcasts = (Button) findViewById(R.id.buttonIncomingBroadcasts);
 
@@ -74,8 +70,6 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		super.onResume();
 		uiHelper.onResume();
 
-		Availability myStatus = database.getMyAvailability();
-
 		// For scenarios where the main activity is launched and user
 		// session is not null, the session state change notification
 		// may not be triggered. Trigger it if it's open/closed.
@@ -88,8 +82,6 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		profilePictureView.setProfileId(myJid);
 
 		textViewMyName.setText(database.getMyFullName());
-		textViewMyStatus.setText(myStatus != null ? myStatus.getDescription()
-				: "No Availability");
 
 		database.addMyUserDataListener(this);
 		onOutgoingBroadcastsUpdate(database.getMyOutgoingBroadcasts());
@@ -144,12 +136,6 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		textViewMyName.setText(me.getFullName());
 	}
 
-	@Override
-	public void onMyAvailabilityUpdate(Availability status) {
-		textViewMyStatus.setText(status != null ? status.getDescription()
-				: "No Availability.");
-	}
-
 	public void startOutgoingBroadcastsActivity(View v) {
 		startActivity(new Intent(this, OutgoingBroadcastsActivity.class));
 	}
@@ -160,13 +146,22 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 
 	@Override
 	public void onOutgoingBroadcastsUpdate(List<User> outgoingBroadcasts) {
-		buttonOutgoingBroadcasts.setText(outgoingBroadcasts.size()
-				+ " Outgoing Broadcasts");
+		if (outgoingBroadcasts.size() == 1) {
+			buttonOutgoingBroadcasts.setText("1 Outgoing Broadcast");
+		} else {
+			buttonOutgoingBroadcasts.setText(outgoingBroadcasts.size()
+					+ " Outgoing Broadcasts");
+		}
 	}
 
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
-		buttonIncomingBroadcasts.setText(incomingBroadcasts.size()
-				+ " Incoming Broadcasts");
+		if (incomingBroadcasts.size() == 1) {
+			buttonIncomingBroadcasts.setText("1 Incoming Broadcast");
+		} else {
+			buttonIncomingBroadcasts.setText(incomingBroadcasts.size()
+					+ " Incoming Broadcasts");
+		}
+
 	}
 }

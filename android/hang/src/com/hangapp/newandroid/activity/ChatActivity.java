@@ -21,6 +21,7 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.callback.MucMessageListener;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
+import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 
 public final class ChatActivity extends BaseFragmentActivity implements
@@ -82,8 +83,15 @@ public final class ChatActivity extends BaseFragmentActivity implements
 	}
 
 	public void sendMessage(View v) {
-		xmpp.sendMessage(mucName, editTextChatMessage.getText().toString(),
-				getApplicationContext());
+		String message = editTextChatMessage.getText().toString().trim();
+
+		if (message.equals("")) {
+			HangLog.toastE(this, "ChatActivity.sendMessage",
+					"Can't send empty message");
+			return;
+		}
+
+		xmpp.sendMessage(mucName, message, getApplicationContext());
 		editTextChatMessage.setText("");
 	}
 

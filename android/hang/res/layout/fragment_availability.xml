@@ -211,7 +211,7 @@
         </com.facebook.widget.ProfilePictureView>
 
         <com.facebook.widget.ProfilePictureView
-            android:id="@+id/imageView2"
+            android:id="@+id/imageViewConfirmed"
             style="@style/ButtonAppTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.hangapp.newandroid.R;
@@ -27,6 +28,8 @@ public final class ProposalFragment extends SherlockFragment {
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
+	private ImageView imageViewInterested;
+	private ImageView imageViewConfirmed;
 	private ImageView buttonChat;
 	private ImageView buttonDeleteProposal;
 
@@ -62,6 +65,10 @@ public final class ProposalFragment extends SherlockFragment {
 		scrollViewProposal = (ScrollView) view
 				.findViewById(R.id.scrollViewProposal);
 		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
+		imageViewInterested = (ImageView) view
+				.findViewById(R.id.imageViewInterested);
+		imageViewConfirmed = (ImageView) view
+				.findViewById(R.id.imageViewConfirmed);
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
 		buttonDeleteProposal = (ImageView) view
 				.findViewById(R.id.buttonDeleteProposal);
@@ -73,6 +80,20 @@ public final class ProposalFragment extends SherlockFragment {
 		hostJid = getActivity().getIntent().getStringExtra(Keys.HOST_JID);
 
 		// Set OnClickListeners.
+		imageViewInterested.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity().getApplicationContext(),
+						"Interested...", Toast.LENGTH_SHORT).show();
+			}
+		});
+		imageViewConfirmed.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getActivity().getApplicationContext(),
+						"Confirmed...", Toast.LENGTH_SHORT).show();
+			}
+		});
 		buttonChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
