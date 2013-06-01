@@ -30,10 +30,6 @@ public class CreateProposalDialogFragment extends DialogFragment {
 	private RestClient restClient;
 
 	public CreateProposalDialogFragment() {
-		// Instantiate dependencies.
-		database = Database.getInstance();
-		restClient = new RestClientImpl(database, getActivity()
-				.getApplicationContext());
 	}
 
 	@Override
@@ -41,6 +37,11 @@ public class CreateProposalDialogFragment extends DialogFragment {
 			Bundle savedInstanceState) {
 		View view = inflater
 				.inflate(R.layout.dialog_create_proposal, container);
+
+		// Instantiate dependencies.
+		database = Database.getInstance();
+		restClient = new RestClientImpl(database, getActivity()
+				.getApplicationContext());
 
 		// Reference Views.
 		editTextProposalDescription = (EditText) view
