@@ -1,3 +1,4 @@
+from gae_python_gcm.gcm import GCMMessage, GCMConnection
 from google.appengine.ext import db
 import webapp2
 import json
@@ -272,18 +273,27 @@ class NudgeRequestHandler(webapp2.RequestHandler):
     def put(self, jid):
         try:
             # Grab the PUT request parameters and put them into variables.
-            param_target = self.request.get('target')
+            param_target = self.request.get('nudgee')
 
-    #        push_token = ''
-    #        android_payload = ''
+            key_broadcaster_jid = db.Key.from_path('User', jid)
+            key_broadcastee_jid = db.Key.from_path('User', param_target)
 
-    #        gcm_message = GCMMessage(push_token, android_payload)
-    #        gcm_conn = GCMConnection()
-    #        logging.info("Attempting to send Android push notification %s to push_token %s." % (repr(android_payload), repr(push_token)))
-    #        gcm_conn.notify_device(gcm_message)
+            broadcaster = db.get(key_broadcaster_jid)
+            broadcastee = db.get(key_broadcastee_jid)
+
+            self.response.write("Nudging " + broadcastee.first_name + ".")
 
 
-            self.response.write("nudge successful")
+            push_token = broadcaster.gcm_registration_id
+            android_payload = {'NUDGER' : jid, 'type' : 'nudge'}
+
+            gcm_message = GCMMessage(push_token, android_payload)
+            gcm_conn = GCMConnection()
+            logging.info("Attempting to send Android push notification %s to push_token %s." % (repr(android_payload), repr(push_token)))
+            gcm_conn.notify_device(gcm_message)
+
+
+    #        self.response.write("nudge successful")
 
         except (TypeError, ValueError):
             # If we couldn't grab the PUT request parameters, then show an error.

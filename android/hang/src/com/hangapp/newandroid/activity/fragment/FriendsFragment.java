@@ -3,6 +3,9 @@ package com.hangapp.newandroid.activity.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +28,7 @@ import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
+import com.hangapp.newandroid.network.rest.SendNudgeAsyncTask;
 import com.hangapp.newandroid.util.AvailabilityButton;
 import com.hangapp.newandroid.util.Keys;
 import com.hangapp.newandroid.util.Utils;
@@ -64,8 +68,7 @@ public final class FriendsFragment extends SherlockFragment implements
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		// Inflate the View for this Fragment.
-		View view = inflater.inflate(R.layout.fragment_friends, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_friends, container, false);
 
 		// Reference Views.
 		listViewFriends = (StickyListHeadersListView) view
@@ -129,8 +132,7 @@ public final class FriendsFragment extends SherlockFragment implements
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.cell_friend_fragment,
-						null);
+				convertView = inflater.inflate(R.layout.cell_friend_fragment, null);
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
@@ -165,32 +167,49 @@ public final class FriendsFragment extends SherlockFragment implements
 			// the OnClickListener for the entire cell.
 			if (user.getProposal() != null) {
 				holder.imageViewProposalIcon.setVisibility(View.VISIBLE);
-				convertView.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						Intent proposalLeechIntent = new Intent(context,
-								ProfileActivity.class);
-						proposalLeechIntent.putExtra(Keys.HOST_JID,
-								user.getJid());
-						context.startActivity(proposalLeechIntent);
-					}
-				});
+				holder.imageViewProposalIcon
+						.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View arg0) {
+								Intent proposalLeechIntent = new Intent(context,
+										ProfileActivity.class);
+								proposalLeechIntent.putExtra(Keys.HOST_JID,
+										user.getJid());
+								context.startActivity(proposalLeechIntent);
+							}
+						});
 			} else {
 				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
-				convertView.setOnClickListener(null);
+			//	convertView.setOnClickListener(null);
 			}
+
+			// Make Facebook icon function as the NUDGE button, for now TODO
+			holder.profilePictureView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					/**
+					 * A List is expected by {@link BasePutRequestAsyncTask} so this
+					 * List will hold the only relevant parameter, the nudge
+					 * recipient's jid
+					 */
+					List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+					parameters.add(new BasicNameValuePair(Keys.NUDGEE_JID, user.getJid()));
+					
+					new SendNudgeAsyncTask(context, user.getJid(), parameters).execute();
+				}
+			});
 
 			return convertView;
 		}
 
 		@Override
-		public View getHeaderView(int position, View convertView,
-				ViewGroup parent) {
+		public View getHeaderView(int position, View convertView, ViewGroup parent) {
 			HeaderViewHolder holder;
 			if (convertView == null) {
 				holder = new HeaderViewHolder();
-				convertView = inflater.inflate(
-						R.layout.cell_friends_list_header, parent, false);
+				convertView = inflater.inflate(R.layout.cell_friends_list_header,
+						parent, false);
 				holder.text1 = (TextView) convertView
 						.findViewById(R.id.textViewFriendsListHeader);
 				convertView.setTag(holder);
