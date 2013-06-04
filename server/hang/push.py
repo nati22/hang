@@ -1,31 +1,24 @@
 from google.appengine.ext import db
-import urllib2
+from gcm import GCM
 
+import urllib2
+import User
 import webapp2
 import json
 
-def tickle_users(users):
-    users = db.
+API_KEY = "AIzaSyAJtklyMjzyHNfRC2Ratkoh3ziFodaZWZU"
 
-def make_request():
-    self.response.out.write("made it into make_request")
-    
-    json_data = {"collapse_key" : "msg", 
-                 "data" : {
-                           "data": "xyz",
-               }, 
-            "registration_ids": ['APA91bGi13Rg2l_*******beNOGxxP25o0hmtpg'],
-    }
+def tickle_users(users, sender):
+    if isinstance(users, list):
+        for user in users:
+            push_to_user(user, sender, 'tickle')
 
+            # do work
+    # this should return some type of Error, I'll figure it out later
+    #return 
+def push_to_user(user, sender, type):
+    data = {'type': type, 'nudger': sender.first_name}
 
-    url = 'https://android.googleapis.com/gcm/send'
-    # this is our key hangapp
-    myKey = "AIzaSyBa4tOm2_Pb8S0xOgB8Hswk-y9gQrAAhis" 
-    data = json.dumps(json_data)
-    headers = {'Content-Type': 'application/json', 'Authorization': myKey} # prefix to mykey: 'key=%s' % 
-    req = urllib2.Request(url, data, headers)
-    f = urllib2.urlopen(req)
-    response = json.loads(f.read())
+    gcm = GCM(API_KEY)
 
-
-    self.response.out.write(json.dumps(response,sort_keys=True, indent=2) )    
+    gcm.plaintext_request(registration_id=user.gcm_registration_id, data=data)

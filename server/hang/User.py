@@ -1,12 +1,9 @@
 from google.appengine.ext import db
+from push import push_to_user
 
-from gcm import GCM
 import webapp2
 import json
 import urllib2
-
-
-API_KEY = "AIzaSyAJtklyMjzyHNfRC2Ratkoh3ziFodaZWZU"
 
 
 # Our model class.
@@ -233,6 +230,8 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
 
             broadcastee.put()
             broadcaster.put()
+
+            push_to_user(broadcastee, broadcaster, 'tickle')
             
             self.response.write(json.dumps(broadcastee.get_partial_json()))
             
@@ -256,21 +255,38 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             broadcastee = db.get(key_broadcastee_jid)
 
             # Remove broadcaster jid from broadcastee's incoming_broadcasts
-            if key_broadcaster_jid in broadcastee.incoming_broadcasts:
+#            if key_broadcaster_jid in broadcastee.incoming_broadcasts:
+#                broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
+#                broadcastee.put()
+#                self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
+#            else: self.response.write("%s isn't even receiving Broadcasts from %s!\n" % (broadcastee.first_name, broadcaster.first_name))
+#                
+#            # Remove broadcastee jid from broadcaster's outgoing_broadcasts
+#            if key_broadcastee_jid in broadcaster.outgoing_broadcasts:
+#                broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
+#                broadcaster.put()
+#
+#                # Tell the user.                
+#                self.response.write("%s is no longer broadcasting to %s.\n" % (broadcaster.first_name, broadcastee.first_name))
+#            else: self.response.write("%s isn't even Broadcasting to %s!\n" % (broadcaster.first_name, broadcastee.first_name))
+
+             # Remove broadcaster jid from broadcastee's incoming_broadcasts
+            if key_broadcaster_jid in broadcastee.incoming_broadcasts and key_broadcastee_jid in broadcaster.outgoing_broadcasts:
                 broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
-                broadcastee.put()
-                self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
-            else: self.response.write("%s isn't even receiving Broadcasts from %s!\n" % (broadcastee.first_name, broadcaster.first_name))
-                
-            # Remove broadcastee jid from broadcaster's outgoing_broadcasts
-            if key_broadcastee_jid in broadcaster.outgoing_broadcasts:
                 broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
+                broadcastee.put()
                 broadcaster.put()
 
                 # Tell the user.                
-                self.response.write("%s is no longer broadcasting to %s.\n" % (broadcaster.first_name, broadcastee.first_name))
-            else: self.response.write("%s isn't even Broadcasting to %s!\n" % (broadcaster.first_name, broadcastee.first_name))
+                push_to_user(broadcastee, broadcaster, 'tickle')
+                # Girum said not to but "ehh"
+                push_to_user(broadcaster, broadcastee, 'tickle')
 
+                self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
+            else:
+                self.response.write("There is an inconsistency in %s and %s's Broadcast data!\n" % (broadcastee.first_name, broadcaster.first_name))
+                return
+            
         except (TypeError, ValueError):
             # If we couldn't grab the DELETE request parameters, then show an error.
             self.response.write('Invalid inputs: Couldn\'t grab the DELETE request parameters.\n')
@@ -290,11 +306,7 @@ class NudgeRequestHandler(webapp2.RequestHandler):
 
             self.response.write("Nudging " + broadcastee.first_name + ".")
 
-            data = {'type': 'nudge', 'nudger': broadcaster.first_name}
-
-            gcm = GCM(API_KEY)
-            
-            gcm.plaintext_request(registration_id=broadcastee.gcm_registration_id, data=data)
+            push_to_user(broadcastee, broadcaster, 'nudge')
 
             self.response.write("Nudge successful")
 

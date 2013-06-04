@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -60,8 +61,15 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0, new Intent(), 0))
 						.build();
-
+				
+				
 				notifMgr.notify(1, notif);
+				
+				Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(400);
+			//	long[] pattern = {0, 250, 400, 200, 125, 200, 75, 100, 25, 100, 200, 100, 25, 100, 10, 100};
+			//	v.vibrate(pattern, -1);
+
 			} else if (type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				restClient.getMyData();
 				HangLog.toastD(context, "Received tickle", "Teehee, that tickles!");

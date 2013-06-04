@@ -2,6 +2,7 @@ package com.hangapp.newandroid.activity.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -55,8 +56,8 @@ public final class ProposalFragment extends SherlockFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_proposal, container,
-				false);
+		View view = inflater
+				.inflate(R.layout.fragment_proposal, container, false);
 
 		// Reference views.
 		textViewProposalTitle = (TextView) view
@@ -88,8 +89,8 @@ public final class ProposalFragment extends SherlockFragment {
 		imageViewInterested.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Interested...",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Interested...", Toast.LENGTH_SHORT)
+						.show();
 
 				addMeToHostInterestedList();
 			}
@@ -97,8 +98,8 @@ public final class ProposalFragment extends SherlockFragment {
 		imageViewConfirmed.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Confirmed...",
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Confirmed...", Toast.LENGTH_SHORT)
+						.show();
 
 				addMeToHostConfirmedList();
 			}
@@ -147,22 +148,24 @@ public final class ProposalFragment extends SherlockFragment {
 
 	private void addMeToHostInterestedList() {
 		removeMeFromHostConfirmedList();
-
-		// TODO
+		Log.v("addMeToHostInterestedList", "added to host interested");
+		restClient.setInterested(host.getJid());
 	}
 
 	private void removeMeFromHostInterestedList() {
-		// TODO
+
+		restClient.deleteInterested(host.getJid());
+
 	}
 
 	private void addMeToHostConfirmedList() {
 		removeMeFromHostInterestedList();
 
-		// TODO
+		restClient.setConfirmed(host.getJid());
 	}
 
 	private void removeMeFromHostConfirmedList() {
-		// TODO
+		restClient.deleteConfirmed(host.getJid());
 	}
 
 }

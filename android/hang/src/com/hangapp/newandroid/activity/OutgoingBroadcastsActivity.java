@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,7 +29,10 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
+import com.hangapp.newandroid.network.rest.RestClient;
+import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
+import com.hangapp.newandroid.util.HangLog;
 
 public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 		implements OutgoingBroadcastsListener {
@@ -37,6 +41,7 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 	private List<User> outgoingBroadcasts = new ArrayList<User>();
 
 	private Database database;
+	private RestClient restClient;
 
 	private ListView listViewOutgoingBroadcasts;
 	private OutgoingBroadcastsArrayAdapter adapter;
@@ -57,6 +62,7 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
+		restClient = new RestClientImpl(database, getApplicationContext());
 
 		// Enable the "Up" button.
 		getSupportActionBar().setHomeButtonEnabled(true);
@@ -69,8 +75,7 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 		adapter = new OutgoingBroadcastsArrayAdapter(this,
 				R.id.listViewOutgoingBroadcasts, outgoingBroadcasts);
 		listViewOutgoingBroadcasts.setAdapter(adapter);
-		listViewOutgoingBroadcasts
-				.setEmptyView(findViewById(android.R.id.empty));
+		listViewOutgoingBroadcasts.setEmptyView(findViewById(android.R.id.empty));
 
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
@@ -122,13 +127,12 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 	}
 
 	public boolean addNewOutgoingBroadcasts(MenuItem item) {
-		startPickerActivity(AddOutgoingBroadcastActivity.FRIEND_PICKER,
-				RESULT_OK);
+		startPickerActivity(AddOutgoingBroadcastActivity.FRIEND_PICKER, RESULT_OK);
 
 		return true;
 	}
 
-	static class OutgoingBroadcastsArrayAdapter extends ArrayAdapter<User> {
+	class OutgoingBroadcastsArrayAdapter extends ArrayAdapter<User> {
 		private boolean showDeleteButtons;
 
 		public OutgoingBroadcastsArrayAdapter(Context context,
@@ -138,7 +142,7 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			User outgoingBroadcast = getItem(position);
+			final User outgoingBroadcast = getItem(position);
 			Availability hisStatus = outgoingBroadcast.getAvailability();
 
 			// Inflate if necessary.
@@ -159,15 +163,29 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 
 			// Set Views to have correct data for this User.
 			profilePictureView.setProfileId(outgoingBroadcast.getJid());
-			textViewOutgoingBroadcastName.setText(outgoingBroadcast
-					.getFullName());
-			textViewOutgoingBroadcastStatus
-					.setText(hisStatus != null ? hisStatus.getDescription()
-							: "Unknown Availability");
+			textViewOutgoingBroadcastName.setText(outgoingBroadcast.getFullName());
+			textViewOutgoingBroadcastStatus.setText(hisStatus != null ? hisStatus
+					.getDescription() : "Unknown Availability");
+			
+			HangLog.toastE(getApplicationContext(), "yo", "code runs");
 
+			buttonDeleteOutgoingBroadcast
+			.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					HangLog.toastD(getApplicationContext(),
+							"Deleting Broadcast", "Deleting "
+									+ outgoingBroadcast.getFirstName()
+									+ " from my Outgoing Broadcasts");
+					restClient.deleteBroadcastee(outgoingBroadcast.getJid());
+				}
+			});
 			// Show/hide the "Delete" button if we need to.
 			if (showDeleteButtons) {
 				buttonDeleteOutgoingBroadcast.setVisibility(View.VISIBLE);
+
+				
 			} else {
 				buttonDeleteOutgoingBroadcast.setVisibility(View.GONE);
 			}
