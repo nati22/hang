@@ -1,12 +1,17 @@
 package com.hangapp.newandroid.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
+import com.hangapp.newandroid.network.rest.RestClient;
+import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.AvailabilityButton;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
@@ -20,6 +25,7 @@ public final class ProfileActivity extends BaseFragmentActivity {
 	private AvailabilityButton[] buttonsAvailability;
 
 	private Database database;
+	private RestClient restClient;
 
 	private User friend;
 
@@ -30,6 +36,7 @@ public final class ProfileActivity extends BaseFragmentActivity {
 
 		// Instantiate dependencies
 		database = Database.getInstance();
+		restClient = new RestClientImpl(database, getApplicationContext());
 
 		// Set who the friend is.
 		String hostJid = getIntent().getStringExtra(Keys.HOST_JID);
@@ -66,6 +73,17 @@ public final class ProfileActivity extends BaseFragmentActivity {
 		// Populate Views.
 		profilePictureView.setProfileId(friend.getJid());
 		textViewFriendName.setText(friend.getFullName());
+
+		// Set OnClickListeners.
+		profilePictureView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Toast.makeText(getApplicationContext(),
+						"Nudging " + friend.getFirstName(), Toast.LENGTH_SHORT)
+						.show();
+				restClient.sendNudge(friend.getJid());
+			}
+		});
 	}
 
 	@Override

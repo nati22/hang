@@ -2,21 +2,23 @@ package com.hangapp.newandroid.network.rest;
 
 import java.util.List;
 
+import org.apache.http.NameValuePair;
+
 import android.content.Context;
 import android.util.Log;
 
-public class SendNudgeAsyncTask extends
-		BasePutRequestAsyncTask<String> {
+public class SendNudgeAsyncTask extends BasePostRequestAsyncTask<String> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String NUDGE_URI_SUFFIX = "/nudge";
 
-	public SendNudgeAsyncTask(Context context, String jid, List parameters) {
+	public SendNudgeAsyncTask(Context context, String jid,
+			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + NUDGE_URI_SUFFIX, parameters);
 	}
 
 	public String call() throws Exception {
-		// Execute the PUT request
+		// Execute the POST request
 		super.call();
 
 		Log.d("SendNudgeAsyncTask.call", "Response string: " + responseString);
