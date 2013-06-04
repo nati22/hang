@@ -3,6 +3,7 @@ from google.appengine.ext import db
 import webapp2
 import json
 
+
 # Our model class.
 class User(db.Model):
     first_name = db.StringProperty()
