@@ -13,6 +13,17 @@
         android:contentDescription="User Icon"
         android:src="@drawable/ic_action_profile_icon" />
 
+        <!-- Profile Picture status indicator bar (UNDERNEATH) -->
+
+    <View
+        android:id="@+id/profile_status_color_bar"
+        android:layout_width="@dimen/profile_picture_width"
+        android:layout_height="7dp"
+        android:layout_alignLeft="@id/profilePictureViewMyIcon"
+        android:layout_alignRight="@id/profilePictureViewMyIcon"
+        android:layout_below="@id/profilePictureViewMyIcon"
+        android:background="@color/green" />
+    
     <View
         android:id="@+id/separatorMyStatusFromButtons"
         android:layout_width="wrap_content"

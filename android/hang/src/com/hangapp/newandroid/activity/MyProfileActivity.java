@@ -3,6 +3,7 @@ package com.hangapp.newandroid.activity;
 import java.util.List;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,6 +27,14 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		MyUserDataListener, IncomingBroadcastsListener,
 		OutgoingBroadcastsListener {
 
+	/**
+	 * The UiLifecycleHelper class helps to create, automatically open (if
+	 * applicable), save, and restore the Active Session in a way that is similar
+	 * to Android UI lifecycles. When using this class, clients MUST call all the
+	 * public methods from the respective methods in either an Activity or
+	 * Fragment. Failure to call all the methods can result in improperly
+	 * initialized or uninitialized Sessions.
+	 */
 	private UiLifecycleHelper uiHelper;
 
 	private ProfilePictureView profilePictureView;
@@ -35,10 +44,13 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 
 	private Database database;
 
+	/**
+	 * Provides asynchronous notification of Session state changes. A Session is
+	 * used to authenticate a user and manage the user's session with Facebook.
+	 */
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
+		public void call(Session session, SessionState state, Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -82,6 +94,9 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		profilePictureView.setProfileId(myJid);
 
 		textViewMyName.setText(database.getMyFullName());
+	//	textViewMyName.setTextSize(R.dimen.title_font_size);
+		textViewMyName.setTypeface(Typeface.createFromAsset(getAssets(),
+				"fonts/AUBREY.TTF"));
 
 		database.addMyUserDataListener(this);
 		onOutgoingBroadcastsUpdate(database.getMyOutgoingBroadcasts());

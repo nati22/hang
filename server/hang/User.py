@@ -1,7 +1,8 @@
-from gae_python_gcm.gcm import GCMMessage, GCMConnection
 from google.appengine.ext import db
+#from push import make_request
 import webapp2
 import json
+import urllib2
 
 # Our model class.
 class User(db.Model):
@@ -282,20 +283,35 @@ class NudgeRequestHandler(webapp2.RequestHandler):
             broadcastee = db.get(key_broadcastee_jid)
 
             self.response.write("Nudging " + broadcastee.first_name + ".")
-
-
-            push_token = broadcaster.gcm_registration_id
-            android_payload = {'NUDGER' : jid, 'type' : 'nudge'}
-
-            gcm_message = GCMMessage(push_token, android_payload)
-            gcm_conn = GCMConnection()
-            logging.info("Attempting to send Android push notification %s to push_token %s." % (repr(android_payload), repr(push_token)))
-            gcm_conn.notify_device(gcm_message)
-
-
-    #        self.response.write("nudge successful")
-
         except (TypeError, ValueError):
             # If we couldn't grab the PUT request parameters, then show an error.
             self.response.write('Invalid inputs: Couldn\'t grab the PUT request parameters.\n')
-            return
+            return            
+
+        try:
+            #make_request()
+            self.response.out.write("made it into make_request")
+    
+            json_data = {"collapse_key" : "msg", 
+                         "data" : {
+                                   "data": "xyz",
+                       }, 
+                    "registration_ids": ['APA91bGi13Rg2l_*******beNOGxxP25o0hmtpg'],
+            }
+
+
+            url = 'https://android.googleapis.com/gcm/send'
+            # this is our key hangapp
+            myKey = "AIzaSyBa4tOm2_Pb8S0xOgB8Hswk-y9gQrAAhis" 
+            data = json.dumps(json_data)
+            headers = {'Content-Type': 'application/json', 'Authorization': 'key=%s' % myKey}
+            req = urllib2.Request(url, data, headers)
+            f = urllib2.urlopen(req)
+            response = json.loads(f.read())
+
+
+            self.response.out.write(json.dumps(response,sort_keys=True, indent=2) )    
+
+        except (TypeError) as e:
+            self.response.write("Error " + e.errno + " in make_request: " + e.strerror)
+
