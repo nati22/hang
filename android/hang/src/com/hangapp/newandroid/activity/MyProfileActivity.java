@@ -94,7 +94,8 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		profilePictureView.setProfileId(myJid);
 
 		textViewMyName.setText(database.getMyFullName());
-	//	textViewMyName.setTextSize(R.dimen.title_font_size);
+		// TODO: change these to a single style
+		textViewMyName.setTextSize(R.dimen.title_font_size);
 		textViewMyName.setTypeface(Typeface.createFromAsset(getAssets(),
 				"fonts/AUBREY.TTF"));
 

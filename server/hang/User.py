@@ -1,9 +1,6 @@
 from google.appengine.ext import db
-<<<<<<< HEAD
-#from push import make_request
-=======
+
 from gcm import GCM
->>>>>>> 0d21bb13756fca6ee83b5644e7130ce34b4cfb73
 import webapp2
 import json
 import urllib2
@@ -291,40 +288,7 @@ class NudgeRequestHandler(webapp2.RequestHandler):
             broadcastee = db.get(key_broadcastee_jid)
 
             self.response.write("Nudging " + broadcastee.first_name + ".")
-        except (TypeError, ValueError):
-            # If we couldn't grab the PUT request parameters, then show an error.
-            self.response.write('Invalid inputs: Couldn\'t grab the PUT request parameters.\n')
-            return            
 
-<<<<<<< HEAD
-        try:
-            #make_request()
-            self.response.out.write("made it into make_request")
-    
-            json_data = {"collapse_key" : "msg", 
-                         "data" : {
-                                   "data": "xyz",
-                       }, 
-                    "registration_ids": ['APA91bGi13Rg2l_*******beNOGxxP25o0hmtpg'],
-            }
-
-
-            url = 'https://android.googleapis.com/gcm/send'
-            # this is our key hangapp
-            myKey = "AIzaSyBa4tOm2_Pb8S0xOgB8Hswk-y9gQrAAhis" 
-            data = json.dumps(json_data)
-            headers = {'Content-Type': 'application/json', 'Authorization': 'key=%s' % myKey}
-            req = urllib2.Request(url, data, headers)
-            f = urllib2.urlopen(req)
-            response = json.loads(f.read())
-
-
-            self.response.out.write(json.dumps(response,sort_keys=True, indent=2) )    
-
-        except (TypeError) as e:
-            self.response.write("Error " + e.errno + " in make_request: " + e.strerror)
-
-=======
             data = {'type': 'nudge', 'nudger': broadcaster.first_name}
 
             gcm = GCM(API_KEY)
@@ -337,8 +301,3 @@ class NudgeRequestHandler(webapp2.RequestHandler):
             # If we couldn't grab the PUT request parameters, then show an error.
             self.response.write('Invalid inputs: Couldn\'t grab the PUT request parameters.\n')
             return
-        
-        
-        
-        
->>>>>>> 0d21bb13756fca6ee83b5644e7130ce34b4cfb73
