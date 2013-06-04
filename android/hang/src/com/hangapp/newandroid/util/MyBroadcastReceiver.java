@@ -72,7 +72,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
 			} else if (type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				restClient.getMyData();
-				HangLog.toastD(context, "Received tickle", "Teehee, that tickles!");
+		//		HangLog.toastD(context, "Received tickle", "Teehee, that tickles!");
 
 			} else {
 				HangLog.toastE(context, TAG, "Nudge type \"" + type

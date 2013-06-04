@@ -89,19 +89,39 @@ public final class ProposalFragment extends SherlockFragment {
 		imageViewInterested.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Interested...", Toast.LENGTH_SHORT)
-						.show();
 
-				addMeToHostInterestedList();
+				if (!imageViewInterested.isPressed()) {
+					Toast.makeText(getActivity(), "Interesting...",
+							Toast.LENGTH_SHORT).show();
+
+					addMeToHostInterestedList();
+					imageViewInterested.setPressed(true);
+				} else {
+					Toast.makeText(getActivity(), "Not so interesting...",
+							Toast.LENGTH_SHORT).show();
+
+					removeMeFromHostInterestedList();
+					imageViewInterested.setPressed(false);
+				}
+
 			}
 		});
 		imageViewConfirmed.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Confirmed...", Toast.LENGTH_SHORT)
-						.show();
+				if (!imageViewInterested.isPressed()) {
+					Toast.makeText(getActivity(), "I'm confirming",
+							Toast.LENGTH_SHORT).show();
 
-				addMeToHostConfirmedList();
+					addMeToHostConfirmedList();
+					imageViewConfirmed.setPressed(true);
+				} else {
+					Toast.makeText(getActivity(), "I'm a flake :(",
+							Toast.LENGTH_SHORT).show();
+
+					removeMeFromHostConfirmedList();
+					imageViewConfirmed.setPressed(false);
+				}
 			}
 		});
 		buttonChat.setOnClickListener(new OnClickListener() {

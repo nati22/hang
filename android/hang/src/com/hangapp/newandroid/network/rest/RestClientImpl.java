@@ -9,7 +9,6 @@ import org.apache.http.message.BasicNameValuePair;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.newandroid.database.Database;
@@ -159,29 +158,44 @@ public final class RestClientImpl implements RestClient {
 
 	@Override
 	public void setInterested(String broadcasterJid) {
-		
+
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
-		
-		new SetInterestedAsyncTask(database, context, database.getMyJid(), parameters).execute();
+
+		new SetInterestedAsyncTask(database, context, database.getMyJid(),
+				parameters).execute();
 	}
 
 	@Override
-	public void setConfirmed(String broadcasteeJid) {
-		// TODO Auto-generated method stub
-		
+	public void setConfirmed(String broadcasterJid) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
+
+		new SetConfirmedAsyncTask(database, context, database.getMyJid(),
+				parameters).execute();
+
 	}
 
 	@Override
-	public void deleteInterested(String broadcasteeJid) {
-		// TODO Auto-generated method stub
-		
+	public void deleteInterested(String broadcasterJid) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
+
+		new DeleteInterestedAsyncTask(database, context, database.getMyJid(),
+				broadcasterJid).execute();
+
 	}
 
 	@Override
-	public void deleteConfirmed(String broadcasteeJid) {
-		// TODO Auto-generated method stub
-		
+	public void deleteConfirmed(String broadcasterJid) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
+
+		new DeleteConfirmedAsyncTask(database, context, database.getMyJid(),
+				broadcasterJid).execute();
 	}
-	
+
 }
