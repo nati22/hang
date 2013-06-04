@@ -10,7 +10,7 @@ import android.util.Log;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
 
-public class AddBroadcastAsyncTask extends BasePutRequestAsyncTask<User> {
+class AddBroadcastAsyncTask extends BasePutRequestAsyncTask<User> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String BROADCAST_URI_SUFFIX = "/broadcast";

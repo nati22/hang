@@ -100,6 +100,27 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 				"fonts/AUBREY.TTF"));
 
 		database.addMyUserDataListener(this);
+
+		// Send a nudge to myself
+		/*
+		 * profilePictureView.setOnClickListener(new OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) {
+		 *//**
+		 * A List is expected by {@link BasePutRequestAsyncTask} so this List
+		 * will hold the only relevant parameter, the nudge recipient's jid
+		 */
+		/*
+		 * List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		 * parameters.add(new BasicNameValuePair(Keys.NUDGEE_JID, Database
+		 * .getInstance().getMyJid()));
+		 * 
+		 * // new SendNudgeAsyncTask(getApplicationContext(), //
+		 * Database.getInstance().getMyJid(), parameters).execute();
+		 * HangLog.toastD(getApplicationContext(), "Self nudge",
+		 * "nudging myself with jid " + Database.getInstance().getMyJid()); } });
+		 */
+
 		onOutgoingBroadcastsUpdate(database.getMyOutgoingBroadcasts());
 		onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 	}

@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.hangapp.newandroid.database.Database;
 
-public final class DeleteMyProposalAsyncTask extends
+final class DeleteMyProposalAsyncTask extends
 		BaseDeleteRequestAsyncTask<String> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String PROPOSAL_URI_SUFFIX = "/proposal";

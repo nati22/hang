@@ -10,7 +10,7 @@ import android.util.Log;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 
-public class SetAvailabilityAsyncTask extends
+class SetAvailabilityAsyncTask extends
 		BasePutRequestAsyncTask<Availability> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";

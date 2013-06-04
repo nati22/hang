@@ -196,7 +196,7 @@ public final class FriendsFragment extends SherlockFragment implements
 					List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 					parameters.add(new BasicNameValuePair(Keys.NUDGEE_JID, user.getJid()));
 					
-					new SendNudgeAsyncTask(context, user.getJid(), parameters).execute();
+					new SendNudgeAsyncTask(context, Database.getInstance().getMyJid(), parameters).execute();
 				}
 			});
 

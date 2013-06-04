@@ -5,7 +5,7 @@ import android.util.Log;
 
 import com.hangapp.newandroid.database.Database;
 
-public final class DeleteMyAvailabilityAsyncTask extends BaseDeleteRequestAsyncTask {
+final class DeleteMyAvailabilityAsyncTask extends BaseDeleteRequestAsyncTask {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/status";
 

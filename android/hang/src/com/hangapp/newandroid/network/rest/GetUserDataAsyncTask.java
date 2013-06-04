@@ -5,7 +5,7 @@ import android.content.Context;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
 
-public final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
+final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 	private static final String URL_SUFFIX = "/users/";
 

@@ -10,7 +10,7 @@ import android.util.Log;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Proposal;
 
-public class SetProposalAsyncTask extends BasePutRequestAsyncTask<Proposal> {
+class SetProposalAsyncTask extends BasePutRequestAsyncTask<Proposal> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/proposal";
 

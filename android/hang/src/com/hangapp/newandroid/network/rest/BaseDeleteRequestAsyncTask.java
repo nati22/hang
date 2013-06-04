@@ -13,7 +13,7 @@ import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.SafeAsyncTask;
 import com.hangapp.newandroid.util.Utils;
 
-public class BaseDeleteRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
+class BaseDeleteRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 
 	static final String BASE_URL = "http://hangapp2.appspot.com";
 

@@ -25,7 +25,6 @@ public final class Keys {
 	public static final String BUSY = "busy";
 	public static final String MUC_NAME = "muc_name";
 	public static final String MUC_MESSAGE = "muc_message";
-	public static final String NUDGEE_JID = "nudgee";
 
 	/*
 	 * IntentService message codes.
