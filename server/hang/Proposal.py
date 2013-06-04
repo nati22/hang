@@ -93,8 +93,7 @@ class InterestedRequestHandler(webapp2.RequestHandler):
             # Make list of Users to tickle
             users = []
             for broadcastee_key in broadcasting_user.outgoing_broadcasts:
-                this_user = db.get(broadcastee_key)
-                users.append(this_user)
+                users.append(db.get(broadcastee_key))
 
             tickle_users(users, broadcasting_user)            
 
@@ -130,8 +129,7 @@ class InterestedRequestHandler(webapp2.RequestHandler):
             # Make list of Users to tickle
             users = []
             for broadcastee_key in broadcasting_user.outgoing_broadcasts:
-                this_user = db.get(broadcastee_key)
-                users.append(this_user)
+                users.append(db.get(broadcastee_key))
 
             tickle_users(users, broadcasting_user) 
 

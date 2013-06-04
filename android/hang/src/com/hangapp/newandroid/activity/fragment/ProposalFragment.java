@@ -94,14 +94,24 @@ public final class ProposalFragment extends SherlockFragment {
 					Toast.makeText(getActivity(), "Interesting...",
 							Toast.LENGTH_SHORT).show();
 
+					Log.v("Button",
+							"before, pressed = " + imageViewInterested.isPressed());
 					addMeToHostInterestedList();
 					imageViewInterested.setPressed(true);
+					Log.v("Button",
+							"after, pressed = " + imageViewInterested.isPressed());
+
 				} else {
 					Toast.makeText(getActivity(), "Not so interesting...",
 							Toast.LENGTH_SHORT).show();
 
 					removeMeFromHostInterestedList();
+					Log.v("Button",
+							"before, pressed = " + imageViewInterested.isPressed());
+
 					imageViewInterested.setPressed(false);
+					Log.v("Button",
+							"after, pressed = " + imageViewInterested.isPressed());
 				}
 
 			}
@@ -109,7 +119,7 @@ public final class ProposalFragment extends SherlockFragment {
 		imageViewConfirmed.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (!imageViewInterested.isPressed()) {
+				if (!imageViewConfirmed.isPressed()) {
 					Toast.makeText(getActivity(), "I'm confirming",
 							Toast.LENGTH_SHORT).show();
 
@@ -124,6 +134,7 @@ public final class ProposalFragment extends SherlockFragment {
 				}
 			}
 		});
+
 		buttonChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
