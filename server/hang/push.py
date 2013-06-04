@@ -1,8 +1,13 @@
+from google.appengine.ext import db
 import urllib2
+
 import webapp2
 import json
 
-def make_request(self):
+def tickle_users(users):
+    users = db.
+
+def make_request():
     self.response.out.write("made it into make_request")
     
     json_data = {"collapse_key" : "msg", 

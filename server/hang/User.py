@@ -215,7 +215,8 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             broadcastee = db.get(key_broadcastee_jid)
             if broadcastee is None:
                 self.response.write(json.dumps({'error_message': "User %s doesn't exist on hang server" % param_target}));
-            
+                return
+
             # Add broadcaster jid to broadcastee's incoming_broadcasts
             if key_broadcaster_jid not in broadcastee.incoming_broadcasts:
                 broadcastee.incoming_broadcasts.append(key_broadcaster_jid)
