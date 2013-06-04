@@ -17,7 +17,7 @@
 
     <View
         android:id="@+id/profile_status_color_bar"
-        android:layout_width="@dimen/profile_picture_width"
+        android:layout_width="wrap_content"
         android:layout_height="10dp"
         android:layout_alignLeft="@id/profilePictureViewMyIcon"
         android:layout_alignRight="@id/profilePictureViewMyIcon"
@@ -32,7 +32,7 @@
         android:layout_alignTop="@id/profilePictureViewMyIcon"
         android:layout_toRightOf="@id/profilePictureViewMyIcon"
         android:layout_marginLeft="20dp"
-        android:text="AVAIL:" />
+        android:text="YOU ARE" />
         
 
 </RelativeLayout>

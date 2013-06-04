@@ -15,5 +15,7 @@ public interface RestClient {
 
 	public void deleteMyProposal();
 
-	public void addBroadcastee(String broadcasteeJID);
+	public void addBroadcastee(String broadcasteeJid);
+	
+	public void sendNudge(String targetJid);
 }

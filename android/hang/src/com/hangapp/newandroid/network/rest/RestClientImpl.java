@@ -131,7 +131,6 @@ public final class RestClientImpl implements RestClient {
 
 	@Override
 	public void addBroadcastee(String broadcasteeJID) {
-
 		String myJid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
@@ -139,6 +138,15 @@ public final class RestClientImpl implements RestClient {
 
 		new AddBroadcastAsyncTask(database, this, context, myJid, parameters)
 				.execute();
+	}
 
+	@Override
+	public void sendNudge(String targetJid) {
+		String myJid = database.getMyJid();
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, targetJid));
+
+		new SendNudgeAsyncTask(context, myJid, parameters).execute();
 	}
 }

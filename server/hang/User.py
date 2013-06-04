@@ -1,8 +1,16 @@
 from google.appengine.ext import db
+<<<<<<< HEAD
 #from push import make_request
+=======
+from gcm import GCM
+>>>>>>> 0d21bb13756fca6ee83b5644e7130ce34b4cfb73
 import webapp2
 import json
 import urllib2
+
+
+API_KEY = "AIzaSyAJtklyMjzyHNfRC2Ratkoh3ziFodaZWZU"
+
 
 # Our model class.
 class User(db.Model):
@@ -271,10 +279,10 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             return
 
 class NudgeRequestHandler(webapp2.RequestHandler):
-    def put(self, jid):
+    def post(self, jid):
         try:
-            # Grab the PUT request parameters and put them into variables.
-            param_target = self.request.get('nudgee')
+            # Grab the POST request parameters and put them into variables.
+            param_target = self.request.get('target')
 
             key_broadcaster_jid = db.Key.from_path('User', jid)
             key_broadcastee_jid = db.Key.from_path('User', param_target)
@@ -288,6 +296,7 @@ class NudgeRequestHandler(webapp2.RequestHandler):
             self.response.write('Invalid inputs: Couldn\'t grab the PUT request parameters.\n')
             return            
 
+<<<<<<< HEAD
         try:
             #make_request()
             self.response.out.write("made it into make_request")
@@ -315,3 +324,21 @@ class NudgeRequestHandler(webapp2.RequestHandler):
         except (TypeError) as e:
             self.response.write("Error " + e.errno + " in make_request: " + e.strerror)
 
+=======
+            data = {'type': 'nudge', 'nudger': broadcaster.first_name}
+
+            gcm = GCM(API_KEY)
+            
+            gcm.plaintext_request(registration_id=broadcastee.gcm_registration_id, data=data)
+
+            self.response.write("Nudge successful")
+
+        except (TypeError, ValueError):
+            # If we couldn't grab the PUT request parameters, then show an error.
+            self.response.write('Invalid inputs: Couldn\'t grab the PUT request parameters.\n')
+            return
+        
+        
+        
+        
+>>>>>>> 0d21bb13756fca6ee83b5644e7130ce34b4cfb73
