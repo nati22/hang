@@ -38,21 +38,6 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 		database.setMyProposal(me.getProposal());
 		database.setIncomingBroadcasts(me.getIncomingBroadcasts());
 		database.setMyOutgoingBroadcasts(me.getOutgoingBroadcasts());
-		if (!me.getIncomingBroadcasts().isEmpty()) {
-			for (User user : me.getIncomingBroadcasts()) {
-				Log.v("Incoming Broadcast fn", user.getFirstName());
-				if (user.getProposal() != null
-						&& user.getProposal().getDescription() != null) {
-					Log.v("prop", user.getProposal().getDescription());
-					if (user.getProposal().getInterested() != null) {
-						Log.v("prop int", user.getProposal().getInterested().toString());
-
-					}
-				}
-
-				
-			}
-		}
 	}
 
 }

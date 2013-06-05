@@ -288,6 +288,7 @@ public final class Database {
 	public User getIncomingUser(String jid) {
 		// (nati) If the other user stops broadcasting would this become an
 		// issue?
+
 		return incomingMap.get(jid);
 	}
 
@@ -295,7 +296,7 @@ public final class Database {
 		// (nati) If defaultuser stops broadcasting could this be a problem?
 		return outgoingMap.get(jid);
 	}
-	
+
 	public void setMyUserData(String jid, String firstName, String lastName) {
 		SharedPreferences.Editor editor = prefs.edit();
 

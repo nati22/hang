@@ -17,6 +17,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
@@ -212,40 +213,29 @@ public final class ProposalFragment extends SherlockFragment {
 			textViewProposalLocation.setText(host.getProposal().getLocation());
 			textViewProposalStartTime.setText(host.getProposal().getStartTime()
 					.toString("h aa"));
-			
-			Log.v("host", host.toString());
-			Log.v("host prop desc", host.getProposal().getDescription());
-			Log.v("host prop int", host.getProposal().getInterested().toString());
-			
-			if (host != null) {
-				if (host.getProposal() != null) {
-					if (host.getProposal().getInterested() != null) {
-						if (host.getProposal().getInterested()
-								.contains(database.getMyJid())) {
-							Toast.makeText(getActivity(), "You're already interested.",
-									Toast.LENGTH_SHORT).show();
-						} else {
-							Toast.makeText(getActivity(), "You aren't interested yet.",
-									Toast.LENGTH_SHORT).show();
-							Log.v("getInterested:", host.getProposal().getInterested()
-									.toString());
-						}
-					} else
-						Toast.makeText(getActivity(),
-								"host.getProposal().getInterested() is null.",
-								Toast.LENGTH_SHORT).show();
 
-				} else
-					Toast.makeText(getActivity(), "host.getProposal() is null.",
-							Toast.LENGTH_SHORT).show();
-			} else
-				Toast.makeText(getActivity(), "host is null.", Toast.LENGTH_SHORT)
-						.show();
 		} else {
 			// Turn on the Empty View.
 			scrollViewProposal.setVisibility(View.INVISIBLE);
 			emptyView.setVisibility(View.VISIBLE);
 		}
+
+		// If User is Interested/Confirmed, check the appropriate ToggleButton
+		if (host.getProposal().getInterested() != null) {
+			if (host.getProposal().getInterested().contains(database.getMyJid()))
+				toggleInterested.setChecked(true);
+		} else Log.i(ProposalFragment.class.getSimpleName(), "None interested.");
+		if (host.getProposal().getConfirmed() != null) {
+			if (host.getProposal().getConfirmed().contains(database.getMyJid()))
+				toggleConfirmed.setChecked(true);
+		} else Log.i(ProposalFragment.class.getSimpleName(), "None confirmed.");
+
+		// TODO: For each Interested User, fill the horizontal ScrollView
+		for (String interestedUser : host.getProposal().getInterested()) {
+			ProfilePictureView interestedIcon = new ProfilePictureView(getActivity());
+			interestedIcon.setBackground(getResources().getDrawable(R.drawable.ic_launcher_huge));
+		}
+		
 	}
 
 	private void addMeToHostInterestedList() {
@@ -255,14 +245,11 @@ public final class ProposalFragment extends SherlockFragment {
 	}
 
 	private void removeMeFromHostInterestedList() {
-
 		restClient.deleteInterested(host.getJid());
-
 	}
 
 	private void addMeToHostConfirmedList() {
 		removeMeFromHostInterestedList();
-
 		restClient.setConfirmed(host.getJid());
 	}
 

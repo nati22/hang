@@ -189,15 +189,15 @@ public final class User implements Comparable<User>, Parcelable {
 		// Populate IncomingBroadcast strings
 		List<String> incomingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < incomingBroadcastsJsonArray.length(); i++) {
-			incomingBroadcastsStrings.add(incomingBroadcastsJsonArray
-					.getString(i));
+			incomingBroadcastsStrings
+					.add(incomingBroadcastsJsonArray.getString(i));
 		}
 
 		// Populate OutgoingBroadcast strings
 		List<String> outgoingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < outgoingBroadcastsJsonArray.length(); i++) {
-			outgoingBroadcastsStrings.add(outgoingBroadcastsJsonArray
-					.getString(i));
+			outgoingBroadcastsStrings
+					.add(outgoingBroadcastsJsonArray.getString(i));
 		}
 
 		// Parse the Library.
@@ -216,8 +216,7 @@ public final class User implements Comparable<User>, Parcelable {
 		return user;
 	}
 
-	public static User parseUserName(String userJsonString)
-			throws JSONException {
+	public static User parseUserName(String userJsonString) throws JSONException {
 		User user = null;
 
 		JSONObject userJsonObject = new JSONObject(userJsonString);
@@ -238,15 +237,17 @@ public final class User implements Comparable<User>, Parcelable {
 		Iterator<?> keys = library.keys();
 
 		while (keys.hasNext()) {
-			JSONObject userJsonObject = library.getJSONObject((String) keys
-					.next());
+			JSONObject userJsonObject = library
+					.getJSONObject((String) keys.next());
+
+			Log.i(User.class.getSimpleName(),
+					"Parsing library: " + userJsonObject.toString());
 
 			String jid = userJsonObject.getString(Keys.JID);
 			String firstName = userJsonObject.getString(Keys.FIRST_NAME);
 			String lastName = userJsonObject.getString(Keys.LAST_NAME);
 
-			String statusColor = userJsonObject
-					.getString(Keys.AVAILABILITY_COLOR);
+			String statusColor = userJsonObject.getString(Keys.AVAILABILITY_COLOR);
 			String statusExpirationDateString = userJsonObject
 					.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
 
@@ -279,8 +280,7 @@ public final class User implements Comparable<User>, Parcelable {
 				} else if (proposalLocation.equals("null")) {
 					throw new JSONException("proposalLocation is \"null\"");
 				} else if (proposalStartTimeString.equals("null")) {
-					throw new JSONException(
-							"proposalStartTimeString is \"null\"");
+					throw new JSONException("proposalStartTimeString is \"null\"");
 				}
 
 				// TODO: Switch to JodaTime (IN YO FACE)
@@ -289,6 +289,20 @@ public final class User implements Comparable<User>, Parcelable {
 
 				Proposal proposal = new Proposal(proposalDescription,
 						proposalLocation, proposalStartTime);
+
+				// Get interested and confirmed for User
+				JSONArray interestedJIDs = userJsonObject
+						.getJSONArray(Keys.PROPOSAL_INTERESTED);
+				for (int i = 0; i < interestedJIDs.length(); i++) {
+					proposal.addInterested(interestedJIDs.getString(i));
+				}
+
+				JSONArray confirmedJIDs = userJsonObject
+						.getJSONArray(Keys.PROPOSAL_CONFIRMED);
+				for (int i = 0; i < confirmedJIDs.length(); i++) {
+					proposal.addConfirmed(confirmedJIDs.getString(i));
+				}
+				
 				user.setProposal(proposal);
 
 			} catch (JSONException e) {
@@ -297,6 +311,22 @@ public final class User implements Comparable<User>, Parcelable {
 			}
 
 			users.put(jid, user);
+
+			try {
+				Log.i(User.class.getSimpleName(),
+						"user full = " + user.getFullName());
+				Log.i(User.class.getSimpleName(), "user propdesc = "
+						+ user.getProposal().getDescription());
+				Log.i(User.class.getSimpleName(), "user proploc = "
+						+ user.getProposal().getLocation());
+				Log.i(User.class.getSimpleName(), "user propint = "
+						+ user.getProposal().getInterested().toString());
+				Log.i(User.class.getSimpleName(), "user propconf = "
+						+ user.getProposal().getConfirmed().toString());
+			} catch (NullPointerException e) {
+				Log.e(User.class.getSimpleName(), e.getMessage());
+			}
+
 		}
 
 		return users;
