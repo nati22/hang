@@ -1,6 +1,7 @@
 package com.hangapp.newandroid.network.rest;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
@@ -11,8 +12,7 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 	private Database database;
 
-	protected GetUserDataAsyncTask(Database database, Context context,
-			String jid) {
+	protected GetUserDataAsyncTask(Database database, Context context, String jid) {
 		super(context, URL_SUFFIX + jid);
 
 		// Set dependencies.
@@ -23,7 +23,7 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 	public User call() throws Exception {
 		// Execute the GET request
 		super.call();
-		
+
 		// Try to parse the resulting JSON.
 		User user = User.parseUser(responseString);
 
@@ -38,6 +38,21 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 		database.setMyProposal(me.getProposal());
 		database.setIncomingBroadcasts(me.getIncomingBroadcasts());
 		database.setMyOutgoingBroadcasts(me.getOutgoingBroadcasts());
+		if (!me.getIncomingBroadcasts().isEmpty()) {
+			for (User user : me.getIncomingBroadcasts()) {
+				Log.v("Incoming Broadcast fn", user.getFirstName());
+				if (user.getProposal() != null
+						&& user.getProposal().getDescription() != null) {
+					Log.v("prop", user.getProposal().getDescription());
+					if (user.getProposal().getInterested() != null) {
+						Log.v("prop int", user.getProposal().getInterested().toString());
+
+					}
+				}
+
+				
+			}
+		}
 	}
 
 }

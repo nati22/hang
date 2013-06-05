@@ -1554,7 +1554,8 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_login_button=0x7f040088;
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f040086;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f040087;
-        public static final int datepickerbutton=0x7f0400b0;
+        public static final int confirmedToggle=0x7f0400b1;
+        public static final int datepickerbutton=0x7f0400b5;
         public static final int description_label=0x7f040089;
         public static final int disableHome=0x7f04000b;
         public static final int editTextChatMessage=0x7f040043;
@@ -1566,7 +1567,9 @@ containing a value of this type.
         public static final int helper=0x7f040090;
         public static final int homeAsUp=0x7f040008;
         public static final int horizontalScrollView1=0x7f040039;
+        public static final int horizontalScrollView1Lin=0x7f0400b2;
         public static final int horizontalScrollView2=0x7f0400ad;
+        public static final int horizontalScrollView2Lin=0x7f0400b3;
         public static final int hybrid=0x7f040015;
         public static final int imageView3=0x7f04009a;
         public static final int imageViewAppLogo=0x7f0400a0;
@@ -1580,17 +1583,20 @@ containing a value of this type.
         public static final int imageViewStatus6=0x7f04003f;
         public static final int imageViewStatus7=0x7f040040;
         public static final int imageViewStatus8=0x7f040041;
+        public static final int interestedToggle=0x7f0400b0;
         public static final int large=0x7f040002;
         public static final int listMode=0x7f040004;
         public static final int listViewChatCells=0x7f040042;
         public static final int listViewFriendsFragment=0x7f04009d;
         public static final int listViewIncomingBroadcasts=0x7f040048;
         public static final int listViewOutgoingBroadcasts=0x7f040053;
+        public static final int loadingPanel=0x7f0400b4;
         public static final int location_label=0x7f04008b;
-        public static final int menu_add_outgoing_broadcast=0x7f0400b5;
-        public static final int menu_edit_outgoing_broadcasts=0x7f0400b4;
-        public static final int menu_profile=0x7f0400b3;
-        public static final int menu_refresh=0x7f0400b2;
+        public static final int menu_add_outgoing_broadcast=0x7f0400bb;
+        public static final int menu_edit_outgoing_broadcasts=0x7f0400ba;
+        public static final int menu_loading=0x7f0400b8;
+        public static final int menu_profile=0x7f0400b9;
+        public static final int menu_refresh=0x7f0400b7;
         public static final int none=0x7f040012;
         public static final int normal=0x7f040001;
         public static final int picker_fragment=0x7f040046;
@@ -1639,7 +1645,7 @@ containing a value of this type.
         public static final int textViewProposalStartTime=0x7f0400a9;
         public static final int textViewProposalTitle=0x7f040096;
         public static final int timePickerProposalStartTime=0x7f04008e;
-        public static final int timepickerbutton=0x7f0400b1;
+        public static final int timepickerbutton=0x7f0400b6;
         public static final int toggleButtonFilterBroadcast=0x7f04006c;
         public static final int useLogo=0x7f040006;
         public static final int viewpager=0x7f040047;
@@ -1706,10 +1712,12 @@ containing a value of this type.
         public static final int fragment_friends=0x7f030033;
         public static final int fragment_login=0x7f030034;
         public static final int fragment_proposal=0x7f030035;
-        public static final int sherlock_spinner_dropdown_item=0x7f030036;
-        public static final int sherlock_spinner_item=0x7f030037;
-        public static final int tab_indicator_holo=0x7f030038;
-        public static final int time_picker=0x7f030039;
+        public static final int fragment_proposal2=0x7f030036;
+        public static final int loading_icon=0x7f030037;
+        public static final int sherlock_spinner_dropdown_item=0x7f030038;
+        public static final int sherlock_spinner_item=0x7f030039;
+        public static final int tab_indicator_holo=0x7f03003a;
+        public static final int time_picker=0x7f03003b;
     }
     public static final class menu {
         public static final int activity_home=0x7f0b0000;
@@ -1958,13 +1966,17 @@ containing a value of this type.
         public static final int ActionBar_Transparent_Hang=0x7f08006f;
         public static final int ActionBarTabStyle_Hang=0x7f080072;
         public static final int ActionButton_CloseMode_Hang=0x7f080075;
-        public static final int AppTheme=0x7f080077;
+        public static final int AppTheme=0x7f08007a;
         public static final int AutoCompleteTextViewAppTheme=0x7f08005c;
         public static final int ButtonAppTheme=0x7f08005f;
         public static final int CheckBoxAppTheme=0x7f08005d;
         public static final int DropDownListView_Hang=0x7f080071;
         public static final int DropDownNav_Hang=0x7f080073;
         public static final int EditTextAppTheme=0x7f08005b;
+        /**  These styles are for the progress icon 
+         */
+        public static final int GenericProgressBackground=0x7f080078;
+        public static final int GenericProgressIndicator=0x7f080079;
         public static final int ImageButtonAppTheme=0x7f080060;
         public static final int ListViewAppTheme=0x7f08006a;
         public static final int ListViewAppTheme_White=0x7f08006b;
@@ -1975,6 +1987,9 @@ containing a value of this type.
         public static final int RatingBarAppTheme=0x7f080066;
         public static final int RatingBarBigAppTheme=0x7f080067;
         public static final int RatingBarSmallAppTheme=0x7f080068;
+        /**  This style is for ScrollView ProfilePictureViews 
+         */
+        public static final int ScrollProfilePictureView=0x7f080077;
         public static final int SeekBarAppTheme=0x7f080065;
         public static final int Sherlock___TextAppearance_Small=0x7f080048;
         public static final int Sherlock___Theme=0x7f080053;

@@ -35,7 +35,9 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:hint="@string/description_hint"
-            android:inputType="text" />
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/location_label"
@@ -65,7 +67,9 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="5dp"
             android:hint="@string/location_hint"
-            android:inputType="text" />
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:singleLine="true" />
 
         <TextView
             android:id="@+id/start_time_label"

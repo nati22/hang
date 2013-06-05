@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+     This same XML file is used for both MyProposalFragment.java (my own Proposal) 
+     and ProposalFragment.java (someone else's Proposal).
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/textViewNoProposal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="5dp"
+            android:text="@string/no_proposal"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageView
+            android:id="@+id/imageViewNoProposal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/textViewNoProposal"
+            android:layout_centerHorizontal="true"
+            android:contentDescription="@string/proposal"
+            android:src="@drawable/ic_action_proposal" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/scrollViewProposal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textViewProposalTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/unknown_proposal"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/separatorButtonsFromBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@+id/textViewProposalTitle"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/darker_gray" />
+
+            <View
+                android:id="@+id/separatorLeftRight"
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/separatorTopBottom"
+                android:layout_alignTop="@+id/separatorButtonsFromBottom"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="0dp"
+                android:layout_toRightOf="@+id/your_prop_desc_title"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/textViewProposalDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/your_prop_desc_title"
+                android:layout_marginLeft="5dp"
+                android:layout_toRightOf="@id/separatorLeftRight"
+                android:maxLines="1"
+                android:text="@string/no_proposal"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/your_prop_loc_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/your_prop_desc_title"
+                android:layout_below="@id/your_prop_desc_title"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/location"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@+id/your_prop_loc_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/darker_gray" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/your_prop_desc_title"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/your_prop_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/your_prop_loc_title"
+                android:layout_below="@id/your_prop_loc_title"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/time"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/separatorTopBottom"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@+id/your_prop_time_title"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp"
+                android:background="@android:color/darker_gray" />
+
+            <View
+                android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/your_prop_desc_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textViewProposalTitle"
+                android:layout_below="@+id/separatorButtonsFromBottom"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/description"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/textViewProposalStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/your_prop_time_title"
+                android:layout_alignBottom="@+id/your_prop_time_title"
+                android:layout_alignLeft="@+id/textViewProposalDescription"
+                android:maxLines="1"
+                android:text="@string/no_time"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/textViewProposalLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/your_prop_loc_title"
+                android:layout_alignBottom="@+id/your_prop_loc_title"
+                android:layout_alignLeft="@+id/textViewProposalDescription"
+                android:maxLines="1"
+                android:text="@string/no_location"
+                android:textSize="12sp" />
+
+            <ToggleButton
+                android:layout_margin="5dp"
+                android:id="@+id/interestedToggle"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/separatorTopBottom"
+                android:textOn="INTERESTED"
+                android:textOff="INTERESTED?" />
+
+            <ToggleButton
+                android:id="@+id/confirmedToggle"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:layout_below="@id/separatorTopBottom"
+                android:layout_alignTop="@id/interestedToggle"
+                android:layout_toRightOf="@id/interestedToggle"
+                android:textOff="CONFIRM"
+                android:textOn="CONFIRMED" />
+
+            <TextView
+                android:id="@+id/textViewInterested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/interestedToggle"
+                android:layout_marginTop="15dp"
+                android:text="@string/interested"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <!--         <ImageView
+                android:id="@+id/imageViewInterested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/textViewInterested"
+                android:contentDescription="@string/interested"
+                android:src="@drawable/interested" />
+ -->
+            <TextView
+                android:id="@+id/textViewConfirmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/horizontalScrollView1"
+                android:layout_marginTop="8dp"
+                android:text="@string/confirmed"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+<!-- 
+            <ImageView
+                android:id="@+id/imageViewConfirmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/textViewConfirmed"
+                android:contentDescription="@string/confirmed"
+                android:src="@drawable/confirmed" />
+ -->
+            <!-- Interested ProfilePictureView ScrollView -->
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewInterested"
+                android:layout_toRightOf="@+id/imageViewInterested"
+                android:minHeight="50dp" >
+
+                <LinearLayout
+                    android:id="@+id/horizontalScrollView1Lin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <!-- Confirmed ProfilePictureView ScrollView -->
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="50dp"
+                android:layout_below="@+id/textViewConfirmed"
+                android:layout_toRightOf="@+id/imageViewConfirmed" >
+
+                <LinearLayout
+                    android:id="@+id/horizontalScrollView2Lin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <ImageView
+                android:id="@+id/buttonChat"
+                style="@style/ButtonAppTheme"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/horizontalScrollView2"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/chat"
+                android:contentDescription="@string/chat" />
+
+            <ImageView
+                android:id="@+id/buttonDeleteProposal"
+                style="@style/ButtonAppTheme"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/trash_recyclebin_empty_closed"
+                android:contentDescription="@string/delete_proposal" />
+        </RelativeLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -231,6 +231,7 @@ public final class Database {
 	}
 
 	public void setIncomingBroadcasts(List<User> incoming) {
+		Log.v("Database.java", "setIncomingBroadcasts(List<User>) called");
 		// Clear out the current list
 		this.incomingList.clear();
 		this.incomingMap.clear();

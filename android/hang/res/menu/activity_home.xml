@@ -5,6 +5,10 @@
         android:icon="@drawable/ic_action_refresh"
         android:showAsAction="never"
         android:title="@string/refresh"/>
+    <item        android:id="@+id/menu_loading"
+        android:actionLayout="@layout/loading_icon"
+        android:showAsAction="collapseActionView"
+        android:title="loading"/>
     <item
         android:id="@+id/menu_profile"
         android:icon="@drawable/ic_action_profile_icon"

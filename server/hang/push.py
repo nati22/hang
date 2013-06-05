@@ -22,3 +22,8 @@ def push_to_user(user, sender, type):
     gcm = GCM(API_KEY)
 
     gcm.plaintext_request(registration_id=user.gcm_registration_id, data=data)
+
+#class NotificationReceivedRequestHandler(webapp2.RequestHandler):
+#    def put(self, jid):
+
+        # Create the Keys for the Entities

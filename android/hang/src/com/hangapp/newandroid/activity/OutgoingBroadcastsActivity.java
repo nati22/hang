@@ -167,8 +167,6 @@ public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
 			textViewOutgoingBroadcastStatus.setText(hisStatus != null ? hisStatus
 					.getDescription() : "Unknown Availability");
 			
-			HangLog.toastE(getApplicationContext(), "yo", "code runs");
-
 			buttonDeleteOutgoingBroadcast
 			.setOnClickListener(new OnClickListener() {
 

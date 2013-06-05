@@ -20,16 +20,15 @@ import com.hangapp.newandroid.network.rest.RestClientImpl;
 public class MyBroadcastReceiver extends BroadcastReceiver {
 
 	static final String TAG = "GCMDemo";
-	public static final int NOTIFICATION_ID = 1;
+	public static final int NUDGE_NOTIFY_ID = 1;
 	private NotificationManager notifMgr;
 	private RestClient restClient;
 	private Database database;
 
-	// NotificationCompat.Builder builder;
-
 	@Override
 	public void onReceive(Context context, Intent intent) {
 
+		// Set dependencies
 		notifMgr = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		database = Database.getInstance();
@@ -46,6 +45,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 					+ intent.getExtras().toString());
 		} else {
 
+			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
 			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
 
@@ -61,19 +61,18 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0, new Intent(), 0))
 						.build();
-				
-				
-				notifMgr.notify(1, notif);
-				
-				Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+
+				notifMgr.notify(NUDGE_NOTIFY_ID, notif);
+
+				Vibrator v = (Vibrator) context
+						.getSystemService(Context.VIBRATOR_SERVICE);
 				v.vibrate(400);
-			//	long[] pattern = {0, 250, 400, 200, 125, 200, 75, 100, 25, 100, 200, 100, 25, 100, 10, 100};
-			//	v.vibrate(pattern, -1);
+				// long[] pattern = {0, 250, 400, 200, 125, 200, 75, 100, 25, 100,
+				// 200, 100, 25, 100, 10, 100};
+				// v.vibrate(pattern, -1);
 
 			} else if (type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				restClient.getMyData();
-		//		HangLog.toastD(context, "Received tickle", "Teehee, that tickles!");
-
 			} else {
 				HangLog.toastE(context, TAG, "Nudge type \"" + type
 						+ "\" is unrecognizable.");
