@@ -103,8 +103,7 @@ public final class ProposalFragment extends SherlockFragment implements
 
 		listViewInterested = (ListView) view
 				.findViewById(R.id.interestedListView);
-		listViewConfirmed = (ListView) view
-				.findViewById(R.id.confirmedListView);
+		listViewConfirmed = (ListView) view.findViewById(R.id.confirmedListView);
 
 		// Set up the Adapters.
 		intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
@@ -226,7 +225,7 @@ public final class ProposalFragment extends SherlockFragment implements
 		// Make sure the adapters are fresh...
 		intAdapter.notifyDataSetChanged();
 		confAdapter.notifyDataSetChanged();
-		
+
 	}
 
 	private void addMeToHostInterestedList() {
@@ -317,15 +316,30 @@ public final class ProposalFragment extends SherlockFragment implements
 				View statusBar = convertView
 						.findViewById(R.id.profilePictureStatusBar);
 				statusBar.setVisibility(View.VISIBLE);
-				if (user.getAvailability().equals(Status.FREE)) {
+				if (user.getAvailability() == null) {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.gray));
+				} else if (user.getAvailability().equals(Status.FREE)) {
 					statusBar.setBackgroundColor(getResources().getColor(
 							R.color.green));
 				} else if (user.getAvailability().equals(Status.BUSY)) {
 					statusBar.setBackgroundColor(getResources()
 							.getColor(R.color.red));
-				} else {
+				}
+			} else if (database.getMyJid().equals(jid)) {
+				View statusBar = convertView
+						.findViewById(R.id.profilePictureStatusBar);
+				statusBar.setVisibility(View.VISIBLE);
+
+				if (database.getMyAvailability() == null) {
 					statusBar.setBackgroundColor(getResources().getColor(
 							R.color.gray));
+				} else if (database.getMyAvailability().equals(Status.FREE)) {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.green));
+				} else if (database.getMyAvailability().equals(Status.BUSY)) {
+					statusBar.setBackgroundColor(getResources()
+							.getColor(R.color.red));
 				}
 			}
 
@@ -336,10 +350,9 @@ public final class ProposalFragment extends SherlockFragment implements
 					if (user != null) {
 						Toast.makeText(context, user.getFullName(),
 								Toast.LENGTH_SHORT).show();
-					} else if (jid.equals(database.getMyJid())) { 
-						Toast.makeText(context,
-								"This is YOU!",
-								Toast.LENGTH_SHORT).show();
+					} else if (jid.equals(database.getMyJid())) {
+						Toast.makeText(context, "This is YOU!", Toast.LENGTH_SHORT)
+								.show();
 					} else {
 						Toast.makeText(context,
 								"One of " + host.getFirstName() + "'s friends",
