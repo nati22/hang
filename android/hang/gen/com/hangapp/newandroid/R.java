@@ -970,10 +970,10 @@ containing a value of this type.
         public static final int abs__bright_foreground_disabled_holo_light=0x7f06000a;
         public static final int abs__bright_foreground_holo_dark=0x7f060007;
         public static final int abs__bright_foreground_holo_light=0x7f060008;
-        public static final int abs__primary_text_disable_only_holo_dark=0x7f060019;
-        public static final int abs__primary_text_disable_only_holo_light=0x7f06001a;
-        public static final int abs__primary_text_holo_dark=0x7f06001b;
-        public static final int abs__primary_text_holo_light=0x7f06001c;
+        public static final int abs__primary_text_disable_only_holo_dark=0x7f06001a;
+        public static final int abs__primary_text_disable_only_holo_light=0x7f06001b;
+        public static final int abs__primary_text_holo_dark=0x7f06001c;
+        public static final int abs__primary_text_holo_light=0x7f06001d;
         public static final int com_facebook_blue=0x7f060000;
         public static final int com_facebook_loginview_text_color=0x7f060004;
         public static final int com_facebook_usersettingsfragment_connected_shadow_color=0x7f060002;
@@ -991,12 +991,13 @@ containing a value of this type.
         public static final int common_signin_btn_light_text_disabled=0x7f060011;
         public static final int common_signin_btn_light_text_focused=0x7f060012;
         public static final int common_signin_btn_light_text_pressed=0x7f060010;
-        public static final int common_signin_btn_text_dark=0x7f06001d;
-        public static final int common_signin_btn_text_light=0x7f06001e;
+        public static final int common_signin_btn_text_dark=0x7f06001e;
+        public static final int common_signin_btn_text_light=0x7f06001f;
         public static final int green=0x7f060017;
         public static final int light_background=0x7f060016;
         public static final int pressed_hang=0x7f060015;
-        public static final int red=0x7f060018;
+        public static final int red=0x7f060019;
+        public static final int yellow=0x7f060018;
     }
     public static final class dimen {
         /**  Default height of an action bar. 
@@ -1567,9 +1568,9 @@ containing a value of this type.
         public static final int helper=0x7f040090;
         public static final int homeAsUp=0x7f040008;
         public static final int horizontalScrollView1=0x7f040039;
-        public static final int horizontalScrollView1Lin=0x7f0400b2;
+        public static final int horizontalScrollView1ListView=0x7f0400b2;
         public static final int horizontalScrollView2=0x7f0400ad;
-        public static final int horizontalScrollView2Lin=0x7f0400b3;
+        public static final int horizontalScrollView2ListView=0x7f0400b3;
         public static final int hybrid=0x7f040015;
         public static final int imageView3=0x7f04009a;
         public static final int imageViewAppLogo=0x7f0400a0;

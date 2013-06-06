@@ -160,6 +160,21 @@ class ConfirmedRequestHandler(webapp2.RequestHandler):
             # Add jid of Confirmed User to Broadcasting User
             broadcasting_user.proposal_confirmed_jids.append(jid)
 
+            #################### Because Confirmed and Interested are mutually exclusive
+            #################### We're removing you from Interested here as well, to prevent 
+            #################### having two requests with one client toggle switch
+            if key_confirmed in broadcasting_user.proposal_interested:
+                broadcasting_user.proposal_interested.remove(key_confirmed)
+                self.response.write("key " + jid + " removed from interested")
+            else:
+                self.response.write("key " + jid + " was never interested")
+
+            if jid in broadcasting_user.proposal_interested_jids:
+                broadcasting_user.proposal_interested_jids.remove(jid)
+                self.response.write(jid + " removed from interested jids")
+            else:
+                self.response.write(jid + " was never interested jids")
+
             # Save it back into the datastore.
             broadcasting_user.put()
 

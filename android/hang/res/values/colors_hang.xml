@@ -23,6 +23,7 @@
     <color name="pressed_hang">#CCC0B9CE</color>
     <color name="light_background">#efedf4</color>
     <color name="green">#228b22</color>
+    <color name="yellow">#FFFF00</color>
     <color name="red">#ff4500</color>
 
 </resources>

@@ -15,6 +15,7 @@ import android.util.Log;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
+import com.hangapp.newandroid.model.callback.IncomingBroadcastListListener;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.model.callback.MyAvailabilityListener;
 import com.hangapp.newandroid.model.callback.MyProposalListener;
@@ -47,6 +48,11 @@ public final class Database {
 	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
 
+	/*
+	 * private Map<String, List<IncomingBroadcastListListener>>
+	 * incomingBroadcastListListeners = new HashMap<String,
+	 * List<IncomingBroadcastListListener>>();
+	 */
 	/** Private constructor */
 	private Database() {
 	}
@@ -95,6 +101,16 @@ public final class Database {
 	public boolean addMyStatusListener(MyAvailabilityListener listener) {
 		return myStatusListeners.add(listener);
 	}
+
+	/*
+	 * public boolean addIncomingBroadcastListListener(String jid,
+	 * IncomingBroadcastListListener listener) { return
+	 * incomingBroadcastListListeners.get(jid).add(listener); }
+	 * 
+	 * public boolean removeIncomingBroadcastListListener(String jid,
+	 * IncomingBroadcastListListener listener) { return
+	 * incomingBroadcastListListeners.get(jid).remove(listener); }
+	 */
 
 	public boolean removeMyStatusListener(MyAvailabilityListener listener) {
 		return myStatusListeners.remove(listener);
@@ -240,6 +256,15 @@ public final class Database {
 		this.incomingList.addAll(incoming);
 		for (User user : incoming) {
 			this.incomingMap.put(user.getJid(), user);
+
+			/*
+			 * if (incomingBroadcastListListeners.get(user.getJid()) != null) { for
+			 * (IncomingBroadcastListListener listener :
+			 * incomingBroadcastListListeners .get(user.getJid())) { // Update
+			 * Interested
+			 * listener.incomingBroadcastListUpdate(user.getProposal().getInterested
+			 * ()); // Update confirmed...TODO } }
+			 */
 		}
 
 		// Notify listeners

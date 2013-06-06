@@ -2,8 +2,7 @@
 
 <!--
      This same XML file is used for both MyProposalFragment.java (my own Proposal) 
-     and ProposalFragment.java (someone else's Proposal).
--->
+     and ProposalFragment.java (someone else's Proposal).-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -177,20 +176,20 @@
                 android:textSize="12sp" />
 
             <ToggleButton
-                android:layout_margin="5dp"
                 android:id="@+id/interestedToggle"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:layout_below="@id/separatorTopBottom"
-                android:textOn="INTERESTED"
-                android:textOff="INTERESTED?" />
+                android:layout_margin="5dp"
+                android:textOff="INTERESTED?"
+                android:textOn="INTERESTED" />
 
             <ToggleButton
                 android:id="@+id/confirmedToggle"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:layout_below="@id/separatorTopBottom"
                 android:layout_alignTop="@id/interestedToggle"
+                android:layout_below="@id/separatorTopBottom"
                 android:layout_toRightOf="@id/interestedToggle"
                 android:textOff="CONFIRM"
                 android:textOn="CONFIRMED" />
@@ -205,15 +204,16 @@
                 android:text="@string/interested"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
-    <!--         <ImageView
+            <!--
+                 <ImageView
                 android:id="@+id/imageViewInterested"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/textViewInterested"
                 android:contentDescription="@string/interested"
-                android:src="@drawable/interested" />
- -->
+                android:src="@drawable/interested" /> -->
+
             <TextView
                 android:id="@+id/textViewConfirmed"
                 android:layout_width="wrap_content"
@@ -223,7 +223,7 @@
                 android:layout_marginTop="8dp"
                 android:text="@string/confirmed"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
-<!-- 
+            <!--
             <ImageView
                 android:id="@+id/imageViewConfirmed"
                 android:layout_width="wrap_content"
@@ -231,8 +231,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/textViewConfirmed"
                 android:contentDescription="@string/confirmed"
-                android:src="@drawable/confirmed" />
- -->
+                android:src="@drawable/confirmed" />-->
+                
             <!-- Interested ProfilePictureView ScrollView -->
 
             <HorizontalScrollView
@@ -241,10 +241,11 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewInterested"
                 android:layout_toRightOf="@+id/imageViewInterested"
+                android:background="@color/yellow"
                 android:minHeight="50dp" >
 
-                <LinearLayout
-                    android:id="@+id/horizontalScrollView1Lin"
+                <ListView
+                    android:id="@+id/horizontalScrollView1ListView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal" />
@@ -256,12 +257,13 @@
                 android:id="@+id/horizontalScrollView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="50dp"
                 android:layout_below="@+id/textViewConfirmed"
-                android:layout_toRightOf="@+id/imageViewConfirmed" >
+                android:layout_toRightOf="@+id/imageViewConfirmed"
+                android:background="@color/green"
+                android:minHeight="50dp" >
 
-                <LinearLayout
-                    android:id="@+id/horizontalScrollView2Lin"
+                <ListView
+                    android:id="@+id/horizontalScrollView2ListView"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal" />

@@ -312,7 +312,7 @@ public final class User implements Comparable<User>, Parcelable {
 
 			users.put(jid, user);
 
-			try {
+			/*try {
 				Log.i(User.class.getSimpleName(),
 						"user full = " + user.getFullName());
 				Log.i(User.class.getSimpleName(), "user propdesc = "
@@ -325,7 +325,7 @@ public final class User implements Comparable<User>, Parcelable {
 						+ user.getProposal().getConfirmed().toString());
 			} catch (NullPointerException e) {
 				Log.e(User.class.getSimpleName(), e.getMessage());
-			}
+			}*/
 
 		}
 
