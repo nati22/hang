@@ -231,10 +231,9 @@ public final class ProposalFragment extends SherlockFragment {
 		} else Log.i(ProposalFragment.class.getSimpleName(), "None confirmed.");
 
 		// TODO: For each Interested User, fill the horizontal ScrollView
-		for (String interestedUser : host.getProposal().getInterested()) {
+	/*	for (String interestedUser : host.getProposal().getInterested()) {
 			ProfilePictureView interestedIcon = new ProfilePictureView(getActivity());
-			interestedIcon.setBackground(getResources().getDrawable(R.drawable.ic_launcher_huge));
-		}
+		}*/
 		
 	}
 

@@ -10,7 +10,7 @@ import urllib2
 class User(db.Model):
     first_name = db.StringProperty()
     last_name = db.StringProperty()
-    gcm_registration_id = db.StringProperty()
+    gcm_registration_ids = db.ListProperty(str)
     
     incoming_broadcasts = db.ListProperty(db.Key)
     outgoing_broadcasts = db.ListProperty(db.Key)
@@ -72,9 +72,14 @@ class UserRequestHandler(webapp2.RequestHandler):
         
         # Create the Key for the Entity we want using the JID that was passed in.               
         key_user = db.Key.from_path('User', jid)
-        
+   
         # Perform the query for the Entity using that Key.
         user = db.get(key_user)
+
+        if user is None:
+            self.response.write("User doesn't exist")
+            return
+
         
         # Perform two more queries for the user's incoming_broadcasts and outgoing_broadcasts
         incoming_broadcasts_keys = db.get(user.incoming_broadcasts)
@@ -171,15 +176,22 @@ class UserRequestHandler(webapp2.RequestHandler):
             param_last_name = self.request.get('ln')
             param_reg_id = self.request.get('regid')
 
-            # Check if User already exists...not sure if spitting out a string is best
+            # Check if User already exists
             if db.get(db.Key.from_path('User', jid)) != None:
-                self.response.write(param_first_name + " already exists!\n")
-            else: 
+                user = db.get(db.Key.from_path('User', jid))
+                # If the device registration id is a new one, add it. 
+                if param_reg_id not in user.gcm_registration_ids:
+                    user.gcm_registration_ids.append(param_reg_id)
+                    user.put()
+                    self.response.write("Added new gcm_registration_id " + param_reg_id)
+                else:                    
+                    self.response.write(param_first_name + " already exists!\n")
+            else:
                 # Make a User object. His Key should be his JID.
                 user = User(key_name=jid,
                              first_name=param_first_name,
-                             last_name=param_last_name,
-                             gcm_registration_id=param_reg_id)
+                             last_name=param_last_name)
+                user.gcm_registration_ids.append(param_reg_id)
                 
                 # Save the new User into the datastore.
                 user.put()

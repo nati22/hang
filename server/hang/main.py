@@ -18,6 +18,7 @@ import webapp2
 from User import UserRequestHandler, BroadcastRequestHandler, NudgeRequestHandler
 from Status import StatusRequestHandler
 from Proposal import ProposalRequestHandler, InterestedRequestHandler, ConfirmedRequestHandler
+#from push import NotificationReceivedRequestHandler
             
 class HelloWorldRequestHandler(webapp2.RequestHandler):
     def get(self):

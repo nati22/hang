@@ -13,6 +13,7 @@ import android.support.v4.app.NotificationCompat;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.newandroid.R;
+import com.hangapp.newandroid.activity.HomeActivity;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
@@ -50,6 +51,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
 
 			if (type.equals(Keys.FromServer.TYPE_NUDGE)) {
+				
+				Intent nudgeIntent = new Intent(context, HomeActivity.class);
+				
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You got a nudge!")
 						.setContentText(
@@ -59,7 +63,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 								BitmapFactory.decodeResource(context.getResources(),
 										R.drawable.ic_launcher_huge))
 						.setContentIntent(
-								PendingIntent.getActivity(context, 0, new Intent(), 0))
+								PendingIntent.getActivity(context, 0, nudgeIntent, 0))
 						.build();
 
 				notifMgr.notify(NUDGE_NOTIFY_ID, notif);
