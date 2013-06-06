@@ -200,7 +200,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/interestedToggle"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="8dp"
                 android:text="@string/interested"
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -241,8 +241,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewInterested"
                 android:layout_toRightOf="@+id/imageViewInterested"
-                android:background="@color/yellow"
-                android:minHeight="50dp" >
+                android:minHeight="30dp" >
 
                 <ListView
                     android:id="@+id/horizontalScrollView1ListView"
@@ -259,8 +258,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/textViewConfirmed"
                 android:layout_toRightOf="@+id/imageViewConfirmed"
-                android:background="@color/green"
-                android:minHeight="50dp" >
+                android:minHeight="30dp" >
 
                 <ListView
                     android:id="@+id/horizontalScrollView2ListView"

@@ -244,23 +244,16 @@ public final class ProposalFragment extends SherlockFragment implements
 
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
-		/*
-		 * Log.v(ProposalFragment.class.getSimpleName(),
-		 * "Incoming Broadcasts updated..."); Log.v("Interested",
-		 * database.getIncomingUser(host.getJid()).getProposal()
-		 * .getInterested().toString());
-		 */
-
-		// Find out if your user was updated
+		// Find out if User's Interested was updated
 		if (!database.getIncomingUser(host.getJid()).getProposal()
 				.getInterested().equals(listInterestedJids)) {
 			listInterestedJids.clear();
 			listInterestedJids.addAll(database.getIncomingUser(host.getJid())
 					.getProposal().getInterested());
-
 			intAdapter.notifyDataSetChanged();
 		}
-
+		
+		// Find out if User's Confirmed was updated
 		if (!database.getIncomingUser(host.getJid()).getProposal().getConfirmed()
 				.equals(listConfirmedJids)) {
 			listConfirmedJids.clear();
@@ -278,12 +271,6 @@ public final class ProposalFragment extends SherlockFragment implements
 
 		@Override
 		public int getCount() {
-			/*
-			 * Log.v(IntConfAdapter.class.getSimpleName(),
-			 * "getCount called and returning " + intJids.size());
-			 * Log.v(IntConfAdapter.class.getSimpleName(), "intJids has " +
-			 * intJids.size() + " elements");
-			 */
 			return intJids.size();
 		}
 
@@ -310,13 +297,6 @@ public final class ProposalFragment extends SherlockFragment implements
 			// Inflate the View if necessary
 			if (convertView == null) {
 
-				// Try to get User
-				User user = database.getIncomingUser(jid);
-
-				if (database.getIncomingUser(jid) != null) {
-					Toast.makeText(context, "You know this guy!", Toast.LENGTH_SHORT).show();
-				}
-
 				ListView.LayoutParams params = new ListView.LayoutParams(
 						ListView.LayoutParams.WRAP_CONTENT,
 						ListView.LayoutParams.MATCH_PARENT);
@@ -324,8 +304,19 @@ public final class ProposalFragment extends SherlockFragment implements
 				((TextView) convertView).setText(jid);
 				((TextView) convertView).setTypeface(Typeface.createFromAsset(
 						context.getAssets(), "fonts/Harabara.ttf"));
-				((TextView) convertView).setTextSize(40);
+				((TextView) convertView).setTextSize(30);
 				((TextView) convertView).setLayoutParams(params);
+				
+				
+				// Try to get User
+				User user = database.getIncomingUser(jid);
+				
+				if (database.getIncomingUser(jid) != null) {
+					Toast.makeText(context, "You know this guy!", Toast.LENGTH_SHORT).show();
+					((TextView) convertView).setText(user.getFullName());
+				} else if (jid.equals(database.getMyJid())) {
+					((TextView) convertView).setText(database.getMyFullName() + " (me)");
+				}
 
 			}
 
