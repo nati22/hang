@@ -98,11 +98,13 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		profilePictureView.setProfileId(myJid);
 		
 		// Set color of availability bar (below profile pic)
-		if (database.getMyAvailability().equals(Status.BUSY)) {
+		if (database.getMyAvailability() == null) {
+			profileStatusBar.setBackgroundColor(getResources().getColor(R.color.gray));
+		} else if (database.getMyAvailability().equals(Status.BUSY)) {
 			profileStatusBar.setBackgroundColor(getResources().getColor(R.color.red));
 		} else if (database.getMyAvailability().equals(Status.FREE)) {
 			profileStatusBar.setBackgroundColor(getResources().getColor(R.color.green));
-		} else profileStatusBar.setBackgroundColor(getResources().getColor(R.color.gray));
+		}
 		
 
 		textViewMyName.setText(database.getMyFullName());
