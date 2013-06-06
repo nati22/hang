@@ -16,7 +16,9 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
+import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.User;
+import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.model.callback.MyUserDataListener;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
@@ -38,6 +40,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 	private UiLifecycleHelper uiHelper;
 
 	private ProfilePictureView profilePictureView;
+	private View profileStatusBar;
 	private TextView textViewMyName;
 	private Button buttonOutgoingBroadcasts;
 	private Button buttonIncomingBroadcasts;
@@ -68,6 +71,7 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 		textViewMyName = (TextView) findViewById(R.id.textViewMyName);
 		buttonOutgoingBroadcasts = (Button) findViewById(R.id.buttonOutgoingBroadcasts);
 		buttonIncomingBroadcasts = (Button) findViewById(R.id.buttonIncomingBroadcasts);
+		profileStatusBar = (View) findViewById(R.id.profile_status_color_bar);
 
 		// Enable the "Up" button.
 		getSupportActionBar().setHomeButtonEnabled(true);
@@ -92,6 +96,14 @@ public final class MyProfileActivity extends BaseFragmentActivity implements
 
 		String myJid = database.getMyJid();
 		profilePictureView.setProfileId(myJid);
+		
+		// Set color of availability bar (below profile pic)
+		if (database.getMyAvailability().equals(Status.BUSY)) {
+			profileStatusBar.setBackgroundColor(getResources().getColor(R.color.red));
+		} else if (database.getMyAvailability().equals(Status.FREE)) {
+			profileStatusBar.setBackgroundColor(getResources().getColor(R.color.green));
+		} else profileStatusBar.setBackgroundColor(getResources().getColor(R.color.gray));
+		
 
 		textViewMyName.setText(database.getMyFullName());
 		// TODO: change these to a single style

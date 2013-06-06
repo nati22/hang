@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -31,6 +32,7 @@ import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
+import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
@@ -100,9 +102,9 @@ public final class ProposalFragment extends SherlockFragment implements
 		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
 
 		listViewInterested = (ListView) view
-				.findViewById(R.id.horizontalScrollView1ListView);
+				.findViewById(R.id.interestedListView);
 		listViewConfirmed = (ListView) view
-				.findViewById(R.id.horizontalScrollView2ListView);
+				.findViewById(R.id.confirmedListView);
 
 		// Set up the Adapters.
 		intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
@@ -134,7 +136,7 @@ public final class ProposalFragment extends SherlockFragment implements
 									"Not so interested anymore...", Toast.LENGTH_SHORT)
 									.show();
 							if (!toggleConfirmed.isChecked())
-									removeMeFromHostInterestedList();
+								removeMeFromHostInterestedList();
 						}
 
 					}
@@ -221,6 +223,10 @@ public final class ProposalFragment extends SherlockFragment implements
 		} else
 			Log.i(ProposalFragment.class.getSimpleName(), "None confirmed.");
 
+		// Make sure the adapters are fresh...
+		intAdapter.notifyDataSetChanged();
+		confAdapter.notifyDataSetChanged();
+		
 	}
 
 	private void addMeToHostInterestedList() {
@@ -252,7 +258,7 @@ public final class ProposalFragment extends SherlockFragment implements
 					.getProposal().getInterested());
 			intAdapter.notifyDataSetChanged();
 		}
-		
+
 		// Find out if User's Confirmed was updated
 		if (!database.getIncomingUser(host.getJid()).getProposal().getConfirmed()
 				.equals(listConfirmedJids)) {
@@ -295,30 +301,53 @@ public final class ProposalFragment extends SherlockFragment implements
 			final String jid = intJids.get(position);
 
 			// Inflate the View if necessary
-			if (convertView == null) {
+			if (convertView == null)
+				convertView = LayoutInflater.from(context).inflate(
+						R.layout.cell_profile_icon, null);
 
-				ListView.LayoutParams params = new ListView.LayoutParams(
-						ListView.LayoutParams.WRAP_CONTENT,
-						ListView.LayoutParams.MATCH_PARENT);
-				convertView = new TextView(context);
-				((TextView) convertView).setText(jid);
-				((TextView) convertView).setTypeface(Typeface.createFromAsset(
-						context.getAssets(), "fonts/Harabara.ttf"));
-				((TextView) convertView).setTextSize(30);
-				((TextView) convertView).setLayoutParams(params);
-				
-				
-				// Try to get User
-				User user = database.getIncomingUser(jid);
-				
-				if (database.getIncomingUser(jid) != null) {
-					Toast.makeText(context, "You know this guy!", Toast.LENGTH_SHORT).show();
-					((TextView) convertView).setText(user.getFullName());
-				} else if (jid.equals(database.getMyJid())) {
-					((TextView) convertView).setText(database.getMyFullName() + " (me)");
+			ProfilePictureView icon = (ProfilePictureView) convertView
+					.findViewById(R.id.profilePictureIcon);
+			icon.setProfileId(jid);
+
+			// Find out if the person is known
+			final User user = database.getIncomingUser(jid);
+
+			// If we know them, set the person's status color
+			if (user != null) {
+				View statusBar = convertView
+						.findViewById(R.id.profilePictureStatusBar);
+				statusBar.setVisibility(View.VISIBLE);
+				if (user.getAvailability().equals(Status.FREE)) {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.green));
+				} else if (user.getAvailability().equals(Status.BUSY)) {
+					statusBar.setBackgroundColor(getResources()
+							.getColor(R.color.red));
+				} else {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.gray));
 				}
-
 			}
+
+			convertView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (user != null) {
+						Toast.makeText(context, user.getFullName(),
+								Toast.LENGTH_SHORT).show();
+					} else if (jid.equals(database.getMyJid())) { 
+						Toast.makeText(context,
+								"This is YOU!",
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(context,
+								"One of " + host.getFirstName() + "'s friends",
+								Toast.LENGTH_SHORT).show();
+					}
+
+				}
+			});
 
 			return convertView;
 		}
