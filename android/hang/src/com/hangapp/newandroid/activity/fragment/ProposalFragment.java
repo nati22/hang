@@ -224,12 +224,9 @@ public final class ProposalFragment extends SherlockFragment implements
 		} else
 			Log.i(ProposalFragment.class.getSimpleName(), "None confirmed.");
 
-		// Make sure the adapters are fresh...
-		/*
-		 * intAdapter.notifyDataSetChanged();
-		 * confAdapter.notifyDataSetChanged();
-		 */
-
+		// Make sure the lists refresh...
+		updateHorizontalList(listInterestedJids, confirmedLinLayout);
+		updateHorizontalList(listConfirmedJids, interestedLinLayout);
 	}
 
 	private void addMeToHostInterestedList() {
