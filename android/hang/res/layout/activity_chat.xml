@@ -103,7 +103,9 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editTextChatMessage"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/horizontalScrollView1" >
+        android:layout_below="@+id/horizontalScrollView1"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll" >
     </ListView>
 
     <!-- Dummy item to prevent AutoCompleteTextView from receiving focus on startup. -->

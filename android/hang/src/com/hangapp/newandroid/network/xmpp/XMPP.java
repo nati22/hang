@@ -5,7 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jivesoftware.smack.PacketListener;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Packet;
+import org.jivesoftware.smackx.muc.MultiUserChat;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +19,7 @@ import android.util.Log;
 
 import com.hangapp.newandroid.database.MessagesDataSource;
 import com.hangapp.newandroid.model.callback.MucListener;
+import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 
 /**
@@ -23,18 +29,21 @@ import com.hangapp.newandroid.util.Keys;
 public class XMPP {
 
 	private static XMPP instance = new XMPP();
-	private static MucBroadcastReceiver mucBroadcastReceiver = new MucBroadcastReceiver();
+	private Context context;
+	private static Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
+	private MucBroadcastReceiver mucBroadcastReceiver;
 
 	private XMPP() {
-
 	}
 
 	public void initialize(Context context) {
+		this.context = context;
 		this.messagesDataSource = new MessagesDataSource(context);
 
-		IntentFilter filter = new IntentFilter(
-				MucBroadcastReceiver.PROCESS_RESPONSE);
+		// Register MucBroadcastReceiver
+		IntentFilter filter = new IntentFilter(MucBroadcastReceiver.ACTION_RESP);
 		filter.addCategory(Intent.CATEGORY_DEFAULT);
+		mucBroadcastReceiver = new MucBroadcastReceiver();
 		context.registerReceiver(mucBroadcastReceiver, filter);
 	}
 
@@ -50,6 +59,12 @@ public class XMPP {
 
 	private static Map<String, ArrayList<MucListener>> mucMessageListeners = new HashMap<String, ArrayList<MucListener>>();
 
+	/**
+	 * The only front-facing XMPPConnection method in this class. You should
+	 * call this method once from front-facing code, and this package should
+	 * handle the rest. That is, it should handle connecting, logging in,
+	 * reconnections on failure, etc.
+	 */
 	public void connect(String myJid, Context context) {
 		Intent connectIntent = new Intent(context, XMPPIntentService.class);
 		connectIntent.putExtra(Keys.MESSAGE, Keys.XMPP_CONNECT);
@@ -57,40 +72,23 @@ public class XMPP {
 		context.startService(connectIntent);
 	}
 
-	public void login(String myJid, Context context) {
+	/**
+	 * Package-private helper method that attempts to login in the background.
+	 */
+	void login(String myJid, Context context) {
 		Intent loginIntent = new Intent(context, XMPPIntentService.class);
 		loginIntent.putExtra(Keys.MESSAGE, Keys.XMPP_LOGIN);
 		loginIntent.putExtra(Keys.JID, myJid);
 		context.startService(loginIntent);
 	}
 
-	public void joinMuc(String mucName, String myJid, Context context) {
-		Intent joinMucIntent = new Intent(context, XMPPIntentService.class);
-		joinMucIntent.putExtra(Keys.MESSAGE, Keys.XMPP_JOIN_MUC);
-		joinMucIntent.putExtra(Keys.MUC_NAME, mucName);
-		joinMucIntent.putExtra(Keys.JID, myJid);
-		context.startService(joinMucIntent);
-	}
-
-	public void leaveMuc(String mucName, Context context) {
-		Intent leaveMucIntent = new Intent(context, XMPPIntentService.class);
-		leaveMucIntent.putExtra(Keys.MESSAGE, Keys.XMPP_JOIN_MUC);
-		leaveMucIntent.putExtra(Keys.MUC_NAME, mucName);
-		context.startService(leaveMucIntent);
-	}
-
-	public void sendMessage(String myJid, String mucName, String messageToSend,
-			Context context) {
-		Intent sendMucMessageIntent = new Intent(context,
-				XMPPIntentService.class);
-		sendMucMessageIntent.putExtra(Keys.MESSAGE, Keys.XMPP_SEND_MUC_MESSAGE);
-		sendMucMessageIntent.putExtra(Keys.JID, myJid);
-		sendMucMessageIntent.putExtra(Keys.MUC_NAME, mucName);
-		sendMucMessageIntent.putExtra(Keys.MUC_MESSAGE, messageToSend);
-		context.startService(sendMucMessageIntent);
-	}
-
+	/**
+	 * Don't forget to add listeners to each MUC by name. Should be called in
+	 * onResume() of client classes.
+	 */
 	public boolean addMucListener(String mucName, MucListener listener) {
+		HangLog.toastD(context, "XMPP", "Added MUC listener for muc " + mucName
+				+ ": " + listener.toString());
 		ArrayList<MucListener> listenersForThisMuc = mucMessageListeners
 				.get(mucName);
 
@@ -107,7 +105,14 @@ public class XMPP {
 		return listenersForThisMuc.add(listener);
 	}
 
+	/**
+	 * The counterpart to removeMucListener. Should be called in onPause() of
+	 * client classes.
+	 */
 	public boolean removeMucListener(String mucName, MucListener listener) {
+		HangLog.toastD(context, "XMPP", "Removed MUC listener for muc "
+				+ mucName + ": " + listener.toString());
+
 		ArrayList<MucListener> listenersForThisMuc = mucMessageListeners
 				.get(mucName);
 
@@ -124,7 +129,12 @@ public class XMPP {
 		return listenersForThisMuc.remove(listener);
 	}
 
+	/**
+	 * Helper method for MyPacketListeners to add Messages to the SQLite
+	 * database.
+	 */
 	void addMucMessage(String mucName, Message message) {
+		Log.d("XMPP", "Opening SQLite datasource");
 		messagesDataSource.open();
 		messagesDataSource.createMessage(mucName, message);
 		List<Message> messages = getAllMessages(mucName);
@@ -138,15 +148,135 @@ public class XMPP {
 		messagesDataSource.close();
 	}
 
+	/**
+	 * Retrieves all Messages for an MUC from the database.
+	 */
 	public List<Message> getAllMessages(String mucName) {
 		List<Message> messages = null;
 
 		messagesDataSource.open();
-
 		messages = messagesDataSource.getAllMessages(mucName);
-
 		messagesDataSource.close();
 
 		return messages;
+	}
+
+	/**
+	 * Join an MUC on the UI thread, so that the MessageListener for the MUC is
+	 * also added in the UI thread.
+	 */
+	public void joinMuc(final String mucName, String myJid) {
+		XMPPConnection xmppConnection = XMPPIntentService.xmppConnection;
+		MultiUserChat muc = mucs.get(mucName);
+
+		if (!xmppConnection.isConnected()) {
+			Log.e("XMPPPIntentService.joinMuc()",
+					"Failed to join muc: not connected");
+			return;
+		}
+
+		if (!xmppConnection.isAuthenticated()) {
+			Log.e("XMPPPIntentService.joinMuc()",
+					"Failed to join muc: not authenticated");
+			return;
+		}
+
+		if (muc == null) {
+			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
+					+ XMPPIntentService.XMPP_SERVER_URL);
+			mucs.put(mucName, muc);
+		}
+
+		try {
+			if (muc.isJoined()) {
+				muc.leave();
+			}
+			muc.join(myJid);
+		} catch (XMPPException e) {
+			Log.e("XMPPPIntentService.joinMuc()",
+					"Failed to join muc: " + e.getMessage());
+			return;
+		}
+
+		HangLog.toastD(context, "XMPPIntentService.joinMuc()", "Joined muc: "
+				+ mucName);
+
+		muc.addMessageListener(new PacketListener() {
+			@Override
+			public void processPacket(final Packet packet) {
+				if (packet instanceof Message) {
+					Message message = (Message) packet;
+
+					// HangLog.toastD(context, "MyPacketListener",
+					// "Processed message: " + message.getBody());
+
+					// // Broadcast an Intent to add the Message to the
+					// // internal database on the UI thread.
+					// Intent broadcastIntent = new Intent();
+					// broadcastIntent.setAction(MucBroadcastReceiver.ACTION_RESP);
+					// broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+					// broadcastIntent.putExtra(Keys.MUC_NAME, mucName);
+					// broadcastIntent.putExtra(Keys.MESSAGE_PACKET_ID,
+					// message.getPacketID());
+					// broadcastIntent.putExtra(Keys.MESSAGE_FROM,
+					// message.getFrom());
+					// broadcastIntent.putExtra(Keys.MESSAGE_BODY,
+					// message.getBody());
+					// context.sendBroadcast(broadcastIntent);
+
+					addMucMessage(mucName, message);
+				}
+			}
+		});
+
+		Log.i("XMPP", "Muc " + mucName + " message listeners: ");
+	}
+
+	/**
+	 * Leave the MUC in the UI thread.
+	 */
+	public void leaveMuc(String mucName) {
+		MultiUserChat muc = mucs.get(mucName);
+
+		if (muc == null) {
+			muc = new MultiUserChat(XMPPIntentService.xmppConnection, mucName
+					+ "@conference." + XMPPIntentService.XMPP_SERVER_URL);
+			mucs.put(mucName, muc);
+		}
+
+		muc.leave();
+		HangLog.toastD(context, "XMPP", "Left muc: " + mucName);
+	}
+
+	/**
+	 * Send an MUC message in the UI thread.
+	 */
+	public void sendMucMessage(String myJid, String mucName, String message) {
+		MultiUserChat muc = mucs.get(mucName);
+
+		if (muc == null) {
+			joinMuc(mucName, myJid);
+		}
+
+		muc = mucs.get(mucName);
+
+		try {
+			muc.sendMessage(message);
+
+			// Intent sendMessageBroadcastIntent = new Intent();
+			// sendMessageBroadcastIntent
+			// .setAction(MucBroadcastReceiver.PROCESS_RESPONSE);
+			// sendMessageBroadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+			// sendMessageBroadcastIntent.putExtra(Keys.MESSAGE,
+			// Keys.MUC_SEND_MESSAGE);
+			// sendMessageBroadcastIntent.putExtra(Keys.MUC_MESSAGE, message);
+			// sendBroadcast(sendMessageBroadcastIntent);
+
+			HangLog.toastD(context, "MucBroadcastReceiver",
+					"Sent muc message: " + message);
+		} catch (XMPPException e) {
+			Log.e("XMPPIntentService.sendMucMessage()",
+					"Couldn't send XMPP muc message: " + e.getMessage());
+		}
 	}
 }

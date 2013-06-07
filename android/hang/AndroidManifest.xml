@@ -75,8 +75,10 @@
             android:name=".activity.ChatActivity"
             android:label="@string/chat" >
         </activity>
-        <service android:name=".network.xmpp.XMPPIntentService"></service>
-        <receiver android:name=".network.xmpp.MucMessageBroadcastReceiver"></receiver>
+
+        <service android:name=".network.xmpp.XMPPIntentService" >
+        </service>
+        <receiver android:name=".network.xmpp.MucBroadcastReceiver"></receiver>
     </application>
 
 </manifest>
