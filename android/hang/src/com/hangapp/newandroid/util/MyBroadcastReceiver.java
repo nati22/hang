@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.newandroid.R;
@@ -38,6 +39,9 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 
 		String messageType = gcm.getMessageType(intent);
+		
+		Log.i(MyBroadcastReceiver.class.getSimpleName(), "NUDGE RECEIVED: " + messageType.toString());
+		
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
 			HangLog.toastE(context, TAG, "Send error: "
 					+ intent.getExtras().toString());
@@ -49,8 +53,8 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
 			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
-
-			if (type.equals(Keys.FromServer.TYPE_NUDGE)) {
+	
+			if (type != null && type.equals(Keys.FromServer.TYPE_NUDGE)) {
 				
 				Intent nudgeIntent = new Intent(context, HomeActivity.class);
 				
@@ -75,7 +79,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 				// 200, 100, 25, 100, 10, 100};
 				// v.vibrate(pattern, -1);
 
-			} else if (type.equals(Keys.FromServer.TYPE_TICKLE)) {
+			} else if (type != null && type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				restClient.getMyData();
 			} else {
 				HangLog.toastE(context, TAG, "Nudge type \"" + type

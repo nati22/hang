@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.DatabaseErrorHandler;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
@@ -49,12 +50,14 @@ public final class ProposalFragment extends SherlockFragment implements
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
 
-	private ListView listViewInterested;
-	private ListView listViewConfirmed;
+	// private ListView listViewInterested;
+	// private ListView listViewConfirmed;
 	private List<String> listInterestedJids = new ArrayList<String>();
 	private List<String> listConfirmedJids = new ArrayList<String>();
-	private IntConfAdapter intAdapter;
-	private IntConfAdapter confAdapter;
+	// private IntConfAdapter intAdapter;
+	// private IntConfAdapter confAdapter;
+	private LinearLayout interestedLinLayout;
+	private LinearLayout confirmedLinLayout;
 
 	private ImageView buttonChat;
 	private ImageView buttonDeleteProposal;
@@ -101,15 +104,20 @@ public final class ProposalFragment extends SherlockFragment implements
 				.findViewById(R.id.scrollViewProposal);
 		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
 
-		listViewInterested = (ListView) view
-				.findViewById(R.id.interestedListView);
-		listViewConfirmed = (ListView) view.findViewById(R.id.confirmedListView);
+		// listViewInterested = (ListView) view
+		// .findViewById(R.id.interestedListView);
+		// listViewConfirmed = (ListView)
+		// view.findViewById(R.id.confirmedListView);
 
 		// Set up the Adapters.
-		intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
-		confAdapter = new IntConfAdapter(getActivity(), listConfirmedJids);
-		listViewInterested.setAdapter(intAdapter);
-		listViewConfirmed.setAdapter(confAdapter);
+		// intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
+		// confAdapter = new IntConfAdapter(getActivity(), listConfirmedJids);
+		// listViewInterested.setAdapter(intAdapter);
+		// listViewConfirmed.setAdapter(confAdapter);
+
+		interestedLinLayout = (LinearLayout) view
+				.findViewById(R.id.linLayoutInterested);
+		confirmedLinLayout = (LinearLayout) view.findViewById(R.id.linLayoutConfirmed);
 
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
 		buttonDeleteProposal = (ImageView) view
@@ -117,7 +125,8 @@ public final class ProposalFragment extends SherlockFragment implements
 
 		toggleInterested = (ToggleButton) view
 				.findViewById(R.id.interestedToggle);
-		toggleConfirmed = (ToggleButton) view.findViewById(R.id.confirmedToggle);
+		toggleConfirmed = (ToggleButton) view
+				.findViewById(R.id.confirmedToggle);
 
 		// Set Toggle ClickListeners
 		toggleInterested
@@ -132,35 +141,34 @@ public final class ProposalFragment extends SherlockFragment implements
 							addMeToHostInterestedList();
 						} else {
 							Toast.makeText(getActivity(),
-									"Not so interested anymore...", Toast.LENGTH_SHORT)
-									.show();
+									"Not so interested anymore...",
+									Toast.LENGTH_SHORT).show();
 							if (!toggleConfirmed.isChecked())
 								removeMeFromHostInterestedList();
+						}
+					}
+				});
+		toggleConfirmed
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (isChecked) {
+							Toast.makeText(getActivity(), "I'm confirming!",
+									Toast.LENGTH_SHORT).show();
+							toggleInterested.setChecked(false);
+							toggleInterested.setEnabled(false);
+							addMeToHostConfirmedList();
+						} else {
+							Toast.makeText(getActivity(), "I'm a flake :(",
+									Toast.LENGTH_SHORT).show();
+							toggleInterested.setEnabled(true);
+							removeMeFromHostConfirmedList();
 						}
 
 					}
 				});
-		toggleConfirmed.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (isChecked) {
-					Toast.makeText(getActivity(), "I'm confirming!",
-							Toast.LENGTH_SHORT).show();
-					toggleInterested.setChecked(false);
-					toggleInterested.setEnabled(false);
-					addMeToHostConfirmedList();
-
-				} else {
-					Toast.makeText(getActivity(), "I'm a flake :(",
-							Toast.LENGTH_SHORT).show();
-					toggleInterested.setEnabled(true);
-					removeMeFromHostConfirmedList();
-				}
-
-			}
-		});
 
 		// Hide the "delete" button, since this isn't your own Proposal.
 		buttonDeleteProposal.setVisibility(View.GONE);
@@ -208,11 +216,13 @@ public final class ProposalFragment extends SherlockFragment implements
 			// Turn on the Empty View.
 			scrollViewProposal.setVisibility(View.INVISIBLE);
 			emptyView.setVisibility(View.VISIBLE);
+
 		}
 
 		// If User is Interested/Confirmed, check the appropriate ToggleButton
 		if (host.getProposal().getInterested() != null) {
-			if (host.getProposal().getInterested().contains(database.getMyJid()))
+			if (host.getProposal().getInterested()
+					.contains(database.getMyJid()))
 				toggleInterested.setChecked(true);
 		} else
 			Log.i(ProposalFragment.class.getSimpleName(), "None interested.");
@@ -223,8 +233,10 @@ public final class ProposalFragment extends SherlockFragment implements
 			Log.i(ProposalFragment.class.getSimpleName(), "None confirmed.");
 
 		// Make sure the adapters are fresh...
-		intAdapter.notifyDataSetChanged();
-		confAdapter.notifyDataSetChanged();
+		/*
+		 * intAdapter.notifyDataSetChanged();
+		 * confAdapter.notifyDataSetChanged();
+		 */
 
 	}
 
@@ -249,120 +261,63 @@ public final class ProposalFragment extends SherlockFragment implements
 
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
+		Log.i(ProposalFragment.class.getSimpleName(),
+				"onIncomingBroadcastsUpdate called with "
+						+ database.getIncomingUser(host.getJid()).getProposal()
+								.getInterested().size()
+						+ " interested, and "
+						+ database.getIncomingUser(host.getJid()).getProposal()
+								.getConfirmed().size() + " confirmed.");
+
 		// Find out if User's Interested was updated
 		if (!database.getIncomingUser(host.getJid()).getProposal()
 				.getInterested().equals(listInterestedJids)) {
+
 			listInterestedJids.clear();
 			listInterestedJids.addAll(database.getIncomingUser(host.getJid())
 					.getProposal().getInterested());
-			intAdapter.notifyDataSetChanged();
+
+			updateHorizontalList(listInterestedJids, interestedLinLayout);
+			/* intAdapter.notifyDataSetChanged(); */
 		}
 
 		// Find out if User's Confirmed was updated
-		if (!database.getIncomingUser(host.getJid()).getProposal().getConfirmed()
-				.equals(listConfirmedJids)) {
-			listConfirmedJids.clear();
-			listConfirmedJids.addAll(database.getIncomingUser(host.getJid())
-					.getProposal().getConfirmed());
-			confAdapter.notifyDataSetChanged();
-		}
+		if (!database.getIncomingUser(host.getJid()).getProposal()
+				.getConfirmed().equals(listConfirmedJids)) {
 
+			  listConfirmedJids.clear();
+			  listConfirmedJids.addAll(database.getIncomingUser(host.getJid())
+			 .getProposal().getConfirmed());
+			  
+			  updateHorizontalList(listConfirmedJids, confirmedLinLayout);
+			/*  confAdapter.notifyDataSetChanged();*/
+			 
+
+		}
 	}
 
-	private class IntConfAdapter extends BaseAdapter {
+	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
 
-		private List<String> intJids;
-		private Context context;
+		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
+				+ " elements");
 
-		@Override
-		public int getCount() {
-			return intJids.size();
-		}
+		Log.i(ProposalFragment.class.getSimpleName(),
+				"removed " + linLayout.getChildCount() + " elements from linLayout");
+		linLayout.removeAllViews();
 
-		@Override
-		public Object getItem(int position) {
-			return intJids.get(position);
-		}
+		for (int i = 0; i < jids.size(); i++) {
+			String jid = jids.get(i);
 
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
+			// Get the cell
+			View view = LayoutInflater.from(getActivity()).inflate(
+					R.layout.cell_profile_icon, null);
 
-		public IntConfAdapter(Context context, List<String> intJids) {
-			this.context = context;
-			this.intJids = intJids;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-
-			final String jid = intJids.get(position);
-
-			// Inflate the View if necessary
-			if (convertView == null)
-				convertView = LayoutInflater.from(context).inflate(
-						R.layout.cell_profile_icon, null);
-
-			ProfilePictureView icon = (ProfilePictureView) convertView
-					.findViewById(R.id.profilePictureIcon);
+			// Set the FB Profile pic
+			ProfilePictureView icon = (ProfilePictureView)view.findViewById(R.id.profilePictureIcon);
+			Log.i(ProposalFragment.class.getSimpleName(), "Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
 
-			// Find out if the person is known
-			final User user = database.getIncomingUser(jid);
-
-			// If we know them, set the person's status color
-			if (user != null) {
-				View statusBar = convertView
-						.findViewById(R.id.profilePictureStatusBar);
-				statusBar.setVisibility(View.VISIBLE);
-				if (user.getAvailability() == null) {
-					statusBar.setBackgroundColor(getResources().getColor(
-							R.color.gray));
-				} else if (user.getAvailability().equals(Status.FREE)) {
-					statusBar.setBackgroundColor(getResources().getColor(
-							R.color.green));
-				} else if (user.getAvailability().equals(Status.BUSY)) {
-					statusBar.setBackgroundColor(getResources()
-							.getColor(R.color.red));
-				}
-			} else if (database.getMyJid().equals(jid)) {
-				View statusBar = convertView
-						.findViewById(R.id.profilePictureStatusBar);
-				statusBar.setVisibility(View.VISIBLE);
-
-				if (database.getMyAvailability() == null) {
-					statusBar.setBackgroundColor(getResources().getColor(
-							R.color.gray));
-				} else if (database.getMyAvailability().equals(Status.FREE)) {
-					statusBar.setBackgroundColor(getResources().getColor(
-							R.color.green));
-				} else if (database.getMyAvailability().equals(Status.BUSY)) {
-					statusBar.setBackgroundColor(getResources()
-							.getColor(R.color.red));
-				}
-			}
-
-			convertView.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (user != null) {
-						Toast.makeText(context, user.getFullName(),
-								Toast.LENGTH_SHORT).show();
-					} else if (jid.equals(database.getMyJid())) {
-						Toast.makeText(context, "This is YOU!", Toast.LENGTH_SHORT)
-								.show();
-					} else {
-						Toast.makeText(context,
-								"One of " + host.getFirstName() + "'s friends",
-								Toast.LENGTH_SHORT).show();
-					}
-
-				}
-			});
-
-			return convertView;
+			linLayout.addView(view);
 		}
 
 	}
