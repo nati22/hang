@@ -39,9 +39,10 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 
 		String messageType = gcm.getMessageType(intent);
-		
-		Log.i(GCMBroadcastReceiver.class.getSimpleName(), "NUDGE RECEIVED: " + messageType.toString());
-		
+
+		Log.i(GCMBroadcastReceiver.class.getSimpleName(), "NUDGE RECEIVED: "
+				+ messageType.toString());
+
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
 			HangLog.toastE(context, TAG, "Send error: "
 					+ intent.getExtras().toString());
@@ -52,10 +53,10 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 		} else {
 			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
-			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
-	
+			String senderFn = intent.getExtras().getString(
+					Keys.FromServer.NUDGER);
+
 			if (type != null && type.equals(Keys.FromServer.TYPE_NUDGE)) {
-				
 
 				Intent nudgeIntent = new Intent(context, HomeActivity.class);
 
@@ -85,8 +86,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 			} else if (type != null && type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				restClient.getMyData();
 			} else {
-				HangLog.toastE(context, TAG, "Nudge type \"" + type
-						+ "\" is unrecognizable.");
+				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");
 			}
 
 		}

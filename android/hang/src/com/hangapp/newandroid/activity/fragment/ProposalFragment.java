@@ -136,13 +136,8 @@ public final class ProposalFragment extends SherlockFragment implements
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						if (isChecked) {
-							Toast.makeText(getActivity(), "I'm interested...",
-									Toast.LENGTH_SHORT).show();
 							addMeToHostInterestedList();
 						} else {
-							Toast.makeText(getActivity(),
-									"Not so interested anymore...",
-									Toast.LENGTH_SHORT).show();
 							if (!toggleConfirmed.isChecked())
 								removeMeFromHostInterestedList();
 						}
@@ -155,14 +150,10 @@ public final class ProposalFragment extends SherlockFragment implements
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
 						if (isChecked) {
-							Toast.makeText(getActivity(), "I'm confirming!",
-									Toast.LENGTH_SHORT).show();
 							toggleInterested.setChecked(false);
 							toggleInterested.setEnabled(false);
 							addMeToHostConfirmedList();
 						} else {
-							Toast.makeText(getActivity(), "I'm a flake :(",
-									Toast.LENGTH_SHORT).show();
 							toggleInterested.setEnabled(true);
 							removeMeFromHostConfirmedList();
 						}
@@ -311,7 +302,7 @@ public final class ProposalFragment extends SherlockFragment implements
 			String jid = jids.get(i);
 
 			// Get the cell
-			View view = LayoutInflater.from(getActivity()).inflate(
+			View view = LayoutInflater.from(getSherlockActivity()).inflate(
 					R.layout.cell_profile_icon, null);
 
 			// Set the FB Profile pic
