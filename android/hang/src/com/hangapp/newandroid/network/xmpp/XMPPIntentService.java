@@ -1,15 +1,11 @@
 package com.hangapp.newandroid.network.xmpp;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.jivesoftware.smack.AccountManager;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.SmackAndroid;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smackx.ConfigureProviderManager;
-import org.jivesoftware.smackx.muc.MultiUserChat;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -33,7 +29,7 @@ import com.hangapp.newandroid.util.Keys;
  * </ol>
  */
 public final class XMPPIntentService extends IntentService {
-	private static final String XMPP_SERVER_URL = "ec2-184-72-81-86.compute-1.amazonaws.com";
+	static final String XMPP_SERVER_URL = "ec2-184-72-81-86.compute-1.amazonaws.com";
 
 	/**
 	 * Maintain a single, static {@link XMPPConnection} through the lifecycle of
@@ -43,7 +39,7 @@ public final class XMPPIntentService extends IntentService {
 	 * because {@link IntentService} guarantees that onHandleIntent() handles a
 	 * single {@link Intent} at a time, in a queue.
 	 */
-	private static XMPPConnection xmppConnection;
+	static XMPPConnection xmppConnection;
 
 	/**
 	 * Hold a reference to the front-facing XMPP object.
@@ -56,8 +52,6 @@ public final class XMPPIntentService extends IntentService {
 	 * connect to XMPP.
 	 */
 	private static MyConnectionListener mConnectionListener = new MyConnectionListener();
-
-	private Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
 
 	public XMPPIntentService() {
 		super("XMPPIntentService");
@@ -73,62 +67,44 @@ public final class XMPPIntentService extends IntentService {
 		Log.d("TAG", "XMPPIntentService started with intent message: "
 				+ message);
 
-		// Pull out myJid from the Intent.
+		// Pull out all extras. Sanity check them later, when you need them.
 		String myJid = intent.getStringExtra(Keys.JID);
-		if (myJid == null) {
-			Log.e("XMPPIntentService",
-					"Can't login: Intent was passed a null JID");
-			return;
-		}
-
-		// Pull out other extras. Sanity check them later, when you need them.
-		String mucName = intent.getStringExtra(Keys.MUC_NAME);
-		String mucMessage = intent.getStringExtra(Keys.MUC_MESSAGE);
 
 		// Start the correct method based on which message was passed into the
 		// Intent.
 		switch (message) {
 		case Keys.XMPP_CONNECT:
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't connect to XMPP: Null myJid");
+				return;
+			}
+
 			connect(myJid);
 			return;
 		case Keys.XMPP_REGISTER:
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't register to XMPP: Null myJid");
+				return;
+			}
+
 			register(myJid);
 			return;
 		case Keys.XMPP_LOGIN:
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't login to XMPP: Null myJid");
+				return;
+			}
+
 			login(myJid);
 			return;
 		case Keys.XMPP_LOGOUT:
 			logout();
-			return;
-		case Keys.XMPP_JOIN_MUC:
-			// Sanity check the mucName, now that you need it.
-			if (mucName == null) {
-				Log.e("XMPPIntentService",
-						"Can't join muc: Intent was passed a null MUC name");
-				return;
-			}
-
-			joinMuc(mucName, myJid);
-			return;
-		case Keys.XMPP_LEAVE_MUC:
-			// Sanity check the mucName, now that you need it.
-			if (mucName == null) {
-				Log.e("XMPPIntentService",
-						"Can't leave XMPP muc: Intent was passed a null muc name");
-				return;
-			}
-
-			leaveMuc(mucName);
-			return;
-		case Keys.XMPP_SEND_MUC_MESSAGE:
-			// Sanity check the mucMessage, now that you need it.
-			if (mucMessage == null) {
-				Log.e("XMPPIntentService",
-						"Can't send XMPP muc message: Intent was passed a null muc message");
-				return;
-			}
-
-			sendMucMessage(mucName, mucMessage);
 			return;
 		default:
 			Log.e("XMPPPIntentService.onHandleIntent",
@@ -258,59 +234,4 @@ public final class XMPPIntentService extends IntentService {
 
 	}
 
-	protected void joinMuc(String mucName, String myJid) {
-		MultiUserChat muc = mucs.get(mucName);
-
-		if (!xmppConnection.isConnected()) {
-			Log.e("XMPPPIntentService.joinMuc()",
-					"Failed to join muc: not connected");
-			return;
-		}
-
-		if (!xmppConnection.isAuthenticated()) {
-			Log.e("XMPPPIntentService.joinMuc()",
-					"Failed to join muc: not authenticated");
-			return;
-		}
-
-		if (muc == null) {
-			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
-					+ XMPP_SERVER_URL);
-			mucs.put(mucName, muc);
-		}
-
-		try {
-			muc.join(myJid);
-		} catch (XMPPException e) {
-			Log.e("XMPPPIntentService.joinMuc()",
-					"Failed to join muc: " + e.getMessage());
-			return;
-		}
-
-		Log.d("XMPPIntentService.joinMuc()",
-				"Joined XMPP muc: " + muc.getRoom());
-		muc.addMessageListener(new MessageListener(mucName));
-	}
-
-	protected void leaveMuc(String mucName) {
-		MultiUserChat muc = mucs.get(mucName);
-
-		if (muc == null) {
-			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
-					+ XMPP_SERVER_URL);
-			mucs.put(mucName, muc);
-		}
-
-		muc.leave();
-	}
-
-	protected void sendMucMessage(String mucName, String message) {
-		MultiUserChat muc = mucs.get(mucName);
-		try {
-			muc.sendMessage(message);
-		} catch (XMPPException e) {
-			Log.e("XMPPIntentService.sendMucMessage()",
-					"Couldn't send XMPP muc message: " + e.getMessage());
-		}
-	}
 }

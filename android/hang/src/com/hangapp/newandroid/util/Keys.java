@@ -25,6 +25,9 @@ public final class Keys {
 	public static final String BUSY = "busy";
 	public static final String MUC_NAME = "muc_name";
 	public static final String MUC_MESSAGE = "muc_message";
+	public static final String MESSAGE_PACKET_ID = "message_packet_id";
+	public static final String MESSAGE_FROM = "message_from";
+	public static final String MESSAGE_BODY = "message_body";
 
 	/*
 	 * IntentService message codes.
@@ -38,6 +41,12 @@ public final class Keys {
 	public static final int XMPP_LEAVE_MUC = 105;
 	public static final int XMPP_SEND_MUC_MESSAGE = 106;
 
+	/*
+	 * BroadcastReceiver message codes.
+	 */
+	public static final int MUC_JOIN_ROOM = 200;
+	public static final int MUC_SEND_MESSAGE = 201;
+
 	/**
 	 * Instead of converting directly from Date objects to Strings and vice
 	 * versa, Android wants us to use DateFormat objects which require a
@@ -49,15 +58,15 @@ public final class Keys {
 	public static final String SERVER_ADDRESS = "@conference.ec2-54-242-9-67.compute-1.amazonaws.com/";
 
 	/**
-	 * I'm sure this is a terrible, terrible idea but I wanted to show that these
-	 * Keys are specifically for receiving nudges from GCM
+	 * I'm sure this is a terrible, terrible idea but I wanted to show that
+	 * these Keys are specifically for receiving nudges from GCM
 	 */
 	public class FromServer {
 		public static final String FROM = "from";
 		public static final String COLLAPSE_KEY = "collapse_key";
 		public static final String NUDGER = "nudger";
 		public static final String TYPE = "type";
-		
+
 		public static final String TYPE_NUDGE = "nudge";
 		public static final String TYPE_TICKLE = "tickle";
 	}

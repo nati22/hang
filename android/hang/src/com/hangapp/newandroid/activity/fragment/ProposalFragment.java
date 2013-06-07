@@ -7,17 +7,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.DatabaseErrorHandler;
 import android.graphics.Typeface;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,8 +31,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.Availability.Status;
+import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
@@ -109,6 +108,7 @@ public final class ProposalFragment extends SherlockFragment implements
 		// listViewConfirmed = (ListView)
 		// view.findViewById(R.id.confirmedListView);
 
+
 		// Set up the Adapters.
 		// intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
 		// confAdapter = new IntConfAdapter(getActivity(), listConfirmedJids);
@@ -166,6 +166,7 @@ public final class ProposalFragment extends SherlockFragment implements
 							toggleInterested.setEnabled(true);
 							removeMeFromHostConfirmedList();
 						}
+
 
 					}
 				});
@@ -285,6 +286,7 @@ public final class ProposalFragment extends SherlockFragment implements
 		if (!database.getIncomingUser(host.getJid()).getProposal()
 				.getConfirmed().equals(listConfirmedJids)) {
 
+
 			  listConfirmedJids.clear();
 			  listConfirmedJids.addAll(database.getIncomingUser(host.getJid())
 			 .getProposal().getConfirmed());
@@ -318,6 +320,7 @@ public final class ProposalFragment extends SherlockFragment implements
 			icon.setProfileId(jid);
 
 			linLayout.addView(view);
+
 		}
 
 	}

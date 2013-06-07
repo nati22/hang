@@ -18,14 +18,14 @@ import android.widget.TextView;
 
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.callback.MucMessageListener;
+import com.hangapp.newandroid.model.callback.MucListener;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 
 public final class ChatActivity extends BaseFragmentActivity implements
-		MucMessageListener {
+		MucListener {
 
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
@@ -54,22 +54,21 @@ public final class ChatActivity extends BaseFragmentActivity implements
 
 		// Join the Muc.
 		String myJid = database.getMyJid();
-		xmpp.joinMuc(mucName, myJid, getApplicationContext());
+		xmpp.joinMuc(mucName, myJid);
 
 		// Reference Views.
 		editTextChatMessage = (EditText) findViewById(R.id.editTextChatMessage);
 		listViewChatCells = (ListView) findViewById(R.id.listViewChatCells);
 
 		// Setup adapter.
-		adapter = new MessageAdapter(this, R.id.listViewChatCells, messages);
+		adapter = new MessageAdapter(this, R.id.listViewChatCells);
 		listViewChatCells.setAdapter(adapter);
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		xmpp.addMucMessageListener(mucName, this);
+		xmpp.addMucListener(mucName, this);
 
 		messages.clear();
 		messages.addAll(xmpp.getAllMessages(mucName));
@@ -79,7 +78,9 @@ public final class ChatActivity extends BaseFragmentActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
-		xmpp.removeMucMessageListener(mucName, this);
+
+		xmpp.leaveMuc(mucName);
+		xmpp.removeMucListener(mucName, this);
 	}
 
 	public void sendMessage(View v) {
@@ -91,25 +92,37 @@ public final class ChatActivity extends BaseFragmentActivity implements
 			return;
 		}
 
-		xmpp.sendMessage(mucName, message, getApplicationContext());
+		String myJid = database.getMyJid();
+
+		xmpp.sendMucMessage(myJid, mucName, message);
 		editTextChatMessage.setText("");
 	}
 
-	static class MessageAdapter extends ArrayAdapter<Message> {
+	class MessageAdapter extends ArrayAdapter<Message> {
 
-		public MessageAdapter(Context context, int textViewResourceId,
-				List<Message> messages) {
-			super(context, textViewResourceId, messages);
+		public MessageAdapter(Context context, int textViewResourceId) {
+			super(context, textViewResourceId, ChatActivity.this.messages);
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
+			String myJid = database.getMyJid();
+
+			// Grab the real name of the "from" from the database.
+			String userJid = message.getFrom().split("@")[0];
+
+			String from = "Unknown user";
+			if (database.getIncomingUser(userJid) != null) {
+				from = database.getIncomingUser(userJid).getFullName();
+			} else if (database.getOutgoingUser(userJid) != null) {
+				from = database.getOutgoingUser(userJid).getFullName();
+			}
+
 			// Inflate the cell if necessary.
 			// TODO: The cell Type could be different, based on if it's an
-			// incoming
-			// or outgoing cell.
+			// incoming or outgoing cell.
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getContext()).inflate(
 						R.layout.cell_incoming_message, null);
@@ -123,16 +136,14 @@ public final class ChatActivity extends BaseFragmentActivity implements
 
 			// Populate Views.
 			textViewMessageBody.setText(message.getBody());
-			textViewMessageFrom.setText(message.getFrom());
+			textViewMessageFrom.setText(from);
 
 			return convertView;
 		}
 	}
 
 	@Override
-	public void onMucMessageUpdate(String mucName, List<Message> messages) {
-		Log.d("ChatActivity.onMucMessageUpdate", "Muc Message updated!");
-
+	public void onMucMessageUpdate(String mucName, final List<Message> messages) {
 		for (Message message : messages) {
 			Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "
 					+ message.getBody());
@@ -141,5 +152,12 @@ public final class ChatActivity extends BaseFragmentActivity implements
 		this.messages.clear();
 		this.messages.addAll(messages);
 		adapter.notifyDataSetChanged();
+
+		listViewChatCells.post(new Runnable() {
+			public void run() {
+				listViewChatCells.setSelection(listViewChatCells.getCount() - 1);
+			}
+		});
 	}
+
 }

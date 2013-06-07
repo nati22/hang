@@ -4,6 +4,10 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Apparently calling HangLog during UI events will stop the event cold. Fml.
+ */
+@Deprecated
 public class HangLog {
 
 	public static void toastD(Context context, String tag, String message) {

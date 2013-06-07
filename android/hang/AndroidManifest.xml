@@ -32,7 +32,7 @@
             android:value="@string/app_id" />
 
         <receiver
-            android:name=".util.MyBroadcastReceiver"
+            android:name=".util.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -40,8 +40,6 @@
                 <category android:name="com.hangapp.newandroid" />
             </intent-filter>
         </receiver>
-
-        <service android:name=".util.MyIntentService" />
 
         <activity
             android:name="com.hangapp.newandroid.activity.HomeActivity"
@@ -77,7 +75,10 @@
             android:name=".activity.ChatActivity"
             android:label="@string/chat" >
         </activity>
-        <service android:name=".network.xmpp.XMPPIntentService"></service>
+
+        <service android:name=".network.xmpp.XMPPIntentService" >
+        </service>
+        <receiver android:name=".network.xmpp.MucBroadcastReceiver"></receiver>
     </application>
 
 </manifest>

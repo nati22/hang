@@ -9,7 +9,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public final class MessagesDataSource {
 
@@ -39,7 +41,15 @@ public final class MessagesDataSource {
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_FROM, message.getFrom());
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_BODY, message.getBody());
 
-		return database.insert(MySQLiteHelper.TABLE_MESSAGES, null, values) != -1;
+		boolean success = false;
+		try {
+			success = database.insert(MySQLiteHelper.TABLE_MESSAGES, null,
+					values) != -1;
+		} catch (SQLiteConstraintException e) {
+			Log.e("MessagesDataSource.createMessage", e.getMessage());
+		}
+
+		return success;
 	}
 
 	public List<Message> getAllMessages(String mucName) {
