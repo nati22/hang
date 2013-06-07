@@ -19,7 +19,6 @@ import android.util.Log;
 
 import com.hangapp.newandroid.database.MessagesDataSource;
 import com.hangapp.newandroid.model.callback.MucListener;
-import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 
 /**
@@ -29,7 +28,6 @@ import com.hangapp.newandroid.util.Keys;
 public class XMPP {
 
 	private static XMPP instance = new XMPP();
-	private Context context;
 	private static Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
 	private MucBroadcastReceiver mucBroadcastReceiver;
 
@@ -37,7 +35,6 @@ public class XMPP {
 	}
 
 	public void initialize(Context context) {
-		this.context = context;
 		this.messagesDataSource = new MessagesDataSource(context);
 
 		// Register MucBroadcastReceiver
@@ -87,8 +84,6 @@ public class XMPP {
 	 * onResume() of client classes.
 	 */
 	public boolean addMucListener(String mucName, MucListener listener) {
-		HangLog.toastD(context, "XMPP", "Added MUC listener for muc " + mucName
-				+ ": " + listener.toString());
 		ArrayList<MucListener> listenersForThisMuc = mucMessageListeners
 				.get(mucName);
 
@@ -110,9 +105,6 @@ public class XMPP {
 	 * client classes.
 	 */
 	public boolean removeMucListener(String mucName, MucListener listener) {
-		HangLog.toastD(context, "XMPP", "Removed MUC listener for muc "
-				+ mucName + ": " + listener.toString());
-
 		ArrayList<MucListener> listenersForThisMuc = mucMessageListeners
 				.get(mucName);
 
@@ -198,8 +190,7 @@ public class XMPP {
 			return;
 		}
 
-		HangLog.toastD(context, "XMPPIntentService.joinMuc()", "Joined muc: "
-				+ mucName);
+		Log.i("XMPPIntentService.joinMuc()", "Joined muc: " + mucName);
 
 		muc.addMessageListener(new PacketListener() {
 			@Override
@@ -245,7 +236,6 @@ public class XMPP {
 		}
 
 		muc.leave();
-		HangLog.toastD(context, "XMPP", "Left muc: " + mucName);
 	}
 
 	/**
@@ -262,18 +252,6 @@ public class XMPP {
 
 		try {
 			muc.sendMessage(message);
-
-			// Intent sendMessageBroadcastIntent = new Intent();
-			// sendMessageBroadcastIntent
-			// .setAction(MucBroadcastReceiver.PROCESS_RESPONSE);
-			// sendMessageBroadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-			// sendMessageBroadcastIntent.putExtra(Keys.MESSAGE,
-			// Keys.MUC_SEND_MESSAGE);
-			// sendMessageBroadcastIntent.putExtra(Keys.MUC_MESSAGE, message);
-			// sendBroadcast(sendMessageBroadcastIntent);
-
-			HangLog.toastD(context, "MucBroadcastReceiver",
-					"Sent muc message: " + message);
 		} catch (XMPPException e) {
 			Log.e("XMPPIntentService.sendMucMessage()",
 					"Couldn't send XMPP muc message: " + e.getMessage());

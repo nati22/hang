@@ -41,37 +41,40 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
 			HangLog.toastE(context, TAG, "Send error: "
 					+ intent.getExtras().toString());
-		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
+				.equals(messageType)) {
 			HangLog.toastD(context, TAG, "Deleted messages on server: "
 					+ intent.getExtras().toString());
 		} else {
-
 			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
-			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
+			String senderFn = intent.getExtras().getString(
+					Keys.FromServer.NUDGER);
 
 			if (type.equals(Keys.FromServer.TYPE_NUDGE)) {
-				
+
 				Intent nudgeIntent = new Intent(context, HomeActivity.class);
-				
+
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You got a nudge!")
 						.setContentText(
 								senderFn + " wants to know what you're up to!")
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
-								BitmapFactory.decodeResource(context.getResources(),
+								BitmapFactory.decodeResource(
+										context.getResources(),
 										R.drawable.ic_launcher_huge))
 						.setContentIntent(
-								PendingIntent.getActivity(context, 0, nudgeIntent, 0))
-						.build();
+								PendingIntent.getActivity(context, 0,
+										nudgeIntent, 0)).build();
 
 				notifMgr.notify(NUDGE_NOTIFY_ID, notif);
 
 				Vibrator v = (Vibrator) context
 						.getSystemService(Context.VIBRATOR_SERVICE);
 				v.vibrate(400);
-				// long[] pattern = {0, 250, 400, 200, 125, 200, 75, 100, 25, 100,
+				// long[] pattern = {0, 250, 400, 200, 125, 200, 75, 100, 25,
+				// 100,
 				// 200, 100, 25, 100, 10, 100};
 				// v.vibrate(pattern, -1);
 

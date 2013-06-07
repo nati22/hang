@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.MucListener;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
@@ -109,15 +108,17 @@ public final class ChatActivity extends BaseFragmentActivity implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
+			String myJid = database.getMyJid();
+
 			// Grab the real name of the "from" from the database.
 			String userJid = message.getFrom().split("@")[0];
-			User fromUser = database.getIncomingUser(userJid);
 
 			String from = "Unknown user";
-			if (fromUser != null) {
-				from = fromUser.getFullName();
+			if (database.getIncomingUser(userJid) != null) {
+				from = database.getIncomingUser(userJid).getFullName();
+			} else if (database.getOutgoingUser(userJid) != null) {
+				from = database.getOutgoingUser(userJid).getFullName();
 			}
-			String myJid = database.getMyJid();
 
 			// Inflate the cell if necessary.
 			// TODO: The cell Type could be different, based on if it's an
@@ -149,8 +150,14 @@ public final class ChatActivity extends BaseFragmentActivity implements
 		}
 
 		this.messages.clear();
-		this.messages.addAll(messages);	
+		this.messages.addAll(messages);
 		adapter.notifyDataSetChanged();
+
+		listViewChatCells.post(new Runnable() {
+			public void run() {
+				listViewChatCells.setSelection(listViewChatCells.getCount() - 1);
+			}
+		});
 	}
 
 }
