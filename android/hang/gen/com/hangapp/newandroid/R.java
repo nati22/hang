@@ -1596,10 +1596,9 @@ containing a value of this type.
         public static final int listViewOutgoingBroadcasts=0x7f040053;
         public static final int loadingPanel=0x7f0400b8;
         public static final int location_label=0x7f04008d;
-        public static final int menu_add_outgoing_broadcast=0x7f0400bf;
-        public static final int menu_edit_outgoing_broadcasts=0x7f0400be;
-        public static final int menu_loading=0x7f0400bc;
-        public static final int menu_profile=0x7f0400bd;
+        public static final int menu_add_outgoing_broadcast=0x7f0400be;
+        public static final int menu_edit_outgoing_broadcasts=0x7f0400bd;
+        public static final int menu_profile=0x7f0400bc;
         public static final int menu_refresh=0x7f0400bb;
         public static final int none=0x7f040012;
         public static final int normal=0x7f040001;

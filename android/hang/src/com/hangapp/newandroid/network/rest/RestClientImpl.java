@@ -109,7 +109,6 @@ public final class RestClientImpl implements RestClient {
 		String jid = database.getMyJid();
 
 		new DeleteMyProposalAsyncTask(database, context, jid).execute();
-
 	}
 
 	@Override
