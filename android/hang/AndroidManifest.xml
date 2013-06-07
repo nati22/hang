@@ -78,7 +78,6 @@
 
         <service android:name=".network.xmpp.XMPPIntentService" >
         </service>
-        <receiver android:name=".network.xmpp.MucBroadcastReceiver"></receiver>
     </application>
 
 </manifest>

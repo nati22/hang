@@ -14,7 +14,6 @@ import org.jivesoftware.smackx.muc.MultiUserChat;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.util.Log;
 
 import com.hangapp.newandroid.database.MessagesDataSource;
@@ -29,19 +28,12 @@ public class XMPP {
 
 	private static XMPP instance = new XMPP();
 	private static Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
-	private MucBroadcastReceiver mucBroadcastReceiver;
 
 	private XMPP() {
 	}
 
 	public void initialize(Context context) {
 		this.messagesDataSource = new MessagesDataSource(context);
-
-		// Register MucBroadcastReceiver
-		IntentFilter filter = new IntentFilter(MucBroadcastReceiver.ACTION_RESP);
-		filter.addCategory(Intent.CATEGORY_DEFAULT);
-		mucBroadcastReceiver = new MucBroadcastReceiver();
-		context.registerReceiver(mucBroadcastReceiver, filter);
 	}
 
 	public static synchronized XMPP getInstance() {

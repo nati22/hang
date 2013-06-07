@@ -9,13 +9,13 @@ import org.apache.http.message.BasicNameValuePair;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
-import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 
 public final class RestClientImpl implements RestClient {
@@ -58,11 +58,11 @@ public final class RestClientImpl implements RestClient {
 		if (status != null) {
 			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
-			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR, status
-					.getStatus().toString()));
+			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR,
+					status.getStatus().toString()));
 			parameters.add(new BasicNameValuePair(
-					Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
-							.toString()));
+					Keys.AVAILABILITY_EXPIRATION_DATE, status
+							.getExpirationDate().toString()));
 			new SetAvailabilityAsyncTask(database, context, jid, parameters)
 					.execute();
 		} else {
@@ -78,8 +78,8 @@ public final class RestClientImpl implements RestClient {
 		String jid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION, proposal
-				.getDescription()));
+		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION,
+				proposal.getDescription()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_LOCATION, proposal
 				.getLocation()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_TIME, proposal
@@ -118,10 +118,10 @@ public final class RestClientImpl implements RestClient {
 		String jid = database.getMyJid();
 
 		if (jid == null) {
-			HangLog.toastE(context, "RestClientImpl",
+			Log.e("RestClientImpl",
 					"Cannot refresh; haven't retrieved Facebook ID yet");
 		} else {
-			HangLog.toastD(context, "RestClientImpl", "Refreshing...");
+			Log.i("RestClientImpl", "Refreshing...");
 		}
 
 		// TODO: GetUserData is currently hard-coded to use "123" as the JID.
