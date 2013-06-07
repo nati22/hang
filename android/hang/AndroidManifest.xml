@@ -40,8 +40,6 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".util.MyIntentService" />
-
         <activity
             android:name="com.hangapp.newandroid.activity.HomeActivity"
             android:label="@string/app_name" >

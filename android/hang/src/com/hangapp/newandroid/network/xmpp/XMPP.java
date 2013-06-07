@@ -30,7 +30,7 @@ public class XMPP {
 		this.messagesDataSource = new MessagesDataSource(context);
 	}
 
-	public static XMPP getInstance() {
+	public static synchronized XMPP getInstance() {
 		return instance;
 	}
 
