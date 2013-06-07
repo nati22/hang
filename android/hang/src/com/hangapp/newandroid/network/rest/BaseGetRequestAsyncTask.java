@@ -23,7 +23,7 @@ import com.hangapp.newandroid.util.Utils;
  * @author girum
  * 
  */
-public abstract class BaseGetRequestAsyncTask<ResultT> extends
+abstract class BaseGetRequestAsyncTask<ResultT> extends
 		SafeAsyncTask<ResultT> {
 
 	static final String BASE_URL = "http://hangapp2.appspot.com";

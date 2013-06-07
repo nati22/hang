@@ -58,11 +58,11 @@ public final class RestClientImpl implements RestClient {
 		if (status != null) {
 			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
-			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR,
-					status.getStatus().toString()));
+			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR, status
+					.getStatus().toString()));
 			parameters.add(new BasicNameValuePair(
-					Keys.AVAILABILITY_EXPIRATION_DATE, status
-							.getExpirationDate().toString()));
+					Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
+							.toString()));
 			new SetAvailabilityAsyncTask(database, context, jid, parameters)
 					.execute();
 		} else {
@@ -78,8 +78,8 @@ public final class RestClientImpl implements RestClient {
 		String jid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION,
-				proposal.getDescription()));
+		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION, proposal
+				.getDescription()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_LOCATION, proposal
 				.getLocation()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_TIME, proposal
@@ -110,7 +110,6 @@ public final class RestClientImpl implements RestClient {
 
 		new DeleteMyProposalAsyncTask(database, context, jid).execute();
 
-		// TODO: Send a tickle to my recipients
 	}
 
 	@Override
@@ -149,4 +148,54 @@ public final class RestClientImpl implements RestClient {
 
 		new SendNudgeAsyncTask(context, myJid, parameters).execute();
 	}
+
+	@Override
+	public void deleteBroadcastee(String broadcasteeJID) {
+		new DeleteBroadcastAsyncTask(database, this, context,
+				database.getMyJid(), broadcasteeJID).execute();
+
+	}
+
+	@Override
+	public void setInterested(String broadcasterJid) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
+
+		new SetInterestedAsyncTask(database, context, database.getMyJid(),
+				parameters).execute();
+	}
+
+	@Override
+	public void setConfirmed(String broadcasterJid) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
+
+		new SetConfirmedAsyncTask(database, context, database.getMyJid(),
+				parameters).execute();
+
+	}
+
+	@Override
+	public void deleteInterested(String broadcasterJid) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
+
+		new DeleteInterestedAsyncTask(database, context, database.getMyJid(),
+				broadcasterJid).execute();
+
+	}
+
+	@Override
+	public void deleteConfirmed(String broadcasterJid) {
+
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
+
+		new DeleteConfirmedAsyncTask(database, context, database.getMyJid(),
+				broadcasterJid).execute();
+	}
+
 }

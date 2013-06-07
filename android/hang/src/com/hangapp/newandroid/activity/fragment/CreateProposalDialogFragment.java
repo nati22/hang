@@ -2,12 +2,15 @@ package com.hangapp.newandroid.activity.fragment;
 
 import org.joda.time.DateTime;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
@@ -17,6 +20,7 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
+import com.hangapp.newandroid.util.HangLog;
 
 public class CreateProposalDialogFragment extends DialogFragment {
 
@@ -35,8 +39,7 @@ public class CreateProposalDialogFragment extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View view = inflater
-				.inflate(R.layout.dialog_create_proposal, container);
+		View view = inflater.inflate(R.layout.dialog_create_proposal, container);
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
@@ -67,6 +70,21 @@ public class CreateProposalDialogFragment extends DialogFragment {
 				CreateProposalDialogFragment.this.dismiss();
 			}
 		});
+
+		// Closes the soft keyboard for the time picker
+		editTextProposalLocation
+				.setOnFocusChangeListener(new OnFocusChangeListener() {
+
+					public void onFocusChange(View v, boolean hasFocus) {
+						if (!hasFocus) {
+							InputMethodManager imm = (InputMethodManager) getActivity()
+									.getApplicationContext().getSystemService(
+											Context.INPUT_METHOD_SERVICE);
+							imm.hideSoftInputFromWindow(
+									editTextProposalLocation.getWindowToken(), 0);
+						}
+					}
+				});
 
 		// Set this dialog's title.
 		getDialog().setTitle(getString(R.string.create_new_proposal));

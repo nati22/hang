@@ -1,19 +1,16 @@
 from google.appengine.ext import db
+from push import push_to_user
 
-from gcm import GCM
 import webapp2
 import json
 import urllib2
-
-
-API_KEY = "AIzaSyAJtklyMjzyHNfRC2Ratkoh3ziFodaZWZU"
 
 
 # Our model class.
 class User(db.Model):
     first_name = db.StringProperty()
     last_name = db.StringProperty()
-    gcm_registration_id = db.StringProperty()
+    gcm_registration_ids = db.ListProperty(str)
     
     incoming_broadcasts = db.ListProperty(db.Key)
     outgoing_broadcasts = db.ListProperty(db.Key)
@@ -75,9 +72,14 @@ class UserRequestHandler(webapp2.RequestHandler):
         
         # Create the Key for the Entity we want using the JID that was passed in.               
         key_user = db.Key.from_path('User', jid)
-        
+   
         # Perform the query for the Entity using that Key.
         user = db.get(key_user)
+
+        if user is None:
+            self.response.write("User doesn't exist")
+            return
+
         
         # Perform two more queries for the user's incoming_broadcasts and outgoing_broadcasts
         incoming_broadcasts_keys = db.get(user.incoming_broadcasts)
@@ -174,15 +176,22 @@ class UserRequestHandler(webapp2.RequestHandler):
             param_last_name = self.request.get('ln')
             param_reg_id = self.request.get('regid')
 
-            # Check if User already exists...not sure if spitting out a string is best
+            # Check if User already exists
             if db.get(db.Key.from_path('User', jid)) != None:
-                self.response.write(param_first_name + " already exists!\n")
-            else: 
+                user = db.get(db.Key.from_path('User', jid))
+                # If the device registration id is a new one, add it. 
+                if param_reg_id not in user.gcm_registration_ids:
+                    user.gcm_registration_ids.append(param_reg_id)
+                    user.put()
+                    self.response.write("Added new gcm_registration_id " + param_reg_id)
+                else:                    
+                    self.response.write(param_first_name + " already exists!\n")
+            else:
                 # Make a User object. His Key should be his JID.
                 user = User(key_name=jid,
                              first_name=param_first_name,
-                             last_name=param_last_name,
-                             gcm_registration_id=param_reg_id)
+                             last_name=param_last_name)
+                user.gcm_registration_ids.append(param_reg_id)
                 
                 # Save the new User into the datastore.
                 user.put()
@@ -215,7 +224,8 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             broadcastee = db.get(key_broadcastee_jid)
             if broadcastee is None:
                 self.response.write(json.dumps({'error_message': "User %s doesn't exist on hang server" % param_target}));
-            
+                return
+
             # Add broadcaster jid to broadcastee's incoming_broadcasts
             if key_broadcaster_jid not in broadcastee.incoming_broadcasts:
                 broadcastee.incoming_broadcasts.append(key_broadcaster_jid)
@@ -232,6 +242,8 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
 
             broadcastee.put()
             broadcaster.put()
+
+            push_to_user(broadcastee, broadcaster, 'tickle')
             
             self.response.write(json.dumps(broadcastee.get_partial_json()))
             
@@ -255,21 +267,38 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             broadcastee = db.get(key_broadcastee_jid)
 
             # Remove broadcaster jid from broadcastee's incoming_broadcasts
-            if key_broadcaster_jid in broadcastee.incoming_broadcasts:
+#            if key_broadcaster_jid in broadcastee.incoming_broadcasts:
+#                broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
+#                broadcastee.put()
+#                self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
+#            else: self.response.write("%s isn't even receiving Broadcasts from %s!\n" % (broadcastee.first_name, broadcaster.first_name))
+#                
+#            # Remove broadcastee jid from broadcaster's outgoing_broadcasts
+#            if key_broadcastee_jid in broadcaster.outgoing_broadcasts:
+#                broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
+#                broadcaster.put()
+#
+#                # Tell the user.                
+#                self.response.write("%s is no longer broadcasting to %s.\n" % (broadcaster.first_name, broadcastee.first_name))
+#            else: self.response.write("%s isn't even Broadcasting to %s!\n" % (broadcaster.first_name, broadcastee.first_name))
+
+             # Remove broadcaster jid from broadcastee's incoming_broadcasts
+            if key_broadcaster_jid in broadcastee.incoming_broadcasts and key_broadcastee_jid in broadcaster.outgoing_broadcasts:
                 broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
-                broadcastee.put()
-                self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
-            else: self.response.write("%s isn't even receiving Broadcasts from %s!\n" % (broadcastee.first_name, broadcaster.first_name))
-                
-            # Remove broadcastee jid from broadcaster's outgoing_broadcasts
-            if key_broadcastee_jid in broadcaster.outgoing_broadcasts:
                 broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
+                broadcastee.put()
                 broadcaster.put()
 
                 # Tell the user.                
-                self.response.write("%s is no longer broadcasting to %s.\n" % (broadcaster.first_name, broadcastee.first_name))
-            else: self.response.write("%s isn't even Broadcasting to %s!\n" % (broadcaster.first_name, broadcastee.first_name))
+                push_to_user(broadcastee, broadcaster, 'tickle')
+                # Girum said not to but "ehh"
+                push_to_user(broadcaster, broadcastee, 'tickle')
 
+                self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
+            else:
+                self.response.write("There is an inconsistency in %s and %s's Broadcast data!\n" % (broadcastee.first_name, broadcaster.first_name))
+                return
+            
         except (TypeError, ValueError):
             # If we couldn't grab the DELETE request parameters, then show an error.
             self.response.write('Invalid inputs: Couldn\'t grab the DELETE request parameters.\n')
@@ -289,11 +318,7 @@ class NudgeRequestHandler(webapp2.RequestHandler):
 
             self.response.write("Nudging " + broadcastee.first_name + ".")
 
-            data = {'type': 'nudge', 'nudger': broadcaster.first_name}
-
-            gcm = GCM(API_KEY)
-            
-            gcm.plaintext_request(registration_id=broadcastee.gcm_registration_id, data=data)
+            push_to_user(broadcastee, broadcaster, 'nudge')
 
             self.response.write("Nudge successful")
 

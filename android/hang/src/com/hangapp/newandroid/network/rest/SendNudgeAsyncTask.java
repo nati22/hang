@@ -7,11 +7,17 @@ import org.apache.http.NameValuePair;
 import android.content.Context;
 import android.util.Log;
 
-public class SendNudgeAsyncTask extends BasePostRequestAsyncTask<String> {
+class SendNudgeAsyncTask extends BasePostRequestAsyncTask<String> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String NUDGE_URI_SUFFIX = "/nudge";
 
+	/**
+	 * 
+	 * @param context 
+	 * @param jid The sender's jid
+	 * @param parameters Mapping from Keys.NUDGEE_JID to the recipient's jid
+	 */
 	public SendNudgeAsyncTask(Context context, String jid,
 			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + NUDGE_URI_SUFFIX, parameters);

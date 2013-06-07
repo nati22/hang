@@ -1,18 +1,18 @@
 package com.hangapp.newandroid.network.rest;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
 
-public final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
+final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 	private static final String URL_SUFFIX = "/users/";
 
 	private Database database;
 
-	protected GetUserDataAsyncTask(Database database, Context context,
-			String jid) {
+	protected GetUserDataAsyncTask(Database database, Context context, String jid) {
 		super(context, URL_SUFFIX + jid);
 
 		// Set dependencies.
@@ -23,7 +23,7 @@ public final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 	public User call() throws Exception {
 		// Execute the GET request
 		super.call();
-		
+
 		// Try to parse the resulting JSON.
 		User user = User.parseUser(responseString);
 

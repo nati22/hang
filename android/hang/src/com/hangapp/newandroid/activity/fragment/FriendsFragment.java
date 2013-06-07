@@ -3,9 +3,6 @@ package com.hangapp.newandroid.activity.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,8 +25,10 @@ import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Availability.Status;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
-import com.hangapp.newandroid.network.rest.SendNudgeAsyncTask;
+import com.hangapp.newandroid.network.rest.RestClient;
+import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.AvailabilityButton;
+import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 import com.hangapp.newandroid.util.Utils;
 
@@ -42,6 +41,7 @@ public final class FriendsFragment extends SherlockFragment implements
 	private FriendsAdapter adapter;
 
 	private Database database;
+	private RestClient restClient;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -52,6 +52,9 @@ public final class FriendsFragment extends SherlockFragment implements
 
 		// Setup listener.
 		database.addIncomingBroadcastsListener(this);
+
+		restClient = new RestClientImpl(database, getActivity()
+				.getApplicationContext());
 
 		// Reload the incoming broadcasts from savedInstanceState.
 		if (savedInstanceState != null) {
@@ -96,12 +99,12 @@ public final class FriendsFragment extends SherlockFragment implements
 		database.removeIncomingBroadcastsListener(this);
 	}
 
-	private static class FriendsAdapter extends BaseAdapter implements
+	private class FriendsAdapter extends BaseAdapter implements
 			StickyListHeadersAdapter {
 		private List<User> friends;
 		private LayoutInflater inflater;
 		private Context context;
-
+		
 		public FriendsAdapter(Context context, List<User> friends) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
@@ -180,7 +183,7 @@ public final class FriendsFragment extends SherlockFragment implements
 						});
 			} else {
 				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
-			//	convertView.setOnClickListener(null);
+				// convertView.setOnClickListener(null);
 			}
 
 			// Make Facebook icon function as the NUDGE button, for now TODO
@@ -188,21 +191,15 @@ public final class FriendsFragment extends SherlockFragment implements
 
 				@Override
 				public void onClick(View v) {
-					/**
-					 * A List is expected by {@link BasePutRequestAsyncTask} so this
-					 * List will hold the only relevant parameter, the nudge
-					 * recipient's jid
-					 */
-					List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-					parameters.add(new BasicNameValuePair(Keys.NUDGEE_JID, user.getJid()));
-					
-					new SendNudgeAsyncTask(context, user.getJid(), parameters).execute();
+
+					restClient.sendNudge(user.getJid());
+					HangLog.toastD(context, "Sending Nudge", "Sending a nudge to " + user.getFirstName());
 				}
 			});
 
 			return convertView;
 		}
-
+		
 		@Override
 		public View getHeaderView(int position, View convertView, ViewGroup parent) {
 			HeaderViewHolder holder;

@@ -1,26 +1,30 @@
+from google.appengine.ext import db
+from gcm import GCM
+
 import urllib2
+import User
 import webapp2
 import json
 
-def make_request(self):
-    self.response.out.write("made it into make_request")
-    
-    json_data = {"collapse_key" : "msg", 
-                 "data" : {
-                           "data": "xyz",
-               }, 
-            "registration_ids": ['APA91bGi13Rg2l_*******beNOGxxP25o0hmtpg'],
-    }
+API_KEY = "AIzaSyAJtklyMjzyHNfRC2Ratkoh3ziFodaZWZU"
 
+def tickle_users(users, sender):
+    if isinstance(users, list):
+        for user in users:
+            push_to_user(user, sender, 'tickle')
 
-    url = 'https://android.googleapis.com/gcm/send'
-    # this is our key hangapp
-    myKey = "AIzaSyBa4tOm2_Pb8S0xOgB8Hswk-y9gQrAAhis" 
-    data = json.dumps(json_data)
-    headers = {'Content-Type': 'application/json', 'Authorization': myKey} # prefix to mykey: 'key=%s' % 
-    req = urllib2.Request(url, data, headers)
-    f = urllib2.urlopen(req)
-    response = json.loads(f.read())
+            # do work
+    # this should return some type of Error, I'll figure it out later
+    #return 
 
+def push_to_user(user, sender, type):
+    data = {'type': type, 'nudger': sender.first_name}
 
-    self.response.out.write(json.dumps(response,sort_keys=True, indent=2) )    
+    gcm = GCM(API_KEY)
+
+    for reg_id in user.gcm_registration_ids:
+        gcm.plaintext_request(registration_id=reg_id, data=data)
+    # As of now this RequestHandler will clear Notifications 
+    # from all devices where the User is signed in
+    #class NotificationReceivedRequestHandler(webapp2.RequestHandler):
+    #    def put(self, jid):

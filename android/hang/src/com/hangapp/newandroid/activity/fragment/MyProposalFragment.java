@@ -50,8 +50,8 @@ public final class MyProposalFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_proposal, container,
-				false);
+		View view = inflater
+				.inflate(R.layout.fragment_proposal, container, false);
 
 		// Reference views.
 		textViewProposalTitle = (TextView) view
@@ -92,8 +92,7 @@ public final class MyProposalFragment extends SherlockFragment implements
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 
 				CreateProposalDialogFragment createProposalDialogFragment = new CreateProposalDialogFragment();
-				createProposalDialogFragment.show(fm,
-						"fragment_create_proposal");
+				createProposalDialogFragment.show(fm, "fragment_create_proposal");
 			}
 		});
 		buttonChat.setOnClickListener(new OnClickListener() {
@@ -113,8 +112,7 @@ public final class MyProposalFragment extends SherlockFragment implements
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 
 				DeleteProposalDialogFragment deleteProposalDialogFragment = new DeleteProposalDialogFragment();
-				deleteProposalDialogFragment.show(fm,
-						"fragment_delete_proposal");
+				deleteProposalDialogFragment.show(fm, "fragment_delete_proposal");
 			}
 		});
 
@@ -153,8 +151,8 @@ public final class MyProposalFragment extends SherlockFragment implements
 			// Populate the Views.
 			textViewProposalDescription.setText(myProposal.getDescription());
 			textViewProposalLocation.setText(myProposal.getLocation());
-			textViewProposalStartTime.setText(myProposal.getStartTime()
-					.toString("h aa"));
+			textViewProposalStartTime.setText(myProposal.getStartTime().toString(
+					"h aa"));
 		} else {
 			// Turn on the Empty View.
 			scrollViewProposal.setVisibility(View.INVISIBLE);

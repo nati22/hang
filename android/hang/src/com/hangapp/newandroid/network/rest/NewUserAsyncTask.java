@@ -14,7 +14,7 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.util.Keys;
 
-public final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
+final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 
 	private Database database;

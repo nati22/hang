@@ -1,9 +1,14 @@
 package com.hangapp.newandroid.network.rest;
 
+import java.util.List;
+
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
@@ -13,7 +18,7 @@ import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.SafeAsyncTask;
 import com.hangapp.newandroid.util.Utils;
 
-public class BaseDeleteRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
+class BaseDeleteRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 
 	static final String BASE_URL = "http://hangapp2.appspot.com";
 
@@ -48,18 +53,17 @@ public class BaseDeleteRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> 
 
 		HttpClient client = new DefaultHttpClient();
 		HttpUriRequest deleteRequest = new HttpDelete(uri);
-
+		
 		Log.v("BaseDeleteRequestAsyncTask", "Sending DELETE request with URI: "
 				+ uri);
-		String responseString = EntityUtils.toString(client.execute(
-				deleteRequest).getEntity());
+		String responseString = EntityUtils.toString(client
+				.execute(deleteRequest).getEntity());
 
 		if (responseString != null) {
 			Log.v("BaseDeleteRequestAsyncTask", "Got HTTP result: "
 					+ responseString);
 		} else {
-			throw new Exception(
-					"DELETE request receieved null response string.");
+			throw new Exception("DELETE request receieved null response string.");
 		}
 
 		// Save the responseString internally, for inheriting classes to use

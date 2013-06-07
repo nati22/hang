@@ -1,5 +1,5 @@
 import webapp2
-
+from push import tickle_users
 from google.appengine.ext import db
 
 class ProposalRequestHandler(webapp2.RequestHandler):
@@ -24,6 +24,13 @@ class ProposalRequestHandler(webapp2.RequestHandler):
             
             # Save it back into the datastore.
             user.put()
+
+            # Make list of Users to tickle
+            users = []
+            for broadcastee_key in user.outgoing_broadcasts:
+                users.append(db.get(broadcastee_key))
+
+            tickle_users(users, user)
             
             # Tell the user.
             self.response.write("Updated %s's proposal to %s.\n" % (user.first_name, user.proposal_description))
@@ -44,8 +51,17 @@ class ProposalRequestHandler(webapp2.RequestHandler):
         user.proposal_time = None
         user.proposal_interested = []
         user.proposal_confirmed = []
+        user.proposal_interested_jids = []
+        user.proposal_confirmed_jids = []
 
         user.put()
+
+        # Make list of Users to tickle
+        users = []
+        for broadcastee_key in user.outgoing_broadcasts:
+            users.append(db.get(broadcastee_key))
+
+        tickle_users(users, user)
         
         self.response.write("Deleted %s's proposal.\n" % user.first_name)
 
@@ -73,6 +89,13 @@ class InterestedRequestHandler(webapp2.RequestHandler):
 
             # Save it back into the datastore.
             broadcasting_user.put()
+
+            # Make list of Users to tickle
+            users = []
+            for broadcastee_key in broadcasting_user.outgoing_broadcasts:
+                users.append(db.get(broadcastee_key))
+
+            tickle_users(users, broadcasting_user)            
 
             self.response.write("User " + jid + " is now Interested in " + broadcasting_user.first_name + "'s Proposal.\n")
         else:
@@ -103,6 +126,13 @@ class InterestedRequestHandler(webapp2.RequestHandler):
             # Save it back into the datastore.
             broadcasting_user.put()
 
+            # Make list of Users to tickle
+            users = []
+            for broadcastee_key in broadcasting_user.outgoing_broadcasts:
+                users.append(db.get(broadcastee_key))
+
+            tickle_users(users, broadcasting_user) 
+
             self.response.write("User " + jid + " is no longer Interested in " + broadcasting_user.first_name + "'s Proposal.\n")
         else:
             self.response.write("User " + jid + " wasn't even Interested in " + broadcasting_user.first_name + "'s Proposal, idiot!!\n")
@@ -130,8 +160,30 @@ class ConfirmedRequestHandler(webapp2.RequestHandler):
             # Add jid of Confirmed User to Broadcasting User
             broadcasting_user.proposal_confirmed_jids.append(jid)
 
+            #################### Because Confirmed and Interested are mutually exclusive
+            #################### We're removing you from Interested here as well, to prevent 
+            #################### having two requests with one client toggle switch
+            if key_confirmed in broadcasting_user.proposal_interested:
+                broadcasting_user.proposal_interested.remove(key_confirmed)
+                self.response.write("key " + jid + " removed from interested")
+            else:
+                self.response.write("key " + jid + " was never interested")
+
+            if jid in broadcasting_user.proposal_interested_jids:
+                broadcasting_user.proposal_interested_jids.remove(jid)
+                self.response.write(jid + " removed from interested jids")
+            else:
+                self.response.write(jid + " was never interested jids")
+
             # Save it back into the datastore.
             broadcasting_user.put()
+
+            # Make list of Users to tickle
+            users = []
+            for broadcastee_key in broadcasting_user.outgoing_broadcasts:
+                users.append(db.get(broadcastee_key))
+
+            tickle_users(users, broadcasting_user) 
 
             self.response.write("User " + jid + " is now Confirmed for " + broadcasting_user.first_name + "'s Proposal.\n")
         else:
@@ -161,6 +213,13 @@ class ConfirmedRequestHandler(webapp2.RequestHandler):
 
             # Save it back into the datastore.
             broadcasting_user.put()
+
+            # Make list of Users to tickle
+            users = []
+            for broadcastee_key in broadcasting_user.outgoing_broadcasts:
+                users.append(db.get(broadcastee_key))
+
+            tickle_users(users, broadcasting_user) 
 
             self.response.write("User " + jid + " is no longer Confirmed for " + broadcasting_user.first_name + "'s Proposal.\n")
         else:

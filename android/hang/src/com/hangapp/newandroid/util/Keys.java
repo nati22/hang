@@ -25,7 +25,6 @@ public final class Keys {
 	public static final String BUSY = "busy";
 	public static final String MUC_NAME = "muc_name";
 	public static final String MUC_MESSAGE = "muc_message";
-	public static final String NUDGEE_JID = "nudgee";
 
 	/*
 	 * IntentService message codes.
@@ -48,4 +47,19 @@ public final class Keys {
 	 */
 	public static final String SPECIFIED_DATE_FORMAT = "MM/dd/yyyy hh:mm:ss aa";
 	public static final String SERVER_ADDRESS = "@conference.ec2-54-242-9-67.compute-1.amazonaws.com/";
+
+	/**
+	 * I'm sure this is a terrible, terrible idea but I wanted to show that these
+	 * Keys are specifically for receiving nudges from GCM
+	 */
+	public class FromServer {
+		public static final String FROM = "from";
+		public static final String COLLAPSE_KEY = "collapse_key";
+		public static final String NUDGER = "nudger";
+		public static final String TYPE = "type";
+		
+		public static final String TYPE_NUDGE = "nudge";
+		public static final String TYPE_TICKLE = "tickle";
+	}
+
 }

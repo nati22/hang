@@ -1,27 +1,45 @@
 package com.hangapp.newandroid.activity.fragment;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.model.User;
+import com.hangapp.newandroid.model.Availability.Status;
+import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.Keys;
 
-public final class ProposalFragment extends SherlockFragment {
+public final class ProposalFragment extends SherlockFragment implements
+		IncomingBroadcastsListener {
 
 	private ScrollView scrollViewProposal;
 	private RelativeLayout emptyView;
@@ -30,10 +48,19 @@ public final class ProposalFragment extends SherlockFragment {
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
-	private ImageView imageViewInterested;
-	private ImageView imageViewConfirmed;
+
+	private ListView listViewInterested;
+	private ListView listViewConfirmed;
+	private List<String> listInterestedJids = new ArrayList<String>();
+	private List<String> listConfirmedJids = new ArrayList<String>();
+	private IntConfAdapter intAdapter;
+	private IntConfAdapter confAdapter;
+
 	private ImageView buttonChat;
 	private ImageView buttonDeleteProposal;
+
+	private ToggleButton toggleInterested;
+	private ToggleButton toggleConfirmed;
 
 	private String hostJid;
 	private User host;
@@ -49,13 +76,16 @@ public final class ProposalFragment extends SherlockFragment {
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getActivity()
 				.getApplicationContext());
+
+		// Setup listener
+		database.addIncomingBroadcastsListener(this);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_proposal, container,
+		View view = inflater.inflate(R.layout.fragment_proposal2, container,
 				false);
 
 		// Reference views.
@@ -70,39 +100,74 @@ public final class ProposalFragment extends SherlockFragment {
 		scrollViewProposal = (ScrollView) view
 				.findViewById(R.id.scrollViewProposal);
 		emptyView = (RelativeLayout) view.findViewById(android.R.id.empty);
-		imageViewInterested = (ImageView) view
-				.findViewById(R.id.imageViewInterested);
-		imageViewConfirmed = (ImageView) view
-				.findViewById(R.id.imageViewConfirmed);
+
+		listViewInterested = (ListView) view
+				.findViewById(R.id.interestedListView);
+		listViewConfirmed = (ListView) view.findViewById(R.id.confirmedListView);
+
+		// Set up the Adapters.
+		intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
+		confAdapter = new IntConfAdapter(getActivity(), listConfirmedJids);
+		listViewInterested.setAdapter(intAdapter);
+		listViewConfirmed.setAdapter(confAdapter);
+
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
 		buttonDeleteProposal = (ImageView) view
 				.findViewById(R.id.buttonDeleteProposal);
 
+		toggleInterested = (ToggleButton) view
+				.findViewById(R.id.interestedToggle);
+		toggleConfirmed = (ToggleButton) view.findViewById(R.id.confirmedToggle);
+
+		// Set Toggle ClickListeners
+		toggleInterested
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (isChecked) {
+							Toast.makeText(getActivity(), "I'm interested...",
+									Toast.LENGTH_SHORT).show();
+							addMeToHostInterestedList();
+						} else {
+							Toast.makeText(getActivity(),
+									"Not so interested anymore...", Toast.LENGTH_SHORT)
+									.show();
+							if (!toggleConfirmed.isChecked())
+								removeMeFromHostInterestedList();
+						}
+
+					}
+				});
+		toggleConfirmed.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				if (isChecked) {
+					Toast.makeText(getActivity(), "I'm confirming!",
+							Toast.LENGTH_SHORT).show();
+					toggleInterested.setChecked(false);
+					toggleInterested.setEnabled(false);
+					addMeToHostConfirmedList();
+
+				} else {
+					Toast.makeText(getActivity(), "I'm a flake :(",
+							Toast.LENGTH_SHORT).show();
+					toggleInterested.setEnabled(true);
+					removeMeFromHostConfirmedList();
+				}
+
+			}
+		});
+
 		// Hide the "delete" button, since this isn't your own Proposal.
-		buttonDeleteProposal.setVisibility(View.INVISIBLE);
+		buttonDeleteProposal.setVisibility(View.GONE);
 
 		// Populate member datum
 		hostJid = getActivity().getIntent().getStringExtra(Keys.HOST_JID);
 
-		// Set OnClickListeners.
-		imageViewInterested.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Interested...",
-						Toast.LENGTH_SHORT).show();
-
-				addMeToHostInterestedList();
-			}
-		});
-		imageViewConfirmed.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getActivity(), "Confirmed...",
-						Toast.LENGTH_SHORT).show();
-
-				addMeToHostConfirmedList();
-			}
-		});
 		buttonChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -138,31 +203,168 @@ public final class ProposalFragment extends SherlockFragment {
 			textViewProposalLocation.setText(host.getProposal().getLocation());
 			textViewProposalStartTime.setText(host.getProposal().getStartTime()
 					.toString("h aa"));
+
 		} else {
 			// Turn on the Empty View.
 			scrollViewProposal.setVisibility(View.INVISIBLE);
 			emptyView.setVisibility(View.VISIBLE);
 		}
+
+		// If User is Interested/Confirmed, check the appropriate ToggleButton
+		if (host.getProposal().getInterested() != null) {
+			if (host.getProposal().getInterested().contains(database.getMyJid()))
+				toggleInterested.setChecked(true);
+		} else
+			Log.i(ProposalFragment.class.getSimpleName(), "None interested.");
+		if (host.getProposal().getConfirmed() != null) {
+			if (host.getProposal().getConfirmed().contains(database.getMyJid()))
+				toggleConfirmed.setChecked(true);
+		} else
+			Log.i(ProposalFragment.class.getSimpleName(), "None confirmed.");
+
+		// Make sure the adapters are fresh...
+		intAdapter.notifyDataSetChanged();
+		confAdapter.notifyDataSetChanged();
+
 	}
 
 	private void addMeToHostInterestedList() {
 		removeMeFromHostConfirmedList();
-
-		// TODO
+		Log.v("addMeToHostInterestedList", "added to host interested");
+		restClient.setInterested(host.getJid());
 	}
 
 	private void removeMeFromHostInterestedList() {
-		// TODO
+		restClient.deleteInterested(host.getJid());
 	}
 
 	private void addMeToHostConfirmedList() {
-		removeMeFromHostInterestedList();
-
-		// TODO
+		toggleInterested.setChecked(false);
+		restClient.setConfirmed(host.getJid());
 	}
 
 	private void removeMeFromHostConfirmedList() {
-		// TODO
+		restClient.deleteConfirmed(host.getJid());
+	}
+
+	@Override
+	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
+		// Find out if User's Interested was updated
+		if (!database.getIncomingUser(host.getJid()).getProposal()
+				.getInterested().equals(listInterestedJids)) {
+			listInterestedJids.clear();
+			listInterestedJids.addAll(database.getIncomingUser(host.getJid())
+					.getProposal().getInterested());
+			intAdapter.notifyDataSetChanged();
+		}
+
+		// Find out if User's Confirmed was updated
+		if (!database.getIncomingUser(host.getJid()).getProposal().getConfirmed()
+				.equals(listConfirmedJids)) {
+			listConfirmedJids.clear();
+			listConfirmedJids.addAll(database.getIncomingUser(host.getJid())
+					.getProposal().getConfirmed());
+			confAdapter.notifyDataSetChanged();
+		}
+
+	}
+
+	private class IntConfAdapter extends BaseAdapter {
+
+		private List<String> intJids;
+		private Context context;
+
+		@Override
+		public int getCount() {
+			return intJids.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return intJids.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		public IntConfAdapter(Context context, List<String> intJids) {
+			this.context = context;
+			this.intJids = intJids;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+
+			final String jid = intJids.get(position);
+
+			// Inflate the View if necessary
+			if (convertView == null)
+				convertView = LayoutInflater.from(context).inflate(
+						R.layout.cell_profile_icon, null);
+
+			ProfilePictureView icon = (ProfilePictureView) convertView
+					.findViewById(R.id.profilePictureIcon);
+			icon.setProfileId(jid);
+
+			// Find out if the person is known
+			final User user = database.getIncomingUser(jid);
+
+			// If we know them, set the person's status color
+			if (user != null) {
+				View statusBar = convertView
+						.findViewById(R.id.profilePictureStatusBar);
+				statusBar.setVisibility(View.VISIBLE);
+				if (user.getAvailability() == null) {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.gray));
+				} else if (user.getAvailability().equals(Status.FREE)) {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.green));
+				} else if (user.getAvailability().equals(Status.BUSY)) {
+					statusBar.setBackgroundColor(getResources()
+							.getColor(R.color.red));
+				}
+			} else if (database.getMyJid().equals(jid)) {
+				View statusBar = convertView
+						.findViewById(R.id.profilePictureStatusBar);
+				statusBar.setVisibility(View.VISIBLE);
+
+				if (database.getMyAvailability() == null) {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.gray));
+				} else if (database.getMyAvailability().equals(Status.FREE)) {
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.green));
+				} else if (database.getMyAvailability().equals(Status.BUSY)) {
+					statusBar.setBackgroundColor(getResources()
+							.getColor(R.color.red));
+				}
+			}
+
+			convertView.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (user != null) {
+						Toast.makeText(context, user.getFullName(),
+								Toast.LENGTH_SHORT).show();
+					} else if (jid.equals(database.getMyJid())) {
+						Toast.makeText(context, "This is YOU!", Toast.LENGTH_SHORT)
+								.show();
+					} else {
+						Toast.makeText(context,
+								"One of " + host.getFirstName() + "'s friends",
+								Toast.LENGTH_SHORT).show();
+					}
+
+				}
+			});
+
+			return convertView;
+		}
+
 	}
 
 }

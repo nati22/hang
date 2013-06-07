@@ -1,5 +1,6 @@
 import webapp2
 
+from push import tickle_users
 from google.appengine.ext import db
 
 class StatusRequestHandler(webapp2.RequestHandler):
@@ -22,6 +23,13 @@ class StatusRequestHandler(webapp2.RequestHandler):
             
             # Save it back into the datastore.
             user.put()
+
+            # Make list of Users to tickle
+            users = []
+            for broadcastee_key in user.outgoing_broadcasts:
+                users.append(db.get(broadcastee_key))
+
+            tickle_users(users, user)
             
             # Tell the user.
             self.response.write("Updated %s's status to %s.\n" % (user.first_name, user.status_color))
@@ -42,6 +50,13 @@ class StatusRequestHandler(webapp2.RequestHandler):
         user.status_expiration_date = None
 
         user.put()
+
+        # Make list of Users to tickle
+        users = []
+        for broadcastee_key in user.outgoing_broadcasts:
+            users.append(db.get(broadcastee_key))
+
+        tickle_users(users, user)        
         
         self.response.write("Deleted %s's status.\n" % user.first_name)    
         
