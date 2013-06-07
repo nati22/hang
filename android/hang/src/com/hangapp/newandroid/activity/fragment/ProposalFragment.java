@@ -5,20 +5,16 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -31,8 +27,8 @@ import com.facebook.widget.ProfilePictureView;
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.activity.ChatActivity;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.Availability.Status;
+import com.hangapp.newandroid.model.User;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
@@ -103,7 +99,8 @@ public final class ProposalFragment extends SherlockFragment implements
 
 		listViewInterested = (ListView) view
 				.findViewById(R.id.interestedListView);
-		listViewConfirmed = (ListView) view.findViewById(R.id.confirmedListView);
+		listViewConfirmed = (ListView) view
+				.findViewById(R.id.confirmedListView);
 
 		// Set up the Adapters.
 		intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
@@ -117,7 +114,8 @@ public final class ProposalFragment extends SherlockFragment implements
 
 		toggleInterested = (ToggleButton) view
 				.findViewById(R.id.interestedToggle);
-		toggleConfirmed = (ToggleButton) view.findViewById(R.id.confirmedToggle);
+		toggleConfirmed = (ToggleButton) view
+				.findViewById(R.id.confirmedToggle);
 
 		// Set Toggle ClickListeners
 		toggleInterested
@@ -132,35 +130,36 @@ public final class ProposalFragment extends SherlockFragment implements
 							addMeToHostInterestedList();
 						} else {
 							Toast.makeText(getActivity(),
-									"Not so interested anymore...", Toast.LENGTH_SHORT)
-									.show();
+									"Not so interested anymore...",
+									Toast.LENGTH_SHORT).show();
 							if (!toggleConfirmed.isChecked())
 								removeMeFromHostInterestedList();
 						}
 
 					}
 				});
-		toggleConfirmed.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		toggleConfirmed
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
-				if (isChecked) {
-					Toast.makeText(getActivity(), "I'm confirming!",
-							Toast.LENGTH_SHORT).show();
-					toggleInterested.setChecked(false);
-					toggleInterested.setEnabled(false);
-					addMeToHostConfirmedList();
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (isChecked) {
+							Toast.makeText(getActivity(), "I'm confirming!",
+									Toast.LENGTH_SHORT).show();
+							toggleInterested.setChecked(false);
+							toggleInterested.setEnabled(false);
+							addMeToHostConfirmedList();
 
-				} else {
-					Toast.makeText(getActivity(), "I'm a flake :(",
-							Toast.LENGTH_SHORT).show();
-					toggleInterested.setEnabled(true);
-					removeMeFromHostConfirmedList();
-				}
+						} else {
+							Toast.makeText(getActivity(), "I'm a flake :(",
+									Toast.LENGTH_SHORT).show();
+							toggleInterested.setEnabled(true);
+							removeMeFromHostConfirmedList();
+						}
 
-			}
-		});
+					}
+				});
 
 		// Hide the "delete" button, since this isn't your own Proposal.
 		buttonDeleteProposal.setVisibility(View.GONE);
@@ -212,7 +211,8 @@ public final class ProposalFragment extends SherlockFragment implements
 
 		// If User is Interested/Confirmed, check the appropriate ToggleButton
 		if (host.getProposal().getInterested() != null) {
-			if (host.getProposal().getInterested().contains(database.getMyJid()))
+			if (host.getProposal().getInterested()
+					.contains(database.getMyJid()))
 				toggleInterested.setChecked(true);
 		} else
 			Log.i(ProposalFragment.class.getSimpleName(), "None interested.");
@@ -259,14 +259,13 @@ public final class ProposalFragment extends SherlockFragment implements
 		}
 
 		// Find out if User's Confirmed was updated
-		if (!database.getIncomingUser(host.getJid()).getProposal().getConfirmed()
-				.equals(listConfirmedJids)) {
+		if (!database.getIncomingUser(host.getJid()).getProposal()
+				.getConfirmed().equals(listConfirmedJids)) {
 			listConfirmedJids.clear();
 			listConfirmedJids.addAll(database.getIncomingUser(host.getJid())
 					.getProposal().getConfirmed());
 			confAdapter.notifyDataSetChanged();
 		}
-
 	}
 
 	private class IntConfAdapter extends BaseAdapter {
@@ -323,8 +322,8 @@ public final class ProposalFragment extends SherlockFragment implements
 					statusBar.setBackgroundColor(getResources().getColor(
 							R.color.green));
 				} else if (user.getAvailability().equals(Status.BUSY)) {
-					statusBar.setBackgroundColor(getResources()
-							.getColor(R.color.red));
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.red));
 				}
 			} else if (database.getMyJid().equals(jid)) {
 				View statusBar = convertView
@@ -338,8 +337,8 @@ public final class ProposalFragment extends SherlockFragment implements
 					statusBar.setBackgroundColor(getResources().getColor(
 							R.color.green));
 				} else if (database.getMyAvailability().equals(Status.BUSY)) {
-					statusBar.setBackgroundColor(getResources()
-							.getColor(R.color.red));
+					statusBar.setBackgroundColor(getResources().getColor(
+							R.color.red));
 				}
 			}
 
@@ -351,8 +350,8 @@ public final class ProposalFragment extends SherlockFragment implements
 						Toast.makeText(context, user.getFullName(),
 								Toast.LENGTH_SHORT).show();
 					} else if (jid.equals(database.getMyJid())) {
-						Toast.makeText(context, "This is YOU!", Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(context, "This is YOU!",
+								Toast.LENGTH_SHORT).show();
 					} else {
 						Toast.makeText(context,
 								"One of " + host.getFirstName() + "'s friends",

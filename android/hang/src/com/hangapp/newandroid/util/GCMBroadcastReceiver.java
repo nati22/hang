@@ -18,7 +18,7 @@ import com.hangapp.newandroid.database.Database;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 
-public class MyBroadcastReceiver extends BroadcastReceiver {
+public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 	static final String TAG = "GCMDemo";
 	public static final int NUDGE_NOTIFY_ID = 1;

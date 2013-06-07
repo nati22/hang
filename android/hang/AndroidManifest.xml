@@ -32,7 +32,7 @@
             android:value="@string/app_id" />
 
         <receiver
-            android:name=".util.MyBroadcastReceiver"
+            android:name=".util.GCMBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
@@ -76,6 +76,7 @@
             android:label="@string/chat" >
         </activity>
         <service android:name=".network.xmpp.XMPPIntentService"></service>
+        <receiver android:name=".network.xmpp.MucMessageBroadcastReceiver"></receiver>
     </application>
 
 </manifest>

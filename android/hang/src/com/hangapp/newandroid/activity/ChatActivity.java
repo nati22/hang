@@ -18,14 +18,15 @@ import android.widget.TextView;
 
 import com.hangapp.newandroid.R;
 import com.hangapp.newandroid.database.Database;
-import com.hangapp.newandroid.model.callback.MucMessageListener;
+import com.hangapp.newandroid.model.callback.MucListener;
+import com.hangapp.newandroid.network.xmpp.MucBroadcastReceiver;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
 import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 
 public final class ChatActivity extends BaseFragmentActivity implements
-		MucMessageListener {
+		MucListener {
 
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
@@ -63,13 +64,12 @@ public final class ChatActivity extends BaseFragmentActivity implements
 		// Setup adapter.
 		adapter = new MessageAdapter(this, R.id.listViewChatCells, messages);
 		listViewChatCells.setAdapter(adapter);
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		xmpp.addMucMessageListener(mucName, this);
+		xmpp.addMucListener(mucName, this);
 
 		messages.clear();
 		messages.addAll(xmpp.getAllMessages(mucName));
@@ -79,7 +79,9 @@ public final class ChatActivity extends BaseFragmentActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
-		xmpp.removeMucMessageListener(mucName, this);
+
+		xmpp.leaveMuc(mucName, getApplicationContext());
+		xmpp.removeMucListener(mucName, this);
 	}
 
 	public void sendMessage(View v) {
@@ -91,11 +93,13 @@ public final class ChatActivity extends BaseFragmentActivity implements
 			return;
 		}
 
-		xmpp.sendMessage(mucName, message, getApplicationContext());
+		String myJid = database.getMyJid();
+
+		xmpp.sendMessage(myJid, mucName, message, getApplicationContext());
 		editTextChatMessage.setText("");
 	}
 
-	static class MessageAdapter extends ArrayAdapter<Message> {
+	class MessageAdapter extends ArrayAdapter<Message> {
 
 		public MessageAdapter(Context context, int textViewResourceId,
 				List<Message> messages) {
@@ -121,9 +125,13 @@ public final class ChatActivity extends BaseFragmentActivity implements
 			TextView textViewMessageFrom = (TextView) convertView
 					.findViewById(R.id.textViewMessageFrom);
 
+			// Grab the real name of the "from" from the database.
+			String userJid = message.getFrom().split("@")[0];
+			String from = database.getIncomingUser(userJid).getFullName();
+
 			// Populate Views.
 			textViewMessageBody.setText(message.getBody());
-			textViewMessageFrom.setText(message.getFrom());
+			textViewMessageFrom.setText(from);
 
 			return convertView;
 		}
@@ -131,7 +139,8 @@ public final class ChatActivity extends BaseFragmentActivity implements
 
 	@Override
 	public void onMucMessageUpdate(String mucName, List<Message> messages) {
-		Log.d("ChatActivity.onMucMessageUpdate", "Muc Message updated!");
+		HangLog.toastD(this, "ChatActivity.onMucMessageUpdate",
+				"Muc Message updated!");
 
 		for (Message message : messages) {
 			Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "

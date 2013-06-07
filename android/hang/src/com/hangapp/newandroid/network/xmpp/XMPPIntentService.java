@@ -57,7 +57,7 @@ public final class XMPPIntentService extends IntentService {
 	 */
 	private static MyConnectionListener mConnectionListener = new MyConnectionListener();
 
-	private Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
+	private static Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
 
 	public XMPPIntentService() {
 		super("XMPPIntentService");
@@ -73,15 +73,8 @@ public final class XMPPIntentService extends IntentService {
 		Log.d("TAG", "XMPPIntentService started with intent message: "
 				+ message);
 
-		// Pull out myJid from the Intent.
+		// Pull out all extras. Sanity check them later, when you need them.
 		String myJid = intent.getStringExtra(Keys.JID);
-		if (myJid == null) {
-			Log.e("XMPPIntentService",
-					"Can't login: Intent was passed a null JID");
-			return;
-		}
-
-		// Pull out other extras. Sanity check them later, when you need them.
 		String mucName = intent.getStringExtra(Keys.MUC_NAME);
 		String mucMessage = intent.getStringExtra(Keys.MUC_MESSAGE);
 
@@ -89,19 +82,48 @@ public final class XMPPIntentService extends IntentService {
 		// Intent.
 		switch (message) {
 		case Keys.XMPP_CONNECT:
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't connect to XMPP: Null myJid");
+				return;
+			}
+
 			connect(myJid);
 			return;
 		case Keys.XMPP_REGISTER:
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't register to XMPP: Null myJid");
+				return;
+			}
+
 			register(myJid);
 			return;
 		case Keys.XMPP_LOGIN:
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't login to XMPP: Null myJid");
+				return;
+			}
+
 			login(myJid);
+
 			return;
 		case Keys.XMPP_LOGOUT:
 			logout();
 			return;
 		case Keys.XMPP_JOIN_MUC:
-			// Sanity check the mucName, now that you need it.
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't join muc: Null myJid");
+				return;
+			}
+
+			// Sanity check.
 			if (mucName == null) {
 				Log.e("XMPPIntentService",
 						"Can't join muc: Intent was passed a null MUC name");
@@ -111,7 +133,7 @@ public final class XMPPIntentService extends IntentService {
 			joinMuc(mucName, myJid);
 			return;
 		case Keys.XMPP_LEAVE_MUC:
-			// Sanity check the mucName, now that you need it.
+			// Sanity check.
 			if (mucName == null) {
 				Log.e("XMPPIntentService",
 						"Can't leave XMPP muc: Intent was passed a null muc name");
@@ -121,14 +143,28 @@ public final class XMPPIntentService extends IntentService {
 			leaveMuc(mucName);
 			return;
 		case Keys.XMPP_SEND_MUC_MESSAGE:
-			// Sanity check the mucMessage, now that you need it.
-			if (mucMessage == null) {
-				Log.e("XMPPIntentService",
-						"Can't send XMPP muc message: Intent was passed a null muc message");
+
+			// Sanity check.
+			if (myJid == null) {
+				Log.e("XMPPIntentService", "Can't join muc: Null myJid");
 				return;
 			}
 
-			sendMucMessage(mucName, mucMessage);
+			// Sanity check.
+			if (mucName == null) {
+				Log.e("XMPPIntentService",
+						"Can't send XMPP muc message: mucName was null");
+				return;
+			}
+
+			// Sanity check.
+			if (mucMessage == null) {
+				Log.e("XMPPIntentService",
+						"Can't send XMPP muc message: mucMessage was null");
+				return;
+			}
+
+			sendMucMessage(myJid, mucName, mucMessage);
 			return;
 		default:
 			Log.e("XMPPPIntentService.onHandleIntent",
@@ -280,6 +316,9 @@ public final class XMPPIntentService extends IntentService {
 		}
 
 		try {
+			if (muc.isJoined()) {
+				muc.leave();
+			}
 			muc.join(myJid);
 		} catch (XMPPException e) {
 			Log.e("XMPPPIntentService.joinMuc()",
@@ -287,9 +326,15 @@ public final class XMPPIntentService extends IntentService {
 			return;
 		}
 
-		Log.d("XMPPIntentService.joinMuc()",
-				"Joined XMPP muc: " + muc.getRoom());
-		muc.addMessageListener(new MessageListener(mucName));
+		// Do this in the UI thread by broadcasting an intent to
+		// MucBroadcastReceiver.
+		Intent joinRoomBroadcastIntent = new Intent();
+		joinRoomBroadcastIntent
+				.setAction(MucBroadcastReceiver.PROCESS_RESPONSE);
+		joinRoomBroadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+		joinRoomBroadcastIntent.putExtra(Keys.MESSAGE, Keys.MUC_JOIN_ROOM);
+		joinRoomBroadcastIntent.putExtra(Keys.MUC_NAME, mucName);
+		sendBroadcast(joinRoomBroadcastIntent);
 	}
 
 	protected void leaveMuc(String mucName) {
@@ -304,10 +349,27 @@ public final class XMPPIntentService extends IntentService {
 		muc.leave();
 	}
 
-	protected void sendMucMessage(String mucName, String message) {
+	protected void sendMucMessage(String myJid, String mucName, String message) {
 		MultiUserChat muc = mucs.get(mucName);
+
+		if (muc == null) {
+			joinMuc(mucName, myJid);
+		}
+
+		muc = mucs.get(mucName);
+
 		try {
 			muc.sendMessage(message);
+
+			Intent sendMessageBroadcastIntent = new Intent();
+			sendMessageBroadcastIntent
+					.setAction(MucBroadcastReceiver.PROCESS_RESPONSE);
+			sendMessageBroadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
+			sendMessageBroadcastIntent.putExtra(Keys.MESSAGE,
+					Keys.MUC_SEND_MESSAGE);
+			sendMessageBroadcastIntent.putExtra(Keys.MUC_MESSAGE, message);
+			sendBroadcast(sendMessageBroadcastIntent);
+
 		} catch (XMPPException e) {
 			Log.e("XMPPIntentService.sendMucMessage()",
 					"Couldn't send XMPP muc message: " + e.getMessage());

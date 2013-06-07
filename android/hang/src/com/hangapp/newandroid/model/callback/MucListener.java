@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.jivesoftware.smack.packet.Message;
 
-public interface MucMessageListener {
+public interface MucListener {
 
 	public void onMucMessageUpdate(String mucName, List<Message> messages);
 }

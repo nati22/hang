@@ -15,7 +15,6 @@ import android.util.Log;
 import com.hangapp.newandroid.model.Availability;
 import com.hangapp.newandroid.model.Proposal;
 import com.hangapp.newandroid.model.User;
-import com.hangapp.newandroid.model.callback.IncomingBroadcastListListener;
 import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.model.callback.MyAvailabilityListener;
 import com.hangapp.newandroid.model.callback.MyProposalListener;
