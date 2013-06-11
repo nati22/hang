@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <android.support.v4.view.ViewPager
+    <!-- Used to be "android.support.v4.view.ViewPager" -->
+    <com.hangapp.newandroid.util.NoSlideViewPager
         android:id="@+id/viewpager"
         android:layout_width="fill_parent"
         android:background="@color/red"

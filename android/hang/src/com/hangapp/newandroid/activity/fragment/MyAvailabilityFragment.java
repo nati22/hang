@@ -108,11 +108,13 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 	public void onResume() {
 		super.onResume();
 
+		// Set this Fragment as an AvailabilityListener
 		database.addMyStatusListener(this);
 
 		// Retrieve my current Availability from the database.
 		myCurrentAvailability = database.getMyAvailability();
 
+		// Initialize Availability buttons and update colos
 		Utils.initializeAvailabilityButtons(buttonsAvailability);
 		Utils.updateAvailabilityStripColors(buttonsAvailability,
 				myCurrentAvailability, getActivity());

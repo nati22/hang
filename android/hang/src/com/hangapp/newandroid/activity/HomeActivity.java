@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.View;
 
@@ -28,11 +27,12 @@ import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.network.xmpp.XMPP;
 import com.hangapp.newandroid.util.Keys;
+import com.hangapp.newandroid.util.NoSlideViewPager;
 import com.hangapp.newandroid.util.TabsAdapter;
 
 public final class HomeActivity extends SherlockFragmentActivity {
 
-	private ViewPager mViewPager;
+	private NoSlideViewPager mViewPager;
 	private TabsAdapter mTabsAdapter;
 
 	private SharedPreferences prefs;
@@ -64,7 +64,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 
 		// Initialize the ViewPager and set it to be the ContentView of this
 		// Activity.
-		mViewPager = new ViewPager(this);
+		mViewPager = new NoSlideViewPager(this);
 		mViewPager.setId(R.id.viewpager);
 		setContentView(mViewPager);
 

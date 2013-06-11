@@ -15,7 +15,7 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
+     limitations under the License.
 -->
 
 <resources>
@@ -94,6 +94,19 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:indeterminate">true</item>
+    </style>
+
+    <style name="AvailabilityButton">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/button_grey</item>
+        <item name="android:focusable">false</item>
+        <item name="android:text">@string/time</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:gravity">right|bottom</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">italic</item>
     </style>
 
 </resources>
