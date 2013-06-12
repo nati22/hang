@@ -2,6 +2,8 @@ package com.hangapp.newandroid.model;
 
 import org.joda.time.DateTime;
 
+import android.util.Log;
+
 public final class Availability implements Comparable<Availability> {
 
 	/**
@@ -17,13 +19,13 @@ public final class Availability implements Comparable<Availability> {
 	 * instead of a proper Availability.Status enum
 	 * 
 	 * @param Context
-	 *            context
+	 *           context
 	 * @param String
-	 *            description
+	 *           description
 	 * @param String
-	 *            colorString
+	 *           colorString
 	 * @param Date
-	 *            expirationDate
+	 *           expirationDate
 	 */
 	public Availability(String statusString, DateTime expirationDate) {
 		this.status = parseStatus(statusString);
@@ -33,13 +35,13 @@ public final class Availability implements Comparable<Availability> {
 	/**
 	 * 
 	 * @param Context
-	 *            context
+	 *           context
 	 * @param String
-	 *            description
+	 *           description
 	 * @param Status
-	 *            status
+	 *           status
 	 * @param Date
-	 *            expirationDate
+	 *           expirationDate
 	 */
 	public Availability(Status color, DateTime expirationDate) {
 		this.status = color;
@@ -47,50 +49,52 @@ public final class Availability implements Comparable<Availability> {
 	}
 
 	public String getDescription() {
-//		if (!isActive()) {
-//			return "No Availability.";
-//		}
+		// if (!isActive()) {
+		// return "No Availability.";
+		// }
 
 		String description = "";
 
-//		switch (status) {
-//		case FREE:
-//			description += "Free";
-//
-//			int currentHours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-//
-//			Calendar expirationDateCalendar = Calendar.getInstance();
-//			expirationDateCalendar.setTime(expirationDate);
-//
-//			int expirationDateHours = expirationDateCalendar
-//					.get(Calendar.HOUR_OF_DAY);
-//			int difference = expirationDateHours - currentHours;
-//
-//			if (difference == 1) {
-//				description += " for " + difference + " hour.";
-//			} else {
-//				description += " for " + difference + " hours.";
-//			}
-//
-//			break;
-//		case BUSY:
-//			description += "Busy";
-//			description += " until ";
-//			description += DateFormat.format("h:mm aa", expirationDate);
-//			break;
-//		default:
-//			Log.e("Availability.getDescription", "Unknown status status: "
-//					+ status.toString());
-//		}
+		// switch (status) {
+		// case FREE:
+		// description += "Free";
+		//
+		// int currentHours = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+		//
+		// Calendar expirationDateCalendar = Calendar.getInstance();
+		// expirationDateCalendar.setTime(expirationDate);
+		//
+		// int expirationDateHours = expirationDateCalendar
+		// .get(Calendar.HOUR_OF_DAY);
+		// int difference = expirationDateHours - currentHours;
+		//
+		// if (difference == 1) {
+		// description += " for " + difference + " hour.";
+		// } else {
+		// description += " for " + difference + " hours.";
+		// }
+		//
+		// break;
+		// case BUSY:
+		// description += "Busy";
+		// description += " until ";
+		// description += DateFormat.format("h:mm aa", expirationDate);
+		// break;
+		// default:
+		// Log.e("Availability.getDescription", "Unknown status status: "
+		// + status.toString());
+		// }
 
 		return description;
 	}
 
 	public Status getStatus() {
 		if (status == null || !isActive()) {
+			if (!isActive()) {
+				Log.e("Availability", "Availability.isActive() =" + isActive());
+			}
 			return null;
 		}
-
 		return status;
 	}
 
@@ -140,7 +144,7 @@ public final class Availability implements Comparable<Availability> {
 	 * @return True if this status is active.
 	 */
 	public boolean isActive() {
-		return expirationDate != null && expirationDate.isAfter(new DateTime());
+		return expirationDate != null /*&& expirationDate.isAfter(new DateTime())*/;
 	}
 
 	/**

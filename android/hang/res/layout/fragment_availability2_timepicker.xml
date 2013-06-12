@@ -108,27 +108,28 @@
             android:layout_toRightOf="@id/centerAlignView"
             android:text="BUSY" />
 
-     <!--   <HorizontalScrollView
+        <!--
+            <HorizontalScrollView
             android:id="@+id/horizScrollViewSeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/checkBoxFree" > -->
+            android:layout_below="@id/checkBoxFree" >
+        -->
 
-            <SeekBar
-                android:id="@+id/seekBarAvailability"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/checkBoxFree"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="15dp"
-                android:max="4" />
-     <!-- </HorizontalScrollView>  -->   
+        <TimePicker
+            android:id="@+id/timePickerAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkBoxFree"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp" />
+        <!-- </HorizontalScrollView> -->
 
         <Button
             android:id="@+id/buttonPostAvailability"
             android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_below="@id/seekBarAvailability"
+            android:layout_below="@id/timePickerAvailability"
             android:layout_marginRight="10dp"
             android:layout_toLeftOf="@id/centerAlignView"
             android:text="OK" />

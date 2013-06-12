@@ -93,7 +93,7 @@ public final class Database {
 		return myProposalListeners.remove(listener);
 	}
 
-	public boolean addMyStatusListener(MyAvailabilityListener listener) {
+	public boolean addMyAvailabilityListener(MyAvailabilityListener listener) {
 		return myStatusListeners.add(listener);
 	}
 
@@ -107,7 +107,7 @@ public final class Database {
 		return incomingBroadcastListListeners.get(jid).remove(listener);
 	}*/
 
-	public boolean removeMyStatusListener(MyAvailabilityListener listener) {
+	public boolean removeMyAvailabilityListener(MyAvailabilityListener listener) {
 		return myStatusListeners.remove(listener);
 	}
 
