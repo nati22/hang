@@ -2,6 +2,7 @@ package com.hangapp.newandroid.activity.fragment;
 
 import org.joda.time.DateTime;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,23 +58,35 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_availability2_timepicker,
-				container, false);
+		View view = inflater.inflate(
+				R.layout.fragment_availability2_timepicker, container, false);
 
 		// Reference Views.
 		buttonsAvailability = new AvailabilityButton[] {
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability00),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability01),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability02),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability03),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability04),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability05),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability06),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability07),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability08),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability09),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability10),
-				(AvailabilityButton) view.findViewById(R.id.buttonAvailability11) };
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability00),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability01),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability02),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability03),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability04),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability05),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability06),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability07),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability08),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability09),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability10),
+				(AvailabilityButton) view
+						.findViewById(R.id.buttonAvailability11) };
 		buttonPost = (Button) view.findViewById(R.id.buttonPostAvailability);
 		buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
 		checkBoxFree = (CheckBox) view.findViewById(R.id.checkBoxFree);
@@ -85,18 +98,22 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 		 */
 		timePickerAvailability = (TimePicker) view
 				.findViewById(R.id.timePickerAvailability);
-		timePickerAvailability.setEnabled(false);
+		timePickerAvailability
+				.setDescendantFocusability(TimePicker.FOCUS_BLOCK_DESCENDANTS);
+		// timePickerAvailability.setEnabled(false);
 		timePickerAvailability.setCurrentHour(new DateTime().getHourOfDay());
-		timePickerAvailability.setCurrentMinute(new DateTime().getMinuteOfHour());
+		timePickerAvailability.setCurrentMinute(new DateTime()
+				.getMinuteOfHour());
 
 		// Initialize the Done and Cancel buttons.
 		/*
 		 * buttonPost.setOnClickListener(new OnClickListener() {
 		 * 
-		 * @Override public void onClick(View v) { confirmNewAvailability(); } });
-		 * buttonCancel.setOnClickListener(new OnClickListener() {
+		 * @Override public void onClick(View v) { confirmNewAvailability(); }
+		 * }); buttonCancel.setOnClickListener(new OnClickListener() {
 		 * 
-		 * @Override public void onClick(View v) { cancelNewAvailability(); } });
+		 * @Override public void onClick(View v) { cancelNewAvailability(); }
+		 * });
 		 */
 		checkBoxBusy.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -146,56 +163,57 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 				// Get DateTime out of TimePicker
 				DateTime dt = new DateTime();
 				dt = dt.withHourOfDay(timePickerAvailability.getCurrentHour());
-				dt = dt.withMinuteOfHour(timePickerAvailability.getCurrentMinute());
-
-/*				if (dt.isBefore(new DateTime())) {
-					Toast.makeText(getActivity(),
-							"Check your time again. No time travel, buddy.",
-							Toast.LENGTH_SHORT).show();
-					Log.d(MyAvailabilityFragment.class.getSimpleName(),
-							"TimePicker time: " + dt.toString());
-					Log.d(MyAvailabilityFragment.class.getSimpleName(),
-							"Current time: " + new DateTime().toString());
-					return;
-				} else if (dt.isEqual(new DateTime())) {
-					Toast.makeText(getActivity(), "same time", Toast.LENGTH_SHORT)
-							.show();
-					Log.d(MyAvailabilityFragment.class.getSimpleName(),
-							"TimePicker time: " + dt.toString());
-					Log.d(MyAvailabilityFragment.class.getSimpleName(),
-							"Current time: " + new DateTime().toString());
-				} else {
-					Toast.makeText(getActivity(), "dt time: " + dt.toString(),
-							Toast.LENGTH_SHORT).show();
-					Toast.makeText(getActivity(),
-							"current time: " + new DateTime().toString(),
-							Toast.LENGTH_SHORT).show();
-					Log.d(MyAvailabilityFragment.class.getSimpleName(),
-							"TimePicker time: " + dt.toString());
-					Log.d(MyAvailabilityFragment.class.getSimpleName(),
-							"Current time: " + new DateTime().toString());
-				}*/
+				dt = dt.withMinuteOfHour(timePickerAvailability
+						.getCurrentMinute());
 				
-				Status st = checkBoxFree.isChecked() ? Status.FREE : Status.BUSY;
+				if (areSameTime(getActivity(), dt, currentTime())) {
+					Toast.makeText(getActivity(),
+							"Status time is for right now", Toast.LENGTH_SHORT)
+							.show();
+					return;
+				} else if (dt.isBefore(new DateTime())) {
+					Toast.makeText(getActivity(), "Status time is before NOW.",
+							Toast.LENGTH_SHORT).show();
+//					Log.d(MyAvailabilityFragment.class.getSimpleName(),
+//							"TimePicker time: " + dt.toString());
+//					Log.d(MyAvailabilityFragment.class.getSimpleName(),
+//							"Current time: " + new DateTime().toString());
+//					Log.d(MyAvailabilityFragment.class.getSimpleName(),
+//							"Status time is in the past.");
+					return;
+				} else {
+					Toast.makeText(getActivity(), "Status time is valid.",
+							Toast.LENGTH_SHORT).show();
+//					Log.d(MyAvailabilityFragment.class.getSimpleName(),
+//							"TimePicker time: " + dt.toString());
+//					Log.d(MyAvailabilityFragment.class.getSimpleName(),
+//							"Current time: " + new DateTime().toString());
+				}
+
+				Status st = checkBoxFree.isChecked() ? Status.FREE
+						: Status.BUSY;
 				Log.i("st status is", st.toString());
 				Log.i("dt time is ", dt.toString());
-				
-				Availability avail = new Availability(
-						st, dt);
-				Log.w("so avail.status should be of type", avail.getStatus() + "");
-				Log.w("so avail.status should be", avail.getStatus().toString());
-				Log.w("so avail.getExpHOUR is ", avail.getExpirationDate().getHourOfDay() + "");
-				Log.w("so avail.getExpMin is", avail.getExpirationDate().getMinuteOfHour() + "");
 
-				Log.i("avail exp", avail.getExpirationDate().toString());
-				Log.i("avail status", avail.getStatus() + "");
+				Availability avail = new Availability(st, dt);
 
-				Toast.makeText(
-						getActivity(),
-						"setting availability "
-								+ avail.getExpirationDate().toString(),
-						Toast.LENGTH_SHORT).show();
-				
+//				Log.w("so avail.status should be of type", avail.getStatus()
+//						+ "");
+//				Log.w("so avail.status should be", avail.getStatus().toString());
+//				Log.w("so avail.getExpHOUR is ", avail.getExpirationDate()
+//						.getHourOfDay() + "");
+//				Log.w("so avail.getExpMin is", avail.getExpirationDate()
+//						.getMinuteOfHour() + "");
+//
+//				Log.i("avail exp", avail.getExpirationDate().toString());
+//				Log.i("avail status", avail.getStatus() + "");
+
+				// Toast.makeText(
+				// getActivity(),
+				// "setting availability "
+				// + avail.getExpirationDate().toString(),
+				// Toast.LENGTH_SHORT).show();
+
 				confirmNewAvailability(avail);
 			}
 		});
@@ -253,9 +271,9 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 	 */
 	private void confirmNewAvailability(Availability newAvailability) {
 		// Disable the "Edit" buttons.
-	//	buttonPost.setVisibility(View.INVISIBLE);
-	//	buttonCancel.setVisibility(View.INVISIBLE);
-		
+		// buttonPost.setVisibility(View.INVISIBLE);
+		// buttonCancel.setVisibility(View.INVISIBLE);
+
 		Log.i("myNewAvailability", newAvailability.toString());
 
 		// Upload this new Availability to the server.
@@ -265,9 +283,10 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 		// Set the new Availability and clear out the old one.
 		myCurrentAvailability = newAvailability;
 		myNewAvailability = null;
-		
+
 		Log.d("db.getMyAvailability", database.getMyAvailability().toString());
 	}
+
 	/*
 	 * private void cancelNewAvailability() { // Disable the "Edit" buttons.
 	 * buttonPost.setVisibility(View.INVISIBLE);
@@ -279,10 +298,36 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 	 * Utils.updateAvailabilityStripColors(buttonsAvailability,
 	 * myCurrentAvailability, getActivity()); }
 	 * 
-	 * @Override public void onMyAvailabilityUpdate(Availability newAvailability)
-	 * { myCurrentAvailability = newAvailability;
+	 * @Override public void onMyAvailabilityUpdate(Availability
+	 * newAvailability) { myCurrentAvailability = newAvailability;
 	 * Utils.initializeAvailabilityButtons(buttonsAvailability);
 	 * Utils.updateAvailabilityStripColors(buttonsAvailability, newAvailability,
 	 * getActivity()); }
 	 */
+
+	public static boolean areSameTime(Context ctxt, DateTime dt1, DateTime dt2) {
+
+		if (dt1.getDayOfYear() == dt2.getDayOfYear()) {
+			if (dt1.getHourOfDay() == dt2.getHourOfDay()) {
+				if (dt1.getMinuteOfHour() == dt2.getMinuteOfHour()) {
+					Log.d("areSameTime()", "different minute");
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				Log.d("areSameTime()", "different hour");
+				return false;
+			}
+		} else {
+			Log.d("areSameTime()", "different day");
+			return false;
+		}
+
+	}
+
+	public static DateTime currentTime() {
+		return new DateTime();
+	}
+
 }

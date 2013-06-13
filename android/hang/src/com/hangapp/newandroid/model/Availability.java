@@ -91,7 +91,7 @@ public final class Availability implements Comparable<Availability> {
 	public Status getStatus() {
 		if (status == null || !isActive()) {
 			if (!isActive()) {
-				Log.e("Availability", "Availability.isActive() =" + isActive());
+				Log.d("Availability", "Availability.isActive() =" + isActive());
 			}
 			return null;
 		}
