@@ -86,7 +86,7 @@
             android:layout_marginRight="10dp"
             android:layout_marginTop="12dp"
             android:layout_toLeftOf="@id/centerAlignView"
-            android:text="FREE" />
+            android:text="@string/free" />
 
         <CheckBox
             android:id="@+id/checkBoxBusy"
@@ -96,7 +96,7 @@
             android:layout_below="@id/textViewProposalTitle"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/centerAlignView"
-            android:text="BUSY" />
+            android:text="@string/busy" />
 
         <!--
             <HorizontalScrollView

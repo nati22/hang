@@ -25,8 +25,8 @@
 
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/profilePictureView"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/profile"
@@ -35,50 +35,26 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_below="@+id/textViewFriendName"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/profilePictureView"
         android:layout_toLeftOf="@+id/buttonFriendProposal"
         android:layout_toRightOf="@+id/profilePictureView" >
 
         <com.hangapp.newandroid.util.AvailabilityButton
             android:id="@+id/buttonAvailability0"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_grey"
-            android:clickable="false"
-            android:focusable="false"
-            android:text="@string/time"
-            android:textSize="12sp" />
+            style="@style/AvailabilityButton" />
 
         <com.hangapp.newandroid.util.AvailabilityButton
             android:id="@+id/buttonAvailability1"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_grey"
-            android:clickable="false"
-            android:focusable="false"
-            android:text="@string/time"
-            android:textSize="12sp" />
+            style="@style/AvailabilityButton" />
 
         <com.hangapp.newandroid.util.AvailabilityButton
             android:id="@+id/buttonAvailability2"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_grey"
-            android:clickable="false"
-            android:focusable="false"
-            android:text="@string/time"
-            android:textSize="12sp" />
+            style="@style/AvailabilityButton" />
 
         <com.hangapp.newandroid.util.AvailabilityButton
             android:id="@+id/buttonAvailability3"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/button_grey"
-            android:clickable="false"
-            android:focusable="false"
-            android:text="@string/time"
-            android:textSize="12sp" />
+            style="@style/AvailabilityButton" />
     </LinearLayout>
 
     <ImageView
@@ -86,7 +62,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textViewFriendName"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:background="@drawable/ic_action_proposal"
         android:contentDescription="@string/proposal"
         android:focusable="false"
