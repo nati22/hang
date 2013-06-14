@@ -334,7 +334,6 @@ public final class Database {
 	}
 
 	public void setMyUserData(String jid, String firstName, String lastName) {
-
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.JID, jid);
 		editor.putString(Keys.FIRST_NAME, firstName);
@@ -350,7 +349,6 @@ public final class Database {
 	}
 
 	public void setMyIncomingBroadcasts(List<String> incomingBroadcasts) {
-
 		// Convert the List<String>'s to single comma separated Strings.
 		String incomingStringList = Utils
 				.convertStringArrayToString(incomingBroadcasts);
@@ -368,7 +366,6 @@ public final class Database {
 	}
 
 	public void setMyOutgoingBroadcasts(List<String> outgoingBroadcasts) {
-
 		// Convert the List<String>'s to single comma separated Strings.
 		String outgoingStringList = Utils
 				.convertStringArrayToString(outgoingBroadcasts);

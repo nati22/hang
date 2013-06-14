@@ -76,7 +76,7 @@ public final class UsersDataSource {
 					(String) null);
 		}
 
-		// If the user has a Proposa, save it in the SQLite row.
+		// If the user has a Proposal, save it in the SQLite row.
 		if (user.getProposal() != null) {
 			values.put(MySQLiteHelper.COLUMN_PROPOSAL_DESCRIPTION, user
 					.getProposal().getDescription());
