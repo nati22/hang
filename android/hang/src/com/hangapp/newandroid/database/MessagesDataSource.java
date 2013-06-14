@@ -9,7 +9,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -19,7 +18,8 @@ public final class MessagesDataSource {
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
 	private String[] allColumns = { MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID,
-			MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME, MySQLiteHelper.COLUMN_MESSAGE_FROM,
+			MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME,
+			MySQLiteHelper.COLUMN_MESSAGE_FROM,
 			MySQLiteHelper.COLUMN_MESSAGE_BODY };
 
 	public MessagesDataSource(Context context) {
@@ -36,7 +36,8 @@ public final class MessagesDataSource {
 
 	public boolean createMessage(String mucName, Message message) {
 		ContentValues values = new ContentValues();
-		values.put(MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID, message.getPacketID());
+		values.put(MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID,
+				message.getPacketID());
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME, mucName);
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_FROM, message.getFrom());
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_BODY, message.getBody());
@@ -45,7 +46,7 @@ public final class MessagesDataSource {
 		try {
 			success = database.insert(MySQLiteHelper.TABLE_MESSAGES, null,
 					values) != -1;
-		} catch (SQLiteConstraintException e) {
+		} catch (Exception e) {
 			Log.e("MessagesDataSource.createMessage", e.getMessage());
 		}
 
@@ -55,8 +56,8 @@ public final class MessagesDataSource {
 	public List<Message> getAllMessages(String mucName) {
 		List<Message> messages = new ArrayList<Message>();
 
-		final String WHERE_CLAUSE = MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME + " = '"
-				+ mucName + "'";
+		final String WHERE_CLAUSE = MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME
+				+ " = '" + mucName + "'";
 
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_MESSAGES,
 				allColumns, WHERE_CLAUSE, null, null, null, null);

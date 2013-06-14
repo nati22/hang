@@ -7,7 +7,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -108,7 +107,7 @@ public final class UsersDataSource {
 		boolean success = false;
 		try {
 			success = database.insert(MySQLiteHelper.TABLE_USERS, null, values) != -1;
-		} catch (SQLiteConstraintException e) {
+		} catch (Exception e) {
 			Log.e("MessagesDataSource.createMessage", e.getMessage());
 		}
 
