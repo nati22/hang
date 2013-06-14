@@ -1,6 +1,7 @@
 package com.hangapp.newandroid.activity.fragment;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
@@ -71,7 +72,8 @@ public final class FriendsFragment extends SherlockFragment implements
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		// Inflate the View for this Fragment.
-		View view = inflater.inflate(R.layout.fragment_friends, container, false);
+		View view = inflater.inflate(R.layout.fragment_friends, container,
+				false);
 
 		// Reference Views.
 		listViewFriends = (StickyListHeadersListView) view
@@ -104,7 +106,7 @@ public final class FriendsFragment extends SherlockFragment implements
 		private List<User> friends;
 		private LayoutInflater inflater;
 		private Context context;
-		
+
 		public FriendsAdapter(Context context, List<User> friends) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
@@ -135,7 +137,8 @@ public final class FriendsFragment extends SherlockFragment implements
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.cell_friend_fragment, null);
+				convertView = inflater.inflate(R.layout.cell_friend_fragment,
+						null);
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
@@ -174,8 +177,8 @@ public final class FriendsFragment extends SherlockFragment implements
 						.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View arg0) {
-								Intent proposalLeechIntent = new Intent(context,
-										ProfileActivity.class);
+								Intent proposalLeechIntent = new Intent(
+										context, ProfileActivity.class);
 								proposalLeechIntent.putExtra(Keys.HOST_JID,
 										user.getJid());
 								context.startActivity(proposalLeechIntent);
@@ -193,20 +196,22 @@ public final class FriendsFragment extends SherlockFragment implements
 				public void onClick(View v) {
 
 					restClient.sendNudge(user.getJid());
-					HangLog.toastD(context, "Sending Nudge", "Sending a nudge to " + user.getFirstName());
+					HangLog.toastD(context, "Sending Nudge",
+							"Sending a nudge to " + user.getFirstName());
 				}
 			});
 
 			return convertView;
 		}
-		
+
 		@Override
-		public View getHeaderView(int position, View convertView, ViewGroup parent) {
+		public View getHeaderView(int position, View convertView,
+				ViewGroup parent) {
 			HeaderViewHolder holder;
 			if (convertView == null) {
 				holder = new HeaderViewHolder();
-				convertView = inflater.inflate(R.layout.cell_friends_list_header,
-						parent, false);
+				convertView = inflater.inflate(
+						R.layout.cell_friends_list_header, parent, false);
 				holder.text1 = (TextView) convertView
 						.findViewById(R.id.textViewFriendsListHeader);
 				convertView.setTag(holder);
@@ -262,6 +267,7 @@ public final class FriendsFragment extends SherlockFragment implements
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
 		this.incomingBroadcasts.clear();
 		this.incomingBroadcasts.addAll(incomingBroadcasts);
+		Collections.sort(this.incomingBroadcasts);
 		adapter.notifyDataSetChanged();
 	}
 

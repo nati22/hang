@@ -131,8 +131,8 @@ public final class MyProposalFragment extends SherlockFragment implements
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	public void onPause() {
+		super.onPause();
 
 		database.removeMyProposalListener(this);
 	}

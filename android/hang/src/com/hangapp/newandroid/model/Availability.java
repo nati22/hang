@@ -19,13 +19,13 @@ public final class Availability implements Comparable<Availability> {
 	 * instead of a proper Availability.Status enum
 	 * 
 	 * @param Context
-	 *           context
+	 *            context
 	 * @param String
-	 *           description
+	 *            description
 	 * @param String
-	 *           colorString
+	 *            colorString
 	 * @param Date
-	 *           expirationDate
+	 *            expirationDate
 	 */
 	public Availability(String statusString, DateTime expirationDate) {
 		this.status = parseStatus(statusString);
@@ -35,13 +35,13 @@ public final class Availability implements Comparable<Availability> {
 	/**
 	 * 
 	 * @param Context
-	 *           context
+	 *            context
 	 * @param String
-	 *           description
+	 *            description
 	 * @param Status
-	 *           status
+	 *            status
 	 * @param Date
-	 *           expirationDate
+	 *            expirationDate
 	 */
 	public Availability(Status color, DateTime expirationDate) {
 		this.status = color;
@@ -144,7 +144,7 @@ public final class Availability implements Comparable<Availability> {
 	 * @return True if this status is active.
 	 */
 	public boolean isActive() {
-		return expirationDate != null /*&& expirationDate.isAfter(new DateTime())*/;
+		return expirationDate != null /* && expirationDate.isAfter(new DateTime()) */;
 	}
 
 	/**
@@ -164,9 +164,11 @@ public final class Availability implements Comparable<Availability> {
 	@Override
 	public int compareTo(Availability another) {
 		if (this.status == null && another.status != null) {
-			return -1;
-		} else if (this.status != null && another.status == null) {
 			return 1;
+		} else if (this.status != null && another.status == null) {
+			return -1;
+		} else if (this.status == null && another.status == null) {
+			return 0;
 		} else {
 			if (this.status.value < another.status.value) {
 				return -1;
