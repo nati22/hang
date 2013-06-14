@@ -46,14 +46,15 @@ public final class Utils {
 	}
 
 	public static boolean updateAvailabilityStripColors(
-			AvailabilityButton[] availabilityButtons, Availability availability,
-			Context context) {
+			AvailabilityButton[] availabilityButtons,
+			Availability availability, Context context) {
 
 		Log.v("updateAvailabilityStripColors called", "with "
 				+ availabilityButtons.length
 				+ " availability buttons and an availability with exp: "
-				+ (availability != null ? availability.getExpirationDate() : null));
-		
+				+ (availability != null ? availability.getExpirationDate()
+						: null));
+
 		if (availability == null) {
 			for (AvailabilityButton button : availabilityButtons) {
 				button.setState(null);
@@ -79,15 +80,6 @@ public final class Utils {
 
 		// If this method gets here, then the for loop failed to find the
 		// AvailabilityButton that we wanted. Show an error message.
-
-		/** This Toast got annoying so I made it an error log */
-		/*
-		 * HangLog.toastE(context,
-		 * "MyAvailabilityFragment.updateAvailabilityStripColors",
-		 * "Couldn't find Availability button for expiration date: " +
-		 * availability.getExpirationDate());
-		 */
-
 		Log.e("MyAvailabilityFragment.updateAvailabilityStripColors",
 				"Couldn't find Availability button for expiration date: "
 						+ availability.getExpirationDate());

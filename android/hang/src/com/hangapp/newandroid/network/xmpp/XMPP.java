@@ -190,23 +190,6 @@ public class XMPP {
 				if (packet instanceof Message) {
 					Message message = (Message) packet;
 
-					// HangLog.toastD(context, "MyPacketListener",
-					// "Processed message: " + message.getBody());
-
-					// // Broadcast an Intent to add the Message to the
-					// // internal database on the UI thread.
-					// Intent broadcastIntent = new Intent();
-					// broadcastIntent.setAction(MucBroadcastReceiver.ACTION_RESP);
-					// broadcastIntent.addCategory(Intent.CATEGORY_DEFAULT);
-					// broadcastIntent.putExtra(Keys.MUC_NAME, mucName);
-					// broadcastIntent.putExtra(Keys.MESSAGE_PACKET_ID,
-					// message.getPacketID());
-					// broadcastIntent.putExtra(Keys.MESSAGE_FROM,
-					// message.getFrom());
-					// broadcastIntent.putExtra(Keys.MESSAGE_BODY,
-					// message.getBody());
-					// context.sendBroadcast(broadcastIntent);
-
 					addMucMessage(mucName, message);
 				}
 			}
