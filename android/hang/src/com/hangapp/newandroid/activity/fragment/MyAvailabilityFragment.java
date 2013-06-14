@@ -33,7 +33,6 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 	private CheckBox checkBoxFree;
 	private CheckBox checkBoxBusy;
 	private Button buttonPost;
-	private Button buttonCancel;
 	private TimePicker timePickerAvailability;
 
 	private Database database;
@@ -84,8 +83,7 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 						.findViewById(R.id.buttonAvailability10),
 				(AvailabilityButton) view
 						.findViewById(R.id.buttonAvailability11) };
-		buttonPost = (Button) view.findViewById(R.id.buttonPostAvailability);
-		buttonCancel = (Button) view.findViewById(R.id.buttonCancel);
+		buttonPost = (Button) view.findViewById(R.id.buttonUpdateMyAvailability);
 		checkBoxFree = (CheckBox) view.findViewById(R.id.checkBoxFree);
 		checkBoxBusy = (CheckBox) view.findViewById(R.id.checkBoxBusy);
 		timePickerAvailability = (TimePicker) view

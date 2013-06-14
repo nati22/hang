@@ -97,5 +97,7 @@
     <string name="no_proposal">No Proposal</string>
     <string name="click_icon_to_nudge">Click icon to nudge</string>
     <string name="nudged">Nudged.</string>
-
+	<string name="my_availability">My Availability</string>
+	<string name="my_proposal">My Proposal</string>
+   
 </resources>

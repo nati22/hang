@@ -8,10 +8,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.hangapp.newandroid.R;
 
 /**
  * Copied straight from Google's tutorial here:
@@ -80,6 +82,22 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 	@Override
 	public void onPageSelected(int position) {
 		mActionBar.setSelectedNavigationItem(position);
+
+		switch (position) {
+		case 0:
+			mActionBar.setTitle(mContext.getString(R.string.app_name));
+			break;
+		case 1:
+			mActionBar.setTitle(mContext.getString(R.string.my_availability));
+			break;
+		case 2:
+			mActionBar.setTitle(mContext.getString(R.string.my_proposal));
+			break;
+		default:
+			Log.e("TabsAdapter.onPageSelected", "Unknown page selected: "
+					+ position);
+			return;
+		}
 	}
 
 	@Override

@@ -1536,9 +1536,9 @@ containing a value of this type.
         public static final int buttonFriendProposal=0x7f040064;
         public static final int buttonIncomingBroadcasts=0x7f04004e;
         public static final int buttonOutgoingBroadcasts=0x7f04004c;
-        public static final int buttonPostAvailability=0x7f0400a4;
         public static final int buttonRoster=0x7f04003c;
         public static final int buttonSendMessage=0x7f040045;
+        public static final int buttonUpdateMyAvailability=0x7f0400a4;
         public static final int centerAlignView=0x7f0400a0;
         public static final int checkBoxBusy=0x7f0400a2;
         public static final int checkBoxFree=0x7f0400a1;
@@ -1931,9 +1931,11 @@ containing a value of this type.
         public static final int location_hint=0x7f050079;
         public static final int logout=0x7f050087;
         public static final int manage_broadcasts=0x7f050057;
+        public static final int my_availability=0x7f05009c;
         public static final int my_current_availability=0x7f050091;
         public static final int my_current_proposal=0x7f050092;
         public static final int my_profile=0x7f050088;
+        public static final int my_proposal=0x7f05009d;
         public static final int new_broadcast_phone_number=0x7f050059;
         public static final int no_description=0x7f050077;
         public static final int no_incoming_broadcasts=0x7f05006e;

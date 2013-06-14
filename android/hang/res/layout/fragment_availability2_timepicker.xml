@@ -8,22 +8,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/textViewProposalTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/my_current_availability"
-            android:textSize="16sp"
-            android:textStyle="bold|italic" />
-
         <HorizontalScrollView
             android:id="@+id/horizScrollViewAvailability"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
-            android:layout_below="@id/textViewProposalTitle"
+            android:layout_alignParentTop="true"
             android:layout_margin="10dp"
             android:scrollbars="none" >
 
@@ -126,22 +116,14 @@
         <!-- </HorizontalScrollView> -->
 
         <Button
-            android:id="@+id/buttonPostAvailability"
+            android:id="@+id/buttonUpdateMyAvailability"
             android:layout_width="100dp"
             android:layout_height="40dp"
+            android:layout_alignLeft="@+id/checkBoxFree"
+            android:layout_alignRight="@+id/checkBoxBusy"
             android:layout_below="@id/timePickerAvailability"
-            android:layout_marginRight="10dp"
-            android:layout_toLeftOf="@id/centerAlignView"
-            android:text="OK" />
-
-        <Button
-            android:id="@+id/buttonCancelAvailability"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:layout_alignTop="@id/buttonPostAvailability"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/centerAlignView"
-            android:text="Cancel" />
+            android:text="@string/update_my_availability"
+            android:textSize="12sp" />
     </RelativeLayout>
 
 </ScrollView>
