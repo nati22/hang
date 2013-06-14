@@ -15,10 +15,10 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
+     limitations under the License.
 -->
 
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="Theme.Hang" parent="@style/Theme.Sherlock.Light">
         <item name="actionBarItemBackground">@drawable/selectable_background_hang</item>
@@ -101,6 +101,7 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@drawable/button_grey</item>
         <item name="android:focusable">false</item>
+        <item name="android:clickable">false</item>
         <item name="android:text">@string/time</item>
         <item name="android:paddingBottom">2dp</item>
         <item name="android:gravity">right|bottom</item>
