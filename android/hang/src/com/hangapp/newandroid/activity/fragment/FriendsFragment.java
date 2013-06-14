@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
@@ -29,7 +30,6 @@ import com.hangapp.newandroid.model.callback.IncomingBroadcastsListener;
 import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.AvailabilityButton;
-import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 import com.hangapp.newandroid.util.Utils;
 
@@ -196,8 +196,9 @@ public final class FriendsFragment extends SherlockFragment implements
 				public void onClick(View v) {
 
 					restClient.sendNudge(user.getJid());
-					HangLog.toastD(context, "Sending Nudge",
-							"Sending a nudge to " + user.getFirstName());
+					Toast.makeText(context,
+							"Sending a nudge to " + user.getFirstName(),
+							Toast.LENGTH_SHORT).show();
 				}
 			});
 

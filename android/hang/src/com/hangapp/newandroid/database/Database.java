@@ -283,11 +283,19 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyIncomingBroadcasts() {
+		String incomingBroadcastJidsStringArray = prefs.getString(
+				Keys.INCOMING, null);
+
+		if (incomingBroadcastJidsStringArray == null) {
+			return null;
+		}
+
+		List<String> incomingBroadcastJids = Utils
+				.convertStringToArray(incomingBroadcastJidsStringArray);
+
 		usersDataSource.open();
-
 		List<User> myIncomingBroadcasts = usersDataSource
-				.getMyIncomingBroadcasts();
-
+				.getMyIncomingBroadcastsFromSQLite(incomingBroadcastJids);
 		usersDataSource.close();
 
 		return myIncomingBroadcasts;
@@ -299,11 +307,19 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyOutgoingBroadcasts() {
+		String outgoingBroadcastJidsStringArray = prefs.getString(
+				Keys.OUTGOING, null);
+
+		if (outgoingBroadcastJidsStringArray == null) {
+			return null;
+		}
+
+		List<String> outgoingBroadcastJids = Utils
+				.convertStringToArray(outgoingBroadcastJidsStringArray);
+
 		usersDataSource.open();
-
 		List<User> myOutgoingBroadcasts = usersDataSource
-				.getMyOutgoingBroadcasts();
-
+				.getMyOutgoingBroadcastsFromSQLite(outgoingBroadcastJids);
 		usersDataSource.close();
 
 		return myOutgoingBroadcasts;
@@ -343,10 +359,11 @@ public final class Database {
 		editor.putString(Keys.INCOMING, incomingStringList);
 		editor.commit();
 
+		// Notify observers of incoming broadcasts. Need to query
+		// SQLite to return actual User objects instead of Strings of JIDs.
+		List<User> incomingBroadcastUserObjects = getMyIncomingBroadcasts();
 		for (IncomingBroadcastsListener listener : incomingBroadcastsListeners) {
-			// FIXME: Notify observers of incoming broadcasts. Need to query
-			// SQLite to return actual User objects instead of Strings of JIDs.
-			// listener.onIncomingBroadcastsUpdate(incomingBroadcasts);
+			listener.onIncomingBroadcastsUpdate(incomingBroadcastUserObjects);
 		}
 	}
 
@@ -360,10 +377,11 @@ public final class Database {
 		editor.putString(Keys.OUTGOING, outgoingStringList);
 		editor.commit();
 
+		// Notify observers of outgoing broadcasts. Need to query
+		// SQLite to return actual User objects instead of Strings of JIDs.
+		List<User> outgoingBroadcastUserObjects = getMyOutgoingBroadcasts();
 		for (OutgoingBroadcastsListener listener : outgoingBroadcastsListeners) {
-			// FIXME: Notify observers of incoming broadcasts. Need to query
-			// SQLite to return actual User objects instead of Strings of JIDs.
-			// listener.onOutgoingBroadcastsUpdate(outgoingBroadcasts);
+			listener.onOutgoingBroadcastsUpdate(outgoingBroadcastUserObjects);
 		}
 	}
 
@@ -401,11 +419,16 @@ public final class Database {
 	}
 
 	public void clear() {
+		// Clear out SQLite as well as SharedPrefs
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.clear();
 		editor.commit();
 
-		// TODO: Clear out SQLite Users here.
+		usersDataSource.open();
+		usersDataSource.clearUsersTable();
+		usersDataSource.close();
+
+		// FIXME: Clear out XMPP messages here as well.
 	}
 
 }

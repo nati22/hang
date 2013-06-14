@@ -1,5 +1,6 @@
 package com.hangapp.newandroid.database;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentValues;
@@ -114,12 +115,26 @@ public final class UsersDataSource {
 		return success;
 	}
 
-	public List<User> getMyIncomingBroadcasts() {
-		return null;
+	public List<User> getMyIncomingBroadcastsFromSQLite(
+			List<String> incomingBroadcastJids) {
+		List<User> incomingBroadcasts = new ArrayList<User>();
+
+		for (String incomingBroadcastJid : incomingBroadcastJids) {
+			incomingBroadcasts.add(getUser(incomingBroadcastJid));
+		}
+
+		return incomingBroadcasts;
 	}
 
-	public List<User> getMyOutgoingBroadcasts() {
-		return null;
+	public List<User> getMyOutgoingBroadcastsFromSQLite(
+			List<String> outgoingBroadcastJids) {
+		List<User> outgoingBroadcasts = new ArrayList<User>();
+
+		for (String outgoingBroadcastJid : outgoingBroadcastJids) {
+			outgoingBroadcasts.add(getUser(outgoingBroadcastJid));
+		}
+
+		return outgoingBroadcasts;
 	}
 
 	protected User getUser(String jid) {
