@@ -114,11 +114,11 @@ public final class ChatActivity extends BaseFragmentActivity implements
 			String userJid = message.getFrom().split("@")[0];
 
 			String from = "Unknown user";
-			if (database.getIncomingUser(userJid) != null) {
-				from = database.getIncomingUser(userJid).getFullName();
-			} else if (database.getOutgoingUser(userJid) != null) {
-				from = database.getOutgoingUser(userJid).getFullName();
-			}
+//			if (database.getIncomingUser(userJid) != null) {
+//				from = database.getIncomingUser(userJid).getFullName();
+//			} else if (database.getOutgoingUser(userJid) != null) {
+//				from = database.getOutgoingUser(userJid).getFullName();
+//			}
 
 			// Inflate the cell if necessary.
 			// TODO: The cell Type could be different, based on if it's an

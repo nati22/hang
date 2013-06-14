@@ -12,7 +12,7 @@ public final class Keys {
 	public static final String AVAILABILITY_EXPIRATION_DATE = "exp";
 	public static final String PROPOSAL_DESCRIPTION = "des";
 	public static final String PROPOSAL_LOCATION = "loc";
-	public static final String PROPOSAL_TIME = "time";
+	public static final String PROPOSAL_START_TIME = "time";
 	public static final String PROPOSAL_INTERESTED = "int";
 	public static final String PROPOSAL_CONFIRMED = "conf";
 	public static final String OUTGOING = "out";

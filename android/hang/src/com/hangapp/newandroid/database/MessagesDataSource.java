@@ -18,8 +18,8 @@ public final class MessagesDataSource {
 	// Database fields
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
-	private String[] allColumns = { MySQLiteHelper.COLUMN_PACKET_ID,
-			MySQLiteHelper.COLUMN_MUC_NAME, MySQLiteHelper.COLUMN_MESSAGE_FROM,
+	private String[] allColumns = { MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID,
+			MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME, MySQLiteHelper.COLUMN_MESSAGE_FROM,
 			MySQLiteHelper.COLUMN_MESSAGE_BODY };
 
 	public MessagesDataSource(Context context) {
@@ -36,8 +36,8 @@ public final class MessagesDataSource {
 
 	public boolean createMessage(String mucName, Message message) {
 		ContentValues values = new ContentValues();
-		values.put(MySQLiteHelper.COLUMN_PACKET_ID, message.getPacketID());
-		values.put(MySQLiteHelper.COLUMN_MUC_NAME, mucName);
+		values.put(MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID, message.getPacketID());
+		values.put(MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME, mucName);
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_FROM, message.getFrom());
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_BODY, message.getBody());
 
@@ -55,7 +55,7 @@ public final class MessagesDataSource {
 	public List<Message> getAllMessages(String mucName) {
 		List<Message> messages = new ArrayList<Message>();
 
-		final String WHERE_CLAUSE = MySQLiteHelper.COLUMN_MUC_NAME + " = '"
+		final String WHERE_CLAUSE = MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME + " = '"
 				+ mucName + "'";
 
 		Cursor cursor = database.query(MySQLiteHelper.TABLE_MESSAGES,

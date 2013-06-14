@@ -1,5 +1,8 @@
 package com.hangapp.newandroid.util;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.joda.time.DateTime;
 
 import android.content.Context;
@@ -100,6 +103,29 @@ public final class Utils {
 		for (int i = middleButtonId + 1; i < availabilityButtons.length; i++) {
 			availabilityButtons[i].setState(null);
 		}
+	}
+
+	public static String convertStringArrayToString(List<String> stringArray) {
+		if (stringArray == null) {
+			return null;
+		}
+
+		StringBuilder result = new StringBuilder();
+		for (String string : stringArray) {
+			result.append(string);
+			result.append(",");
+		}
+		return result.length() > 0 ? result.substring(0, result.length() - 1)
+				: "";
+	}
+
+	public static List<String> convertStringToArray(String str) {
+		if (str == null) {
+			return null;
+		}
+
+		String[] arr = str.split(",");
+		return Arrays.asList(arr);
 	}
 
 }

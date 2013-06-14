@@ -82,7 +82,7 @@ public final class RestClientImpl implements RestClient {
 				proposal.getDescription()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_LOCATION, proposal
 				.getLocation()));
-		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_TIME, proposal
+		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_START_TIME, proposal
 				.getStartTime().toString()));
 
 		if (!proposal.getInterested().isEmpty()) {

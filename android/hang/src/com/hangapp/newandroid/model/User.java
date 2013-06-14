@@ -1,7 +1,6 @@
 package com.hangapp.newandroid.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +25,8 @@ public final class User implements Comparable<User>, Parcelable {
 	private String lastName;
 	private Availability availability;
 	private Proposal proposal;
-	private List<User> incomingBroadcasts;
-	private List<User> outgoingBroadcasts;
+	private List<String> incomingBroadcasts;
+	private List<String> outgoingBroadcasts;
 
 	public User(String jid, String firstName, String lastName) {
 		super();
@@ -68,19 +67,19 @@ public final class User implements Comparable<User>, Parcelable {
 		this.proposal = proposal;
 	}
 
-	public List<User> getIncomingBroadcasts() {
+	public List<String> getIncomingBroadcasts() {
 		return incomingBroadcasts;
 	}
 
-	public void setIncomingBroadcasts(List<User> incomingBroadcasts) {
+	public void setIncomingBroadcasts(List<String> incomingBroadcasts) {
 		this.incomingBroadcasts = incomingBroadcasts;
 	}
 
-	public List<User> getOutgoingBroadcasts() {
+	public List<String> getOutgoingBroadcasts() {
 		return outgoingBroadcasts;
 	}
 
-	public void setOutgoingBroadcasts(List<User> outgoingBroadcasts) {
+	public void setOutgoingBroadcasts(List<String> outgoingBroadcasts) {
 		this.outgoingBroadcasts = outgoingBroadcasts;
 	}
 
@@ -128,7 +127,8 @@ public final class User implements Comparable<User>, Parcelable {
 		}
 	}
 
-	public static User parseUser(String userJsonString) throws JSONException {
+	public static User parseMyUserData(String userJsonString)
+			throws JSONException {
 		User user = null;
 		Availability availability = null;
 		Proposal proposal = null;
@@ -162,7 +162,7 @@ public final class User implements Comparable<User>, Parcelable {
 		String proposalLocation = userJsonObject
 				.getString(Keys.PROPOSAL_LOCATION);
 		String proposalStartTimeString = userJsonObject
-				.getString(Keys.PROPOSAL_TIME);
+				.getString(Keys.PROPOSAL_START_TIME);
 
 		// Sanity checks on string fields.
 		if (proposalDescription.equals("null")) {
@@ -175,7 +175,7 @@ public final class User implements Comparable<User>, Parcelable {
 			// If all the sanity checks passed, then parse and create the
 			// Proposal object.
 			DateTime proposalStartTime = DateTime.parse(userJsonObject
-					.getString(Keys.PROPOSAL_TIME));
+					.getString(Keys.PROPOSAL_START_TIME));
 			proposal = new Proposal(proposalDescription, proposalLocation,
 					proposalStartTime);
 			user.setProposal(proposal);
@@ -200,23 +200,13 @@ public final class User implements Comparable<User>, Parcelable {
 					.getString(i));
 		}
 
-		// Parse the Library.
-		Map<String, User> library = parseLibrary(userJsonObject
-				.getJSONObject(Keys.LIBRARY));
-
-		// Use the library to retrieve the Incoming and Outgoing Broadcasts.
-		List<User> incomingBroadcasts = searchLibraryForJids(library,
-				incomingBroadcastsStrings);
-		List<User> outgoingBroadcasts = searchLibraryForJids(library,
-				outgoingBroadcastsStrings);
-
-		user.setIncomingBroadcasts(incomingBroadcasts);
-		user.setOutgoingBroadcasts(outgoingBroadcasts);
+		user.setIncomingBroadcasts(incomingBroadcastsStrings);
+		user.setOutgoingBroadcasts(outgoingBroadcastsStrings);
 
 		return user;
 	}
 
-	public static User parseUserName(String userJsonString)
+	public static User parseUserNameData(String userJsonString)
 			throws JSONException {
 		User user = null;
 
@@ -231,9 +221,16 @@ public final class User implements Comparable<User>, Parcelable {
 		return user;
 	}
 
-	private static Map<String, User> parseLibrary(JSONObject library)
+	public static List<User> parseLibrary(String myUserDataJsonString)
+			throws JSONException {
+		JSONObject userJsonObject = new JSONObject(myUserDataJsonString);
+		return parseLibrary(userJsonObject.getJSONObject(Keys.LIBRARY));
+	}
+
+	private static List<User> parseLibrary(JSONObject library)
 			throws JSONException, ClassCastException {
-		Map<String, User> users = new HashMap<String, User>();
+		// Map<String, User> users = new HashMap<String, User>();
+		List<User> users = new ArrayList<User>();
 
 		Iterator<?> keys = library.keys();
 
@@ -274,7 +271,7 @@ public final class User implements Comparable<User>, Parcelable {
 				String proposalLocation = userJsonObject
 						.getString(Keys.PROPOSAL_LOCATION);
 				String proposalStartTimeString = userJsonObject
-						.getString(Keys.PROPOSAL_TIME);
+						.getString(Keys.PROPOSAL_START_TIME);
 
 				// Sanity checks on the Strings we just parsed
 				if (proposalDescription.equals("null")) {
@@ -313,7 +310,7 @@ public final class User implements Comparable<User>, Parcelable {
 						+ " had no proposal: " + e.getMessage());
 			}
 
-			users.put(jid, user);
+			users.add(user);
 		}
 
 		return users;

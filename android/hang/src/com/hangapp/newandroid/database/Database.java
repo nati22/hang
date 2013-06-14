@@ -1,9 +1,7 @@
 package com.hangapp.newandroid.database;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -22,6 +20,7 @@ import com.hangapp.newandroid.model.callback.MyUserDataListener;
 import com.hangapp.newandroid.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.newandroid.util.BaseApplication;
 import com.hangapp.newandroid.util.Keys;
+import com.hangapp.newandroid.util.Utils;
 
 /**
  * This class persists client-side user data. It is a Singleton that maintains
@@ -33,13 +32,7 @@ public final class Database {
 	private static Database instance = new Database();
 
 	private SharedPreferences prefs;
-
-	private Proposal proposal;
-	private Map<String, User> incomingMap = new HashMap<String, User>();
-	private Map<String, User> outgoingMap = new HashMap<String, User>();
-
-	private List<User> incomingList = new ArrayList<User>();
-	private List<User> outgoingList = new ArrayList<User>();
+	private UsersDataSource usersDataSource;
 
 	private List<IncomingBroadcastsListener> incomingBroadcastsListeners = new ArrayList<IncomingBroadcastsListener>();
 	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
@@ -47,7 +40,11 @@ public final class Database {
 	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
 
-/*	private Map<String, List<IncomingBroadcastListListener>> incomingBroadcastListListeners = new HashMap<String, List<IncomingBroadcastListListener>>();*/
+	/*
+	 * private Map<String, List<IncomingBroadcastListListener>>
+	 * incomingBroadcastListListeners = new HashMap<String,
+	 * List<IncomingBroadcastListListener>>();
+	 */
 	/** Private constructor */
 	private Database() {
 	}
@@ -63,6 +60,7 @@ public final class Database {
 	 */
 	public void initialize(Context context) {
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		this.usersDataSource = new UsersDataSource(context);
 	}
 
 	public boolean addIncomingBroadcastsListener(
@@ -97,15 +95,15 @@ public final class Database {
 		return myStatusListeners.add(listener);
 	}
 
-/*	public boolean addIncomingBroadcastListListener(String jid,
-			IncomingBroadcastListListener listener) {
-		return incomingBroadcastListListeners.get(jid).add(listener);
-	}
-
-	public boolean removeIncomingBroadcastListListener(String jid,
-			IncomingBroadcastListListener listener) {
-		return incomingBroadcastListListeners.get(jid).remove(listener);
-	}*/
+	/*
+	 * public boolean addIncomingBroadcastListListener(String jid,
+	 * IncomingBroadcastListListener listener) { return
+	 * incomingBroadcastListListeners.get(jid).add(listener); }
+	 * 
+	 * public boolean removeIncomingBroadcastListListener(String jid,
+	 * IncomingBroadcastListListener listener) { return
+	 * incomingBroadcastListListeners.get(jid).remove(listener); }
+	 */
 
 	public boolean removeMyAvailabilityListener(MyAvailabilityListener listener) {
 		return myStatusListeners.remove(listener);
@@ -196,7 +194,6 @@ public final class Database {
 		prefsEditor.commit();
 	}
 
-	// TODO: We need a way to store time, interested users, confirmed users
 	public void setMyProposal(Proposal proposal) {
 		if (proposal == null) {
 			Log.v("Database.setProposal",
@@ -210,16 +207,21 @@ public final class Database {
 			return;
 		}
 
-		this.proposal = proposal;
-
 		SharedPreferences.Editor editor = prefs.edit();
+
+		// Convert the each of the String arrays into a comma-separated String.
+		String interestedString = Utils.convertStringArrayToString(proposal
+				.getInterested());
+		String confirmedString = Utils.convertStringArrayToString(proposal
+				.getConfirmed());
 
 		editor.putString(Keys.PROPOSAL_DESCRIPTION, proposal.getDescription());
 		editor.putString(Keys.PROPOSAL_LOCATION, proposal.getLocation());
-		/*
-		 * editor.putString(Keys.PROPOSAL_TIME, proposal.getStartTime()
-		 * .toGMTString());
-		 */
+		editor.putString(Keys.PROPOSAL_START_TIME, proposal.getStartTime()
+				.toString());
+		editor.putString(Keys.PROPOSAL_INTERESTED, interestedString);
+		editor.putString(Keys.PROPOSAL_INTERESTED, confirmedString);
+
 		editor.commit();
 
 		// Notify listeners
@@ -229,70 +231,50 @@ public final class Database {
 	}
 
 	public Proposal getMyProposal() {
-		return proposal;
+		Proposal myProposal = null;
+
+		String proposalDescription = prefs.getString(Keys.PROPOSAL_DESCRIPTION,
+				null);
+		String proposalLocation = prefs.getString(Keys.PROPOSAL_LOCATION, null);
+		String proposalStartTimeString = prefs.getString(
+				Keys.PROPOSAL_START_TIME, null);
+		String proposalInterestedString = prefs.getString(
+				Keys.PROPOSAL_INTERESTED, null);
+		String proposalConfirmedString = prefs.getString(
+				Keys.PROPOSAL_CONFIRMED, null);
+
+		// Convert the Start Time back into a Date Time.
+		DateTime proposalStartTime = DateTime.parse(proposalStartTimeString);
+
+		// Convert the Interested and Confirmed strings back into List<String>'s
+		List<String> interested = Utils
+				.convertStringToArray(proposalInterestedString);
+		List<String> confirmed = Utils
+				.convertStringToArray(proposalConfirmedString);
+
+		myProposal = new Proposal(proposalDescription, proposalLocation,
+				proposalStartTime);
+		myProposal.setInterested(interested);
+		myProposal.setConfirmed(confirmed);
+
+		return myProposal;
 	}
 
 	public void deleteMyProposal() {
-		this.proposal = null;
+		SharedPreferences.Editor editor = prefs.edit();
+
+		editor.remove(Keys.PROPOSAL_DESCRIPTION);
+		editor.remove(Keys.PROPOSAL_LOCATION);
+		editor.remove(Keys.PROPOSAL_START_TIME);
+		editor.remove(Keys.PROPOSAL_INTERESTED);
+		editor.remove(Keys.PROPOSAL_INTERESTED);
+
+		editor.commit();
 
 		// Notify listeners
 		for (MyProposalListener listener : myProposalListeners) {
 			listener.onMyProposalUpdate(null);
 		}
-	}
-
-	public void setIncomingBroadcasts(List<User> incoming) {
-		Log.v("Database.java", "setIncomingBroadcasts(List<User>) called");
-		// Clear out the current list
-		this.incomingList.clear();
-		this.incomingMap.clear();
-
-		// Put the whole list in.
-		this.incomingList.addAll(incoming);
-		for (User user : incoming) {
-			this.incomingMap.put(user.getJid(), user);
-
-			/*if (incomingBroadcastListListeners.get(user.getJid()) != null) {
-				for (IncomingBroadcastListListener listener : incomingBroadcastListListeners
-						.get(user.getJid())) {
-					// Update Interested
-					listener.incomingBroadcastListUpdate(user.getProposal().getInterested());
-					// Update confirmed...TODO
-				}
-			}*/
-		}
-
-		// Notify listeners
-		for (IncomingBroadcastsListener listener : incomingBroadcastsListeners) {
-			listener.onIncomingBroadcastsUpdate(incoming);
-		}
-	}
-
-	public void setMyOutgoingBroadcasts(List<User> outgoing) {
-		// Clear out the current list.
-		this.outgoingMap.clear();
-		this.outgoingList.clear();
-
-		// Add everything
-		this.outgoingList.addAll(outgoing);
-		for (User user : outgoing) {
-			this.outgoingMap.put(user.getJid(), user);
-		}
-
-		// Notify listeners
-		for (OutgoingBroadcastsListener listener : outgoingBroadcastsListeners) {
-			listener.onOutgoingBroadcastsUpdate(outgoing);
-		}
-	}
-
-	/**
-	 * Returns a deep copy of the user's current outgoing broadcasts.
-	 * 
-	 * @return
-	 */
-	public List<User> getMyOutgoingBroadcasts() {
-		List<User> outgoingBroadcasts = new ArrayList<User>(this.outgoingList);
-		return outgoingBroadcasts;
 	}
 
 	/**
@@ -301,35 +283,87 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyIncomingBroadcasts() {
-		List<User> incomingBroadcasts = new ArrayList<User>(this.incomingList);
-		return incomingBroadcasts;
+		usersDataSource.open();
+
+		List<User> myIncomingBroadcasts = usersDataSource
+				.getMyIncomingBroadcasts();
+
+		usersDataSource.close();
+
+		return myIncomingBroadcasts;
+	}
+
+	/**
+	 * Returns a deep copy of the user's current outgoing broadcasts.
+	 * 
+	 * @return
+	 */
+	public List<User> getMyOutgoingBroadcasts() {
+		usersDataSource.open();
+
+		List<User> myOutgoingBroadcasts = usersDataSource
+				.getMyOutgoingBroadcasts();
+
+		usersDataSource.close();
+
+		return myOutgoingBroadcasts;
 	}
 
 	public User getIncomingUser(String jid) {
-		// (nati) If the other user stops broadcasting would this become an
-		// issue?
-
-		return incomingMap.get(jid);
+		return null;
 	}
 
 	public User getOutgoingUser(String jid) {
-		// (nati) If defaultuser stops broadcasting could this be a problem?
-		return outgoingMap.get(jid);
+		return null;
 	}
 
 	public void setMyUserData(String jid, String firstName, String lastName) {
-		SharedPreferences.Editor editor = prefs.edit();
 
+		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.JID, jid);
 		editor.putString(Keys.FIRST_NAME, firstName);
 		editor.putString(Keys.LAST_NAME, lastName);
-
 		editor.commit();
 
 		User me = new User(jid, firstName, lastName);
 
 		for (MyUserDataListener listener : myUserDataListeners) {
 			listener.onMyUserDataUpdate(me);
+		}
+
+	}
+
+	public void setMyIncomingBroadcasts(List<String> incomingBroadcasts) {
+
+		// Convert the List<String>'s to single comma separated Strings.
+		String incomingStringList = Utils
+				.convertStringArrayToString(incomingBroadcasts);
+
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Keys.INCOMING, incomingStringList);
+		editor.commit();
+
+		for (IncomingBroadcastsListener listener : incomingBroadcastsListeners) {
+			// FIXME: Notify observers of incoming broadcasts. Need to query
+			// SQLite to return actual User objects instead of Strings of JIDs.
+			// listener.onIncomingBroadcastsUpdate(incomingBroadcasts);
+		}
+	}
+
+	public void setMyOutgoingBroadcasts(List<String> outgoingBroadcasts) {
+
+		// Convert the List<String>'s to single comma separated Strings.
+		String outgoingStringList = Utils
+				.convertStringArrayToString(outgoingBroadcasts);
+
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Keys.OUTGOING, outgoingStringList);
+		editor.commit();
+
+		for (OutgoingBroadcastsListener listener : outgoingBroadcastsListeners) {
+			// FIXME: Notify observers of incoming broadcasts. Need to query
+			// SQLite to return actual User objects instead of Strings of JIDs.
+			// listener.onOutgoingBroadcastsUpdate(outgoingBroadcasts);
 		}
 	}
 
@@ -349,16 +383,29 @@ public final class Database {
 		return getMyFirstName() + " " + getMyLastName();
 	}
 
+	/**
+	 * Helper method only to be used by the REST calls, as they finish parsing
+	 * in the JSON for the library.
+	 */
+	public void saveLibrary(List<User> library) {
+		usersDataSource.open();
+
+		// Clear out the existing Users table from SQLite.
+		usersDataSource.clearUsersTable();
+
+		for (User userToSave : library) {
+			usersDataSource.saveUserInDatabase(userToSave);
+		}
+
+		usersDataSource.close();
+	}
+
 	public void clear() {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.clear();
 		editor.commit();
 
-		proposal = null;
-		incomingList.clear();
-		incomingMap.clear();
-		outgoingList.clear();
-		outgoingMap.clear();
+		// TODO: Clear out SQLite Users here.
 	}
 
 }

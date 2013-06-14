@@ -55,6 +55,14 @@ public final class Proposal {
 		interestedUsers.remove(uninterestedUserJid);
 	}
 
+	public void setInterested(List<String> interestedUsers) {
+		this.interestedUsers = interestedUsers;
+	}
+
+	public void setConfirmed(List<String> confirmedUsers) {
+		this.confirmedUsers = confirmedUsers;
+	}
+
 	public List<String> getConfirmed() {
 		return confirmedUsers;
 	}
@@ -68,15 +76,6 @@ public final class Proposal {
 	}
 
 	public boolean isActive() {
-		// if (startTime == null) {
-		// return false;
-		// }
-		// Date expirationDate = (Date) startTime.clone();
-		// expirationDate.setHours(expirationDate.getHours() +
-		// PROPOSAL_DURATION);
-		//
-		// return new Date().before(expirationDate);
-
 		return false;
 	}
 

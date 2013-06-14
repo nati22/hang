@@ -1,6 +1,7 @@
 package com.hangapp.newandroid.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -14,7 +15,6 @@ import com.hangapp.newandroid.network.rest.RestClient;
 import com.hangapp.newandroid.network.rest.RestClientImpl;
 import com.hangapp.newandroid.util.AvailabilityButton;
 import com.hangapp.newandroid.util.BaseFragmentActivity;
-import com.hangapp.newandroid.util.HangLog;
 import com.hangapp.newandroid.util.Keys;
 import com.hangapp.newandroid.util.Utils;
 
@@ -44,8 +44,8 @@ public final class ProfileActivity extends BaseFragmentActivity {
 
 		// Friend not in Database sanity check.
 		if (friend == null) {
-			HangLog.toastE(this, "ProfileActivity.onCreate", "Host with jid: "
-					+ hostJid + " was null in the Database.");
+			Log.e("ProfileActivity.onCreate", "Host with jid: " + hostJid
+					+ " was null in the Database.");
 			finish();
 		}
 
