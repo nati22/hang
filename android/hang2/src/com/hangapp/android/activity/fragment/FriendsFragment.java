@@ -29,9 +29,7 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.util.AvailabilityButton;
 import com.hangapp.android.util.Keys;
-import com.hangapp.android.util.Utils;
 
 public final class FriendsFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
@@ -145,15 +143,6 @@ public final class FriendsFragment extends SherlockFragment implements
 						.findViewById(R.id.profilePictureView);
 				holder.textViewFriendName = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
-				holder.buttonsAvailability = new AvailabilityButton[] {
-						(AvailabilityButton) convertView
-								.findViewById(R.id.buttonAvailability0),
-						(AvailabilityButton) convertView
-								.findViewById(R.id.buttonAvailability1),
-						(AvailabilityButton) convertView
-								.findViewById(R.id.buttonAvailability2),
-						(AvailabilityButton) convertView
-								.findViewById(R.id.buttonAvailability3) };
 				holder.imageViewProposalIcon = (ImageView) convertView
 						.findViewById(R.id.buttonFriendProposal);
 
@@ -165,9 +154,6 @@ public final class FriendsFragment extends SherlockFragment implements
 			// Populate the Views.
 			holder.profilePictureView.setProfileId(user.getJid());
 			holder.textViewFriendName.setText(user.getFullName());
-			Utils.initializeAvailabilityButtons(holder.buttonsAvailability);
-			Utils.updateAvailabilityStripColors(holder.buttonsAvailability,
-					user.getAvailability(), context);
 
 			// If the user has a Proposal, then show the Proposal icon and set
 			// the OnClickListener for the entire cell.
@@ -259,7 +245,6 @@ public final class FriendsFragment extends SherlockFragment implements
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
 			TextView textViewFriendName;
-			AvailabilityButton[] buttonsAvailability;
 			ImageView imageViewProposalIcon;
 		}
 	}

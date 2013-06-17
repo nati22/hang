@@ -74,22 +74,23 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		// Setup the ActionBar
 		final ActionBar bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 		bar.setDisplayShowTitleEnabled(true);
+		bar.setIcon(null);
+		bar.setDisplayShowHomeEnabled(true);
 		SpannableString s = new SpannableString(getString(R.string.app_name));
 		s.setSpan(new TypefaceSpan(this, "coolvetica.ttf"), 0, s.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		bar.setTitle(s);
+		bar.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.action_bar_background));
 
 		// Throw the three tabs into the ActionBar.
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
-		mTabsAdapter.addTab(bar.newTab().setIcon(R.drawable.ic_action_friends),
+		mTabsAdapter.addTab(bar.newTab().setText("Feed"),
 				FriendsFragment.class, null);
-		mTabsAdapter.addTab(
-				bar.newTab().setIcon(R.drawable.ic_action_availability),
+		mTabsAdapter.addTab(bar.newTab().setText("You"),
 				MyAvailabilityFragment.class, null);
-		mTabsAdapter.addTab(
-				bar.newTab().setIcon(R.drawable.ic_action_proposal),
+		mTabsAdapter.addTab(bar.newTab().setText("Proposals"),
 				MyProposalFragment.class, null);
 
 		// Setup Facebook SDK.
