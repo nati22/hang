@@ -39,14 +39,15 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 	@Override
 	protected void onSuccess(User me) throws Exception {
+		// Save the library of other users' data into the database.
+		// Do this first so that the setMy* calls after this work.
+		database.saveLibrary(library);
+
 		// Save the user data in the database.
 		database.setMyUserData(me.getJid(), me.getFirstName(), me.getLastName());
 		database.setMyIncomingBroadcasts(me.getIncomingBroadcasts());
 		database.setMyOutgoingBroadcasts(me.getOutgoingBroadcasts());
 		database.setMyAvailability(me.getAvailability());
 		database.setMyProposal(me.getProposal());
-
-		// Save the library of other users' data into the database.
-		database.saveLibrary(library);
 	}
 }

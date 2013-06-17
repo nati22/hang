@@ -229,7 +229,6 @@ public final class User implements Comparable<User>, Parcelable {
 
 	private static List<User> parseLibrary(JSONObject library)
 			throws JSONException, ClassCastException {
-		// Map<String, User> users = new HashMap<String, User>();
 		List<User> users = new ArrayList<User>();
 
 		Iterator<?> keys = library.keys();
@@ -238,32 +237,41 @@ public final class User implements Comparable<User>, Parcelable {
 			JSONObject userJsonObject = library.getJSONObject((String) keys
 					.next());
 
-			Log.i(User.class.getSimpleName(), "Parsing library: "
-					+ userJsonObject.toString());
+			Log.i(User.class.getSimpleName(),
+					"Parsing user JSON object from library: "
+							+ userJsonObject.toString());
 
 			String jid = userJsonObject.getString(Keys.JID);
 			String firstName = userJsonObject.getString(Keys.FIRST_NAME);
 			String lastName = userJsonObject.getString(Keys.LAST_NAME);
 
-			String statusColor = userJsonObject
-					.getString(Keys.AVAILABILITY_COLOR);
-			String statusExpirationDateString = userJsonObject
-					.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
-
-			DateTime expirationDate = null;
-
-			if (!statusExpirationDateString.equals("null")) {
-				expirationDate = DateTime.parse(statusExpirationDateString);
-			}
-
-			Availability availability = new Availability(statusColor,
-					expirationDate);
-
 			User user = new User(jid, firstName, lastName);
 
-			// TODO: Use new Availability model.
-			user.setAvailability(availability);
+			// Try to parse this user's Availability.
+			try {
 
+				String statusColor = userJsonObject
+						.getString(Keys.AVAILABILITY_COLOR);
+				String statusExpirationDateString = userJsonObject
+						.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
+
+				DateTime expirationDate = null;
+
+				if (!statusExpirationDateString.equals("null")) {
+					expirationDate = DateTime.parse(statusExpirationDateString);
+				}
+
+				Availability availability = new Availability(statusColor,
+						expirationDate);
+
+				// TODO: Use new Availability model.
+				user.setAvailability(availability);
+			} catch (JSONException e) {
+				Log.e("User.parseLibrary", "User " + user.firstName
+						+ " had no proposal: " + e.getMessage());
+			}
+
+			// Try to parse this user's Proposal.
 			try {
 				// Parsing proposal detail fields
 				String proposalDescription = userJsonObject

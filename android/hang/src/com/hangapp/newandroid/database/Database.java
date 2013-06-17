@@ -1,7 +1,9 @@
 package com.hangapp.newandroid.database;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -32,7 +34,9 @@ public final class Database {
 	private static Database instance = new Database();
 
 	private SharedPreferences prefs;
-	private UsersDataSource usersDataSource;
+	// private UsersDataSource usersDataSource;
+
+	private Map<String, User> library = new HashMap<String, User>();
 
 	private List<IncomingBroadcastsListener> incomingBroadcastsListeners = new ArrayList<IncomingBroadcastsListener>();
 	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
@@ -60,7 +64,7 @@ public final class Database {
 	 */
 	public void initialize(Context context) {
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		this.usersDataSource = new UsersDataSource(context);
+		// this.usersDataSource = new UsersDataSource(context);
 	}
 
 	public boolean addIncomingBroadcastsListener(
@@ -293,10 +297,25 @@ public final class Database {
 		List<String> incomingBroadcastJids = Utils
 				.convertStringToArray(incomingBroadcastJidsStringArray);
 
-		usersDataSource.open();
-		List<User> myIncomingBroadcasts = usersDataSource
-				.getMyIncomingBroadcastsFromSQLite(incomingBroadcastJids);
-		usersDataSource.close();
+		// usersDataSource.open();
+		// List<User> myIncomingBroadcasts = usersDataSource
+		// .getMyIncomingBroadcastsFromSQLite(incomingBroadcastJids);
+		// usersDataSource.close();
+
+		List<User> myIncomingBroadcasts = new ArrayList<User>(
+				incomingBroadcastJids.size());
+
+		for (String incomingBroadcastJid : incomingBroadcastJids) {
+			User incomingBroadcast = this.library.get(incomingBroadcastJid);
+
+			if (incomingBroadcast != null) {
+				myIncomingBroadcasts.add(incomingBroadcast);
+			} else {
+				Log.e("Database.getMyIncomingBroadcasts",
+						"No incoming broadcast for jid: "
+								+ incomingBroadcastJid);
+			}
+		}
 
 		return myIncomingBroadcasts;
 	}
@@ -307,22 +326,7 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyOutgoingBroadcasts() {
-		String outgoingBroadcastJidsStringArray = prefs.getString(
-				Keys.OUTGOING, null);
-
-		if (outgoingBroadcastJidsStringArray == null) {
-			return null;
-		}
-
-		List<String> outgoingBroadcastJids = Utils
-				.convertStringToArray(outgoingBroadcastJidsStringArray);
-
-		usersDataSource.open();
-		List<User> myOutgoingBroadcasts = usersDataSource
-				.getMyOutgoingBroadcastsFromSQLite(outgoingBroadcastJids);
-		usersDataSource.close();
-
-		return myOutgoingBroadcasts;
+		return null;
 	}
 
 	public User getIncomingUser(String jid) {
@@ -402,17 +406,23 @@ public final class Database {
 	 * Helper method only to be used by the REST calls, as they finish parsing
 	 * in the JSON for the library.
 	 */
-	public void saveLibrary(List<User> library) {
-		usersDataSource.open();
+	public void saveLibrary(List<User> newLibrary) {
+		// usersDataSource.open();
+		//
+		// // Clear out the existing Users table from SQLite.
+		// usersDataSource.clearUsersTable();
+		//
+		// for (User userToSave : library) {
+		// usersDataSource.saveUserInDatabase(userToSave);
+		// }
+		//
+		// usersDataSource.close();
 
-		// Clear out the existing Users table from SQLite.
-		usersDataSource.clearUsersTable();
+		this.library.clear();
 
-		for (User userToSave : library) {
-			usersDataSource.saveUserInDatabase(userToSave);
+		for (User user : newLibrary) {
+			this.library.put(user.getJid(), user);
 		}
-
-		usersDataSource.close();
 	}
 
 	public void clear() {
@@ -421,9 +431,11 @@ public final class Database {
 		editor.clear();
 		editor.commit();
 
-		usersDataSource.open();
-		usersDataSource.clearUsersTable();
-		usersDataSource.close();
+		// usersDataSource.open();
+		// usersDataSource.clearUsersTable();
+		// usersDataSource.close();
+
+		library.clear();
 
 		// FIXME: Clear out XMPP messages here as well.
 	}

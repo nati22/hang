@@ -24,8 +24,6 @@ public final class MySQLiteHelper extends SQLiteOpenHelper {
 	static final String COLUMN_PROPOSAL_START_TIME = "proposal_start_time";
 	static final String COLUMN_PROPOSAL_INTERESTED = "proposal_interested";
 	static final String COLUMN_PROPOSAL_CONFIRMED = "proposal_confirmed";
-	static final String COLUMN_INCOMING_BROADCASTS = "incoming_broadcasts";
-	static final String COLUMN_OUTGOING_BROADCASTS = "outgoing_broadcasts";
 
 	private static final String DATABASE_NAME = "com.hangapp.android.database";
 	private static final int DATABASE_VERSION = 1;
@@ -62,11 +60,7 @@ public final class MySQLiteHelper extends SQLiteOpenHelper {
 			+ " text, "
 			+ COLUMN_PROPOSAL_INTERESTED
 			+ " text, "
-			+ COLUMN_PROPOSAL_CONFIRMED
-			+ " text, "
-			+ COLUMN_INCOMING_BROADCASTS
-			+ " text, "
-			+ COLUMN_OUTGOING_BROADCASTS + " text);";
+			+ COLUMN_PROPOSAL_CONFIRMED + " text); ";
 
 	public MySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -86,5 +80,5 @@ public final class MySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
 		onCreate(db);
 	}
-	
+
 }
