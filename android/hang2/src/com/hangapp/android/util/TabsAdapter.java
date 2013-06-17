@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -83,21 +85,28 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 	public void onPageSelected(int position) {
 		mActionBar.setSelectedNavigationItem(position);
 
+		SpannableString s = null;
+
 		switch (position) {
 		case 0:
-			mActionBar.setTitle(mContext.getString(R.string.app_name));
+			s = new SpannableString(mContext.getString(R.string.app_name));
 			break;
 		case 1:
-			mActionBar.setTitle(mContext.getString(R.string.my_availability));
+			s = new SpannableString(
+					mContext.getString(R.string.my_availability));
 			break;
 		case 2:
-			mActionBar.setTitle(mContext.getString(R.string.my_proposal));
+			s = new SpannableString(mContext.getString(R.string.my_proposal));
 			break;
 		default:
 			Log.e("TabsAdapter.onPageSelected", "Unknown page selected: "
 					+ position);
 			return;
 		}
+
+		s.setSpan(new TypefaceSpan(mContext, "coolvetica.ttf"), 0, s.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		mActionBar.setTitle(s);
 	}
 
 	@Override

@@ -16,10 +16,10 @@ import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.util.BaseFragmentActivity;
+import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.HangLog;
 
-public final class AddOutgoingBroadcastActivity extends BaseFragmentActivity {
+public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	public static final Uri FRIEND_PICKER = Uri.parse("picker://friend");
 	private FriendPickerFragment friendPickerFragment;

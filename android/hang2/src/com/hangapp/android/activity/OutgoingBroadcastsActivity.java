@@ -31,10 +31,10 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.util.BaseFragmentActivity;
+import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.HangLog;
 
-public final class OutgoingBroadcastsActivity extends BaseFragmentActivity
+public final class OutgoingBroadcastsActivity extends BaseActivity
 		implements OutgoingBroadcastsListener {
 
 	private static final int REAUTH_ACTIVITY_CODE = 100;

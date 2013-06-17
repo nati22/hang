@@ -18,9 +18,9 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
-import com.hangapp.android.util.BaseFragmentActivity;
+import com.hangapp.android.util.BaseActivity;
 
-public final class IncomingBroadcastsActivity extends BaseFragmentActivity implements
+public final class IncomingBroadcastsActivity extends BaseActivity implements
 		IncomingBroadcastsListener {
 
 	private List<User> incomingBroadcasts = new ArrayList<User>();

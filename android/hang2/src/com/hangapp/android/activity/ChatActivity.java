@@ -20,11 +20,11 @@ import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.callback.MucListener;
 import com.hangapp.android.network.xmpp.XMPP;
-import com.hangapp.android.util.BaseFragmentActivity;
+import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.HangLog;
 import com.hangapp.android.util.Keys;
 
-public final class ChatActivity extends BaseFragmentActivity implements
+public final class ChatActivity extends BaseActivity implements
 		MucListener {
 
 	private EditText editTextChatMessage;

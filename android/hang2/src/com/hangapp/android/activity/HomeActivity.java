@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.View;
 
@@ -29,6 +31,7 @@ import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.NoSlideViewPager;
 import com.hangapp.android.util.TabsAdapter;
+import com.hangapp.android.util.TypefaceSpan;
 
 public final class HomeActivity extends SherlockFragmentActivity {
 
@@ -73,6 +76,10 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		bar.setDisplayOptions(0, ActionBar.DISPLAY_SHOW_TITLE);
 		bar.setDisplayShowTitleEnabled(true);
+		SpannableString s = new SpannableString(getString(R.string.app_name));
+		s.setSpan(new TypefaceSpan(this, "coolvetica.ttf"), 0, s.length(),
+				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		bar.setTitle(s);
 
 		// Throw the three tabs into the ActionBar.
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
