@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/are_you_sure_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="5dp"
+        android:text="@string/confirm_delete_proposal" />
+
+    <Button
+        android:id="@+id/buttonConfirmDeleteProposal"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@id/are_you_sure_title"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:text="@string/delete_proposal"
+        android:textSize="14sp" />
+
+    <View
+        android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/buttonCancelDeleteProposal"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@id/are_you_sure_title"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:text="@string/cancel"
+        android:textSize="14sp" />
+
+</RelativeLayout>

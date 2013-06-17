@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <View
+        android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textViewFriendName"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/profilePictureView"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        android:text="@string/no_user_name"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textSize="14sp" />
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="@string/profile"
+        android:src="@drawable/ic_action_profile_icon" >
+    </com.facebook.widget.ProfilePictureView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_alignBottom="@+id/profilePictureView"
+        android:layout_toLeftOf="@+id/buttonFriendProposal"
+        android:layout_toRightOf="@+id/profilePictureView" >
+
+        <com.hangapp.android.util.AvailabilityButton
+            android:id="@+id/buttonAvailability0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.hangapp.android.util.AvailabilityButton
+            android:id="@+id/buttonAvailability1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.hangapp.android.util.AvailabilityButton
+            android:id="@+id/buttonAvailability2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.hangapp.android.util.AvailabilityButton
+            android:id="@+id/buttonAvailability3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/buttonFriendProposal"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/ic_action_proposal"
+        android:contentDescription="@string/proposal"
+        android:focusable="false"
+        android:textSize="12sp" />
+
+</RelativeLayout>

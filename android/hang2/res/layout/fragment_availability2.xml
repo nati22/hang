@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textViewProposalTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:text="@string/my_current_availability"
+            android:textSize="16sp"
+            android:textStyle="bold|italic" />
+
+        <HorizontalScrollView
+            android:id="@+id/horizScrollViewAvailability"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/textViewProposalTitle"
+            android:layout_margin="10dp"
+            android:scrollbars="none" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal" >
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability00" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability01" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability02" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability03" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability04" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability05" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability06" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability07" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability08" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability09" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability10" />
+
+                <com.hangapp.android.util.AvailabilityButton android:id="@+id/buttonAvailability11" />
+            </LinearLayout>
+        </HorizontalScrollView>
+
+        <View
+            android:id="@+id/centerAlignView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerHorizontal="true" />
+
+        <CheckBox
+            android:id="@+id/checkBoxFree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/horizScrollViewAvailability"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="12dp"
+            android:layout_toLeftOf="@id/centerAlignView"
+            android:text="FREE" />
+
+        <CheckBox
+            android:id="@+id/checkBoxBusy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/checkBoxFree"
+            android:layout_below="@id/textViewProposalTitle"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/centerAlignView"
+            android:text="BUSY" />
+
+        <!--
+            <HorizontalScrollView
+            android:id="@+id/horizScrollViewSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkBoxFree" >
+        -->
+
+        <SeekBar
+            android:id="@+id/seekBarAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/checkBoxFree"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="15dp"
+            android:max="4" />
+        <!-- </HorizontalScrollView> -->
+
+        <Button
+            android:id="@+id/buttonUpdateMyAvailability"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_below="@id/seekBarAvailability"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/centerAlignView"
+            android:text="OK" />
+
+        <Button
+            android:id="@+id/buttonCancelAvailability"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@id/buttonUpdateMyAvailability"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/centerAlignView"
+            android:text="Cancel" />
+    </RelativeLayout>
+
+</ScrollView>

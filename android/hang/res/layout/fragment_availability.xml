@@ -20,7 +20,6 @@
 
         <com.facebook.widget.ProfilePictureView
             android:id="@+id/imageViewNoProposal"
-            style="@style/ButtonAppTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignLeft="@+id/textViewInterested"
@@ -169,7 +168,6 @@
 
         <Button
             android:id="@+id/buttonDone"
-            style="@style/ButtonAppTheme"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_below="@+id/separatorProfileFromBottom"
@@ -201,7 +199,6 @@
 
         <com.facebook.widget.ProfilePictureView
             android:id="@+id/imageView3"
-            style="@style/ButtonAppTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignLeft="@+id/imageViewNoProposal"
@@ -212,7 +209,6 @@
 
         <com.facebook.widget.ProfilePictureView
             android:id="@+id/imageViewConfirmed"
-            style="@style/ButtonAppTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignLeft="@+id/profilePictureView1"
@@ -223,7 +219,6 @@
 
         <com.facebook.widget.ProfilePictureView
             android:id="@+id/profilePictureView1"
-            style="@style/ButtonAppTheme"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignLeft="@+id/imageView3"
