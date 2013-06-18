@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +32,7 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Keys;
 
-public final class FriendsFragment extends SherlockFragment implements
+public final class FeedFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
 
 	private StickyListHeadersListView listViewFriends;
@@ -146,6 +147,11 @@ public final class FriendsFragment extends SherlockFragment implements
 				holder.imageViewProposalIcon = (ImageView) convertView
 						.findViewById(R.id.buttonFriendProposal);
 
+				Typeface tf = Typeface.createFromAsset(getActivity()
+						.getApplicationContext().getAssets(),
+						"fonts/champagne_limousines_bold.ttf");
+				holder.textViewFriendName.setTypeface(tf);
+
 				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
@@ -201,6 +207,12 @@ public final class FriendsFragment extends SherlockFragment implements
 						R.layout.cell_friends_list_header, parent, false);
 				holder.text1 = (TextView) convertView
 						.findViewById(R.id.textViewFriendsListHeader);
+
+				Typeface tf = Typeface.createFromAsset(getActivity()
+						.getApplicationContext().getAssets(),
+						"fonts/champagne_limousines_bold.ttf");
+				holder.text1.setTypeface(tf);
+
 				convertView.setTag(holder);
 			} else {
 				holder = (HeaderViewHolder) convertView.getTag();
@@ -210,14 +222,14 @@ public final class FriendsFragment extends SherlockFragment implements
 			String headerText = null;
 
 			if (availability != null && availability.getStatus() == Status.FREE) {
-				headerText = "Free to hang";
+				headerText = "free to hang";
 				holder.text1.setTextColor(android.graphics.Color.GREEN);
 			} else if (availability != null
 					&& availability.getStatus() == Status.BUSY) {
-				headerText = "Busy, can't hang";
+				headerText = "busy, can't hang";
 				holder.text1.setTextColor(android.graphics.Color.RED);
 			} else {
-				headerText = "No availability";
+				headerText = "no availability";
 				holder.text1.setTextColor(android.graphics.Color.GRAY);
 			}
 			holder.text1.setText(headerText);

@@ -20,7 +20,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.hangapp.android.R;
-import com.hangapp.android.activity.fragment.FriendsFragment;
+import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.MyAvailabilityFragment;
 import com.hangapp.android.activity.fragment.MyProposalFragment;
 import com.hangapp.android.database.Database;
@@ -87,7 +87,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		// Throw the three tabs into the ActionBar.
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab().setText("Feed"),
-				FriendsFragment.class, null);
+				FeedFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab().setText("You"),
 				MyAvailabilityFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab().setText("Proposals"),
