@@ -24,7 +24,7 @@ public final class SettingsActivity extends BaseActivity {
 	 */
 	private UiLifecycleHelper uiHelper;
 
-	private Database database;
+	private Database database;	
 
 	/**
 	 * Provides asynchronous notification of Session state changes. A Session is

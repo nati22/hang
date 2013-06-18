@@ -71,7 +71,7 @@ public final class FeedFragment extends SherlockFragment implements
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		// Inflate the View for this Fragment.
-		View view = inflater.inflate(R.layout.fragment_friends, container,
+		View view = inflater.inflate(R.layout.fragment_feed, container,
 				false);
 
 		// Reference Views.

@@ -56,7 +56,7 @@ public final class MyAvailabilityFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_availability, container,
+		View view = inflater.inflate(R.layout.fragment_me, container,
 				false);
 
 		// Reference views
