@@ -97,13 +97,6 @@
                 android:layout_marginTop="0dp"
                 android:background="@android:color/darker_gray" />
 
-            <View
-                android:layout_width="wrap_content"
-                android:layout_height="1dp"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/your_prop_desc_title"
-                android:background="@android:color/darker_gray" />
-
             <TextView
                 android:id="@+id/your_prop_time_title"
                 android:layout_width="wrap_content"
@@ -166,96 +159,81 @@
                 android:text="@string/no_location"
                 android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/textViewInterested"
+            <View
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="1dp"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/separatorTopBottom"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/interested"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:layout_below="@+id/your_prop_desc_title"
+                android:background="@android:color/darker_gray" />
 
             <HorizontalScrollView
-                android:id="@+id/horizScrollViewInterested"
+                android:id="@+id/horizontalScrollView1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textViewInterested"
-                android:layout_margin="2dp"
-                android:layout_marginLeft="20dp"
-                android:minHeight="40dp"
-                android:padding="2dp" >
+                android:layout_below="@+id/textViewInterested"
+                android:layout_toRightOf="@+id/imageViewInterested" >
 
                 <LinearLayout
-                    android:id="@+id/linLayoutInterested"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:orientation="horizontal" >
 
-                    <!--
-                         <com.facebook.widget.ProfilePictureView
-                        android:id="@+id/profilePictureViewMyIcon"
+                    <com.facebook.widget.ProfilePictureView
                         android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
-                        android:visibility="invisible" />
-                    -->
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
                 </LinearLayout>
             </HorizontalScrollView>
-
-            <!--
-           <ListView
-                android:id="@+id/interestedListView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewInterested"
-                android:layout_margin="2dp"
-				android:layout_marginLeft="10dp"
-                android:minHeight="20dp"
-                android:orientation="horizontal"
-                android:padding="2dp" />
-            -->
-
-            <TextView
-                android:id="@+id/textViewConfirmed"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@id/horizScrollViewInterested"
-                android:layout_marginLeft="8dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/confirmed"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-            <HorizontalScrollView
-                android:id="@+id/horizScrollViewConfirmed"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/textViewConfirmed"
-                android:layout_margin="2dp"
-                android:layout_marginLeft="20dp"
-                android:minHeight="40dp"
-                android:padding="2dp" >
-
-                <LinearLayout
-                    android:id="@+id/linLayoutConfirmed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal" >
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <ImageView
-                android:id="@+id/buttonChat"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_below="@+id/horizScrollViewConfirmed"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/chat"
-                android:contentDescription="@string/chat" />
 
             <ImageView
                 android:id="@+id/buttonDeleteProposal"
@@ -269,6 +247,113 @@
                 android:layout_marginTop="25dp"
                 android:background="@drawable/trash_recyclebin_empty_closed"
                 android:contentDescription="@string/delete_proposal" />
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewConfirmed"
+                android:layout_toRightOf="@+id/imageViewConfirmed" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp" >
+                    </com.facebook.widget.ProfilePictureView>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/textViewInterested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/separatorTopBottom"
+                android:layout_marginTop="15dp"
+                android:text="@string/interested"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageView
+                android:id="@+id/buttonChat"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_below="@+id/horizontalScrollView2"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/chat"
+                android:contentDescription="@string/chat" />
+
+            <ImageView
+                android:id="@+id/imageViewInterested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/textViewInterested"
+                android:contentDescription="@string/interested"
+                android:src="@drawable/interested" />
+
+            <TextView
+                android:id="@+id/textViewConfirmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/horizontalScrollView1"
+                android:layout_marginTop="8dp"
+                android:text="@string/confirmed"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <ImageView
+                android:id="@+id/imageViewConfirmed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/textViewConfirmed"
+                android:contentDescription="@string/confirmed"
+                android:src="@drawable/confirmed" />
         </RelativeLayout>
     </ScrollView>
 

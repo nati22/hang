@@ -79,7 +79,7 @@ public final class ProposalFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
-		View view = inflater.inflate(R.layout.fragment_proposal2, container,
+		View view = inflater.inflate(R.layout.fragment_proposal, container,
 				false);
 
 		// Reference views.

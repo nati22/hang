@@ -55,7 +55,7 @@ abstract class BasePostRequestAsyncTask<ResultT> extends
 			// final String errorMessage = "No internet connection detected";
 			// Log.e(errorMessage);
 			// Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-			HangLog.toastE(context, "BasePutRequestAsyncTask.onPreExecute",
+			HangLog.toastE(context, "BasePostRequestAsyncTask.onPreExecute",
 					"No internet connection detected");
 
 			// If there is no Internet connection, then don't run the AsyncTask.
@@ -68,23 +68,23 @@ abstract class BasePostRequestAsyncTask<ResultT> extends
 	public ResultT call() throws Exception {
 
 		HttpClient client = new DefaultHttpClient();
-		HttpPost putRequest = new HttpPost(uri);
+		HttpPost postRequest = new HttpPost(uri);
 
 		// Add the parameters in.
 		if (parameters != null) {
-			putRequest.setEntity(new UrlEncodedFormEntity(parameters));
+			postRequest.setEntity(new UrlEncodedFormEntity(parameters));
 		}
 
-		Log.v("BasePutRequestAsyncTask.call", "Sending PUT request with URI: "
+		Log.v("BasePostRequestAsyncTask.call", "Sending POST request with URI: "
 				+ uri);
-		String responseString = EntityUtils.toString(client.execute(putRequest)
+		String responseString = EntityUtils.toString(client.execute(postRequest)
 				.getEntity());
 
 		if (responseString != null) {
-			Log.v("BasePutRequestAsyncTask.call", "Got HTTP result: "
+			Log.v("BasePostRequestAsyncTask.call", "Got HTTP result: "
 					+ responseString);
 		} else {
-			throw new Exception("PUT request receieved null response string.");
+			throw new Exception("POST request receieved null response string.");
 		}
 
 		// Save the responseString internally, for inheriting classes to use
@@ -97,6 +97,6 @@ abstract class BasePostRequestAsyncTask<ResultT> extends
 	@Override
 	protected void onException(Exception e) throws RuntimeException {
 		super.onException(e);
-		HangLog.toastE(context, "BasePutRequestAsyncTask.onException", e);
+		HangLog.toastE(context, "BasePostRequestAsyncTask.onException", e);
 	}
 }
