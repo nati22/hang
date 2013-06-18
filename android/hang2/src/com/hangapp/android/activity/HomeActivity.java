@@ -116,8 +116,8 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		case R.id.menu_refresh:
 			restClient.getMyData();
 			return true;
-		case R.id.menu_profile:
-			startActivity(new Intent(this, MyProfileActivity.class));
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

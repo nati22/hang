@@ -1,31 +1,35 @@
-package com.hangapp.android.activity.fragment;
+package com.hangapp.android.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
-import com.hangapp.android.network.rest.RestClient;
-import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.util.BaseActivity;
 
-public final class LoginFragment extends SherlockFragment {
+public final class SettingsActivity extends BaseActivity {
 
-	private SharedPreferences prefs;
-	private Database database;
-	private RestClient restClient;
-
-	// Facebook SDK member variables.
+	/**
+	 * The UiLifecycleHelper class helps to create, automatically open (if
+	 * applicable), save, and restore the Active Session in a way that is
+	 * similar to Android UI lifecycles. When using this class, clients MUST
+	 * call all the public methods from the respective methods in either an
+	 * Activity or Fragment. Failure to call all the methods can result in
+	 * improperly initialized or uninitialized Sessions.
+	 */
 	private UiLifecycleHelper uiHelper;
+
+	private Database database;
+
+	/**
+	 * Provides asynchronous notification of Session state changes. A Session is
+	 * used to authenticate a user and manage the user's session with Facebook.
+	 */
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state,
@@ -37,26 +41,18 @@ public final class LoginFragment extends SherlockFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_my_profile);
 
-		// Setup the Facebook SDK helper object.
-		uiHelper = new UiLifecycleHelper(getActivity(), callback);
+		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
 
+		// Enable the "Up" button.
+		getSupportActionBar().setHomeButtonEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 		// Instantiate dependencies.
-		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
-				.getApplicationContext());
 		database = Database.getInstance();
-		restClient = new RestClientImpl(database, getActivity()
-				.getApplicationContext());
-	}
-
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_login, null);
-
-		return view;
-	}
+	};
 
 	@Override
 	public void onResume() {
@@ -70,6 +66,8 @@ public final class LoginFragment extends SherlockFragment {
 		if (session != null && (session.isOpened() || session.isClosed())) {
 			onSessionStateChange(session, session.getState(), null);
 		}
+
+		String myJid = database.getMyJid();
 	}
 
 	@Override
@@ -100,16 +98,16 @@ public final class LoginFragment extends SherlockFragment {
 			Exception exception) {
 		if (state.isOpened()) {
 			Log.i("SettingsActivity.onSessionStateChange", "Logged in...");
-
-//			SharedPreferences.Editor editor = prefs.edit();
-//			editor.putBoolean(Keys.REGISTERED, true);
-//			editor.commit();
 		} else if (state.isClosed()) {
 			Log.i("SettingsActivity.onSessionStateChange", "Logged out...");
 
-//			SharedPreferences.Editor editor = prefs.edit();
-//			editor.clear();
-//			editor.commit();
+			Toast.makeText(getApplicationContext(),
+					"Logged out, cleared database", Toast.LENGTH_SHORT).show();
+			database.clear();
+
+			// TODO: Logout of XMPP.
+			// XMPP.getInstance().logout();
+			finish();
 		}
 	}
 }
