@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey_action_bar"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -9,23 +10,26 @@
         android:layout_height="wrap_content"
         android:background="@color/grey_background" >
 
-        <TextView
-            android:id="@+id/textViewMyName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profilePictureViewMyIcon"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@string/champagne_limousines"
-            android:text="my name goes here"
-            android:textColor="@android:color/white" />
-
         <com.facebook.widget.ProfilePictureView
             android:id="@+id/profilePictureViewMyIcon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
+            android:background="@android:color/white"
+            android:padding="2dp"
             android:src="@drawable/ic_action_profile_icon" />
+
+        <TextView
+            android:id="@+id/textViewMyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profilePictureViewMyIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@string/champagne_limousines_bold"
+            android:text="my name goes here"
+            android:textColor="@android:color/white" />
 
         <ImageView
             android:id="@+id/imageViewMyAvailability"
@@ -34,6 +38,7 @@
             android:layout_below="@+id/textViewMyName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
+            android:contentDescription="@string/my_availability"
             android:src="@drawable/status_green" />
 
         <TextView
@@ -43,7 +48,7 @@
             android:layout_below="@+id/imageViewMyAvailability"
             android:layout_centerHorizontal="true"
             android:fontFamily="@string/champagne_limousines"
-            android:text="Status"
+            android:text="status"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
 
@@ -56,8 +61,6 @@
             android:background="@android:color/transparent"
             android:fontFamily="@string/champagne_limousines"
             android:onClick="startOutgoingBroadcastsActivity"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
             android:text="@string/outgoing"
             android:textColor="@android:color/white"
             android:textSize="13sp" />

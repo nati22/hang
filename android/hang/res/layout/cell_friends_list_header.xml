@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_background"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:visibility="gone" >
 
     <TextView
         android:id="@+id/textViewFriendsListHeader"
@@ -11,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="3dp"
         android:layout_marginTop="3dp"
-        android:text="Free to hang"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

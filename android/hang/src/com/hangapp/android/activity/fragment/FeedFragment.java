@@ -8,23 +8,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersAdapter;
-import com.emilsjolander.components.stickylistheaders.StickyListHeadersListView;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
-import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Availability.Status;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
@@ -35,7 +34,7 @@ import com.hangapp.android.util.Keys;
 public final class FeedFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
 
-	private StickyListHeadersListView listViewFriends;
+	private ListView listViewFriends;
 
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
 	private FriendsAdapter adapter;
@@ -71,11 +70,10 @@ public final class FeedFragment extends SherlockFragment implements
 		super.onCreateView(inflater, container, savedInstanceState);
 
 		// Inflate the View for this Fragment.
-		View view = inflater.inflate(R.layout.fragment_feed, container,
-				false);
+		View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
 		// Reference Views.
-		listViewFriends = (StickyListHeadersListView) view
+		listViewFriends = (ListView) view
 				.findViewById(R.id.listViewFriendsFragment);
 
 		// Set up the Adapter.
@@ -100,8 +98,7 @@ public final class FeedFragment extends SherlockFragment implements
 		database.removeIncomingBroadcastsListener(this);
 	}
 
-	private class FriendsAdapter extends BaseAdapter implements
-			StickyListHeadersAdapter {
+	private class FriendsAdapter extends BaseAdapter {
 		private List<User> friends;
 		private LayoutInflater inflater;
 		private Context context;
@@ -146,6 +143,8 @@ public final class FeedFragment extends SherlockFragment implements
 						.findViewById(R.id.textViewFriendName);
 				holder.imageViewProposalIcon = (ImageView) convertView
 						.findViewById(R.id.buttonFriendProposal);
+				holder.imageViewAvailability = (ImageView) convertView
+						.findViewById(R.id.imageViewAvailability);
 
 				Typeface tf = Typeface.createFromAsset(getActivity()
 						.getApplicationContext().getAssets(),
@@ -165,28 +164,42 @@ public final class FeedFragment extends SherlockFragment implements
 			// the OnClickListener for the entire cell.
 			if (user.getProposal() != null) {
 				holder.imageViewProposalIcon.setVisibility(View.VISIBLE);
-				holder.imageViewProposalIcon
-						.setOnClickListener(new OnClickListener() {
-							@Override
-							public void onClick(View arg0) {
-								Intent proposalLeechIntent = new Intent(
-										context, ProfileActivity.class);
-								proposalLeechIntent.putExtra(Keys.HOST_JID,
-										user.getJid());
-								context.startActivity(proposalLeechIntent);
-							}
-						});
+				convertView.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View arg0) {
+						Intent proposalLeechIntent = new Intent(context,
+								ProfileActivity.class);
+						proposalLeechIntent.putExtra(Keys.HOST_JID,
+								user.getJid());
+						context.startActivity(proposalLeechIntent);
+					}
+				});
 			} else {
 				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
-				// convertView.setOnClickListener(null);
+				convertView.setOnClickListener(null);
 			}
 
-			// Make Facebook icon function as the NUDGE button, for now TODO
-			holder.profilePictureView.setOnClickListener(new OnClickListener() {
+			// Set the user's status icon based on his Availability.
+			if (user.getAvailability() == null
+					|| user.getAvailability().getStatus() == null) {
+				holder.imageViewAvailability.setImageDrawable(getResources()
+						.getDrawable(R.drawable.status_grey));
+			} else if (user.getAvailability().getStatus() == Status.FREE) {
+				holder.imageViewAvailability.setImageDrawable(getResources()
+						.getDrawable(R.drawable.status_green));
+			} else if (user.getAvailability().getStatus() == Status.BUSY) {
+				holder.imageViewAvailability.setImageDrawable(getResources()
+						.getDrawable(R.drawable.status_red));
+			} else {
+				Log.e("FeedFragment.getView",
+						"Unknown user availability status: "
+								+ user.getAvailability().getStatus());
+			}
 
+			// Make Facebook icon function as the NUDGE button.
+			holder.profilePictureView.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-
 					restClient.sendNudge(user.getJid());
 					Toast.makeText(context,
 							"Sending a nudge to " + user.getFirstName(),
@@ -197,67 +210,11 @@ public final class FeedFragment extends SherlockFragment implements
 			return convertView;
 		}
 
-		@Override
-		public View getHeaderView(int position, View convertView,
-				ViewGroup parent) {
-			HeaderViewHolder holder;
-			if (convertView == null) {
-				holder = new HeaderViewHolder();
-				convertView = inflater.inflate(
-						R.layout.cell_friends_list_header, parent, false);
-				holder.text1 = (TextView) convertView
-						.findViewById(R.id.textViewFriendsListHeader);
-
-				Typeface tf = Typeface.createFromAsset(getActivity()
-						.getApplicationContext().getAssets(),
-						"fonts/champagne_limousines_bold.ttf");
-				holder.text1.setTypeface(tf);
-
-				convertView.setTag(holder);
-			} else {
-				holder = (HeaderViewHolder) convertView.getTag();
-			}
-
-			Availability availability = friends.get(position).getAvailability();
-			String headerText = null;
-
-			if (availability != null && availability.getStatus() == Status.FREE) {
-				headerText = "free to hang";
-				holder.text1.setTextColor(android.graphics.Color.GREEN);
-			} else if (availability != null
-					&& availability.getStatus() == Status.BUSY) {
-				headerText = "busy, can't hang";
-				holder.text1.setTextColor(android.graphics.Color.RED);
-			} else {
-				headerText = "no availability";
-				holder.text1.setTextColor(android.graphics.Color.GRAY);
-			}
-			holder.text1.setText(headerText);
-			return convertView;
-		}
-
-		@Override
-		public long getHeaderId(int position) {
-			Availability availability = friends.get(position).getAvailability();
-
-			if (availability != null && availability.getStatus() == Status.FREE) {
-				return 0;
-			} else if (availability != null
-					&& availability.getStatus() == Status.BUSY) {
-				return 1;
-			} else {
-				return 2;
-			}
-		}
-
-		class HeaderViewHolder {
-			TextView text1;
-		}
-
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
 			TextView textViewFriendName;
 			ImageView imageViewProposalIcon;
+			ImageView imageViewAvailability;
 		}
 	}
 

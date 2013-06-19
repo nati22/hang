@@ -85,7 +85,8 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 		mActionBar.setSelectedNavigationItem(position);
 
 		SpannableString s = null;
-		s = new SpannableString(mContext.getString(R.string.app_name));
+		// s = new SpannableString(mContext.getString(R.string.app_name));
+		s = new SpannableString("");
 
 		// switch (position) {
 		// case 0:

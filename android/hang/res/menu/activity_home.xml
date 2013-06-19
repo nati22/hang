@@ -9,6 +9,6 @@
         android:id="@+id/menu_settings"
         android:icon="@drawable/monotone_cog_settings_gear"
         android:showAsAction="never"
-        android:title="@string/profile"/>
+        android:title="@string/settings"/>
 
 </menu>

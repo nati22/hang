@@ -33,22 +33,23 @@
         android:src="@drawable/ic_action_profile_icon" >
     </com.facebook.widget.ProfilePictureView>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imageViewAvailability"
+        android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_alignBottom="@+id/profilePictureView"
-        android:layout_toLeftOf="@+id/buttonFriendProposal"
-        android:layout_toRightOf="@+id/profilePictureView" >
-    </LinearLayout>
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
+        android:src="@drawable/status_green" />
 
     <ImageView
         android:id="@+id/buttonFriendProposal"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_toLeftOf="@+id/imageViewAvailability"
         android:background="@drawable/ic_action_proposal"
         android:contentDescription="@string/proposal"
         android:focusable="false"

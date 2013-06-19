@@ -99,6 +99,7 @@
     <string name="nudged">Nudged.</string>
     <string name="my_availability">My Availability</string>
     <string name="my_proposal">My Proposal</string>
-    <string name="champagne_limousines">assets/fonts/champagne_limousines_bold.ttf</string>
+    <string name="champagne_limousines_bold">assets/fonts/champagne_limousines_bold.ttf</string>
+    <string name="champagne_limousines">assets/fonts/champagne_limousines.ttf</string>
 
 </resources>

@@ -146,20 +146,20 @@ public final class YouFragment extends SherlockFragment implements
 	@Override
 	public void onOutgoingBroadcastsUpdate(List<User> outgoingBroadcasts) {
 		if (outgoingBroadcasts == null) {
-			buttonOutgoingBroadcasts.setText("0 Outgoing");
+			buttonOutgoingBroadcasts.setText("0 outgoing");
 		} else {
 			buttonOutgoingBroadcasts.setText(outgoingBroadcasts.size()
-					+ " Outgoing");
+					+ " outgoing");
 		}
 	}
 
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
 		if (incomingBroadcasts == null) {
-			buttonOutgoingBroadcasts.setText("0 Incoming");
+			buttonOutgoingBroadcasts.setText("0 incoming");
 		} else {
 			buttonIncomingBroadcasts.setText(incomingBroadcasts.size()
-					+ " Incoming");
+					+ " incoming");
 		}
 	}
 

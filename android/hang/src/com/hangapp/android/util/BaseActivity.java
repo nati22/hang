@@ -8,12 +8,13 @@ import android.util.Log;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
+import com.hangapp.android.R;
 
 public class BaseActivity extends SherlockFragmentActivity {
 
 	@Override
-	protected void onCreate(Bundle arg0) {
-		super.onCreate(arg0);
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
 		SpannableString s = new SpannableString(getTitle());
 		s.setSpan(new TypefaceSpan(this, "coolvetica.ttf"), 0, s.length(),
@@ -22,6 +23,8 @@ public class BaseActivity extends SherlockFragmentActivity {
 		// Update the action bar title with the TypefaceSpan instance
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(s);
+		actionBar.setBackgroundDrawable(getResources().getDrawable(
+				R.drawable.action_bar_background));
 	}
 
 	@Override
