@@ -39,22 +39,6 @@
         android:layout_alignBottom="@+id/profilePictureView"
         android:layout_toLeftOf="@+id/buttonFriendProposal"
         android:layout_toRightOf="@+id/profilePictureView" >
-
-        <com.hangapp.newandroid.util.AvailabilityButton
-            android:id="@+id/buttonAvailability0"
-            style="@style/AvailabilityButton" />
-
-        <com.hangapp.newandroid.util.AvailabilityButton
-            android:id="@+id/buttonAvailability1"
-            style="@style/AvailabilityButton" />
-
-        <com.hangapp.newandroid.util.AvailabilityButton
-            android:id="@+id/buttonAvailability2"
-            style="@style/AvailabilityButton" />
-
-        <com.hangapp.newandroid.util.AvailabilityButton
-            android:id="@+id/buttonAvailability3"
-            style="@style/AvailabilityButton" />
     </LinearLayout>
 
     <ImageView

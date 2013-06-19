@@ -4,80 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureViewMyIcon"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:contentDescription="User Icon"
-        android:src="@drawable/ic_action_profile_icon" />
-
-    <!-- Profile Picture status indicator bar (UNDERNEATH) -->
-
-    <View
-        android:id="@+id/profile_status_color_bar"
-        android:layout_width="@dimen/profile_picture_width"
-        android:layout_height="7dp"
-        android:layout_alignLeft="@id/profilePictureViewMyIcon"
-        android:layout_alignRight="@id/profilePictureViewMyIcon"
-        android:layout_below="@id/profilePictureViewMyIcon"
-        android:background="@color/green" />
-
-    <View
-        android:id="@+id/separatorMyStatusFromButtons"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_below="@+id/profilePictureViewMyIcon"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="5dp"
-        android:background="@android:color/darker_gray" />
-
-    <Button
-        android:id="@+id/buttonOutgoingBroadcasts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/separatorIncomingOutgoingButtonsFromEachOther"
-        android:layout_below="@+id/separatorMyStatusFromButtons"
-        android:background="@android:color/transparent"
-        android:onClick="startOutgoingBroadcastsActivity"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:text="@string/outgoing_broadcasts"
-        android:textSize="13sp" />
-
-    <View
-        android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
-        android:layout_width="1dp"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
-        android:layout_alignTop="@+id/buttonIncomingBroadcasts"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/darker_gray" />
-
-    <Button
-        android:id="@+id/buttonIncomingBroadcasts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
-        android:layout_alignLeft="@+id/separatorIncomingOutgoingButtonsFromEachOther"
-        android:layout_alignParentRight="true"
-        android:background="@android:color/transparent"
-        android:onClick="startIncomingBroadcastsActivity"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:text="@string/incoming_broadcasts"
-        android:textSize="13sp" />
-
-    <View
-        android:id="@+id/separatorButtonsFromBottom"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_below="@+id/buttonIncomingBroadcasts"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:background="@android:color/darker_gray" />
-
     <com.facebook.widget.LoginButton
         android:id="@+id/facebookLoginButton"
         android:layout_width="wrap_content"
@@ -87,15 +13,5 @@
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp" />
-
-    <TextView
-        android:id="@+id/textViewMyName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/facebookLoginButton"
-        android:layout_alignTop="@+id/profilePictureViewMyIcon"
-        android:text="@string/no_user_name"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="18sp" />
 
 </RelativeLayout>
