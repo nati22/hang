@@ -38,11 +38,11 @@
 
             <ImageView
                 android:id="@+id/imageViewMyAvailability"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_below="@+id/textViewMyName"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="10dp"
                 android:contentDescription="@string/my_availability"
                 android:src="@drawable/status_green" />
 
@@ -52,8 +52,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/imageViewMyAvailability"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
                 android:fontFamily="@string/champagne_limousines"
-                android:text="status"
+                android:text="Status"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
 

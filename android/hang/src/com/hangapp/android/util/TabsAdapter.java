@@ -89,8 +89,7 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 		mActionBar.setSelectedNavigationItem(position);
 
 		SpannableString s = null;
-		// s = new SpannableString(mContext.getString(R.string.app_name));
-		s = new SpannableString("");
+		s = new SpannableString(mContext.getString(R.string.app_name));
 
 		// switch (position) {
 		// case 0:
@@ -113,25 +112,25 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		mActionBar.setTitle(s);
 
-//		// Style the Action Bar tabs.
-//		Typeface champagneLimousinesFont = Typeface.createFromAsset(
-//				mContext.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
-//		Typeface champagneLimousinesBoldFont = Typeface.createFromAsset(
-//				mContext.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-//		for (int i = 0; i < mActionBar.getTabCount(); i++) {
-//			LayoutInflater inflater = LayoutInflater.from(mContext);
-//			View customView = inflater.inflate(R.layout.tab_title, null);
-//			TextView titleTV = (TextView) customView
-//					.findViewById(R.id.action_custom_title);
-//
-//			if (position == i) {
-//				titleTV.setTypeface(champagneLimousinesBoldFont);
-//			} else {
-//				titleTV.setTypeface(champagneLimousinesFont);
-//			}
-//
-//			mActionBar.getTabAt(i).setCustomView(customView);
-//		}
+		// // Style the Action Bar tabs.
+		// Typeface champagneLimousinesFont = Typeface.createFromAsset(
+		// mContext.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
+		// Typeface champagneLimousinesBoldFont = Typeface.createFromAsset(
+		// mContext.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
+		// for (int i = 0; i < mActionBar.getTabCount(); i++) {
+		// LayoutInflater inflater = LayoutInflater.from(mContext);
+		// View customView = inflater.inflate(R.layout.tab_title, null);
+		// TextView titleTV = (TextView) customView
+		// .findViewById(R.id.action_custom_title);
+		//
+		// if (position == i) {
+		// titleTV.setTypeface(champagneLimousinesBoldFont);
+		// } else {
+		// titleTV.setTypeface(champagneLimousinesFont);
+		// }
+		//
+		// mActionBar.getTabAt(i).setCustomView(customView);
+		// }
 
 	}
 

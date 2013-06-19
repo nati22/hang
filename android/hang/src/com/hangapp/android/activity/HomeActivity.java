@@ -78,7 +78,6 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		final ActionBar bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		bar.setDisplayShowTitleEnabled(true);
-		bar.setIcon(null);
 		bar.setDisplayShowHomeEnabled(true);
 		SpannableString s = new SpannableString(getString(R.string.app_name));
 		s.setSpan(new TypefaceSpan(this, "coolvetica.ttf"), 0, s.length(),
@@ -94,9 +93,9 @@ public final class HomeActivity extends SherlockFragmentActivity {
 
 		// Style the Action Bar tabs.
 		String[] tabNames = { "FEED", "YOU" };
-		Typeface champagneLimousinesFont = Typeface
-				.createFromAsset(getApplicationContext().getAssets(),
-						Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(
+				getApplicationContext().getAssets(),
+				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
 		for (int i = 0; i < bar.getTabCount(); i++) {
 			LayoutInflater inflater = LayoutInflater.from(this);
 			View customView = inflater.inflate(R.layout.tab_title, null);

@@ -75,8 +75,8 @@ public final class YouFragment extends SherlockFragment implements
 		buttonIncomingBroadcasts = (Button) view
 				.findViewById(R.id.buttonIncomingBroadcasts);
 
-		Typeface champagneLimousinesFont = Typeface.createFromAsset(getActivity()
-				.getApplicationContext().getAssets(),
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(
+				getActivity().getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES);
 		Typeface coolveticaFont = Typeface.createFromAsset(getActivity()
 				.getApplicationContext().getAssets(), Fonts.COOLVETICA);
