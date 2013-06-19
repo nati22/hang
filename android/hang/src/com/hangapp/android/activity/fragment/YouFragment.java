@@ -38,6 +38,7 @@ public final class YouFragment extends SherlockFragment implements
 
 	private ProfilePictureView profilePictureView;
 	private TextView textViewMyName;
+	private TextView textViewStatus;
 	private Button buttonOutgoingBroadcasts;
 	private Button buttonIncomingBroadcasts;
 
@@ -68,18 +69,22 @@ public final class YouFragment extends SherlockFragment implements
 		profilePictureView = (ProfilePictureView) view
 				.findViewById(R.id.profilePictureViewMyIcon);
 		textViewMyName = (TextView) view.findViewById(R.id.textViewMyName);
+		textViewStatus = (TextView) view.findViewById(R.id.textViewStatus);
 		buttonOutgoingBroadcasts = (Button) view
 				.findViewById(R.id.buttonOutgoingBroadcasts);
 		buttonIncomingBroadcasts = (Button) view
 				.findViewById(R.id.buttonIncomingBroadcasts);
 
-		Typeface tf = Typeface.createFromAsset(getActivity()
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(getActivity()
 				.getApplicationContext().getAssets(),
-				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
+				Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface coolveticaFont = Typeface.createFromAsset(getActivity()
+				.getApplicationContext().getAssets(), Fonts.COOLVETICA);
 
-		textViewMyName.setTypeface(tf);
-		buttonIncomingBroadcasts.setTypeface(tf);
-		buttonOutgoingBroadcasts.setTypeface(tf);
+		textViewMyName.setTypeface(coolveticaFont);
+		textViewStatus.setTypeface(champagneLimousinesFont);
+		buttonIncomingBroadcasts.setTypeface(champagneLimousinesFont);
+		buttonOutgoingBroadcasts.setTypeface(champagneLimousinesFont);
 
 		buttonOutgoingBroadcasts.setOnClickListener(new OnClickListener() {
 			@Override

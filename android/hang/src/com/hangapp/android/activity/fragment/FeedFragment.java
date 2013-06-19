@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -80,6 +82,21 @@ public final class FeedFragment extends SherlockFragment implements
 		adapter = new FriendsAdapter(getActivity(), incomingBroadcasts);
 		listViewFriends.setAdapter(adapter);
 		listViewFriends.setEmptyView(view.findViewById(android.R.id.empty));
+
+		// Set the ListView's OnItemClickListener to open ProfileActivity.
+		listViewFriends.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Context context = FeedFragment.this.getActivity();
+				User user = incomingBroadcasts.get(position);
+
+				Intent proposalLeechIntent = new Intent(context,
+						ProfileActivity.class);
+				proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
+				context.startActivity(proposalLeechIntent);
+			}
+		});
 
 		return view;
 	}
@@ -160,20 +177,9 @@ public final class FeedFragment extends SherlockFragment implements
 			holder.profilePictureView.setProfileId(user.getJid());
 			holder.textViewFriendName.setText(user.getFullName());
 
-			// If the user has a Proposal, then show the Proposal icon and set
-			// the OnClickListener for the entire cell.
+			// If the user has a Proposal, then show the Proposal icon.
 			if (user.getProposal() != null) {
 				holder.imageViewProposalIcon.setVisibility(View.VISIBLE);
-				convertView.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View arg0) {
-						Intent proposalLeechIntent = new Intent(context,
-								ProfileActivity.class);
-						proposalLeechIntent.putExtra(Keys.HOST_JID,
-								user.getJid());
-						context.startActivity(proposalLeechIntent);
-					}
-				});
 			} else {
 				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
 				convertView.setOnClickListener(null);

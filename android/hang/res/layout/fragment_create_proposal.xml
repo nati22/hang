@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_action_bar" >
+
+    <TextView
+        android:id="@+id/textViewCreateProposal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@string/champagne_limousines"
+        android:text="CREATE PROPOSAL"
+        android:textSize="14sp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupNowLater"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewCreateProposal"
+        android:layout_marginRight="15dp"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioButtonNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="@string/now"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/radioButtonLater"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/later"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/textViewProposalDescription1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/radioGroupNowLater"
+        android:layout_marginLeft="10dp"
+        android:fontFamily="@string/champagne_limousines"
+        android:text="what do you want to do?"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/editTextProposalDescription1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewProposalDescription1"
+        android:layout_alignRight="@+id/radioGroupNowLater"
+        android:layout_below="@+id/textViewProposalDescription1"
+        android:ems="10"
+        android:inputType="text" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textViewProposalLocation1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextProposalDescription1"
+        android:layout_below="@+id/editTextProposalDescription1"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@string/champagne_limousines"
+        android:text="where? (optional)"
+        android:textSize="12sp" />
+
+    <EditText
+        android:id="@+id/editTextProposalLocation1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewProposalLocation1"
+        android:layout_alignRight="@+id/editTextProposalDescription1"
+        android:layout_below="@+id/textViewProposalLocation1"
+        android:ems="10"
+        android:inputType="text" />
+
+    <TextView
+        android:id="@+id/textViewProposalHowSoon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextProposalLocation1"
+        android:layout_below="@+id/editTextProposalLocation1"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="5dp"
+        android:text="how soon?"
+        android:textSize="12sp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupHowSoon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewProposalHowSoon"
+        android:layout_marginRight="10dp"
+        android:orientation="horizontal" >
+
+        <RadioButton
+            android:id="@+id/radioButtonNow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="now"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/radioButton15Min1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="in 15"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/radioButton30Min1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:text="in 30"
+            android:textSize="12sp" />
+
+        <RadioButton
+            android:id="@+id/radioButton1Hr1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1hr"
+            android:textSize="12sp" />
+    </RadioGroup>
+
+</RelativeLayout>

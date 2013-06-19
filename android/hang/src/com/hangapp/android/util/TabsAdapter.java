@@ -3,6 +3,7 @@ package com.hangapp.android.util;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -10,6 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
@@ -108,6 +112,27 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 		s.setSpan(new TypefaceSpan(mContext, "coolvetica.ttf"), 0, s.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		mActionBar.setTitle(s);
+
+//		// Style the Action Bar tabs.
+//		Typeface champagneLimousinesFont = Typeface.createFromAsset(
+//				mContext.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
+//		Typeface champagneLimousinesBoldFont = Typeface.createFromAsset(
+//				mContext.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
+//		for (int i = 0; i < mActionBar.getTabCount(); i++) {
+//			LayoutInflater inflater = LayoutInflater.from(mContext);
+//			View customView = inflater.inflate(R.layout.tab_title, null);
+//			TextView titleTV = (TextView) customView
+//					.findViewById(R.id.action_custom_title);
+//
+//			if (position == i) {
+//				titleTV.setTypeface(champagneLimousinesBoldFont);
+//			} else {
+//				titleTV.setTypeface(champagneLimousinesFont);
+//			}
+//
+//			mActionBar.getTabAt(i).setCustomView(customView);
+//		}
+
 	}
 
 	@Override

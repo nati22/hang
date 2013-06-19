@@ -2,93 +2,107 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_action_bar"
+    android:background="@color/grey_dark_background"
     android:orientation="vertical" >
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/grey_background" >
+        android:layout_height="wrap_content" >
 
-        <com.facebook.widget.ProfilePictureView
-            android:id="@+id/profilePictureViewMyIcon"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:background="@android:color/white"
-            android:padding="2dp"
-            android:src="@drawable/ic_action_profile_icon" />
-
-        <TextView
-            android:id="@+id/textViewMyName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/profilePictureViewMyIcon"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
-            android:fontFamily="@string/champagne_limousines_bold"
-            android:text="my name goes here"
-            android:textColor="@android:color/white" />
-
-        <ImageView
-            android:id="@+id/imageViewMyAvailability"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/textViewMyName"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="8dp"
-            android:contentDescription="@string/my_availability"
-            android:src="@drawable/status_green" />
-
-        <TextView
-            android:id="@+id/textViewStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/imageViewMyAvailability"
-            android:layout_centerHorizontal="true"
-            android:fontFamily="@string/champagne_limousines"
-            android:text="status"
-            android:textColor="@android:color/white"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/buttonOutgoingBroadcasts"
+        <RelativeLayout
+            android:id="@+id/relativeLayoutFragmentYou"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@+id/separatorIncomingOutgoingButtonsFromEachOther"
-            android:layout_below="@+id/textViewStatus"
-            android:background="@android:color/transparent"
-            android:fontFamily="@string/champagne_limousines"
-            android:onClick="startOutgoingBroadcastsActivity"
-            android:text="@string/outgoing"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
+            android:background="@color/grey_dark_background" >
 
-        <View
-            android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
-            android:layout_alignTop="@+id/buttonIncomingBroadcasts"
-            android:layout_centerHorizontal="true"
-            android:background="@android:color/darker_gray" />
+            <com.facebook.widget.ProfilePictureView
+                android:id="@+id/profilePictureViewMyIcon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/white"
+                android:padding="2dp"
+                android:src="@drawable/ic_action_profile_icon" />
 
-        <Button
-            android:id="@+id/buttonIncomingBroadcasts"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/textViewMyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profilePictureViewMyIcon"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@string/champagne_limousines_bold"
+                android:text="my name goes here"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/imageViewMyAvailability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewMyName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:contentDescription="@string/my_availability"
+                android:src="@drawable/status_green" />
+
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageViewMyAvailability"
+                android:layout_centerHorizontal="true"
+                android:fontFamily="@string/champagne_limousines"
+                android:text="status"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/buttonOutgoingBroadcasts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+                android:layout_below="@+id/textViewStatus"
+                android:background="@android:color/transparent"
+                android:fontFamily="@string/champagne_limousines"
+                android:onClick="startOutgoingBroadcastsActivity"
+                android:text="@string/outgoing"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <View
+                android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
+                android:layout_alignTop="@+id/buttonIncomingBroadcasts"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/buttonIncomingBroadcasts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
+                android:layout_alignLeft="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:fontFamily="@string/champagne_limousines"
+                android:onClick="startIncomingBroadcastsActivity"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/incoming"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+        </RelativeLayout>
+
+        <fragment
+            android:id="@+id/fragmentCreateProposalFragment"
+            android:name="com.hangapp.android.activity.fragment.CreateProposalFragment"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
-            android:layout_alignLeft="@+id/separatorIncomingOutgoingButtonsFromEachOther"
-            android:layout_alignParentRight="true"
-            android:background="@android:color/transparent"
-            android:fontFamily="@string/champagne_limousines"
-            android:onClick="startIncomingBroadcastsActivity"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:text="@string/incoming"
-            android:textColor="@android:color/white"
-            android:textSize="13sp" />
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/relativeLayoutFragmentYou" />
     </RelativeLayout>
 
 </ScrollView>

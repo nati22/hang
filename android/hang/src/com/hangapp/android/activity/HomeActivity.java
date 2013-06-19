@@ -2,12 +2,15 @@ package com.hangapp.android.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -22,12 +25,12 @@ import com.facebook.model.GraphUser;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
-import com.hangapp.android.activity.fragment.MyProposalFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.network.xmpp.XMPP;
+import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.NoSlideViewPager;
 import com.hangapp.android.util.TabsAdapter;
@@ -84,12 +87,27 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		bar.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.action_bar_background));
 
-		// Throw the three tabs into the ActionBar.
+		// Throw the two tabs into the ActionBar.
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
-		mTabsAdapter.addTab(bar.newTab().setText("Feed"), FeedFragment.class,
-				null);
-		mTabsAdapter.addTab(bar.newTab().setText("You"), YouFragment.class,
-				null);
+		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
+		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
+
+		// Style the Action Bar tabs.
+		String[] tabNames = { "FEED", "YOU" };
+		Typeface champagneLimousinesFont = Typeface
+				.createFromAsset(getApplicationContext().getAssets(),
+						Fonts.CHAMPAGNE_LIMOUSINES);
+		for (int i = 0; i < bar.getTabCount(); i++) {
+			LayoutInflater inflater = LayoutInflater.from(this);
+			View customView = inflater.inflate(R.layout.tab_title, null);
+
+			TextView titleTV = (TextView) customView
+					.findViewById(R.id.action_custom_title);
+			titleTV.setText(tabNames[i]);
+			titleTV.setTypeface(champagneLimousinesFont);
+
+			bar.getTabAt(i).setCustomView(customView);
+		}
 
 		// Setup Facebook SDK.
 		uiHelper = new UiLifecycleHelper(this, callback);
