@@ -38,8 +38,8 @@
     <string name="home">Home</string>
     <string name="no_user_name">No user name</string>
     <string name="no_user_availability">No Availability</string>
-    <string name="free">Free</string>
-    <string name="busy">Busy</string>
+    <string name="free">free</string>
+    <string name="busy">busy</string>
     <string name="how_long_will_you_be_free">How long will you be free?</string>
     <string name="when_will_you_be_free">When will you be free?</string>
     <string name="start_broadcasting">Start Broadcasting</string>
@@ -101,5 +101,6 @@
     <string name="my_proposal">My Proposal</string>
     <string name="champagne_limousines_bold">assets/fonts/champagne_limousines_bold.ttf</string>
     <string name="champagne_limousines">assets/fonts/champagne_limousines.ttf</string>
+    <string name="availabile">available</string>
 
 </resources>

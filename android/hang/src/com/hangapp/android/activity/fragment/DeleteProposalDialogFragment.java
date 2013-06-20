@@ -63,9 +63,6 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 			}
 		});
 
-		// Set this dialog's title.
-		getDialog().setTitle(getString(R.string.delete_proposal));
-
 		return view;
 	}
 

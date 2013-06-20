@@ -36,21 +36,23 @@
                 android:text="my name goes here"
                 android:textColor="@android:color/white" />
 
-            <ImageView
-                android:id="@+id/imageViewMyAvailability"
+            <ImageButton
+                android:id="@+id/imageButtonMyAvailability"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_below="@+id/textViewMyName"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
                 android:contentDescription="@string/my_availability"
+                android:scaleType="fitCenter"
                 android:src="@drawable/status_green" />
 
             <TextView
                 android:id="@+id/textViewStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/imageViewMyAvailability"
+                android:layout_below="@+id/imageButtonMyAvailability"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@string/champagne_limousines"

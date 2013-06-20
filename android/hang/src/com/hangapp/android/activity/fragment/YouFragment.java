@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -41,6 +42,7 @@ public final class YouFragment extends SherlockFragment implements
 
 	private ProfilePictureView profilePictureView;
 	private TextView textViewMyName;
+	private ImageButton imageButtonMyAvailability;
 	private TextView textViewStatus;
 	private Button buttonOutgoingBroadcasts;
 	private Button buttonIncomingBroadcasts;
@@ -72,6 +74,8 @@ public final class YouFragment extends SherlockFragment implements
 		profilePictureView = (ProfilePictureView) view
 				.findViewById(R.id.profilePictureViewMyIcon);
 		textViewMyName = (TextView) view.findViewById(R.id.textViewMyName);
+		imageButtonMyAvailability = (ImageButton) view
+				.findViewById(R.id.imageButtonMyAvailability);
 		textViewStatus = (TextView) view.findViewById(R.id.textViewStatus);
 		buttonOutgoingBroadcasts = (Button) view
 				.findViewById(R.id.buttonOutgoingBroadcasts);
@@ -101,6 +105,16 @@ public final class YouFragment extends SherlockFragment implements
 			public void onClick(View arg0) {
 				startActivity(new Intent(getActivity(),
 						IncomingBroadcastsActivity.class));
+			}
+		});
+		imageButtonMyAvailability.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Open the Delete Proposal dialog.
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+
+				SetStatusDialogFragment setStatusDialogFragment = new SetStatusDialogFragment();
+				setStatusDialogFragment.show(fm, "fragment_set_status");
 			}
 		});
 
