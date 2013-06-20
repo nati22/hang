@@ -16,14 +16,14 @@ public class BaseActivity extends SherlockFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		SpannableString s = new SpannableString(getTitle());
+		// Setup the ActionBar
+		final ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		SpannableString s = new SpannableString(getString(R.string.app_name));
 		s.setSpan(new TypefaceSpan(this, "coolvetica.ttf"), 0, s.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-		// Update the action bar title with the TypefaceSpan instance
-		ActionBar actionBar = getSupportActionBar();
-		actionBar.setTitle(s);
-		actionBar.setBackgroundDrawable(getResources().getDrawable(
+		bar.setTitle(s);
+		bar.setBackgroundDrawable(getResources().getDrawable(
 				R.drawable.action_bar_background));
 	}
 

@@ -5,15 +5,12 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.facebook.Request;
@@ -30,13 +27,13 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.network.xmpp.XMPP;
+import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.NoSlideViewPager;
 import com.hangapp.android.util.TabsAdapter;
-import com.hangapp.android.util.TypefaceSpan;
 
-public final class HomeActivity extends SherlockFragmentActivity {
+public final class HomeActivity extends BaseActivity {
 
 	private NoSlideViewPager mViewPager;
 	private TabsAdapter mTabsAdapter;
@@ -67,6 +64,7 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		restClient = new RestClientImpl(Database.getInstance(),
 				getApplicationContext());
 		xmpp = XMPP.getInstance();
+		LayoutInflater inflater = LayoutInflater.from(this);
 
 		// Initialize the ViewPager and set it to be the ContentView of this
 		// Activity.
@@ -74,19 +72,8 @@ public final class HomeActivity extends SherlockFragmentActivity {
 		mViewPager.setId(R.id.viewpager);
 		setContentView(mViewPager);
 
-		// Setup the ActionBar
-		final ActionBar bar = getSupportActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-		bar.setDisplayShowTitleEnabled(true);
-		bar.setDisplayShowHomeEnabled(true);
-		SpannableString s = new SpannableString(getString(R.string.app_name));
-		s.setSpan(new TypefaceSpan(this, "coolvetica.ttf"), 0, s.length(),
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		bar.setTitle(s);
-		bar.setBackgroundDrawable(getResources().getDrawable(
-				R.drawable.action_bar_background));
-
 		// Throw the two tabs into the ActionBar.
+		final ActionBar bar = getSupportActionBar();
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
@@ -97,7 +84,6 @@ public final class HomeActivity extends SherlockFragmentActivity {
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
 		for (int i = 0; i < bar.getTabCount(); i++) {
-			LayoutInflater inflater = LayoutInflater.from(this);
 			View customView = inflater.inflate(R.layout.tab_title, null);
 
 			TextView titleTV = (TextView) customView
@@ -135,7 +121,9 @@ public final class HomeActivity extends SherlockFragmentActivity {
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:
-			return super.onOptionsItemSelected(item);
+			Log.e("HomeActivity.onOptionsItemSelected",
+					"Unknown item selected: " + item.getAlphabeticShortcut());
+			return true;
 		}
 	}
 

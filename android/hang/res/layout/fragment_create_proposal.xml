@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@string/champagne_limousines"
         android:text="CREATE PROPOSAL"
-        android:textSize="16sp" />
+        android:textSize="18sp" />
 
     <RadioGroup
         android:id="@+id/radioGroupNowLater"
