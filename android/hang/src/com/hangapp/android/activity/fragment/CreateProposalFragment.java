@@ -101,7 +101,7 @@ public class CreateProposalFragment extends SherlockFragment {
 		// Set fonts.
 		Typeface tf = Typeface.createFromAsset(getActivity()
 				.getApplicationContext().getAssets(),
-				Fonts.CHAMPAGNE_LIMOUSINES);
+				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
 		textViewCreateProposal.setTypeface(tf);
 		radioButtonNow.setTypeface(tf);
 		radioButtonLater.setTypeface(tf);
@@ -155,15 +155,20 @@ public class CreateProposalFragment extends SherlockFragment {
 		try {
 			Proposal newProposal = Proposal.createProposal(proposalDescription,
 					proposalLocation, proposalStartTime);
-
 			database.setMyProposal(newProposal);
 			restClient.updateMyProposal(newProposal);
+
+			editTextProposalDescription.setText("");
+			editTextProposalLocation.setText("");
+
+			Toast.makeText(getActivity(),
+					"Created Proposal: " + proposalDescription,
+					Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			Toast.makeText(getActivity(),
 					"Invalid proposal: " + e.getMessage(), Toast.LENGTH_SHORT)
 					.show();
 			return;
 		}
-
 	}
 }

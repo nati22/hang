@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:fontFamily="@string/champagne_limousines"
         android:text="CREATE PROPOSAL"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <RadioGroup
         android:id="@+id/radioGroupNowLater"
@@ -51,7 +51,7 @@
         android:layout_marginLeft="10dp"
         android:fontFamily="@string/champagne_limousines"
         android:text="what do you want to do?"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <EditText
         android:id="@+id/editTextProposalDescription1"
@@ -75,7 +75,7 @@
         android:layout_marginTop="20dp"
         android:fontFamily="@string/champagne_limousines"
         android:text="where? (optional)"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <EditText
         android:id="@+id/editTextProposalLocation1"
@@ -96,7 +96,7 @@
         android:layout_centerVertical="true"
         android:layout_marginTop="5dp"
         android:text="how soon?"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <RadioGroup
         android:id="@+id/radioGroupHowSoon"
