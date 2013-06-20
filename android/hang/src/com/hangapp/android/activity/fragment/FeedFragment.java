@@ -159,15 +159,21 @@ public final class FeedFragment extends SherlockFragment implements
 						.findViewById(R.id.profilePictureView);
 				holder.textViewFriendName = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
-				holder.imageViewProposalIcon = (ImageView) convertView
-						.findViewById(R.id.buttonFriendProposal);
+				holder.textViewProposalDescriptionPreview = (TextView) convertView
+						.findViewById(R.id.textViewProposalDescriptionPreview);
 				holder.imageViewAvailability = (ImageView) convertView
 						.findViewById(R.id.imageViewAvailability);
 
-				Typeface tf = Typeface.createFromAsset(getActivity()
-						.getApplicationContext().getAssets(),
+				Typeface champagneLimousinesBold = Typeface.createFromAsset(
+						getActivity().getApplicationContext().getAssets(),
 						Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-				holder.textViewFriendName.setTypeface(tf);
+				Typeface champagneLimousines = Typeface.createFromAsset(
+						getActivity().getApplicationContext().getAssets(),
+						Fonts.CHAMPAGNE_LIMOUSINES);
+
+				holder.textViewFriendName.setTypeface(champagneLimousinesBold);
+				holder.textViewProposalDescriptionPreview
+						.setTypeface(champagneLimousines);
 
 				convertView.setTag(holder);
 			} else {
@@ -180,10 +186,10 @@ public final class FeedFragment extends SherlockFragment implements
 
 			// If the user has a Proposal, then show the Proposal icon.
 			if (user.getProposal() != null) {
-				holder.imageViewProposalIcon.setVisibility(View.VISIBLE);
+				holder.textViewProposalDescriptionPreview.setText(user
+						.getProposal().getDescription());
 			} else {
-				holder.imageViewProposalIcon.setVisibility(View.INVISIBLE);
-				convertView.setOnClickListener(null);
+				holder.textViewProposalDescriptionPreview.setText("");
 			}
 
 			// Set the user's status icon based on his Availability.
@@ -220,7 +226,7 @@ public final class FeedFragment extends SherlockFragment implements
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
 			TextView textViewFriendName;
-			ImageView imageViewProposalIcon;
+			TextView textViewProposalDescriptionPreview;
 			ImageView imageViewAvailability;
 		}
 	}

@@ -16,12 +16,14 @@
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="3dp"
         android:layout_toRightOf="@+id/profilePictureView"
         android:paddingBottom="1dp"
         android:paddingTop="1dp"
         android:text="@string/no_user_name"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="14sp" />
+        android:textSize="16sp" />
 
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/profilePictureView"
@@ -39,20 +41,19 @@
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:src="@drawable/status_green" />
 
-    <ImageView
-        android:id="@+id/buttonFriendProposal"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
-        android:layout_toLeftOf="@+id/imageViewAvailability"
-        android:background="@drawable/ic_action_proposal"
-        android:contentDescription="@string/proposal"
-        android:focusable="false"
-        android:textSize="12sp" />
+    <TextView
+        android:id="@+id/textViewProposalDescriptionPreview"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_alignLeft="@+id/textViewFriendName"
+        android:layout_below="@+id/textViewFriendName"
+        android:paddingBottom="1dp"
+        android:paddingTop="1dp"
+        android:text="@string/proposal_description"
+        android:textSize="16sp" />
 
 </RelativeLayout>
