@@ -18,7 +18,6 @@ public class BaseActivity extends SherlockFragmentActivity {
 
 		// Setup the ActionBar
 		final ActionBar bar = getSupportActionBar();
-		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		SpannableString s = new SpannableString(getString(R.string.app_name));
 		s.setSpan(new TypefaceSpan(this, "coolvetica.ttf"), 0, s.length(),
 				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

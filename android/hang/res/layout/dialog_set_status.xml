@@ -19,20 +19,20 @@
         android:id="@+id/TextView01"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/ImageButton01"
-        android:layout_alignRight="@+id/ImageButton01"
-        android:layout_below="@+id/ImageButton01"
+        android:layout_alignLeft="@+id/imageButtonBusy"
+        android:layout_alignRight="@+id/imageButtonBusy"
+        android:layout_below="@+id/imageButtonBusy"
         android:gravity="center_horizontal"
         android:text="@string/busy"
         android:textSize="12sp" />
 
     <SeekBar
-        android:id="@+id/seekBar1"
+        android:id="@+id/seekBarAvailabilityDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView3"
-        android:layout_alignRight="@+id/textView3"
-        android:layout_below="@+id/textView3" />
+        android:layout_alignLeft="@+id/textViewAvailabilityDuration"
+        android:layout_alignRight="@+id/textViewAvailabilityDuration"
+        android:layout_below="@+id/textViewAvailabilityDuration" />
 
     <TextView
         android:id="@+id/textView2"
@@ -47,17 +47,17 @@
         android:textSize="16sp" />
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonSetAvailability"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBar1"
+        android:layout_below="@+id/seekBarAvailabilityDuration"
         android:layout_toLeftOf="@+id/TextView01"
         android:layout_toRightOf="@+id/textView1"
         android:text="done"
         android:textSize="12sp" />
 
     <ImageButton
-        android:id="@+id/ImageButton01"
+        android:id="@+id/imageButtonBusy"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_above="@+id/textView1"
@@ -79,7 +79,7 @@
         android:src="@drawable/status_green" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textViewAvailabilityDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textView2"

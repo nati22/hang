@@ -74,6 +74,7 @@ public final class HomeActivity extends BaseActivity {
 
 		// Throw the two tabs into the ActionBar.
 		final ActionBar bar = getSupportActionBar();
+		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);

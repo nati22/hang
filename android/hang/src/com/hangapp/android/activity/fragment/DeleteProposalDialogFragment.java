@@ -1,5 +1,6 @@
 package com.hangapp.android.activity.fragment;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.util.Fonts;
 
 public class DeleteProposalDialogFragment extends DialogFragment {
 
@@ -47,6 +49,12 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 				.findViewById(R.id.buttonConfirmDeleteProposal);
 		buttonCancelDeleteProposal = (Button) view
 				.findViewById(R.id.buttonCancelDeleteProposal);
+
+		// Set fonts.
+		Typeface tf = Typeface.createFromAsset(getActivity()
+				.getApplicationContext().getAssets(),
+				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
+		// TODO
 
 		// Set OnClickListeners.
 		buttonConfirmDeleteProposal.setOnClickListener(new OnClickListener() {
