@@ -31,6 +31,7 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
 public final class FeedFragment extends SherlockFragment implements
@@ -165,7 +166,7 @@ public final class FeedFragment extends SherlockFragment implements
 
 				Typeface tf = Typeface.createFromAsset(getActivity()
 						.getApplicationContext().getAssets(),
-						"fonts/champagne_limousines_bold.ttf");
+						Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
 				holder.textViewFriendName.setTypeface(tf);
 
 				convertView.setTag(holder);

@@ -29,6 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:checked="true"
             android:text="@string/now"
             android:textSize="12sp" />
 
@@ -36,6 +37,7 @@
             android:id="@+id/radioButtonLater"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:text="@string/later"
             android:textSize="12sp" />
     </RadioGroup>
@@ -110,6 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
+            android:checked="true"
             android:text="now"
             android:textSize="12sp" />
 
@@ -138,7 +141,7 @@
     </RadioGroup>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonCreateProposal"
         android:layout_width="200dp"
         android:layout_height="40dp"
         android:layout_below="@+id/radioGroupHowSoon"

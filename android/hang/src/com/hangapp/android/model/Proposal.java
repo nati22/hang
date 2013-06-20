@@ -31,6 +31,30 @@ public final class Proposal {
 		this.confirmedUsers = new ArrayList<String>();
 	}
 
+	public static Proposal createProposal(String description, String location,
+			DateTime startTime) throws Exception {
+		DateTime rightNow = new DateTime();
+
+		// Sanity checks.
+		if (description == null) {
+			throw new Exception("Description was null");
+		} else if (description.trim().equals("")) {
+			throw new Exception("Description was empty");
+		} else if (location == null) {
+			throw new Exception("Location was null");
+		} else if (location.trim().equals("")) {
+			throw new Exception("Location was empty");
+		} else if (startTime == null) {
+			throw new Exception("Start time was null");
+		} else if (startTime.isBefore(rightNow)) {
+			throw new Exception("Proposal start time already passed");
+		}
+
+		Proposal newProposal = new Proposal(description, location, startTime);
+
+		return newProposal;
+	}
+
 	public String getDescription() {
 		return description;
 	}
