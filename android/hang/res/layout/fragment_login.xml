@@ -2,34 +2,52 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/pressed_hang" >
-
-    <TextView
-        android:id="@+id/textViewAppName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/app_name"
-        android:textSize="50sp" />
+    android:background="@drawable/login_image" >
 
     <ImageView
-        android:id="@+id/imageViewAppLogo"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_below="@+id/textViewAppName"
+        android:id="@+id/imageViewAppName"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_launcher_huge" />
+        android:layout_marginTop="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/hang_logo_full" />
 
     <com.facebook.widget.LoginButton
         android:id="@+id/facebookLoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/relativeLayout1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="7dp" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="25dp" />
+        android:background="@android:color/black" >
+
+        <TextView
+            android:id="@+id/textViewAlreadyHaveAnAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:text="Already have an account?"
+            android:textColor="@color/gray" />
+
+        <TextView
+            android:id="@+id/textViewSignInNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@+id/textViewAlreadyHaveAnAccount"
+            android:text="Sign in now"
+            android:textColor="@color/grey_action_bar" />
+    </RelativeLayout>
 
 </RelativeLayout>

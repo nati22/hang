@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_action_bar"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingBottom="10dp" >
 
     <TextView
         android:id="@+id/textViewMyProposal"
@@ -54,8 +55,8 @@
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_alignLeft="@+id/relativeLayoutMyProposalChatArea"
+        android:layout_alignRight="@+id/relativeLayoutMyProposalChatArea"
         android:layout_below="@+id/textViewMyProposalStartTime"
         android:layout_marginTop="5dp" >
 
@@ -139,6 +140,7 @@
     </HorizontalScrollView>
 
     <RelativeLayout
+        android:id="@+id/relativeLayoutMyProposalChatArea"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_below="@+id/horizontalScrollView1"
@@ -170,8 +172,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
+            android:layout_marginTop="2dp"
             android:layout_toLeftOf="@+id/buttonMyProposalSendMessage"
-            android:inputType="text" />
+            android:hint="Enter message here"
+            android:inputType="text"
+            android:textSize="12sp" />
 
         <Button
             android:id="@+id/buttonMyProposalSendMessage"
@@ -183,5 +188,13 @@
             android:text="@string/send"
             android:textSize="12sp" />
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/imageViewDeleteMyProposal"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignRight="@+id/textViewMyProposalInterestedCount"
+        android:layout_alignTop="@+id/textViewMyProposal"
+        android:src="@drawable/delete" />
 
 </RelativeLayout>

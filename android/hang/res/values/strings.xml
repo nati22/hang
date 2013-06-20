@@ -91,7 +91,7 @@
     <string name="unknown_proposal">Unknown Proposal</string>
     <string name="someones_proposal">%s\'s current Proposal</string>
     <string name="refresh">Refresh</string>
-    <string name="confirm_delete_proposal">Are you sure you want to delete your proposal?</string>
+    <string name="confirm_delete_proposal">Delete this proposal?</string>
     <string name="remove_proposal_button">Delete Proposal</string>
     <string name="cancel">Cancel</string>
     <string name="no_proposal">No Proposal</string>

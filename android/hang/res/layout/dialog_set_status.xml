@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_action_bar" >
+
+    <ImageButton
+        android:id="@+id/imageButtonFree"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/imageButtonBusy"
+        android:layout_marginRight="15dp"
+        android:layout_toLeftOf="@+id/helper"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/status_green" />
+
+    <TextView
+        android:id="@+id/textViewFree"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageButtonFree"
+        android:layout_alignRight="@+id/imageButtonFree"
+        android:layout_below="@+id/imageButtonFree"
+        android:gravity="center_horizontal"
+        android:text="@string/free" />
+
+    <View
+        android:id="@+id/helper"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:id="@+id/imageButtonBusy"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="28dp"
+        android:layout_toRightOf="@+id/helper"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/status_red" />
+
+    <TextView
+        android:id="@+id/textViewConfirmDeletion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageButtonBusy"
+        android:layout_alignRight="@+id/imageButtonBusy"
+        android:layout_below="@+id/imageButtonBusy"
+        android:gravity="center_horizontal"
+        android:text="@string/busy" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewFree"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="18dp"
+        android:text="until 3 PM today (or tomorrow)" />
+
+    <SeekBar
+        android:id="@+id/seekBar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1"
+        android:layout_marginTop="20dp" />
+
+</RelativeLayout>

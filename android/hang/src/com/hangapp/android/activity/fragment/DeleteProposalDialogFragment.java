@@ -25,6 +25,13 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 	}
 
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		setStyle(STYLE_NO_TITLE, 0); // remove title from dialogfragment
+	}
+
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater

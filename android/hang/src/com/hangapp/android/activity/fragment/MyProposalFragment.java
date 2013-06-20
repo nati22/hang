@@ -2,10 +2,13 @@ package com.hangapp.android.activity.fragment;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -21,6 +24,7 @@ public final class MyProposalFragment extends SherlockFragment {
 	private TextView textViewMyProposalLocation;
 	private TextView textViewMyProposalStartTime;
 	private TextView textViewMyProposalInterestedCount;
+	private ImageView imageViewDeleteMyProposal;
 
 	private Proposal myProposal;
 	private Database database;
@@ -51,6 +55,8 @@ public final class MyProposalFragment extends SherlockFragment {
 				.findViewById(R.id.textViewMyProposalStartTime);
 		textViewMyProposalInterestedCount = (TextView) view
 				.findViewById(R.id.textViewMyProposalInterestedCount);
+		imageViewDeleteMyProposal = (ImageView) view
+				.findViewById(R.id.imageViewDeleteMyProposal);
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -65,6 +71,19 @@ public final class MyProposalFragment extends SherlockFragment {
 		textViewMyProposalStartTime.setTypeface(champagneLimousinesFont);
 		textViewMyProposalInterestedCount
 				.setTypeface(champagneLimousinesFontBold);
+
+		// Set OnClickListeners
+		imageViewDeleteMyProposal.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// Open the Delete Proposal dialog.
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+
+				DeleteProposalDialogFragment deleteProposalDialogFragment = new DeleteProposalDialogFragment();
+				deleteProposalDialogFragment.show(fm,
+						"fragment_delete_proposal");
+			}
+		});
 
 		return view;
 	}

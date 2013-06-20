@@ -1,25 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textViewMessageBody"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Small Text"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="13sp" />
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/profilePictureViewMessageFrom"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentLeft="true" >
+    </com.facebook.widget.ProfilePictureView>
 
     <TextView
-        android:id="@+id/textViewMessageFrom"
+        android:id="@+id/textViewMessageBody2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Small Text"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="2dp"
+        android:layout_toRightOf="@+id/textViewMessageFrom2"
+        android:text="Message body goes here."
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="12sp"
-        android:textStyle="italic" />
+        android:textSize="12sp" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/textViewMessageFrom2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/profilePictureViewMessageFrom"
+        android:text="(message from)"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/blue_muc_chat"
+        android:textSize="12sp" />
+
+</RelativeLayout>

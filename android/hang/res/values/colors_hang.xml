@@ -9,5 +9,7 @@
     <color name="gray">#808080</color>
     <color name="grey_action_bar">#DEDBD5</color>
     <color name="grey_dark_background">#424242</color>
+    <color name="blue_muc_chat">#00B2ED</color>
+    <color name="black_transparent">#90000000</color>
 
 </resources>

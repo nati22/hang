@@ -130,9 +130,9 @@ public final class ChatActivity extends BaseActivity implements
 
 			// Reference Views.
 			TextView textViewMessageBody = (TextView) convertView
-					.findViewById(R.id.textViewMessageBody);
+					.findViewById(R.id.textViewMessageFrom2);
 			TextView textViewMessageFrom = (TextView) convertView
-					.findViewById(R.id.textViewMessageFrom);
+					.findViewById(R.id.textViewMessageBody2);
 
 			// Populate Views.
 			textViewMessageBody.setText(message.getBody());
