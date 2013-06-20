@@ -97,9 +97,8 @@
                 android:textSize="13sp" />
         </RelativeLayout>
 
-        <fragment
-            android:id="@+id/fragmentCreateProposalFragment"
-            android:name="com.hangapp.android.activity.fragment.CreateProposalFragment"
+        <FrameLayout
+            android:id="@+id/frameLayoutYouFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

@@ -61,10 +61,7 @@
         android:layout_alignRight="@+id/radioGroupNowLater"
         android:layout_below="@+id/textViewProposalDescription1"
         android:ems="10"
-        android:inputType="text" >
-
-        <requestFocus />
-    </EditText>
+        android:inputType="text" />
 
     <TextView
         android:id="@+id/textViewProposalLocation1"

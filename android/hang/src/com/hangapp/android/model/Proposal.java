@@ -41,9 +41,7 @@ public final class Proposal {
 		} else if (description.trim().equals("")) {
 			throw new Exception("Description was empty");
 		} else if (location == null) {
-			throw new Exception("Location was null");
-		} else if (location.trim().equals("")) {
-			throw new Exception("Location was empty");
+			location = "";
 		} else if (startTime == null) {
 			throw new Exception("Start time was null");
 		} else if (startTime.isBefore(rightNow)) {

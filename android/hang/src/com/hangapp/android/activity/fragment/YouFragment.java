@@ -6,6 +6,9 @@ import java.util.Locale;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,7 +145,7 @@ public final class YouFragment extends SherlockFragment implements
 			return;
 		}
 
-		Log.d("YouFragment.onMyAvailabilityUpdate", "onMyAvailabilityUpdate: "
+		Log.i("YouFragment.onMyAvailabilityUpdate", "onMyAvailabilityUpdate: "
 				+ newAvailability.getExpirationDate().toString());
 
 		myCurrentAvailability = newAvailability;
@@ -177,5 +180,19 @@ public final class YouFragment extends SherlockFragment implements
 	@Override
 	public void onMyProposalUpdate(Proposal proposal) {
 		myProposal = proposal;
+
+		FragmentManager fragmentManager = getFragmentManager();
+		FragmentTransaction fragmentTransaction = fragmentManager
+				.beginTransaction();
+		Fragment fragment = null;
+
+		if (myProposal == null) {
+			fragment = new CreateProposalFragment();
+		} else {
+			fragment = new MyProposalFragment();
+		}
+
+		fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment);
+		fragmentTransaction.commit();
 	}
 }

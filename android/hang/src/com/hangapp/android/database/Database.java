@@ -264,12 +264,10 @@ public final class Database {
 
 		if (proposalInterestedString == null) {
 			Log.e("Database.getMyProposal", "proposalInterestedString was null");
-			return null;
 		}
 
 		if (proposalConfirmedString == null) {
 			Log.e("Database.getMyProposal", "proposalConfirmedString was null");
-			return null;
 		}
 
 		// Convert the Start Time back into a Date Time.

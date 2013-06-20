@@ -1,5 +1,6 @@
 package com.hangapp.android.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,7 +42,7 @@ public final class Utils {
 
 	public static List<String> convertStringToArray(String str) {
 		if (str == null) {
-			return null;
+			return new ArrayList<String>();
 		}
 
 		String[] arr = str.split(",");
