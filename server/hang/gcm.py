@@ -62,9 +62,9 @@ class GCM(object):
         self.api_key = api_key
         self.url = url
         if proxy:
-            if isinstance(proxy,basestring):
+            if isinstance(proxy, basestring):
                 protocol = url.split(':')[0]
-                proxy={protocol:proxy}
+                proxy = {protocol:proxy}
 
             auth = urllib2.HTTPBasicAuthHandler()
             opener = urllib2.build_opener(urllib2.ProxyHandler(proxy), auth, urllib2.HTTPHandler)

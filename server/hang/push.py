@@ -1,5 +1,5 @@
 from google.appengine.ext import db
-from gcm import GCM
+from gcm import GCM, GCMNotRegisteredException, GCMUnavailableException
 
 import urllib2
 import User
@@ -15,16 +15,27 @@ def tickle_users(users, sender):
 
             # do work
     # this should return some type of Error, I'll figure it out later
-    #return 
+    # return 
 
 def push_to_user(user, sender, type):
     data = {'type': type, 'nudger': sender.first_name}
 
     gcm = GCM(API_KEY)
 
-    for reg_id in user.gcm_registration_ids:
-        gcm.plaintext_request(registration_id=reg_id, data=data)
-    # As of now this RequestHandler will clear Notifications 
-    # from all devices where the User is signed in
-    #class NotificationReceivedRequestHandler(webapp2.RequestHandler):
-    #    def put(self, jid):
+    response = gcm.json_request(registration_ids=user.gcm_registration_ids, data=data)
+
+    # Handling errors
+    if 'errors' in response:
+        for error, reg_ids in response['errors'].items():
+            # Check for errors and act accordingly
+            if error is 'NotRegistered':
+                # Remove reg_ids from database
+                for reg_id in reg_ids:
+                    user.gcm_registration_ids.remove(reg_id)
+                    user.put()
+    if 'canonical' in response:
+        for reg_id, canonical_id in response['canonical'].items():
+            # Repace reg_id with canonical_id in your database
+            user.gcm_registration_ids.remove(reg_id)
+            user.gcm_registration_ids.add(canonical_id)
+            user.put()

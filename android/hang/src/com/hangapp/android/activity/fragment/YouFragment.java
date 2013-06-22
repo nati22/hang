@@ -157,6 +157,13 @@ public final class YouFragment extends SherlockFragment implements
 		if (newAvailability == null) {
 			Log.e("YouFragment.onMyAvailabilityUpdate", "Availability was null");
 			return;
+		} else if (newAvailability.getDescription() == null) {
+			Log.e("YouFragment.onMyAvailabilityUpdate", "Description was null");
+			return;
+		} else if (newAvailability.getExpirationDate() == null) {
+			Log.e("YouFragment.onMyAvailabilityUpdate",
+					"Expiration date was null");
+			return;
 		}
 
 		Log.i("YouFragment.onMyAvailabilityUpdate", "onMyAvailabilityUpdate: "
