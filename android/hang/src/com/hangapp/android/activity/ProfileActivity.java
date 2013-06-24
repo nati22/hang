@@ -4,7 +4,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -76,6 +75,7 @@ public final class ProfileActivity extends BaseActivity {
 		Typeface champagneLimousinesFont = Typeface
 				.createFromAsset(getApplicationContext().getAssets(),
 						Fonts.CHAMPAGNE_LIMOUSINES);
+		textViewStatus.setTypeface(champagneLimousinesFont);
 		textViewProposal.setTypeface(champagneLimousinesFontBold);
 		textViewProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewProposalLocation.setTypeface(champagneLimousinesFontBold);
@@ -92,5 +92,17 @@ public final class ProfileActivity extends BaseActivity {
 		profilePictureViewFriendIcon.setProfileId(friend.getJid());
 		textViewFriendsName.setText(friend.getFullName());
 		textViewProposal.setText(friend.getFirstName() + "'s Proposal");
+
+		if (friend.getProposal() == null) {
+			Log.e("ProfileActivity.onResume", friend.getFirstName()
+					+ "'s proposal was null");
+		} else {
+			textViewProposalDescription.setText(friend.getProposal()
+					.getDescription());
+			textViewProposalLocation
+					.setText(friend.getProposal().getLocation());
+			textViewProposalStartTime.setText(friend.getProposal()
+					.getStartTime().toString("h:mm aa"));
+		}
 	}
 }
