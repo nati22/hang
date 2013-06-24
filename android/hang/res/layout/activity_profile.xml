@@ -237,6 +237,14 @@
                     android:layout_above="@+id/editTextMyProposalMessageText"
                     android:background="@color/grey_action_bar" />
 
+                <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+
+                <LinearLayout
+                    android:layout_width="0px"
+                    android:layout_height="0px"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true" />
+
                 <EditText
                     android:id="@+id/editTextMyProposalMessageText"
                     android:layout_width="wrap_content"
@@ -247,6 +255,8 @@
                     android:layout_toLeftOf="@+id/buttonMyProposalSendMessage"
                     android:hint="Enter message here"
                     android:inputType="text"
+                    android:nextFocusLeft="@+id/editTextMyProposalMessageText"
+                    android:nextFocusUp="@+id/editTextMyProposalMessageText"
                     android:textSize="12sp" />
 
                 <Button
