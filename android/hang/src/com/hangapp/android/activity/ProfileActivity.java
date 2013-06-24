@@ -1,11 +1,11 @@
 package com.hangapp.android.activity;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
@@ -14,12 +14,20 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.BaseActivity;
+import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
 public final class ProfileActivity extends BaseActivity {
 
-	private ProfilePictureView profilePictureView;
-	private TextView textViewFriendName;
+	private ProfilePictureView profilePictureViewFriendIcon;
+	private TextView textViewFriendsName;
+	private ImageButton imageButtonFriendsAvailability;
+	private TextView textViewStatus;
+	private TextView textViewProposal;
+	private TextView textViewProposalDescription;
+	private TextView textViewProposalLocation;
+	private TextView textViewProposalStartTime;
+	private TextView textViewProposalInterestedCount;
 
 	private Database database;
 	private RestClient restClient;
@@ -51,22 +59,38 @@ public final class ProfileActivity extends BaseActivity {
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Reference Views.
-		profilePictureView = (ProfilePictureView) findViewById(R.id.profilePictureView);
-		textViewFriendName = (TextView) findViewById(R.id.textViewFriendName);
+		profilePictureViewFriendIcon = (ProfilePictureView) findViewById(R.id.profilePictureViewFriendsIcon);
+		textViewFriendsName = (TextView) findViewById(R.id.textViewFriendsName);
+		imageButtonFriendsAvailability = (ImageButton) findViewById(R.id.imageButtonFriendsAvailability);
+		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+		textViewProposal = (TextView) findViewById(R.id.textViewMyProposal);
+		textViewProposalDescription = (TextView) findViewById(R.id.textViewMyProposalDescription);
+		textViewProposalLocation = (TextView) findViewById(R.id.textViewMyProposalLocation);
+		textViewProposalStartTime = (TextView) findViewById(R.id.textViewMyProposalStartTime);
+		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
+
+		// Set fonts
+		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
+				getApplicationContext().getAssets(),
+				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
+		Typeface champagneLimousinesFont = Typeface
+				.createFromAsset(getApplicationContext().getAssets(),
+						Fonts.CHAMPAGNE_LIMOUSINES);
+		textViewProposal.setTypeface(champagneLimousinesFontBold);
+		textViewProposalDescription.setTypeface(champagneLimousinesFontBold);
+		textViewProposalLocation.setTypeface(champagneLimousinesFontBold);
+		textViewProposalStartTime.setTypeface(champagneLimousinesFont);
+		textViewProposalInterestedCount
+				.setTypeface(champagneLimousinesFontBold);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 
 		// Populate Views.
-		profilePictureView.setProfileId(friend.getJid());
-		textViewFriendName.setText(friend.getFullName());
-
-		// Set OnClickListeners.
-		profilePictureView.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Toast.makeText(getApplicationContext(),
-						"Nudging " + friend.getFirstName(), Toast.LENGTH_SHORT)
-						.show();
-				restClient.sendNudge(friend.getJid());
-			}
-		});
+		profilePictureViewFriendIcon.setProfileId(friend.getJid());
+		textViewFriendsName.setText(friend.getFullName());
+		textViewProposal.setText(friend.getFirstName() + "'s Proposal");
 	}
 }

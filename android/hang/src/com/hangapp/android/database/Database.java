@@ -382,6 +382,8 @@ public final class Database {
 				Keys.INCOMING, null);
 
 		if (incomingBroadcastJidsStringArray == null) {
+			Log.e("Database.getIncomingUser",
+					"incomingBroadcastJidsStringArray was null");
 			return null;
 		}
 

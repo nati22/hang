@@ -196,8 +196,8 @@
 
     <ImageView
         android:id="@+id/imageViewDeleteMyProposal"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_alignRight="@+id/textViewMyProposalInterestedCount"
         android:layout_alignTop="@+id/textViewMyProposal"
         android:src="@drawable/delete" />

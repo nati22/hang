@@ -1,60 +1,265 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey_action_bar"
+    android:background="@color/grey_dark_background"
     android:orientation="vertical" >
 
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureView"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:contentDescription="@string/profile"
-        android:src="@drawable/ic_action_profile_icon" >
-    </com.facebook.widget.ProfilePictureView>
-
-    <TextView
-        android:id="@+id/textViewClickIconToNudge"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/relativeLayoutFragmentYou"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/profilePictureView"
-        android:layout_below="@+id/profilePictureView"
-        android:lines="2"
-        android:text="@string/click_icon_to_nudge"
-        android:textSize="12sp"
-        android:textStyle="italic" />
+        android:background="@color/grey_dark_background" >
 
-    <TextView
-        android:id="@+id/textViewFriendName"
-        android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_alignTop="@+id/profilePictureView"
-        android:layout_toRightOf="@+id/profilePictureView"
-        android:text="@string/no_user_name"
-        android:textSize="16sp" />
+        <com.facebook.widget.ProfilePictureView
+            android:id="@+id/profilePictureViewFriendsIcon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/white"
+            android:padding="2dp"
+            android:src="@drawable/ic_action_profile_icon" />
 
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:layout_alignLeft="@+id/textViewFriendName"
-        android:layout_below="@+id/textViewFriendName" >
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/textViewFriendsName"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-        </LinearLayout>
-    </HorizontalScrollView>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profilePictureViewFriendsIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@string/champagne_limousines_bold"
+            android:text="friend&apos;s name goes here"
+            android:textColor="@android:color/white" />
 
-    <fragment
-        android:id="@+id/fragment1"
-        android:name="com.hangapp.android.activity.fragment.ProposalFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textViewClickIconToNudge" />
+        <ImageButton
+            android:id="@+id/imageButtonFriendsAvailability"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_below="@+id/textViewFriendsName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/my_availability"
+            android:scaleType="fitCenter"
+            android:src="@drawable/status_green" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textViewStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageButtonFriendsAvailability"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@string/champagne_limousines"
+            android:text="Status"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/darker_gray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewStatus"
+            android:background="@color/grey_action_bar"
+            android:orientation="vertical"
+            android:paddingBottom="10dp" >
+
+            <TextView
+                android:id="@+id/textViewMyProposal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="PROPOSAL"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/textViewMyProposalDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/textViewMyProposal"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/proposal_description"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewMyProposalLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textViewMyProposalDescription"
+                android:layout_below="@+id/textViewMyProposalDescription"
+                android:text="@string/proposal_location"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewMyProposalStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textViewMyProposalLocation"
+                android:layout_below="@+id/textViewMyProposalLocation"
+                android:text="@string/start_time"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewMyProposalInterestedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textViewMyProposalStartTime"
+                android:layout_alignBottom="@+id/textViewMyProposalStartTime"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:text="0 interested"
+                android:textSize="16sp" />
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/relativeLayoutMyProposalChatArea"
+                android:layout_alignRight="@+id/relativeLayoutMyProposalChatArea"
+                android:layout_below="@+id/textViewMyProposalStartTime"
+                android:layout_marginTop="5dp" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested00"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested01"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested02"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested03"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested04"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested05"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested06"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested07"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested08"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested09"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested10"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+
+                    <com.facebook.widget.ProfilePictureView
+                        android:id="@+id/profilePictureViewInterested11"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp" >
+                    </com.facebook.widget.ProfilePictureView>
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayoutMyProposalChatArea"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@+id/horizontalScrollView1"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/white" >
+
+                <ListView
+                    android:id="@+id/listView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/buttonMyProposalSendMessage"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true" >
+                </ListView>
+
+                <View
+                    android:id="@+id/separatorChatFromCompose"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_above="@+id/editTextMyProposalMessageText"
+                    android:background="@color/grey_action_bar" />
+
+                <EditText
+                    android:id="@+id/editTextMyProposalMessageText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_toLeftOf="@+id/buttonMyProposalSendMessage"
+                    android:hint="Enter message here"
+                    android:inputType="text"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/buttonMyProposalSendMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignTop="@+id/editTextMyProposalMessageText"
+                    android:text="@string/send"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView>
