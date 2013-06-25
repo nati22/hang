@@ -53,7 +53,7 @@ public final class Availability implements Comparable<Availability> {
 		// return "No Availability.";
 		// }
 
-		String description = "(availability description goes here)";
+		String description = "Status";
 
 		// switch (status) {
 		// case FREE:

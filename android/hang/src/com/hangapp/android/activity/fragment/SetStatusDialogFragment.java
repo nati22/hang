@@ -1,5 +1,7 @@
 package com.hangapp.android.activity.fragment;
 
+import org.joda.time.DateTime;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -11,11 +13,14 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Availability;
+import com.hangapp.android.model.Availability.Status;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
@@ -70,6 +75,7 @@ public class SetStatusDialogFragment extends DialogFragment {
 		textViewAvailabilityDuration.setTypeface(tf);
 		buttonSetAvailability.setTypeface(tf);
 
+		// Set OnClickListeners.
 		buttonSetAvailability.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -77,13 +83,65 @@ public class SetStatusDialogFragment extends DialogFragment {
 			}
 		});
 
+		// Initialize the SeekBar.
+		seekBarAvailabilityDuration
+				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+					@Override
+					public void onStopTrackingTouch(SeekBar seekBar) {
+						// Do nothing.
+					}
+
+					@Override
+					public void onStartTrackingTouch(SeekBar seekBar) {
+						// Do nothing.
+					}
+
+					@Override
+					public void onProgressChanged(SeekBar seekBar,
+							int progress, boolean fromUser) {
+						DateTime expirationDate = getExpirationDate();
+
+						textViewAvailabilityDuration.setText("until: "
+								+ expirationDate.toString("h:mm aa"));
+					}
+				});
+
 		return view;
 	}
 
-	private void setStatus() {
-		Toast.makeText(getActivity(), "Not yet implemented.",
-				Toast.LENGTH_SHORT).show();
+	protected void setStatus() {
+		Availability.Status status = null;
+
+		switch (radioGroupFreeBusy.getCheckedRadioButtonId()) {
+		case R.id.radioButtonFree:
+			status = Status.FREE;
+			break;
+		case R.id.radioButtonBusy:
+			status = Status.BUSY;
+			break;
+		default:
+			Toast.makeText(getActivity(), "Choose if you're Free or Busy",
+					Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		DateTime expirationDate = getExpirationDate();
+
+		Availability newAvailability = new Availability(status, expirationDate);
+		database.setMyAvailability(newAvailability);
+		restClient.updateMyAvailability(newAvailability);
 
 		dismiss();
+	}
+
+	private DateTime getExpirationDate() {
+		DateTime rightNow = new DateTime();
+		DateTime expirationDate = new DateTime(rightNow.getYear(),
+				rightNow.getMonthOfYear(), rightNow.getDayOfMonth(),
+				rightNow.getHourOfDay(), 0);
+		expirationDate = expirationDate.plusHours(seekBarAvailabilityDuration
+				.getProgress() + 1);
+
+		return expirationDate;
 	}
 }

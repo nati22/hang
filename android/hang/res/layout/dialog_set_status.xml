@@ -48,15 +48,6 @@
             android:textSize="12sp" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/buttonSetAvailability"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBarAvailabilityDuration"
-        android:layout_centerHorizontal="true"
-        android:text="done"
-        android:textSize="12sp" />
-
     <TextView
         android:id="@+id/textViewAvailabilityDuration"
         android:layout_width="wrap_content"
@@ -64,7 +55,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/radioGroupFreeBusy"
         android:layout_marginLeft="14dp"
-        android:text="available until 3 PM today"
+        android:text=""
         android:textColor="@android:color/black"
         android:textSize="14sp" />
 
@@ -74,6 +65,17 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/textViewAvailabilityDuration"
         android:layout_alignRight="@+id/radioGroupFreeBusy"
-        android:layout_below="@+id/textViewAvailabilityDuration" />
+        android:layout_below="@+id/textViewAvailabilityDuration"
+        android:max="8"
+        android:progress="1" />
+
+    <Button
+        android:id="@+id/buttonSetAvailability"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBarAvailabilityDuration"
+        android:layout_centerHorizontal="true"
+        android:text="done"
+        android:textSize="12sp" />
 
 </RelativeLayout>
