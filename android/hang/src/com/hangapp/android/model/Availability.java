@@ -2,6 +2,8 @@ package com.hangapp.android.model;
 
 import org.joda.time.DateTime;
 
+import com.hangapp.android.util.Utils;
+
 import android.util.Log;
 
 public final class Availability implements Comparable<Availability> {
@@ -144,7 +146,8 @@ public final class Availability implements Comparable<Availability> {
 	 * @return True if this status is active.
 	 */
 	public boolean isActive() {
-		return expirationDate != null /* && expirationDate.isAfter(new DateTime()) */;
+		return expirationDate != null
+				&& Utils.getRemainingHours(expirationDate) > 0;
 	}
 
 	/**

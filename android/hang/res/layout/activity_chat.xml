@@ -7,14 +7,14 @@
         android:id="@+id/separatorRosterFromChat"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/horizontalScrollView1"
+        android:layout_below="@+id/horizontalScrollViewInterestedUsers"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="1dp"
         android:layout_marginTop="1dp"
         android:background="@android:color/darker_gray" />
 
     <HorizontalScrollView
-        android:id="@+id/horizontalScrollView1"
+        android:id="@+id/horizontalScrollViewInterestedUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -95,7 +95,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editTextChatMessage"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/horizontalScrollView1"
+        android:layout_below="@+id/horizontalScrollViewInterestedUsers"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll" >
     </ListView>

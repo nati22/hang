@@ -36,6 +36,7 @@ import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
+import com.hangapp.android.util.Utils;
 
 public final class YouFragment extends SherlockFragment implements
 		MyUserDataListener, MyAvailabilityListener, MyProposalListener,
@@ -44,6 +45,7 @@ public final class YouFragment extends SherlockFragment implements
 	private ProfilePictureView profilePictureView;
 	private TextView textViewMyName;
 	private ImageButton imageButtonMyAvailability;
+	private TextView textViewMyAvailabilityExpirationDate;
 	private TextView textViewStatus;
 	private Button buttonOutgoingBroadcasts;
 	private Button buttonIncomingBroadcasts;
@@ -77,6 +79,8 @@ public final class YouFragment extends SherlockFragment implements
 		textViewMyName = (TextView) view.findViewById(R.id.textViewMyName);
 		imageButtonMyAvailability = (ImageButton) view
 				.findViewById(R.id.imageButtonMyAvailability);
+		textViewMyAvailabilityExpirationDate = (TextView) view
+				.findViewById(R.id.textViewMyAvailabilityExpirationDate);
 		textViewStatus = (TextView) view.findViewById(R.id.textViewStatus);
 		buttonOutgoingBroadcasts = (Button) view
 				.findViewById(R.id.buttonOutgoingBroadcasts);
@@ -90,6 +94,7 @@ public final class YouFragment extends SherlockFragment implements
 				.getApplicationContext().getAssets(), Fonts.COOLVETICA);
 
 		textViewMyName.setTypeface(coolveticaFont);
+		textViewMyAvailabilityExpirationDate.setTypeface(coolveticaFont);
 		textViewStatus.setTypeface(champagneLimousinesFont);
 		buttonIncomingBroadcasts.setTypeface(champagneLimousinesFont);
 		buttonOutgoingBroadcasts.setTypeface(champagneLimousinesFont);
@@ -186,6 +191,10 @@ public final class YouFragment extends SherlockFragment implements
 					.getDrawable(R.drawable.imagebutton_status_green));
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
+
+			int remainingHours = Utils.getRemainingHours(myCurrentAvailability
+					.getExpirationDate());
+			textViewMyAvailabilityExpirationDate.setText(remainingHours + "h");
 		}
 		// Availability is BUSY.
 		else if (myCurrentAvailability.getStatus() == Status.BUSY) {
@@ -193,6 +202,10 @@ public final class YouFragment extends SherlockFragment implements
 					.getDrawable(R.drawable.imagebutton_status_red));
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
+
+			int remainingHours = Utils.getRemainingHours(myCurrentAvailability
+					.getExpirationDate());
+			textViewMyAvailabilityExpirationDate.setText(remainingHours + "h");
 		}
 		// Error state.
 		else {
@@ -201,6 +214,8 @@ public final class YouFragment extends SherlockFragment implements
 			return;
 		}
 	}
+
+	
 
 	@Override
 	public void onOutgoingBroadcastsUpdate(List<User> outgoingBroadcasts) {

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.joda.time.DateTime;
+import org.joda.time.Hours;
+
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -47,6 +50,16 @@ public final class Utils {
 
 		String[] arr = str.split(",");
 		return Arrays.asList(arr);
+	}
+
+	public static int getRemainingHours(DateTime expirationDate) {
+		DateTime rightNow = new DateTime();
+
+		if (expirationDate.isBefore(rightNow)) {
+			return 0;
+		}
+
+		return Hours.hoursBetween(rightNow, expirationDate).getHours();
 	}
 
 }

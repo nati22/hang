@@ -33,6 +33,7 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
+import com.hangapp.android.util.Utils;
 
 public final class FeedFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
@@ -162,7 +163,9 @@ public final class FeedFragment extends SherlockFragment implements
 				holder.textViewProposalDescriptionPreview = (TextView) convertView
 						.findViewById(R.id.textViewProposalDescriptionPreview);
 				holder.imageViewAvailability = (ImageView) convertView
-						.findViewById(R.id.imageViewAvailability);
+						.findViewById(R.id.imageButtonAvailability);
+				holder.textViewAvailabilityExpirationDate = (TextView) convertView
+						.findViewById(R.id.textViewAvailabilityExpirationDate);
 
 				Typeface champagneLimousinesBold = Typeface.createFromAsset(
 						getActivity().getApplicationContext().getAssets(),
@@ -170,10 +173,14 @@ public final class FeedFragment extends SherlockFragment implements
 				Typeface champagneLimousines = Typeface.createFromAsset(
 						getActivity().getApplicationContext().getAssets(),
 						Fonts.CHAMPAGNE_LIMOUSINES);
+				Typeface coolvetica = Typeface.createFromAsset(getActivity()
+						.getApplicationContext().getAssets(), Fonts.COOLVETICA);
 
 				holder.textViewFriendName.setTypeface(champagneLimousinesBold);
 				holder.textViewProposalDescriptionPreview
 						.setTypeface(champagneLimousines);
+				holder.textViewAvailabilityExpirationDate
+						.setTypeface(coolvetica);
 
 				convertView.setTag(holder);
 			} else {
@@ -197,12 +204,23 @@ public final class FeedFragment extends SherlockFragment implements
 					|| user.getAvailability().getStatus() == null) {
 				holder.imageViewAvailability.setImageDrawable(getResources()
 						.getDrawable(R.drawable.status_grey));
+				holder.textViewAvailabilityExpirationDate.setText("");
 			} else if (user.getAvailability().getStatus() == Status.FREE) {
 				holder.imageViewAvailability.setImageDrawable(getResources()
 						.getDrawable(R.drawable.status_green));
+
+				int remainingHours = Utils.getRemainingHours(user
+						.getAvailability().getExpirationDate());
+				holder.textViewAvailabilityExpirationDate
+						.setText(remainingHours + "h");
 			} else if (user.getAvailability().getStatus() == Status.BUSY) {
 				holder.imageViewAvailability.setImageDrawable(getResources()
 						.getDrawable(R.drawable.status_red));
+
+				int remainingHours = Utils.getRemainingHours(user
+						.getAvailability().getExpirationDate());
+				holder.textViewAvailabilityExpirationDate
+						.setText(remainingHours + "h");
 			} else {
 				Log.e("FeedFragment.getView",
 						"Unknown user availability status: "
@@ -228,6 +246,7 @@ public final class FeedFragment extends SherlockFragment implements
 			TextView textViewFriendName;
 			TextView textViewProposalDescriptionPreview;
 			ImageView imageViewAvailability;
+			TextView textViewAvailabilityExpirationDate;
 		}
 	}
 

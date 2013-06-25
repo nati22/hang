@@ -34,7 +34,6 @@ public final class Database {
 	private static Database instance = new Database();
 
 	private SharedPreferences prefs;
-	// private UsersDataSource usersDataSource;
 
 	private Map<String, User> library = new HashMap<String, User>();
 
@@ -44,11 +43,6 @@ public final class Database {
 	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
 
-	/*
-	 * private Map<String, List<IncomingBroadcastListListener>>
-	 * incomingBroadcastListListeners = new HashMap<String,
-	 * List<IncomingBroadcastListListener>>();
-	 */
 	/** Private constructor */
 	private Database() {
 	}
@@ -98,16 +92,6 @@ public final class Database {
 	public boolean addMyAvailabilityListener(MyAvailabilityListener listener) {
 		return myStatusListeners.add(listener);
 	}
-
-	/*
-	 * public boolean addIncomingBroadcastListListener(String jid,
-	 * IncomingBroadcastListListener listener) { return
-	 * incomingBroadcastListListeners.get(jid).add(listener); }
-	 * 
-	 * public boolean removeIncomingBroadcastListListener(String jid,
-	 * IncomingBroadcastListListener listener) { return
-	 * incomingBroadcastListListeners.get(jid).remove(listener); }
-	 */
 
 	public boolean removeMyAvailabilityListener(MyAvailabilityListener listener) {
 		return myStatusListeners.remove(listener);
@@ -431,7 +415,6 @@ public final class Database {
 		for (MyUserDataListener listener : myUserDataListeners) {
 			listener.onMyUserDataUpdate(me);
 		}
-
 	}
 
 	public void setMyIncomingBroadcasts(List<String> incomingBroadcasts) {

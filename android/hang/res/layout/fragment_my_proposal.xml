@@ -57,7 +57,7 @@
         android:textSize="16sp" />
 
     <HorizontalScrollView
-        android:id="@+id/horizontalScrollView1"
+        android:id="@+id/horizontalScrollViewInterestedUsers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/relativeLayoutMyProposalChatArea"
@@ -148,7 +148,7 @@
         android:id="@+id/relativeLayoutMyProposalChatArea"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_below="@+id/horizontalScrollView1"
+        android:layout_below="@+id/horizontalScrollViewInterestedUsers"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

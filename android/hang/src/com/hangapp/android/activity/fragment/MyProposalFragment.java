@@ -1,5 +1,7 @@
 package com.hangapp.android.activity.fragment;
 
+import java.util.List;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -8,22 +10,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
+import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.util.Fonts;
 
-public final class MyProposalFragment extends SherlockFragment {
+public final class MyProposalFragment extends SherlockFragment implements
+		MyProposalListener {
 
 	private TextView textViewMyProposal;
 	private TextView textViewMyProposalDescription;
 	private TextView textViewMyProposalLocation;
 	private TextView textViewMyProposalStartTime;
 	private TextView textViewMyProposalInterestedCount;
+	private HorizontalScrollView horizontalScrollViewInterestedUsers;
+	private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
 	private ImageView imageViewDeleteMyProposal;
 
 	private Proposal myProposal;
@@ -55,6 +63,33 @@ public final class MyProposalFragment extends SherlockFragment {
 				.findViewById(R.id.textViewMyProposalStartTime);
 		textViewMyProposalInterestedCount = (TextView) view
 				.findViewById(R.id.textViewMyProposalInterestedCount);
+		horizontalScrollViewInterestedUsers = (HorizontalScrollView) view
+				.findViewById(R.id.horizontalScrollViewInterestedUsers);
+		profilePictureViewArrayInterestedUsers = new ProfilePictureView[] {
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested00),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested01),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested02),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested03),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested04),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested05),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested06),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested07),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested08),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested09),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested10),
+				(ProfilePictureView) view
+						.findViewById(R.id.profilePictureViewInterested11) };
 		imageViewDeleteMyProposal = (ImageView) view
 				.findViewById(R.id.imageViewDeleteMyProposal);
 
@@ -94,6 +129,12 @@ public final class MyProposalFragment extends SherlockFragment {
 
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
+		onMyProposalUpdate(myProposal);
+	}
+
+	@Override
+	public void onMyProposalUpdate(Proposal proposal) {
+		myProposal = proposal;
 
 		if (myProposal == null) {
 			Log.e("MyProposalFragment", "myProposal is null");
@@ -115,6 +156,33 @@ public final class MyProposalFragment extends SherlockFragment {
 				"h:mm aa"));
 		textViewMyProposalInterestedCount.setText(myProposal.getInterested()
 				.size() + " interested");
+
+		// Hide the Interested users if there are none.
+		if (proposal.getInterested() == null) {
+			Log.i("MyProposalFragment.onMyProposalUpdate",
+					"Proposal interested is null");
+			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
+		} else if (proposal.getInterested().size() == 0) {
+			Log.i("MyProposalFragment.onMyProposalUpdate",
+					"Proposal interested is empty");
+			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
+		} else {
+			horizontalScrollViewInterestedUsers.setVisibility(View.VISIBLE);
+			updateHorizontalScrollView(proposal.getInterested());
+		}
 	}
 
+	private void updateHorizontalScrollView(List<String> interestedUsers) {
+		// Show Facebook icons for friends that are there.
+		for (int i = 0; i < interestedUsers.size(); i++) {
+			profilePictureViewArrayInterestedUsers[i]
+					.setVisibility(View.VISIBLE);
+			profilePictureViewArrayInterestedUsers[i]
+					.setProfileId(interestedUsers.get(i));
+		}
+		// Hide all the other Facebook icons.
+		for (int i = interestedUsers.size(); i < profilePictureViewArrayInterestedUsers.length; i++) {
+			profilePictureViewArrayInterestedUsers[i].setVisibility(View.GONE);
+		}
+	}
 }

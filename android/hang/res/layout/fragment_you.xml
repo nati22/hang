@@ -97,6 +97,19 @@
                 android:text="@string/incoming"
                 android:textColor="@android:color/white"
                 android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/textViewMyAvailabilityExpirationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageButtonMyAvailability"
+                android:layout_alignLeft="@+id/imageButtonMyAvailability"
+                android:layout_alignRight="@+id/imageButtonMyAvailability"
+                android:layout_alignTop="@+id/imageButtonMyAvailability"
+                android:gravity="center"
+                android:text="0h"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <FrameLayout
