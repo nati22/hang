@@ -11,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
@@ -32,6 +33,7 @@ public final class ProfileActivity extends BaseActivity {
 	private ImageButton imageButtonFriendsAvailability;
 	private TextView textViewFriendsAvailabilityExpirationDate;
 	private TextView textViewStatus;
+	private RelativeLayout relativeLayoutFriendsProposal;
 	private TextView textViewProposal;
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
@@ -76,6 +78,7 @@ public final class ProfileActivity extends BaseActivity {
 		imageButtonFriendsAvailability = (ImageButton) findViewById(R.id.imageButtonFriendsAvailability);
 		textViewFriendsAvailabilityExpirationDate = (TextView) findViewById(R.id.textViewFriendsAvailabilityExpirationDate);
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+		relativeLayoutFriendsProposal = (RelativeLayout) findViewById(R.id.relativeLayoutFriendsProposal);
 		textViewProposal = (TextView) findViewById(R.id.textViewMyProposal);
 		textViewProposalDescription = (TextView) findViewById(R.id.textViewMyProposalDescription);
 		textViewProposalLocation = (TextView) findViewById(R.id.textViewMyProposalLocation);
@@ -103,13 +106,23 @@ public final class ProfileActivity extends BaseActivity {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
+						List<String> friendsInterestedList = friend
+								.getProposal().getInterested();
+						String myJid = database.getMyJid();
+
 						// Add yourself to the Interested list of this user.
 						if (isChecked) {
+							friendsInterestedList.add(myJid);
+							restClient.setInterested(myJid);
 						}
 						// Remove yourself from the Interested list of this
 						// user.
 						else {
+							friendsInterestedList.remove(myJid);
+							restClient.deleteInterested(myJid);
 						}
+
+						updateInterestedList(friendsInterestedList);
 					}
 				});
 
@@ -175,12 +188,13 @@ public final class ProfileActivity extends BaseActivity {
 			textViewFriendsAvailabilityExpirationDate.setVisibility(View.GONE);
 		}
 
-		textViewProposal.setText(friend.getFirstName() + "'s Proposal");
-
 		if (friend.getProposal() == null) {
 			Log.e("ProfileActivity.onResume", friend.getFirstName()
 					+ "'s proposal was null");
+			relativeLayoutFriendsProposal.setVisibility(View.GONE);
 		} else {
+			relativeLayoutFriendsProposal.setVisibility(View.VISIBLE);
+			textViewProposal.setText(friend.getFirstName() + "'s Proposal");
 			textViewProposalDescription.setText(friend.getProposal()
 					.getDescription());
 			textViewProposalLocation
@@ -188,23 +202,29 @@ public final class ProfileActivity extends BaseActivity {
 			textViewProposalStartTime.setText(friend.getProposal()
 					.getStartTime().toString("h:mm aa"));
 
-			// Hide the Interested users if there are none.
-			if (friend.getProposal().getInterested() == null) {
-				Log.i("MyProposalFragment.onMyProposalUpdate",
-						"Proposal interested is null");
-				horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
-			} else if (friend.getProposal().getInterested().size() == 0) {
-				Log.i("MyProposalFragment.onMyProposalUpdate",
-						"Proposal interested is empty");
-				horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
-			} else {
-				horizontalScrollViewInterestedUsers.setVisibility(View.VISIBLE);
-				updateHorizontalScrollView(friend.getProposal().getInterested());
-			}
+			updateInterestedList(friend.getProposal().getInterested());
 		}
 	}
 
-	private void updateHorizontalScrollView(List<String> interestedUsers) {
+	private void updateInterestedList(List<String> interestedUsers) {
+		// Hide the Interested users if there are none.
+		if (interestedUsers == null) {
+			Log.i("MyProposalFragment.onMyProposalUpdate",
+					"Proposal interested is null");
+			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
+			textViewProposalInterestedCount.setText("0 interested");
+		} else if (interestedUsers.size() == 0) {
+			Log.i("MyProposalFragment.onMyProposalUpdate",
+					"Proposal interested is empty");
+			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
+			textViewProposalInterestedCount.setText(interestedUsers.size()
+					+ " interested");
+		} else {
+			horizontalScrollViewInterestedUsers.setVisibility(View.VISIBLE);
+			textViewProposalInterestedCount.setText(interestedUsers.size()
+					+ " interested");
+		}
+
 		// Show Facebook icons for friends that are there.
 		for (int i = 0; i < interestedUsers.size(); i++) {
 			profilePictureViewArrayInterestedUsers[i]
