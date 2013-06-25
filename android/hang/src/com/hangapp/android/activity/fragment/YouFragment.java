@@ -25,6 +25,7 @@ import com.hangapp.android.activity.IncomingBroadcastsActivity;
 import com.hangapp.android.activity.OutgoingBroadcastsActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
+import com.hangapp.android.model.Availability.Status;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
@@ -170,6 +171,35 @@ public final class YouFragment extends SherlockFragment implements
 				+ newAvailability.getExpirationDate().toString());
 
 		myCurrentAvailability = newAvailability;
+
+		// If the Availability is invalid for some reason, display as grey.
+		if (myCurrentAvailability == null
+				|| myCurrentAvailability.getStatus() == null
+				|| !myCurrentAvailability.isActive()) {
+			imageButtonMyAvailability.setImageDrawable(getResources()
+					.getDrawable(R.drawable.imagebutton_status_grey));
+			textViewStatus.setVisibility(View.GONE);
+		}
+		// Availability is FREE.
+		else if (myCurrentAvailability.getStatus() == Status.FREE) {
+			imageButtonMyAvailability.setImageDrawable(getResources()
+					.getDrawable(R.drawable.imagebutton_status_green));
+			textViewStatus.setVisibility(View.VISIBLE);
+			textViewStatus.setText(myCurrentAvailability.getDescription());
+		}
+		// Availability is BUSY.
+		else if (myCurrentAvailability.getStatus() == Status.BUSY) {
+			imageButtonMyAvailability.setImageDrawable(getResources()
+					.getDrawable(R.drawable.imagebutton_status_red));
+			textViewStatus.setVisibility(View.VISIBLE);
+			textViewStatus.setText(myCurrentAvailability.getDescription());
+		}
+		// Error state.
+		else {
+			Log.e("YouFragment.onMyAvailabilityUpdate",
+					"Unknown availability state: " + myCurrentAvailability);
+			return;
+		}
 	}
 
 	@Override

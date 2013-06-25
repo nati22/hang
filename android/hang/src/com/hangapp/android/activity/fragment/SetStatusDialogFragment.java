@@ -8,7 +8,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,8 +22,9 @@ import com.hangapp.android.util.Fonts;
 
 public class SetStatusDialogFragment extends DialogFragment {
 
-	private ImageButton imageButtonFree;
-	private ImageButton imageButtonBusy;
+	private RadioGroup radioGroupFreeBusy;
+	private RadioButton radioButtonFree;
+	private RadioButton radioButtonBusy;
 	private TextView textViewAvailabilityDuration;
 	private SeekBar seekBarAvailabilityDuration;
 	private Button buttonSetAvailability;
@@ -50,8 +52,10 @@ public class SetStatusDialogFragment extends DialogFragment {
 		View view = inflater.inflate(R.layout.dialog_set_status, container);
 
 		// Reference views.
-		imageButtonFree = (ImageButton) view.findViewById(R.id.imageButtonFree);
-		imageButtonFree = (ImageButton) view.findViewById(R.id.imageButtonBusy);
+		radioGroupFreeBusy = (RadioGroup) view
+				.findViewById(R.id.radioGroupFreeBusy);
+		radioButtonFree = (RadioButton) view.findViewById(R.id.radioButtonFree);
+		radioButtonBusy = (RadioButton) view.findViewById(R.id.radioButtonBusy);
 		textViewAvailabilityDuration = (TextView) view
 				.findViewById(R.id.textViewAvailabilityDuration);
 		seekBarAvailabilityDuration = (SeekBar) view

@@ -46,7 +46,7 @@
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/my_availability"
                 android:scaleType="fitCenter"
-                android:src="@drawable/status_green" />
+                android:src="@drawable/imagebutton_status_green" />
 
             <TextView
                 android:id="@+id/textViewStatus"
