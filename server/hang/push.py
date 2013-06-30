@@ -37,5 +37,5 @@ def push_to_user(user, sender, type):
         for reg_id, canonical_id in response['canonical'].items():
             # Repace reg_id with canonical_id in your database
             user.gcm_registration_ids.remove(reg_id)
-            user.gcm_registration_ids.add(canonical_id)
+            user.gcm_registration_ids.append(canonical_id)
             user.put()

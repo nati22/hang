@@ -1,24 +1,30 @@
 package com.hangapp.android.activity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.fragment.ProposalFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability.Status;
 import com.hangapp.android.model.User;
+import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.BaseActivity;
@@ -26,7 +32,8 @@ import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.Utils;
 
-public final class ProfileActivity extends BaseActivity {
+public final class ProfileActivity extends BaseActivity implements
+		IncomingBroadcastsListener {
 
 	private ProfilePictureView profilePictureViewFriendIcon;
 	private TextView textViewFriendsName;
@@ -43,6 +50,9 @@ public final class ProfileActivity extends BaseActivity {
 	private HorizontalScrollView horizontalScrollViewInterestedUsers;
 	private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
 
+	private LinearLayout linLayoutInterested;
+	private List<String> listInterestedJids = new ArrayList<String>();
+
 	private Database database;
 	private RestClient restClient;
 
@@ -56,6 +66,9 @@ public final class ProfileActivity extends BaseActivity {
 		// Instantiate dependencies
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
+		
+		// Setup listener
+		database.addIncomingBroadcastsListener(this);
 
 		// Set who the friend is.
 		String hostJid = getIntent().getStringExtra(Keys.HOST_JID);
@@ -86,19 +99,17 @@ public final class ProfileActivity extends BaseActivity {
 		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
 		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
 		horizontalScrollViewInterestedUsers = (HorizontalScrollView) findViewById(R.id.horizontalScrollViewInterestedUsers);
-		profilePictureViewArrayInterestedUsers = new ProfilePictureView[] {
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested00),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested01),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested02),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested03),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested04),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested05),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested06),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested07),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested08),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested09),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested10),
-				(ProfilePictureView) findViewById(R.id.profilePictureViewInterested11) };
+
+		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterested);
+
+		// If User is Interested/Confirmed, check the appropriate ToggleButton
+		if (friend.getProposal() != null) {
+			if (friend.getProposal().getInterested() != null) {
+				if (friend.getProposal().getInterested()
+						.contains(database.getMyJid()))
+					checkBoxInterested.setChecked(true);
+			}
+		}
 
 		// Set CheckBox.
 		checkBoxInterested
@@ -106,23 +117,14 @@ public final class ProfileActivity extends BaseActivity {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
-						List<String> friendsInterestedList = friend
-								.getProposal().getInterested();
-						String myJid = database.getMyJid();
-
 						// Add yourself to the Interested list of this user.
 						if (isChecked) {
-							friendsInterestedList.add(myJid);
-							restClient.setInterested(myJid);
+							addMeToHostInterestedList();
 						}
-						// Remove yourself from the Interested list of this
-						// user.
+						// Remove yourself from the Interested list of this user.
 						else {
-							friendsInterestedList.remove(myJid);
-							restClient.deleteInterested(myJid);
+							removeMeFromHostInterestedList();
 						}
-
-						updateInterestedList(friendsInterestedList);
 					}
 				});
 
@@ -130,16 +132,47 @@ public final class ProfileActivity extends BaseActivity {
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-		Typeface champagneLimousinesFont = Typeface
-				.createFromAsset(getApplicationContext().getAssets(),
-						Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(
+				getApplicationContext().getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
 		textViewStatus.setTypeface(champagneLimousinesFont);
 		textViewProposal.setTypeface(champagneLimousinesFontBold);
 		textViewProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewProposalStartTime.setTypeface(champagneLimousinesFont);
-		textViewProposalInterestedCount
-				.setTypeface(champagneLimousinesFontBold);
+		textViewProposalInterestedCount.setTypeface(champagneLimousinesFontBold);
+	}
+
+	@Override
+	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
+		// If friend is still broadcasting to you
+		if (database.getIncomingUser(friend.getJid()) != null) {
+			// If they still have a proposal
+			if (database.getIncomingUser(friend.getJid()).getProposal() != null) {
+				Log.i(ProposalFragment.class.getSimpleName(),
+						"onIncomingBroadcastsUpdate called with "
+								+ database.getIncomingUser(friend.getJid()).getProposal()
+										.getInterested().size()
+								+ " interested, and "
+								+ database.getIncomingUser(friend.getJid()).getProposal()
+										.getConfirmed().size() + " confirmed.");
+
+				// Find out if User's Interested was updated
+				if (!database.getIncomingUser(friend.getJid()).getProposal()
+						.getInterested().equals(listInterestedJids)) {
+
+					listInterestedJids.clear();
+					listInterestedJids.addAll(database.getIncomingUser(friend.getJid())
+							.getProposal().getInterested());
+
+					updateHorizontalList(listInterestedJids, linLayoutInterested);
+				}
+			} else {
+				Toast.makeText(this, "Proposal deleted for " + friend.getFirstName(), Toast.LENGTH_SHORT).show();
+				Log.i(ProposalFragment.class.getSimpleName(),
+						"onIncomingBroadcastsUpdate called with NO PROPOSAL.");
+				this.finish();
+			}
+		}
 	}
 
 	@Override
@@ -161,23 +194,21 @@ public final class ProfileActivity extends BaseActivity {
 		else if (friend.getAvailability().getStatus() == Status.FREE) {
 			imageButtonFriendsAvailability.setImageDrawable(getResources()
 					.getDrawable(R.drawable.status_green));
+			textViewFriendsAvailabilityExpirationDate.setVisibility(View.VISIBLE);
+			int hoursRemaining = Utils.getRemainingHours(friend.getAvailability()
+					.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate
-					.setVisibility(View.VISIBLE);
-			int hoursRemaining = Utils.getRemainingHours(friend
-					.getAvailability().getExpirationDate());
-			textViewFriendsAvailabilityExpirationDate.setText(hoursRemaining
-					+ "h");
+					.setText(hoursRemaining + "h");
 		}
 		// Busy.
 		else if (friend.getAvailability().getStatus() == Status.BUSY) {
 			imageButtonFriendsAvailability.setImageDrawable(getResources()
 					.getDrawable(R.drawable.status_red));
+			textViewFriendsAvailabilityExpirationDate.setVisibility(View.VISIBLE);
+			int hoursRemaining = Utils.getRemainingHours(friend.getAvailability()
+					.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate
-					.setVisibility(View.VISIBLE);
-			int hoursRemaining = Utils.getRemainingHours(friend
-					.getAvailability().getExpirationDate());
-			textViewFriendsAvailabilityExpirationDate.setText(hoursRemaining
-					+ "h");
+					.setText(hoursRemaining + "h");
 		}
 		// Error state.
 		else {
@@ -197,44 +228,59 @@ public final class ProfileActivity extends BaseActivity {
 			textViewProposal.setText(friend.getFirstName() + "'s Proposal");
 			textViewProposalDescription.setText(friend.getProposal()
 					.getDescription());
-			textViewProposalLocation
-					.setText(friend.getProposal().getLocation());
-			textViewProposalStartTime.setText(friend.getProposal()
-					.getStartTime().toString("h:mm aa"));
+			textViewProposalLocation.setText(friend.getProposal().getLocation());
+			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
+					.toString("h:mm aa"));
 
-			updateInterestedList(friend.getProposal().getInterested());
+
+			// Set "my" interested checkbox
+			if (friend.getProposal().getInterested() != null) {
+				if (friend.getProposal().getInterested()
+						.contains(database.getMyJid()))
+					checkBoxInterested.setChecked(true);
+			}
+			
+			// Refresh list
+			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
+
 		}
 	}
 
-	private void updateInterestedList(List<String> interestedUsers) {
-		// Hide the Interested users if there are none.
-		if (interestedUsers == null) {
-			Log.i("MyProposalFragment.onMyProposalUpdate",
-					"Proposal interested is null");
-			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
-			textViewProposalInterestedCount.setText("0 interested");
-		} else if (interestedUsers.size() == 0) {
-			Log.i("MyProposalFragment.onMyProposalUpdate",
-					"Proposal interested is empty");
-			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
-			textViewProposalInterestedCount.setText(interestedUsers.size()
-					+ " interested");
-		} else {
-			horizontalScrollViewInterestedUsers.setVisibility(View.VISIBLE);
-			textViewProposalInterestedCount.setText(interestedUsers.size()
-					+ " interested");
-		}
-
-		// Show Facebook icons for friends that are there.
-		for (int i = 0; i < interestedUsers.size(); i++) {
-			profilePictureViewArrayInterestedUsers[i]
-					.setVisibility(View.VISIBLE);
-			profilePictureViewArrayInterestedUsers[i]
-					.setProfileId(interestedUsers.get(i));
-		}
-		// Hide all the other Facebook icons.
-		for (int i = interestedUsers.size(); i < profilePictureViewArrayInterestedUsers.length; i++) {
-			profilePictureViewArrayInterestedUsers[i].setVisibility(View.GONE);
-		}
+	private void addMeToHostInterestedList() {
+		restClient.setInterested(friend.getJid());
 	}
+
+	private void removeMeFromHostInterestedList() {
+		restClient.deleteInterested(friend.getJid());
+	}
+	
+	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
+
+		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
+				+ " elements");
+
+		Log.i(ProposalFragment.class.getSimpleName(),
+				"removed " + linLayout.getChildCount() + " elements from linLayout");
+		linLayout.removeAllViews();
+
+		for (int i = 0; i < jids.size(); i++) {
+			String jid = jids.get(i);
+
+			// Get the cell
+			View view = LayoutInflater.from(this).inflate(
+					R.layout.cell_profile_icon, null);
+
+			// Set the FB Profile pic
+			ProfilePictureView icon = (ProfilePictureView)view.findViewById(R.id.profilePictureIcon);
+			Log.i(ProposalFragment.class.getSimpleName(), "Creating fb icon with jid " + jid);
+			icon.setProfileId(jid);
+
+			linLayout.addView(view);
+
+		}
+		
+		textViewProposalInterestedCount.setText(jids.size() + " interested");
+
+	}
+
 }
