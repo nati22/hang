@@ -2,6 +2,7 @@ package com.hangapp.android.activity.fragment;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -17,15 +18,18 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.ChatActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.util.Fonts;
+import com.hangapp.android.util.Keys;
 
 public final class MyProposalFragment extends SherlockFragment implements
 		MyProposalListener {
 
 	private TextView textViewMyProposal;
+	private ImageView imageViewChat;
 	private TextView textViewMyProposalDescription;
 	private TextView textViewMyProposalLocation;
 	private TextView textViewMyProposalStartTime;
@@ -55,6 +59,7 @@ public final class MyProposalFragment extends SherlockFragment implements
 		// Reference views.
 		textViewMyProposal = (TextView) view
 				.findViewById(R.id.textViewMyProposal);
+		imageViewChat = (ImageView) view.findViewById(R.id.imageViewChat);
 		textViewMyProposalDescription = (TextView) view
 				.findViewById(R.id.textViewMyProposalDescription);
 		textViewMyProposalLocation = (TextView) view
@@ -108,6 +113,17 @@ public final class MyProposalFragment extends SherlockFragment implements
 				.setTypeface(champagneLimousinesFontBold);
 
 		// Set OnClickListeners
+		imageViewChat.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent chatActivityIntent = new Intent(MyProposalFragment.this
+						.getActivity().getApplicationContext(),
+						ChatActivity.class);
+				chatActivityIntent.putExtra(Keys.HOST_JID, database.getMyJid());
+				startActivity(chatActivityIntent);
+			}
+		});
+
 		imageViewDeleteMyProposal.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

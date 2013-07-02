@@ -226,9 +226,10 @@
                 android:id="@+id/imageViewChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/checkBoxInterested"
+                android:layout_alignLeft="@+id/textViewMyProposalDescription"
                 android:layout_alignTop="@+id/textViewMyProposal"
                 android:src="@drawable/chat" />
+
         </RelativeLayout>
     </RelativeLayout>
 
