@@ -143,7 +143,6 @@ public final class HomeActivity extends BaseActivity {
 		super.onResume();
 		uiHelper.onResume();
 
-		restClient.getMyData();
 
 		// If the user hasn't registered yet, then show the LoginFragment.
 		if (!prefs.getBoolean(Keys.REGISTERED, false)) {
@@ -152,6 +151,9 @@ public final class HomeActivity extends BaseActivity {
 		}
 		// Otherwise, show the regular tabbed ActionBar.
 		else {
+			
+			restClient.getMyData();
+
 			setContentView(mViewPager);
 			getSupportActionBar().show();
 		}
