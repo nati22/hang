@@ -24,8 +24,7 @@ import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.HangLog;
 import com.hangapp.android.util.Keys;
 
-public final class ChatActivity extends BaseActivity implements
-		MucListener {
+public final class ChatActivity extends BaseActivity implements MucListener {
 
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
@@ -114,11 +113,6 @@ public final class ChatActivity extends BaseActivity implements
 			String userJid = message.getFrom().split("@")[0];
 
 			String from = "Unknown user";
-			// if (database.getIncomingUser(userJid) != null) {
-			// from = database.getIncomingUser(userJid).getFullName();
-			// } else if (database.getOutgoingUser(userJid) != null) {
-			// from = database.getOutgoingUser(userJid).getFullName();
-			// }
 
 			// Inflate the cell if necessary.
 			// TODO: The cell Type could be different, based on if it's an
@@ -129,9 +123,9 @@ public final class ChatActivity extends BaseActivity implements
 			}
 
 			// Reference Views.
-			TextView textViewMessageBody = (TextView) convertView
-					.findViewById(R.id.textViewMessageFrom2);
 			TextView textViewMessageFrom = (TextView) convertView
+					.findViewById(R.id.textViewMessageFrom2);
+			TextView textViewMessageBody = (TextView) convertView
 					.findViewById(R.id.textViewMessageBody2);
 
 			// Populate Views.
