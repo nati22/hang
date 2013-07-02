@@ -213,10 +213,14 @@ public final class XMPPIntentService extends IntentService {
 		}
 
 		try {
+			Log.i("XMPPIntentService.login()", "XMPP: attempting to login.");
 			xmppConnection.login(myJid, myJid);
+			Log.i("XMPPIntentService.login()", "XMPP: login attempt finished.");
 		} catch (XMPPException e) {
-			// Show the error, but don't do anything about it yet.
-			Log.e("XMPPIntentService.login()", "Can't login: " + e.getMessage());
+			// Show the error. Attempt to register.
+			Log.e("XMPPIntentService.login()",
+					"XMPP: can't login: " + e.getMessage());
+			register(myJid);
 			return;
 		}
 
@@ -226,6 +230,7 @@ public final class XMPPIntentService extends IntentService {
 			// Do nothing.
 		} else {
 			// If login failed, then start over from connect().
+			Log.e("XMPPIntentService.login()", "XMPP login failed. connect");
 			xmpp.connect(myJid, getApplicationContext());
 		}
 	}
