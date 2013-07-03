@@ -62,7 +62,6 @@ public final class MyProposalFragment extends SherlockFragment implements
 		this.context = activity.getApplicationContext();
 	}
 
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,20 +80,20 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Reference views.
 		textViewMyProposal = (TextView) view
-				.findViewById(R.id.textViewMyProposal);
+				.findViewById(R.id.myTextViewMyProposal);
 		imageViewChat = (ImageView) view.findViewById(R.id.imageViewChat);
 		textViewMyProposalDescription = (TextView) view
-				.findViewById(R.id.textViewMyProposalDescription);
+				.findViewById(R.id.myTextViewMyProposalDescription);
 		textViewMyProposalLocation = (TextView) view
-				.findViewById(R.id.textViewMyProposalLocation);
+				.findViewById(R.id.myTextViewMyProposalLocation);
 		textViewMyProposalStartTime = (TextView) view
-				.findViewById(R.id.textViewMyProposalStartTime);
+				.findViewById(R.id.myTextViewMyProposalStartTime);
 		textViewMyProposalInterestedCount = (TextView) view
-				.findViewById(R.id.textViewMyProposalInterestedCount);
+				.findViewById(R.id.myTextViewMyProposalInterestedCount);
 		imageViewDeleteMyProposal = (ImageView) view
 				.findViewById(R.id.imageViewDeleteMyProposal);
 		interestedLinLayout = (LinearLayout) view
-				.findViewById(R.id.linLayoutInterested);
+				.findViewById(R.id.myLinLayoutInterested);
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -143,13 +142,12 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
-		
+
 		database.addMyProposalListener(this);
-		
-	//	onMyProposalUpdate(myProposal);
+
+		// onMyProposalUpdate(myProposal);
 	}
-	
-	
+
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -159,19 +157,18 @@ public final class MyProposalFragment extends SherlockFragment implements
 	@Override
 	public void onMyProposalUpdate(Proposal proposal) {
 
-		Log.d(TAG,
-				"onMyProposalUpdate called with this ALREADY PRESENT:\n" +
-						">>> myProposal desc: " + myProposal.getDescription() + "\n" +
-						">>> myProposal loc: " + myProposal.getLocation() + "\n" +
-						">>> myProposal time: " + myProposal.getStartTime() + "\n" +
-						">>> myProposal int: " + myProposal.getInterested().toString());
-		
-		Log.d(TAG,
-				"onMyProposalUpdate called with this passed in :\n" +
-						">>> proposal desc: " + proposal.getDescription() + "\n" +
-						">>> proposal loc: " + proposal.getLocation() + "\n" +
-						">>> proposal time: " + proposal.getStartTime() + "\n" +
-						">>> proposal int: " + proposal.getInterested().toString());
+		Log.d(TAG, "onMyProposalUpdate called with this ALREADY PRESENT:\n"
+				+ ">>> myProposal desc: " + myProposal.getDescription() + "\n"
+				+ ">>> myProposal loc: " + myProposal.getLocation() + "\n"
+				+ ">>> myProposal time: " + myProposal.getStartTime() + "\n"
+				+ ">>> myProposal int: "
+				+ myProposal.getInterested().toString());
+
+		Log.d(TAG, "onMyProposalUpdate called with this passed in :\n"
+				+ ">>> proposal desc: " + proposal.getDescription() + "\n"
+				+ ">>> proposal loc: " + proposal.getLocation() + "\n"
+				+ ">>> proposal time: " + proposal.getStartTime() + "\n"
+				+ ">>> proposal int: " + proposal.getInterested().toString());
 
 		// Make sure Proposal isn't null
 		if (myProposal == null) {
@@ -179,25 +176,26 @@ public final class MyProposalFragment extends SherlockFragment implements
 			return;
 		}
 
+		/*Log.d(TAG, "desc: \"" + myProposal.getDescription() + "\", new desc: "
+				+ proposal.getDescription());
+		Log.d(TAG, "loc: \n" + myProposal.getLocation() + "\n, new loc: "
+				+ proposal.getLocation());
+		Log.d(TAG, "int: \n" + myProposal.getInterested().toString());*/
+
 		// Make sure Proposal has changed
 		if (!myProposal.equals(proposal)) {
 			myProposal = proposal;
 		} else {
-			Log.d(MyProposalFragment.class.getSimpleName(), "Same Proposal");
-			Log.d(MyProposalFragment.class.getSimpleName(),
-					"desc: " + myProposal.getDescription() + " new desc: "
-							+ proposal.getDescription());
-			Log.d(MyProposalFragment.class.getSimpleName(),
-					"loc: " + myProposal.getLocation() + " new loc: "
-							+ proposal.getLocation());
-			Log.d(MyProposalFragment.class.getSimpleName(), "int: "
-					+ myProposal.getInterested().toString() + " new int: "
-					+ proposal.getInterested().toString());
+			Log.d(TAG, "Same Proposal");
 			return;
 		}
 
 		// Set Proposal text
 		textViewMyProposalDescription.setText(myProposal.getDescription());
+		
+		Log.d(TAG, "setting proposal to " + myProposal.getDescription());
+		Log.d(TAG, "setting location to " + myProposal.getLocation());
+		Log.d(TAG, "setting interested to " + myProposal.getInterested().toString());
 
 		// Proposal location is optional.
 		if (myProposal.getLocation() == null
@@ -235,12 +233,10 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
 
-		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
-				+ " elements");
+		Log.i(TAG, "jids has " + jids.size() + " elements");
 
-		Log.i(ProposalFragment.class.getSimpleName(),
-				"removed " + linLayout.getChildCount()
-						+ " elements from linLayout");
+		Log.i(TAG, "removed " + linLayout.getChildCount()
+				+ " elements from linLayout");
 		linLayout.removeAllViews();
 
 		for (int i = 0; i < jids.size(); i++) {
@@ -253,8 +249,7 @@ public final class MyProposalFragment extends SherlockFragment implements
 			// Set the FB Profile pic
 			ProfilePictureView icon = (ProfilePictureView) view
 					.findViewById(R.id.profilePictureIcon);
-			Log.i(ProposalFragment.class.getSimpleName(),
-					"Creating fb icon with jid " + jid);
+			Log.i(TAG, "Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
 
 			linLayout.addView(view);
