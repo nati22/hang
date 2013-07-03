@@ -25,9 +25,15 @@ import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
+/**
+ * This fragment is shown within {@link YouFragment}, at the bottom.
+ * {@code YouFragment} will dynamically display either this or
+ * {@link CreateProposalFragment} based on whether or not you have a Proposal.
+ */
 public final class MyProposalFragment extends SherlockFragment implements
 		MyProposalListener {
 
+	// UI widgets.
 	private TextView textViewMyProposal;
 	private ImageView imageViewChat;
 	private TextView textViewMyProposalDescription;
@@ -38,8 +44,11 @@ public final class MyProposalFragment extends SherlockFragment implements
 	private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
 	private ImageView imageViewDeleteMyProposal;
 
-	private Proposal myProposal;
+	// Dependencies.
 	private Database database;
+
+	// Member datum.
+	private Proposal myProposal;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

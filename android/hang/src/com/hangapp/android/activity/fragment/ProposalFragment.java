@@ -30,6 +30,7 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Keys;
 
+@Deprecated
 public final class ProposalFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
 
@@ -100,7 +101,6 @@ public final class ProposalFragment extends SherlockFragment implements
 		// listViewConfirmed = (ListView)
 		// view.findViewById(R.id.confirmedListView);
 
-
 		// Set up the Adapters.
 		// intAdapter = new IntConfAdapter(getActivity(), listInterestedJids);
 		// confAdapter = new IntConfAdapter(getActivity(), listConfirmedJids);
@@ -109,7 +109,8 @@ public final class ProposalFragment extends SherlockFragment implements
 
 		interestedLinLayout = (LinearLayout) view
 				.findViewById(R.id.linLayoutInterested);
-		confirmedLinLayout = (LinearLayout) view.findViewById(R.id.linLayoutConfirmed);
+		confirmedLinLayout = (LinearLayout) view
+				.findViewById(R.id.linLayoutConfirmed);
 
 		buttonChat = (ImageView) view.findViewById(R.id.buttonChat);
 		buttonDeleteProposal = (ImageView) view
@@ -149,7 +150,6 @@ public final class ProposalFragment extends SherlockFragment implements
 							toggleInterested.setEnabled(true);
 							removeMeFromHostConfirmedList();
 						}
-
 
 					}
 				});
@@ -266,14 +266,12 @@ public final class ProposalFragment extends SherlockFragment implements
 		if (!database.getIncomingUser(host.getJid()).getProposal()
 				.getConfirmed().equals(listConfirmedJids)) {
 
+			listConfirmedJids.clear();
+			listConfirmedJids.addAll(database.getIncomingUser(host.getJid())
+					.getProposal().getConfirmed());
 
-			  listConfirmedJids.clear();
-			  listConfirmedJids.addAll(database.getIncomingUser(host.getJid())
-			 .getProposal().getConfirmed());
-			  
-			  updateHorizontalList(listConfirmedJids, confirmedLinLayout);
-			/*  confAdapter.notifyDataSetChanged();*/
-			 
+			updateHorizontalList(listConfirmedJids, confirmedLinLayout);
+			/* confAdapter.notifyDataSetChanged(); */
 
 		}
 	}
@@ -284,7 +282,8 @@ public final class ProposalFragment extends SherlockFragment implements
 				+ " elements");
 
 		Log.i(ProposalFragment.class.getSimpleName(),
-				"removed " + linLayout.getChildCount() + " elements from linLayout");
+				"removed " + linLayout.getChildCount()
+						+ " elements from linLayout");
 		linLayout.removeAllViews();
 
 		for (int i = 0; i < jids.size(); i++) {
@@ -295,8 +294,10 @@ public final class ProposalFragment extends SherlockFragment implements
 					R.layout.cell_profile_icon, null);
 
 			// Set the FB Profile pic
-			ProfilePictureView icon = (ProfilePictureView)view.findViewById(R.id.profilePictureIcon);
-			Log.i(ProposalFragment.class.getSimpleName(), "Creating fb icon with jid " + jid);
+			ProfilePictureView icon = (ProfilePictureView) view
+					.findViewById(R.id.profilePictureIcon);
+			Log.i(ProposalFragment.class.getSimpleName(),
+					"Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
 
 			linLayout.addView(view);

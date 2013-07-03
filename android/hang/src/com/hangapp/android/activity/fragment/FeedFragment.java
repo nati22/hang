@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability.Status;
@@ -35,14 +36,20 @@ import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.Utils;
 
+/**
+ * The leftmost tab inside {@link HomeActivity}.
+ */
 public final class FeedFragment extends SherlockFragment implements
 		IncomingBroadcastsListener {
 
+	// UI stuff
 	private ListView listViewFriends;
-
-	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
 	private FriendsAdapter adapter;
 
+	// Member datum.
+	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
+
+	// Dependencies.
 	private Database database;
 	private RestClient restClient;
 
@@ -52,10 +59,6 @@ public final class FeedFragment extends SherlockFragment implements
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
-
-		// Setup listener.
-		database.addIncomingBroadcastsListener(this);
-
 		restClient = new RestClientImpl(database, getActivity()
 				.getApplicationContext());
 
@@ -111,8 +114,15 @@ public final class FeedFragment extends SherlockFragment implements
 	}
 
 	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	public void onResume() {
+		super.onResume();
+
+		database.addIncomingBroadcastsListener(this);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
 
 		database.removeIncomingBroadcastsListener(this);
 	}

@@ -24,14 +24,20 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 
+/**
+ * This fragment is shown within {@link YouFragment}, at the bottom.
+ * {@code YouFragment} will dynamically display either this or
+ * {@link MyProposalFragment} based on whether or not you have a Proposal.
+ */
 public class CreateProposalFragment extends SherlockFragment {
 
+	// Constants.
 	private static final int FIFTEEN = 15;
 	private static final int THIRTY = 30;
 	private static final int ONE = 1;
 
+	// UI widgets.
 	private TextView textViewCreateProposal;
-	private RadioGroup radioGroupNowLater;
 	private RadioButton radioButtonNow;
 	private RadioButton radioButtonLater;
 	private TextView textViewProposalDescription;
@@ -46,6 +52,7 @@ public class CreateProposalFragment extends SherlockFragment {
 	private RadioButton radioButtonHowSoon1hr;
 	private Button buttonCreateProposal;
 
+	// Dependencies.
 	private Database database;
 	private RestClient restClient;
 
@@ -70,8 +77,6 @@ public class CreateProposalFragment extends SherlockFragment {
 		// Reference Views.
 		textViewCreateProposal = (TextView) view
 				.findViewById(R.id.textViewCreateProposal);
-		radioGroupNowLater = (RadioGroup) view
-				.findViewById(R.id.radioGroupNowLater);
 		radioButtonNow = (RadioButton) view.findViewById(R.id.radioButtonNow);
 		radioButtonLater = (RadioButton) view
 				.findViewById(R.id.radioButtonLater);

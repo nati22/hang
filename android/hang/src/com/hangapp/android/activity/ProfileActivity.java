@@ -13,7 +13,6 @@ import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +24,7 @@ import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.ProposalFragment;
+import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability.Status;
 import com.hangapp.android.model.User;
@@ -39,7 +39,10 @@ import com.hangapp.android.util.Utils;
 /**
  * Get to this activity by clicking on a user in {@link FeedFragment}. <br />
  * <br />
- * 
+ * This Activity shows a target user's availability (similar to how
+ * {@link YouFragment} shows your own Availability). It implements
+ * {@link IncomingBroadcastsActivity} in order to subscribe itself to any
+ * changes in state for this target user.
  */
 public final class ProfileActivity extends BaseActivity implements
 		IncomingBroadcastsListener {
@@ -58,8 +61,8 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewProposalStartTime;
 	private CheckBox checkBoxInterested;
 	private TextView textViewProposalInterestedCount;
-	private HorizontalScrollView horizontalScrollViewInterestedUsers;
-	private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
+	// private HorizontalScrollView horizontalScrollViewInterestedUsers;
+	// private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
 	private LinearLayout linLayoutInterested;
 
 	// Member datum.
@@ -111,7 +114,8 @@ public final class ProfileActivity extends BaseActivity implements
 		textViewProposalStartTime = (TextView) findViewById(R.id.textViewMyProposalStartTime);
 		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
 		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
-		horizontalScrollViewInterestedUsers = (HorizontalScrollView) findViewById(R.id.horizontalScrollViewInterestedUsers);
+		// horizontalScrollViewInterestedUsers = (HorizontalScrollView)
+		// findViewById(R.id.horizontalScrollViewInterestedUsers);
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterested);
 
 		// Set OnClickListeners.
@@ -288,7 +292,6 @@ public final class ProfileActivity extends BaseActivity implements
 	}
 
 	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
-
 		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
 				+ " elements");
 

@@ -9,27 +9,28 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.fragment.LoginFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.util.BaseActivity;
 
+/**
+ * Get to this Activity from {@link HomeActivity} -> menu button -> Settings. <br />
+ * <br />
+ * This Activity currently does one thing: show a Facebook Logout button. It
+ * uses Facebook's {@link UiLifecycleHelper} to "watch" for facebook session
+ * state changes. If it detects a logout, then it clears the database and
+ * returns to {@link HomeActivity}. {@code HomeActivity} will then do its own
+ * Facebook session state check to see if the user is logged out, and show
+ * {@link LoginFragment} once it realizes that the user is logged out (since we
+ * pressed the logout button here in {@link SettingsActivity}).
+ */
 public final class SettingsActivity extends BaseActivity {
 
-	/**
-	 * The UiLifecycleHelper class helps to create, automatically open (if
-	 * applicable), save, and restore the Active Session in a way that is
-	 * similar to Android UI lifecycles. When using this class, clients MUST
-	 * call all the public methods from the respective methods in either an
-	 * Activity or Fragment. Failure to call all the methods can result in
-	 * improperly initialized or uninitialized Sessions.
-	 */
+	// Dependencies.
+	private Database database;
+
+	// Facebook SDK stuff.
 	private UiLifecycleHelper uiHelper;
-
-	private Database database;	
-
-	/**
-	 * Provides asynchronous notification of Session state changes. A Session is
-	 * used to authenticate a user and manage the user's session with Facebook.
-	 */
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
 		public void call(Session session, SessionState state,
@@ -66,8 +67,6 @@ public final class SettingsActivity extends BaseActivity {
 		if (session != null && (session.isOpened() || session.isClosed())) {
 			onSessionStateChange(session, session.getState(), null);
 		}
-
-		String myJid = database.getMyJid();
 	}
 
 	@Override
@@ -106,7 +105,7 @@ public final class SettingsActivity extends BaseActivity {
 			database.clear();
 
 			// TODO: Logout of XMPP.
-			// XMPP.getInstance().logout();
+			// xmpp.logout();
 			finish();
 		}
 	}
