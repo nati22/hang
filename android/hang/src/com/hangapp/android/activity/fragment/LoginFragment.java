@@ -14,15 +14,19 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.Database;
-import com.hangapp.android.network.rest.RestClient;
-import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.util.Keys;
 
+/**
+ * The fragment that is shown automatically by {@link HomeActivity} whenever
+ * {@code HomeActivity} detects that you're not logged into Facebook.
+ */
 public final class LoginFragment extends SherlockFragment {
 
+	// Dependencies.
 	private SharedPreferences prefs;
 	private Database database;
-	private RestClient restClient;
 
 	// Facebook SDK member variables.
 	private UiLifecycleHelper uiHelper;
@@ -46,8 +50,6 @@ public final class LoginFragment extends SherlockFragment {
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
 				.getApplicationContext());
 		database = Database.getInstance();
-		restClient = new RestClientImpl(database, getActivity()
-				.getApplicationContext());
 	}
 
 	@Override
@@ -101,15 +103,13 @@ public final class LoginFragment extends SherlockFragment {
 		if (state.isOpened()) {
 			Log.i("SettingsActivity.onSessionStateChange", "Logged in...");
 
-			// SharedPreferences.Editor editor = prefs.edit();
-			// editor.putBoolean(Keys.REGISTERED, true);
-			// editor.commit();
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putBoolean(Keys.REGISTERED, true);
+			editor.commit();
 		} else if (state.isClosed()) {
 			Log.i("SettingsActivity.onSessionStateChange", "Logged out...");
 
-			// SharedPreferences.Editor editor = prefs.edit();
-			// editor.clear();
-			// editor.commit();
+			database.clear();
 		}
 	}
 }

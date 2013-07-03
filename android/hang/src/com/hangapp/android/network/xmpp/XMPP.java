@@ -22,7 +22,8 @@ import com.hangapp.android.util.Keys;
 
 /**
  * Front-facing XMPP interface. This class uses {@link XMPPIntentService} in the
- * background.
+ * background. If you want to use XMPP from a client class, inject this class as
+ * your dependency.
  */
 public class XMPP {
 

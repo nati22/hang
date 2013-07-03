@@ -5,14 +5,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public final class MySQLiteHelper extends SQLiteOpenHelper {
+/**
+ * This class was ripped almost straight out of <a
+ * href="http://www.vogella.com/articles/AndroidSQLite/article.html">Vogella's
+ * Android SQLite tutorial</a>.
+ */
+final class MySQLiteHelper extends SQLiteOpenHelper {
 
+	// Columns for the "message" SQLite table. We use this table to persist
+	// SQLite table.
 	static final String TABLE_MESSAGES = "messages";
 	static final String COLUMN_MESSAGE_PACKET_ID = "packet_id";
 	static final String COLUMN_MESSAGE_MUC_NAME = "muc_name";
 	static final String COLUMN_MESSAGE_FROM = "message_from";
 	static final String COLUMN_MESSAGE_BODY = "message_body";
 
+	// Columns for the "users" SQLite table. This is unused at the moment.
 	static final String TABLE_USERS = "users";
 	static final String COLUMN_JID = "jid";
 	static final String COLUMN_FIRST_NAME = "first_name";

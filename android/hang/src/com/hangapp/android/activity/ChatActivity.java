@@ -15,25 +15,44 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hangapp.android.R;
+import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.callback.MucListener;
+import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
-import com.hangapp.android.util.HangLog;
 import com.hangapp.android.util.Keys;
 
-public final class ChatActivity extends BaseActivity implements
-		MucListener {
+/**
+ * Get to this Activity via the "Chat" icon in {@link YouFragment} and
+ * {@link ProfileActivity}. <br />
+ * <br />
+ * All XMPP messages are sent and received in this Activity. Most of our client
+ * classes (where a "client class" is either an Activity or a Fragment)
+ * instantiate and inject two dependencies: {@link Database} and
+ * {@link RestClient}. This class instantiates and injects a third: {@link XMPP}
+ * . {@code XMPP} is the client-facing interface to *all* of our XMPP logic.
+ * Don't use any other XMPP classes directly. <br />
+ * <br />
+ * This activity requires that a String MUC name was passed into it at creation.
+ * The JID of an MUC (the MUC's name) is always the JID of the user who owns
+ * that Proposal.
+ */
+public final class ChatActivity extends BaseActivity implements MucListener {
 
+	// UI widgets.
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
 	private MessageAdapter adapter;
 
+	// Member datum.
 	private String mucName;
 	private List<Message> messages = new ArrayList<Message>();
 
+	// Dependencies.
 	private Database database;
 	private XMPP xmpp;
 
@@ -50,7 +69,15 @@ public final class ChatActivity extends BaseActivity implements
 		database = Database.getInstance();
 		xmpp = XMPP.getInstance();
 
+		// Pull the Muc name from the Intent.
 		mucName = getIntent().getStringExtra(Keys.HOST_JID);
+
+		// Sanity check on the Muc name pulled from the Intent.
+		if (mucName == null) {
+			Toast.makeText(getApplicationContext(), "Muc name was null",
+					Toast.LENGTH_SHORT).show();
+			finish();
+		}
 
 		// Join the Muc.
 		String myJid = database.getMyJid();
@@ -68,10 +95,18 @@ public final class ChatActivity extends BaseActivity implements
 	@Override
 	protected void onResume() {
 		super.onResume();
+
+		// "Subscribe" this activity to new MUC messages.
 		xmpp.addMucListener(mucName, this);
 
+		// Clear out the member datum list of messages for this Activity.
 		messages.clear();
-		messages.addAll(xmpp.getAllMessages(mucName));
+
+		// Then, grab the cached messages for this MUC from SQLite.
+		List<Message> mucMessages = xmpp.getAllMessages(mucName);
+		messages.addAll(mucMessages);
+
+		// Notify data set changed.
 		adapter.notifyDataSetChanged();
 	}
 
@@ -79,16 +114,23 @@ public final class ChatActivity extends BaseActivity implements
 	protected void onPause() {
 		super.onPause();
 
+		// Leave the MUC.
 		xmpp.leaveMuc(mucName);
+
+		// "Unsubscribe" this activity from new MUC messages.
 		xmpp.removeMucListener(mucName, this);
 	}
 
+	/**
+	 * XML OnClickListener for the "sendMessage" button.
+	 */
 	public void sendMessage(View v) {
 		String message = editTextChatMessage.getText().toString().trim();
 
 		if (message.equals("")) {
-			HangLog.toastE(this, "ChatActivity.sendMessage",
-					"Can't send empty message");
+			Toast.makeText(this, "Can't send empty message", Toast.LENGTH_SHORT)
+					.show();
+			Log.e("ChatActivity.sendMessage", "Can't send empty message");
 			return;
 		}
 
@@ -108,17 +150,11 @@ public final class ChatActivity extends BaseActivity implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
-			String myJid = database.getMyJid();
+			String from = message.getFrom();
 
-			// Grab the real name of the "from" from the database.
-			String userJid = message.getFrom().split("@")[0];
-
-			String from = "Unknown user";
-			// if (database.getIncomingUser(userJid) != null) {
-			// from = database.getIncomingUser(userJid).getFullName();
-			// } else if (database.getOutgoingUser(userJid) != null) {
-			// from = database.getOutgoingUser(userJid).getFullName();
-			// }
+			// TODO: Grab the real name of the "from" from the internal
+			// database.
+			// String userJid = from.split("@")[0];
 
 			// Inflate the cell if necessary.
 			// TODO: The cell Type could be different, based on if it's an
@@ -129,9 +165,9 @@ public final class ChatActivity extends BaseActivity implements
 			}
 
 			// Reference Views.
-			TextView textViewMessageBody = (TextView) convertView
-					.findViewById(R.id.textViewMessageFrom2);
 			TextView textViewMessageFrom = (TextView) convertView
+					.findViewById(R.id.textViewMessageFrom2);
+			TextView textViewMessageBody = (TextView) convertView
 					.findViewById(R.id.textViewMessageBody2);
 
 			// Populate Views.

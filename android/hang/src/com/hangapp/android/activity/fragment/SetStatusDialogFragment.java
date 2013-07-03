@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -25,11 +24,13 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 
+/**
+ * The dialog that shows up when you click on your own status in
+ * {@link YouFragment}.
+ */
 public class SetStatusDialogFragment extends DialogFragment {
 
 	private RadioGroup radioGroupFreeBusy;
-	private RadioButton radioButtonFree;
-	private RadioButton radioButtonBusy;
 	private TextView textViewAvailabilityDuration;
 	private SeekBar seekBarAvailabilityDuration;
 	private Button buttonSetAvailability;
@@ -59,8 +60,10 @@ public class SetStatusDialogFragment extends DialogFragment {
 		// Reference views.
 		radioGroupFreeBusy = (RadioGroup) view
 				.findViewById(R.id.radioGroupFreeBusy);
-		radioButtonFree = (RadioButton) view.findViewById(R.id.radioButtonFree);
-		radioButtonBusy = (RadioButton) view.findViewById(R.id.radioButtonBusy);
+		// radioButtonFree = (RadioButton)
+		// view.findViewById(R.id.radioButtonFree);
+		// radioButtonBusy = (RadioButton)
+		// view.findViewById(R.id.radioButtonBusy);
 		textViewAvailabilityDuration = (TextView) view
 				.findViewById(R.id.textViewAvailabilityDuration);
 		seekBarAvailabilityDuration = (SeekBar) view

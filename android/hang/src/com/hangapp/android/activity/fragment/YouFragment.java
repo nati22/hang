@@ -21,6 +21,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.activity.IncomingBroadcastsActivity;
 import com.hangapp.android.activity.OutgoingBroadcastsActivity;
 import com.hangapp.android.database.Database;
@@ -38,6 +39,9 @@ import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Utils;
 
+/**
+ * The rightmost tab from {@link HomeActivity}.
+ */
 public final class YouFragment extends SherlockFragment implements
 		MyUserDataListener, MyAvailabilityListener, MyProposalListener,
 		IncomingBroadcastsListener, OutgoingBroadcastsListener {
@@ -214,8 +218,6 @@ public final class YouFragment extends SherlockFragment implements
 			return;
 		}
 	}
-
-	
 
 	@Override
 	public void onOutgoingBroadcastsUpdate(List<User> outgoingBroadcasts) {

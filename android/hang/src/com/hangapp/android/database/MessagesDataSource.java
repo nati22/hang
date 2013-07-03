@@ -12,6 +12,13 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+/**
+ * Helper <a href="http://en.wikipedia.org/wiki/Data_access_object">DAO</a> that
+ * abstracts away XMPP Message SQLite usage. <br />
+ * <br />
+ * Basically, you should never explicitly use SQLite; you should only use this
+ * interface.
+ */
 public final class MessagesDataSource {
 
 	// Database fields
@@ -34,6 +41,13 @@ public final class MessagesDataSource {
 		dbHelper.close();
 	}
 
+	/**
+	 * Saves an XMPP {@link Message} into SQLite.
+	 * 
+	 * @param mucName
+	 * @param message
+	 * @return
+	 */
 	public boolean createMessage(String mucName, Message message) {
 		ContentValues values = new ContentValues();
 		values.put(MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID,
@@ -53,6 +67,12 @@ public final class MessagesDataSource {
 		return success;
 	}
 
+	/**
+	 * Given an MUC name, pulls all XMPP {@link Message}s for an MUC.
+	 * 
+	 * @param mucName
+	 * @return
+	 */
 	public List<Message> getAllMessages(String mucName) {
 		List<Message> messages = new ArrayList<Message>();
 
@@ -74,6 +94,12 @@ public final class MessagesDataSource {
 		return messages;
 	}
 
+	/**
+	 * Helper method that retrieves individual {@link Message} objects.
+	 * 
+	 * @param cursor
+	 * @return
+	 */
 	private Message retrieveMessageFromCursor(Cursor cursor) {
 		Message message = new Message();
 

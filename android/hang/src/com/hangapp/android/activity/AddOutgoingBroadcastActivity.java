@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.facebook.FacebookException;
 import com.facebook.model.GraphUser;
@@ -17,8 +18,19 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.BaseActivity;
-import com.hangapp.android.util.HangLog;
 
+/**
+ * Get to this Activity from {@link OutgoingBroadcastsActivity}, or
+ * alternatively from the Empty ListView of {@link FriendsFragment}. <br />
+ * <br />
+ * This Activity shows one thing: the Facebook Friend Picker showing all of your
+ * Facebook friends, where you can check them off. When the user clicks "Done",
+ * the Activity calls the {@code saveSelection()} method and closes itself. <br />
+ * <br />
+ * Most of the code from this class was lifted straight from the <a href=
+ * "https://developers.facebook.com/docs/tutorials/androidsdk/3.0/scrumptious/show-friends/"
+ * >Facebook Android SDK tutorial</a>.
+ */
 public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	public static final Uri FRIEND_PICKER = Uri.parse("picker://friend");
@@ -40,11 +52,13 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
 
+		// (lifted from Facebook tutorial above)
 		Bundle args = getIntent().getExtras();
 		FragmentManager manager = getSupportFragmentManager();
 		Fragment fragmentToShow = null;
 		Uri intentUri = getIntent().getData();
 
+		// (lifted from Facebook tutorial above)
 		if (FRIEND_PICKER.equals(intentUri)) {
 			if (savedInstanceState == null) {
 				friendPickerFragment = new FriendPickerFragment(args);
@@ -132,9 +146,10 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	private void saveSelection() {
 		for (GraphUser graphUser : friendPickerFragment.getSelection()) {
-			HangLog.toastD(getApplicationContext(),
-					"AddOutgoingBroadcastActivity.finishActivity",
+			Log.i("AddOutgoingBroadcastActivity.finishActivity",
 					"Adding broadcastee: " + graphUser.getName());
+			Toast.makeText(this, "Adding broadcastee: " + graphUser.getName(),
+					Toast.LENGTH_SHORT).show();
 			restClient.addBroadcastee(graphUser.getId());
 		}
 	}

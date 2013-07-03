@@ -116,14 +116,14 @@ public final class RestClientImpl implements RestClient {
 
 		String jid = database.getMyJid();
 
-		if (jid == null) {
+		if (jid == null || jid.equals("") || jid.equals("null")) {
 			Log.e("RestClientImpl",
 					"Cannot refresh; haven't retrieved Facebook ID yet");
+			return;
 		} else {
 			Log.i("RestClientImpl", "Refreshing...");
 		}
 
-		// TODO: GetUserData is currently hard-coded to use "123" as the JID.
 		new GetUserDataAsyncTask(database, context, jid).execute();
 	}
 

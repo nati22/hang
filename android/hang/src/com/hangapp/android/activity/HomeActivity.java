@@ -21,6 +21,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
+import com.hangapp.android.activity.fragment.LoginFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
@@ -33,11 +34,26 @@ import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.NoSlideViewPager;
 import com.hangapp.android.util.TabsAdapter;
 
+/**
+ * This is our main Activity. This Activity manages two possible "fragments".
+ * First, it is responsible for holding the main tabs of the app (we currently
+ * use {@link FeedFragment} and {@link YouFragment} as our tabs). <br />
+ * <br />
+ * Second, it uses Facebook's {@link UiLifecycleHelper} class to "listen" to
+ * changes in Facebook session state (it listens to whether or not you're logged
+ * into Facebook). It handles changes in onSessionStateChange(). Several
+ * activities "listen" to Facebook session state this way. This particular
+ * Activity listens to state changes and hides / shows its tabs based on that.
+ * If the user is logged out of Facebook, it shows {@link LoginFragment} and
+ * hides its tabs.
+ */
 public final class HomeActivity extends BaseActivity {
 
+	// UI stuff.
 	private NoSlideViewPager mViewPager;
 	private TabsAdapter mTabsAdapter;
 
+	// Dependencies.
 	private SharedPreferences prefs;
 	private Database database;
 	private RestClient restClient;
@@ -143,19 +159,19 @@ public final class HomeActivity extends BaseActivity {
 		super.onResume();
 		uiHelper.onResume();
 
+		boolean userIsRegistered = prefs.getBoolean(Keys.REGISTERED, false);
 
 		// If the user hasn't registered yet, then show the LoginFragment.
-		if (!prefs.getBoolean(Keys.REGISTERED, false)) {
+		if (!userIsRegistered) {
 			setContentView(R.layout.fragment_login);
 			getSupportActionBar().hide();
 		}
 		// Otherwise, show the regular tabbed ActionBar.
 		else {
-			
-			restClient.getMyData();
-
 			setContentView(mViewPager);
 			getSupportActionBar().show();
+
+			restClient.getMyData();
 		}
 
 		// (Facebook SDK) For scenarios where the main activity is launched and
@@ -211,12 +227,15 @@ public final class HomeActivity extends BaseActivity {
 		uiHelper.onDestroy();
 	}
 
+	/**
+	 * HomeActivity "watches" for Facebook session validity in order to show the
+	 * LoginFragment if a logout occurs for any reason.
+	 */
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		if (state.isOpened()) {
 			Log.i("HomeActivity.onSessionStateChange",
 					"Logged in to Facebook...");
-
 			// Since Facebook successfully logged in, show the regular tabbed
 			// ActionBar.
 			setContentView(mViewPager);
@@ -230,6 +249,12 @@ public final class HomeActivity extends BaseActivity {
 		}
 	}
 
+	/**
+	 * XML onClickListener for the Empty View "Add Outgoing Broadcasts" button.
+	 * This appears here, even though FeedFragment manages the Empty View
+	 * itself... TODO we should change this so that FeedFragment explicitly
+	 * implements this OnClickListener for the button.
+	 */
 	public void addMoreOutgoingBroadcasts(View v) {
 		Intent intent = new Intent();
 		intent.setData(AddOutgoingBroadcastActivity.FRIEND_PICKER);
