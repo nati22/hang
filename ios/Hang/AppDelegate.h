@@ -2,7 +2,7 @@
 //  AppDelegate.h
 //  Hang
 //
-//  Created by Girum on 4/27/13.
+//  Created by Girum on 7/3/13.
 //  Copyright (c) 2013 Girum. All rights reserved.
 //
 
