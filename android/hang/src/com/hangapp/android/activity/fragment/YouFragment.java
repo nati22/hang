@@ -148,7 +148,7 @@ public final class YouFragment extends SherlockFragment implements
 
 		// Refresh the Proposal for this Fragment.
 		onMyAvailabilityUpdate(myCurrentAvailability);
-//		onMyProposalUpdate(myProposal);
+		// onMyProposalUpdate(myProposal);
 	}
 
 	@Override
@@ -247,6 +247,12 @@ public final class YouFragment extends SherlockFragment implements
 
 	@Override
 	public void onMyProposalUpdate(Proposal proposal) {
+		if (myProposal.equals(proposal)) {
+			Log.i("YouFragment.onMyProposalUpdate",
+					"Received onMyProposalUpdate with an existing proposal. Not changing Fragment");
+			return;
+		}
+
 		myProposal = proposal;
 
 		FragmentManager fragmentManager = getFragmentManager();

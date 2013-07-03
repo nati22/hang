@@ -3,10 +3,7 @@ package com.hangapp.android.activity.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -53,14 +50,6 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 	private Proposal myProposal;
 	private Database database;
-
-	private Context context;
-
-	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		this.context = activity.getApplicationContext();
-	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -176,11 +165,12 @@ public final class MyProposalFragment extends SherlockFragment implements
 			return;
 		}
 
-		/*Log.d(TAG, "desc: \"" + myProposal.getDescription() + "\", new desc: "
-				+ proposal.getDescription());
-		Log.d(TAG, "loc: \n" + myProposal.getLocation() + "\n, new loc: "
-				+ proposal.getLocation());
-		Log.d(TAG, "int: \n" + myProposal.getInterested().toString());*/
+		/*
+		 * Log.d(TAG, "desc: \"" + myProposal.getDescription() +
+		 * "\", new desc: " + proposal.getDescription()); Log.d(TAG, "loc: \n" +
+		 * myProposal.getLocation() + "\n, new loc: " + proposal.getLocation());
+		 * Log.d(TAG, "int: \n" + myProposal.getInterested().toString());
+		 */
 
 		// Make sure Proposal has changed
 		if (!myProposal.equals(proposal)) {
@@ -192,10 +182,11 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Set Proposal text
 		textViewMyProposalDescription.setText(myProposal.getDescription());
-		
+
 		Log.d(TAG, "setting proposal to " + myProposal.getDescription());
 		Log.d(TAG, "setting location to " + myProposal.getLocation());
-		Log.d(TAG, "setting interested to " + myProposal.getInterested().toString());
+		Log.d(TAG, "setting interested to "
+				+ myProposal.getInterested().toString());
 
 		// Proposal location is optional.
 		if (myProposal.getLocation() == null
