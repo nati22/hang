@@ -66,82 +66,10 @@
         android:layout_marginTop="5dp" >
 
         <LinearLayout
+            android:id="@+id/linLayoutInterested"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal" >
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested00"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested01"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested02"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested03"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested04"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested05"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested06"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested07"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested08"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested09"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested10"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested11"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-        </LinearLayout>
+            android:orientation="horizontal" />
     </HorizontalScrollView>
 
     <RelativeLayout

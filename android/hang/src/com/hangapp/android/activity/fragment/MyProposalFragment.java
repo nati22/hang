@@ -1,7 +1,10 @@
 package com.hangapp.android.activity.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -10,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -25,17 +28,28 @@ import com.hangapp.android.util.Fonts;
 public final class MyProposalFragment extends SherlockFragment implements
 		MyProposalListener {
 
+	private final String TAG = MyProposalFragment.class.getSimpleName();
+
 	private TextView textViewMyProposal;
 	private TextView textViewMyProposalDescription;
 	private TextView textViewMyProposalLocation;
 	private TextView textViewMyProposalStartTime;
 	private TextView textViewMyProposalInterestedCount;
-	private HorizontalScrollView horizontalScrollViewInterestedUsers;
-	private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
 	private ImageView imageViewDeleteMyProposal;
+
+	private List<String> listInterestedJids = new ArrayList<String>();
+	private LinearLayout interestedLinLayout;
 
 	private Proposal myProposal;
 	private Database database;
+
+	private Context context;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.context = activity.getApplicationContext();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,6 +57,7 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
+
 	}
 
 	@Override
@@ -63,35 +78,10 @@ public final class MyProposalFragment extends SherlockFragment implements
 				.findViewById(R.id.textViewMyProposalStartTime);
 		textViewMyProposalInterestedCount = (TextView) view
 				.findViewById(R.id.textViewMyProposalInterestedCount);
-		horizontalScrollViewInterestedUsers = (HorizontalScrollView) view
-				.findViewById(R.id.horizontalScrollViewInterestedUsers);
-		profilePictureViewArrayInterestedUsers = new ProfilePictureView[] {
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested00),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested01),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested02),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested03),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested04),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested05),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested06),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested07),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested08),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested09),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested10),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested11) };
 		imageViewDeleteMyProposal = (ImageView) view
 				.findViewById(R.id.imageViewDeleteMyProposal);
+		interestedLinLayout = (LinearLayout) view
+				.findViewById(R.id.linLayoutInterested);
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -129,18 +119,60 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
-		onMyProposalUpdate(myProposal);
+		
+		database.addMyProposalListener(this);
+		
+	//	onMyProposalUpdate(myProposal);
+	}
+	
+	
+	@Override
+	public void onPause() {
+		super.onPause();
+		database.removeMyProposalListener(this);
 	}
 
 	@Override
 	public void onMyProposalUpdate(Proposal proposal) {
-		myProposal = proposal;
 
+		Log.d(TAG,
+				"onMyProposalUpdate called with this ALREADY PRESENT:\n" +
+						">>> myProposal desc: " + myProposal.getDescription() + "\n" +
+						">>> myProposal loc: " + myProposal.getLocation() + "\n" +
+						">>> myProposal time: " + myProposal.getStartTime() + "\n" +
+						">>> myProposal int: " + myProposal.getInterested().toString());
+		
+		Log.d(TAG,
+				"onMyProposalUpdate called with this passed in :\n" +
+						">>> proposal desc: " + proposal.getDescription() + "\n" +
+						">>> proposal loc: " + proposal.getLocation() + "\n" +
+						">>> proposal time: " + proposal.getStartTime() + "\n" +
+						">>> proposal int: " + proposal.getInterested().toString());
+
+		// Make sure Proposal isn't null
 		if (myProposal == null) {
 			Log.e("MyProposalFragment", "myProposal is null");
 			return;
 		}
 
+		// Make sure Proposal has changed
+		if (!myProposal.equals(proposal)) {
+			myProposal = proposal;
+		} else {
+			Log.d(MyProposalFragment.class.getSimpleName(), "Same Proposal");
+			Log.d(MyProposalFragment.class.getSimpleName(),
+					"desc: " + myProposal.getDescription() + " new desc: "
+							+ proposal.getDescription());
+			Log.d(MyProposalFragment.class.getSimpleName(),
+					"loc: " + myProposal.getLocation() + " new loc: "
+							+ proposal.getLocation());
+			Log.d(MyProposalFragment.class.getSimpleName(), "int: "
+					+ myProposal.getInterested().toString() + " new int: "
+					+ proposal.getInterested().toString());
+			return;
+		}
+
+		// Set Proposal text
 		textViewMyProposalDescription.setText(myProposal.getDescription());
 
 		// Proposal location is optional.
@@ -152,37 +184,56 @@ public final class MyProposalFragment extends SherlockFragment implements
 			textViewMyProposalLocation.setVisibility(View.VISIBLE);
 		}
 
+		// Set Proposal start time and Interested count
 		textViewMyProposalStartTime.setText(myProposal.getStartTime().toString(
 				"h:mm aa"));
 		textViewMyProposalInterestedCount.setText(myProposal.getInterested()
 				.size() + " interested");
 
-		// Hide the Interested users if there are none.
-		if (proposal.getInterested() == null) {
+		// Modify Interested users display according to list
+		if (myProposal.getInterested() == null) {
 			Log.i("MyProposalFragment.onMyProposalUpdate",
 					"Proposal interested is null");
-			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
-		} else if (proposal.getInterested().size() == 0) {
+			interestedLinLayout.setVisibility(View.GONE);
+		} else if (myProposal.getInterested().size() == 0) {
 			Log.i("MyProposalFragment.onMyProposalUpdate",
 					"Proposal interested is empty");
-			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
+			interestedLinLayout.setVisibility(View.GONE);
 		} else {
-			horizontalScrollViewInterestedUsers.setVisibility(View.VISIBLE);
-			updateHorizontalScrollView(proposal.getInterested());
+			interestedLinLayout.setVisibility(View.VISIBLE);
+			if (!myProposal.getInterested().equals(listInterestedJids)) {
+				listInterestedJids.clear();
+				listInterestedJids.addAll(myProposal.getInterested());
+			}
+			updateHorizontalList(listInterestedJids, interestedLinLayout);
 		}
 	}
 
-	private void updateHorizontalScrollView(List<String> interestedUsers) {
-		// Show Facebook icons for friends that are there.
-		for (int i = 0; i < interestedUsers.size(); i++) {
-			profilePictureViewArrayInterestedUsers[i]
-					.setVisibility(View.VISIBLE);
-			profilePictureViewArrayInterestedUsers[i]
-					.setProfileId(interestedUsers.get(i));
-		}
-		// Hide all the other Facebook icons.
-		for (int i = interestedUsers.size(); i < profilePictureViewArrayInterestedUsers.length; i++) {
-			profilePictureViewArrayInterestedUsers[i].setVisibility(View.GONE);
+	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
+
+		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
+				+ " elements");
+
+		Log.i(ProposalFragment.class.getSimpleName(),
+				"removed " + linLayout.getChildCount()
+						+ " elements from linLayout");
+		linLayout.removeAllViews();
+
+		for (int i = 0; i < jids.size(); i++) {
+			String jid = jids.get(i);
+
+			// Get the cell
+			View view = LayoutInflater.from(getSherlockActivity()).inflate(
+					R.layout.cell_profile_icon, null);
+
+			// Set the FB Profile pic
+			ProfilePictureView icon = (ProfilePictureView) view
+					.findViewById(R.id.profilePictureIcon);
+			Log.i(ProposalFragment.class.getSimpleName(),
+					"Creating fb icon with jid " + jid);
+			icon.setProfileId(jid);
+
+			linLayout.addView(view);
 		}
 	}
 }

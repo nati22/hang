@@ -6,12 +6,35 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
+import android.util.Log;
+
 public final class Proposal {
 	private String description;
 	private String location;
 	private DateTime startTime;
 	private List<String> interestedUsers;
 	private List<String> confirmedUsers;
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Proposal)) {
+			Log.e(Proposal.class.getSimpleName(),
+					".equals() called with Proposal against a "
+							+ o.getClass().getName());
+			return false;
+		} else {
+			Proposal otherProp = (Proposal) o;
+			if (otherProp.getDescription().equals(this.description)
+					&& otherProp.getLocation().equals(this.location)
+					&& otherProp.getStartTime().equals(this.startTime)
+					&& otherProp.interestedUsers.equals(this.interestedUsers)
+					&& otherProp.confirmedUsers.equals(this.confirmedUsers)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
 
 	public static final int DESCRIPTION_MAX_CHARS = 100;
 	public static final int LOCATION_MAX_CHARS = 50;
