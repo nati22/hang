@@ -1,8 +1,12 @@
 package com.hangapp.android.activity.fragment;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -33,6 +37,8 @@ import com.hangapp.android.util.Keys;
 public final class MyProposalFragment extends SherlockFragment implements
 		MyProposalListener {
 
+	private final String TAG = MyProposalFragment.class.getSimpleName();
+
 	// UI widgets.
 	private TextView textViewMyProposal;
 	private ImageView imageViewChat;
@@ -40,15 +46,21 @@ public final class MyProposalFragment extends SherlockFragment implements
 	private TextView textViewMyProposalLocation;
 	private TextView textViewMyProposalStartTime;
 	private TextView textViewMyProposalInterestedCount;
-	private HorizontalScrollView horizontalScrollViewInterestedUsers;
-	private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
 	private ImageView imageViewDeleteMyProposal;
 
-	// Dependencies.
+	private List<String> listInterestedJids = new ArrayList<String>();
+	private LinearLayout interestedLinLayout;
+
+	private Proposal myProposal;
 	private Database database;
 
-	// Member datum.
-	private Proposal myProposal;
+	private Context context;
+
+	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		this.context = activity.getApplicationContext();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -56,6 +68,7 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
+
 	}
 
 	@Override
@@ -67,45 +80,20 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Reference views.
 		textViewMyProposal = (TextView) view
-				.findViewById(R.id.textViewMyProposal);
+				.findViewById(R.id.myTextViewMyProposal);
 		imageViewChat = (ImageView) view.findViewById(R.id.imageViewChat);
 		textViewMyProposalDescription = (TextView) view
-				.findViewById(R.id.textViewMyProposalDescription);
+				.findViewById(R.id.myTextViewMyProposalDescription);
 		textViewMyProposalLocation = (TextView) view
-				.findViewById(R.id.textViewMyProposalLocation);
+				.findViewById(R.id.myTextViewMyProposalLocation);
 		textViewMyProposalStartTime = (TextView) view
-				.findViewById(R.id.textViewMyProposalStartTime);
+				.findViewById(R.id.myTextViewMyProposalStartTime);
 		textViewMyProposalInterestedCount = (TextView) view
-				.findViewById(R.id.textViewMyProposalInterestedCount);
-		horizontalScrollViewInterestedUsers = (HorizontalScrollView) view
-				.findViewById(R.id.horizontalScrollViewInterestedUsers);
-		profilePictureViewArrayInterestedUsers = new ProfilePictureView[] {
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested00),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested01),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested02),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested03),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested04),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested05),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested06),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested07),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested08),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested09),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested10),
-				(ProfilePictureView) view
-						.findViewById(R.id.profilePictureViewInterested11) };
+				.findViewById(R.id.myTextViewMyProposalInterestedCount);
 		imageViewDeleteMyProposal = (ImageView) view
 				.findViewById(R.id.imageViewDeleteMyProposal);
+		interestedLinLayout = (LinearLayout) view
+				.findViewById(R.id.myLinLayoutInterested);
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -154,19 +142,60 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
-		onMyProposalUpdate(myProposal);
+
+		database.addMyProposalListener(this);
+
+		// onMyProposalUpdate(myProposal);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		database.removeMyProposalListener(this);
 	}
 
 	@Override
 	public void onMyProposalUpdate(Proposal proposal) {
-		myProposal = proposal;
 
+		Log.d(TAG, "onMyProposalUpdate called with this ALREADY PRESENT:\n"
+				+ ">>> myProposal desc: " + myProposal.getDescription() + "\n"
+				+ ">>> myProposal loc: " + myProposal.getLocation() + "\n"
+				+ ">>> myProposal time: " + myProposal.getStartTime() + "\n"
+				+ ">>> myProposal int: "
+				+ myProposal.getInterested().toString());
+
+		Log.d(TAG, "onMyProposalUpdate called with this passed in :\n"
+				+ ">>> proposal desc: " + proposal.getDescription() + "\n"
+				+ ">>> proposal loc: " + proposal.getLocation() + "\n"
+				+ ">>> proposal time: " + proposal.getStartTime() + "\n"
+				+ ">>> proposal int: " + proposal.getInterested().toString());
+
+		// Make sure Proposal isn't null
 		if (myProposal == null) {
 			Log.e("MyProposalFragment", "myProposal is null");
 			return;
 		}
 
+		/*Log.d(TAG, "desc: \"" + myProposal.getDescription() + "\", new desc: "
+				+ proposal.getDescription());
+		Log.d(TAG, "loc: \n" + myProposal.getLocation() + "\n, new loc: "
+				+ proposal.getLocation());
+		Log.d(TAG, "int: \n" + myProposal.getInterested().toString());*/
+
+		// Make sure Proposal has changed
+		if (!myProposal.equals(proposal)) {
+			myProposal = proposal;
+		} else {
+			Log.d(TAG, "Same Proposal");
+			return;
+		}
+
+		// Set Proposal text
 		textViewMyProposalDescription.setText(myProposal.getDescription());
+		
+		Log.d(TAG, "setting proposal to " + myProposal.getDescription());
+		Log.d(TAG, "setting location to " + myProposal.getLocation());
+		Log.d(TAG, "setting interested to " + myProposal.getInterested().toString());
 
 		// Proposal location is optional.
 		if (myProposal.getLocation() == null
@@ -177,37 +206,53 @@ public final class MyProposalFragment extends SherlockFragment implements
 			textViewMyProposalLocation.setVisibility(View.VISIBLE);
 		}
 
+		// Set Proposal start time and Interested count
 		textViewMyProposalStartTime.setText(myProposal.getStartTime().toString(
 				"h:mm aa"));
 		textViewMyProposalInterestedCount.setText(myProposal.getInterested()
 				.size() + " interested");
 
-		// Hide the Interested users if there are none.
-		if (proposal.getInterested() == null) {
+		// Modify Interested users display according to list
+		if (myProposal.getInterested() == null) {
 			Log.i("MyProposalFragment.onMyProposalUpdate",
 					"Proposal interested is null");
-			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
-		} else if (proposal.getInterested().size() == 0) {
+			interestedLinLayout.setVisibility(View.GONE);
+		} else if (myProposal.getInterested().size() == 0) {
 			Log.i("MyProposalFragment.onMyProposalUpdate",
 					"Proposal interested is empty");
-			horizontalScrollViewInterestedUsers.setVisibility(View.GONE);
+			interestedLinLayout.setVisibility(View.GONE);
 		} else {
-			horizontalScrollViewInterestedUsers.setVisibility(View.VISIBLE);
-			updateHorizontalScrollView(proposal.getInterested());
+			interestedLinLayout.setVisibility(View.VISIBLE);
+			if (!myProposal.getInterested().equals(listInterestedJids)) {
+				listInterestedJids.clear();
+				listInterestedJids.addAll(myProposal.getInterested());
+			}
+			updateHorizontalList(listInterestedJids, interestedLinLayout);
 		}
 	}
 
-	private void updateHorizontalScrollView(List<String> interestedUsers) {
-		// Show Facebook icons for friends that are there.
-		for (int i = 0; i < interestedUsers.size(); i++) {
-			profilePictureViewArrayInterestedUsers[i]
-					.setVisibility(View.VISIBLE);
-			profilePictureViewArrayInterestedUsers[i]
-					.setProfileId(interestedUsers.get(i));
-		}
-		// Hide all the other Facebook icons.
-		for (int i = interestedUsers.size(); i < profilePictureViewArrayInterestedUsers.length; i++) {
-			profilePictureViewArrayInterestedUsers[i].setVisibility(View.GONE);
+	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
+
+		Log.i(TAG, "jids has " + jids.size() + " elements");
+
+		Log.i(TAG, "removed " + linLayout.getChildCount()
+				+ " elements from linLayout");
+		linLayout.removeAllViews();
+
+		for (int i = 0; i < jids.size(); i++) {
+			String jid = jids.get(i);
+
+			// Get the cell
+			View view = LayoutInflater.from(getSherlockActivity()).inflate(
+					R.layout.cell_profile_icon, null);
+
+			// Set the FB Profile pic
+			ProfilePictureView icon = (ProfilePictureView) view
+					.findViewById(R.id.profilePictureIcon);
+			Log.i(TAG, "Creating fb icon with jid " + jid);
+			icon.setProfileId(jid);
+
+			linLayout.addView(view);
 		}
 	}
 }

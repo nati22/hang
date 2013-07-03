@@ -148,7 +148,7 @@ public final class YouFragment extends SherlockFragment implements
 
 		// Refresh the Proposal for this Fragment.
 		onMyAvailabilityUpdate(myCurrentAvailability);
-		onMyProposalUpdate(myProposal);
+//		onMyProposalUpdate(myProposal);
 	}
 
 	@Override

@@ -164,11 +164,29 @@ public final class User implements Comparable<User>, Parcelable {
 		String proposalStartTimeString = userJsonObject
 				.getString(Keys.PROPOSAL_START_TIME);
 
+		JSONArray proposalInterestedJidsArray = userJsonObject
+				.getJSONArray(Keys.PROPOSAL_INTERESTED);
+		JSONArray proposalConfirmedJidsArray = userJsonObject
+				.getJSONArray(Keys.PROPOSAL_CONFIRMED);
+		
+		List<String> proposalInterestedJidStrings = new ArrayList<String>();
+		List<String> proposalConfirmedJidStrings = new ArrayList<String>();
+		
+		for (int i = 0; i < proposalInterestedJidsArray.length(); i++) {
+			proposalInterestedJidStrings.add(proposalInterestedJidsArray.getString(i));
+		}
+		for (int i = 0; i < proposalConfirmedJidsArray.length(); i++) {
+			proposalConfirmedJidStrings.add(proposalConfirmedJidsArray.getString(i));
+		}
+
+		if (proposalLocation.equals("null")) {
+			Log.e("User.parseUser", "Proposal location was \"null\"");
+			proposalLocation = null;
+		}
+
 		// Sanity checks on string fields.
 		if (proposalDescription.equals("null")) {
 			Log.e("User.parseUser", "Proposal description was \"null\"");
-		} else if (proposalLocation.equals("null")) {
-			Log.e("User.parseUser", "Proposal location was \"null\"");
 		} else if (proposalStartTimeString.equals("null")) {
 			Log.e("User.parseUser", "Proposal start time was \"null\"");
 		} else {
@@ -178,6 +196,8 @@ public final class User implements Comparable<User>, Parcelable {
 					.getString(Keys.PROPOSAL_START_TIME));
 			proposal = new Proposal(proposalDescription, proposalLocation,
 					proposalStartTime);
+			proposal.setInterested(proposalInterestedJidStrings);
+			proposal.setConfirmed(proposalConfirmedJidStrings);
 			user.setProposal(proposal);
 		}
 

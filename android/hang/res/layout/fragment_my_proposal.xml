@@ -7,7 +7,7 @@
     android:paddingBottom="10dp" >
 
     <TextView
-        android:id="@+id/textViewMyProposal"
+        android:id="@+id/myTextViewMyProposal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -17,40 +17,40 @@
         android:textSize="18sp" />
 
     <TextView
-        android:id="@+id/textViewMyProposalDescription"
+        android:id="@+id/myTextViewMyProposalDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textViewMyProposal"
+        android:layout_below="@+id/myTextViewMyProposal"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:text="@string/proposal_description"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textViewMyProposalLocation"
+        android:id="@+id/myTextViewMyProposalLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewMyProposalDescription"
-        android:layout_below="@+id/textViewMyProposalDescription"
+        android:layout_alignLeft="@+id/myTextViewMyProposalDescription"
+        android:layout_below="@+id/myTextViewMyProposalDescription"
         android:text="@string/proposal_location"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textViewMyProposalStartTime"
+        android:id="@+id/myTextViewMyProposalStartTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewMyProposalLocation"
-        android:layout_below="@+id/textViewMyProposalLocation"
+        android:layout_alignLeft="@+id/myTextViewMyProposalLocation"
+        android:layout_below="@+id/myTextViewMyProposalLocation"
         android:text="@string/start_time"
         android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/textViewMyProposalInterestedCount"
+        android:id="@+id/myTextViewMyProposalInterestedCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textViewMyProposalStartTime"
-        android:layout_alignBottom="@+id/textViewMyProposalStartTime"
+        android:layout_alignBaseline="@+id/myTextViewMyProposalStartTime"
+        android:layout_alignBottom="@+id/myTextViewMyProposalStartTime"
         android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
         android:text="0 interested"
@@ -62,86 +62,14 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/relativeLayoutMyProposalChatArea"
         android:layout_alignRight="@+id/relativeLayoutMyProposalChatArea"
-        android:layout_below="@+id/textViewMyProposalStartTime"
+        android:layout_below="@+id/myTextViewMyProposalStartTime"
         android:layout_marginTop="5dp" >
 
         <LinearLayout
+            android:id="@+id/myLinLayoutInterested"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:orientation="horizontal" >
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested00"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested01"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested02"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested03"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested04"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested05"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested06"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested07"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested08"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested09"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested10"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/profilePictureViewInterested11"
-                android:layout_width="40dp"
-                android:layout_height="40dp" >
-            </com.facebook.widget.ProfilePictureView>
-        </LinearLayout>
+            android:orientation="horizontal" />
     </HorizontalScrollView>
 
     <RelativeLayout
@@ -198,16 +126,16 @@
         android:id="@+id/imageViewDeleteMyProposal"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignRight="@+id/textViewMyProposalInterestedCount"
-        android:layout_alignTop="@+id/textViewMyProposal"
+        android:layout_alignRight="@+id/myTextViewMyProposalInterestedCount"
+        android:layout_alignTop="@+id/myTextViewMyProposal"
         android:src="@drawable/delete" />
 
     <ImageView
         android:id="@+id/imageViewChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewMyProposalDescription"
-        android:layout_alignTop="@+id/textViewMyProposal"
+        android:layout_alignLeft="@+id/myTextViewMyProposalDescription"
+        android:layout_alignTop="@+id/myTextViewMyProposal"
         android:src="@drawable/chat" />
 
 </RelativeLayout>
