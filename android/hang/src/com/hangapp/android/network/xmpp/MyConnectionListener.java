@@ -4,7 +4,7 @@ import org.jivesoftware.smack.ConnectionListener;
 
 import android.util.Log;
 
-public class MyConnectionListener implements ConnectionListener {
+class MyConnectionListener implements ConnectionListener {
 
 	@Override
 	public void connectionClosed() {

@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -25,6 +26,7 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
@@ -32,20 +34,36 @@ import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.BaseActivity;
-import com.hangapp.android.util.HangLog;
 
-public final class OutgoingBroadcastsActivity extends BaseActivity
-		implements OutgoingBroadcastsListener {
+/**
+ * Get to this Activity via {@link YouFragment} and clicking the number of
+ * Outgoing Broadcasts you have. <br />
+ * <br />
+ * This is a simple Activity that shows a ListView of your Outgoing broadcasts.
+ * It also listens for changes in Outgoing Broadcasts so that it doesn't have to
+ * refresh manually. <br />
+ * <br />
+ * For some reason, this Activity uses the Facebook {@link UiLifecycleHelper} to
+ * "listen" to change in Facebook session state (whether or not you're logged
+ * in). I'm not really sure what it needs it for, so TODO: remove Facebook
+ * session state listener from this class.
+ */
+public final class OutgoingBroadcastsActivity extends BaseActivity implements
+		OutgoingBroadcastsListener {
 
-	private static final int REAUTH_ACTIVITY_CODE = 100;
+	// Member datum.
 	private List<User> outgoingBroadcasts = new ArrayList<User>();
 
+	// Dependencies.
 	private Database database;
 	private RestClient restClient;
 
+	// UI stuff.
 	private ListView listViewOutgoingBroadcasts;
 	private OutgoingBroadcastsArrayAdapter adapter;
 
+	// Facebook session state listener stuff.
+	private static final int REAUTH_ACTIVITY_CODE = 100;
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
@@ -78,6 +96,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity
 		listViewOutgoingBroadcasts
 				.setEmptyView(findViewById(android.R.id.empty));
 
+		// Facebook SDK stuff (lifted from Facebook SDK Android tutorial).
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
 	}
@@ -128,8 +147,8 @@ public final class OutgoingBroadcastsActivity extends BaseActivity
 	}
 
 	public boolean addNewOutgoingBroadcasts(MenuItem item) {
-		startPickerActivity(AddOutgoingBroadcastActivity.FRIEND_PICKER,
-				RESULT_OK);
+		startAddOutgoingBroadcastsActivity(
+				AddOutgoingBroadcastActivity.FRIEND_PICKER, RESULT_OK);
 
 		return true;
 	}
@@ -171,23 +190,32 @@ public final class OutgoingBroadcastsActivity extends BaseActivity
 					.setText(hisStatus != null ? hisStatus.getDescription()
 							: "Unknown Availability");
 
+			// Set OnClickListeners.
 			buttonDeleteOutgoingBroadcast
 					.setOnClickListener(new OnClickListener() {
-
 						@Override
 						public void onClick(View v) {
-							HangLog.toastD(getApplicationContext(),
-									"Deleting Broadcast", "Deleting "
+							// Tell the user that you're deleting a broadcast.
+							Log.i("OutgoingBroadcastsActivity.deleteOutgoingBroadcast",
+									"Deleting "
 											+ outgoingBroadcast.getFirstName()
 											+ " from my Outgoing Broadcasts");
+							Toast.makeText(
+									getApplicationContext(),
+									"Deleting "
+											+ outgoingBroadcast.getFirstName()
+											+ " from my Outgoing Broadcasts",
+									Toast.LENGTH_SHORT).show();
+
+							// Actually delete the outgoing Broadcast.
 							restClient.deleteBroadcastee(outgoingBroadcast
 									.getJid());
 						}
 					});
+
 			// Show/hide the "Delete" button if we need to.
 			if (showDeleteButtons) {
 				buttonDeleteOutgoingBroadcast.setVisibility(View.VISIBLE);
-
 			} else {
 				buttonDeleteOutgoingBroadcast.setVisibility(View.GONE);
 			}
@@ -196,7 +224,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity
 		}
 	}
 
-	private void startPickerActivity(Uri data, int requestCode) {
+	private void startAddOutgoingBroadcastsActivity(Uri data, int requestCode) {
 		Intent intent = new Intent();
 		intent.setData(data);
 		intent.setClass(this, AddOutgoingBroadcastActivity.class);
@@ -215,7 +243,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity
 
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
-
+		// Do nothing.
 	}
 
 	@Override

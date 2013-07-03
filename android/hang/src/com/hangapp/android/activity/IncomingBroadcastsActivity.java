@@ -14,20 +14,32 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.util.BaseActivity;
 
+/**
+ * Get to this Activity via {@link YouFragment} and clicking on the number of
+ * Incoming Broadcasts you have. <br />
+ * <br />
+ * This is a simple Activity that shows a ListView of your Incoming broadcasts.
+ * It also listens for changes in IncomingBroadcasts so that it doesn't have to
+ * refresh manually.
+ */
 public final class IncomingBroadcastsActivity extends BaseActivity implements
 		IncomingBroadcastsListener {
 
+	// Member datum.
 	private List<User> incomingBroadcasts = new ArrayList<User>();
 
+	// UI stuff.
 	private ListView listViewIncomingBroadcasts;
 	private IncomingBroadcastsArrayAdapter adapter;
 
+	// Dependencies.
 	private Database database;
 
 	@Override
@@ -57,14 +69,18 @@ public final class IncomingBroadcastsActivity extends BaseActivity implements
 	protected void onResume() {
 		super.onResume();
 
+		// "Subscribe" to changes in Incoming Broadcasts.
 		database.addIncomingBroadcastsListener(this);
+
+		// Refresh Incoming Broadcasts from the internal database (our cache).
 		onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 	}
 
 	@Override
-	protected void onDestroy() {
-		super.onDestroy();
+	protected void onPause() {
+		super.onPause();
 
+		// "Unsubscribe" from changes in Incoming Broadcasts.
 		database.removeIncomingBroadcastsListener(this);
 	}
 

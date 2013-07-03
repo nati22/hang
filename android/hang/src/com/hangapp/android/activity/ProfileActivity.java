@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.ProposalFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability.Status;
@@ -35,9 +36,15 @@ import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.Utils;
 
+/**
+ * Get to this activity by clicking on a user in {@link FeedFragment}. <br />
+ * <br />
+ * 
+ */
 public final class ProfileActivity extends BaseActivity implements
 		IncomingBroadcastsListener {
 
+	// UI widgets.
 	private ProfilePictureView profilePictureViewFriendIcon;
 	private TextView textViewFriendsName;
 	private ImageButton imageButtonFriendsAvailability;
@@ -53,14 +60,15 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewProposalInterestedCount;
 	private HorizontalScrollView horizontalScrollViewInterestedUsers;
 	private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
-
 	private LinearLayout linLayoutInterested;
-	private List<String> listInterestedJids = new ArrayList<String>();
 
+	// Member datum.
+	private List<String> listInterestedJids = new ArrayList<String>();
+	private User friend;
+
+	// Dependencies.
 	private Database database;
 	private RestClient restClient;
-
-	private User friend;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

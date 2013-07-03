@@ -17,9 +17,11 @@ import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.util.Keys;
 
 public final class LoginFragment extends SherlockFragment {
 
+	// Dependencies.
 	private SharedPreferences prefs;
 	private Database database;
 	private RestClient restClient;
@@ -101,15 +103,13 @@ public final class LoginFragment extends SherlockFragment {
 		if (state.isOpened()) {
 			Log.i("SettingsActivity.onSessionStateChange", "Logged in...");
 
-			// SharedPreferences.Editor editor = prefs.edit();
-			// editor.putBoolean(Keys.REGISTERED, true);
-			// editor.commit();
+			SharedPreferences.Editor editor = prefs.edit();
+			editor.putBoolean(Keys.REGISTERED, true);
+			editor.commit();
 		} else if (state.isClosed()) {
 			Log.i("SettingsActivity.onSessionStateChange", "Logged out...");
 
-			// SharedPreferences.Editor editor = prefs.edit();
-			// editor.clear();
-			// editor.commit();
+			database.clear();
 		}
 	}
 }
