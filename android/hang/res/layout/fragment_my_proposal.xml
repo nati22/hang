@@ -7,27 +7,6 @@
     android:paddingBottom="10dp" >
 
     <TextView
-        android:id="@+id/myTextViewMyProposal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:text="MY PROPOSAL"
-        android:textSize="18sp" />
-
-    <TextView
-        android:id="@+id/myTextViewMyProposalDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/myTextViewMyProposal"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="40dp"
-        android:text="@string/proposal_description"
-        android:textSize="16sp" />
-
-    <TextView
         android:id="@+id/myTextViewMyProposalLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,8 +39,6 @@
         android:id="@+id/horizontalScrollViewInterestedUsers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/relativeLayoutMyProposalChatArea"
-        android:layout_alignRight="@+id/relativeLayoutMyProposalChatArea"
         android:layout_below="@+id/myTextViewMyProposalStartTime"
         android:layout_marginTop="5dp" >
 
@@ -72,70 +49,32 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayoutMyProposalChatArea"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_below="@+id/horizontalScrollViewInterestedUsers"
-        android:layout_marginBottom="20dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@android:color/white" >
-
-        <ListView
-            android:id="@+id/listView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonMyProposalSendMessage"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" >
-        </ListView>
-
-        <View
-            android:id="@+id/separatorChatFromCompose"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@+id/editTextMyProposalMessageText"
-            android:background="@color/grey_action_bar" />
-
-        <EditText
-            android:id="@+id/editTextMyProposalMessageText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="2dp"
-            android:layout_toLeftOf="@+id/buttonMyProposalSendMessage"
-            android:hint="Enter message here"
-            android:inputType="text"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/buttonMyProposalSendMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/editTextMyProposalMessageText"
-            android:text="@string/send"
-            android:textSize="12sp" />
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/imageViewChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/myTextViewMyProposalInterestedCount"
+        android:layout_alignTop="@+id/horizontalScrollViewInterestedUsers"
+        android:src="@drawable/button_chat" />
 
     <ImageView
         android:id="@+id/imageViewDeleteMyProposal"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:layout_alignRight="@+id/myTextViewMyProposalInterestedCount"
-        android:layout_alignTop="@+id/myTextViewMyProposal"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="5dp"
         android:src="@drawable/delete" />
 
-    <ImageView
-        android:id="@+id/imageViewChat"
+    <TextView
+        android:id="@+id/myTextViewMyProposalDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/myTextViewMyProposalDescription"
-        android:layout_alignTop="@+id/myTextViewMyProposal"
-        android:src="@drawable/chat" />
+        android:layout_alignBottom="@+id/imageViewDeleteMyProposal"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="24dp"
+        android:text="@string/proposal_description"
+        android:textSize="16sp" />
 
 </RelativeLayout>

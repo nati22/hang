@@ -87,27 +87,6 @@
             android:paddingBottom="10dp" >
 
             <TextView
-                android:id="@+id/textViewMyProposal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="PROPOSAL"
-                android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/textViewMyProposalDescription"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_below="@+id/textViewMyProposal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="40dp"
-                android:text="@string/proposal_description"
-                android:textSize="16sp" />
-
-            <TextView
                 android:id="@+id/textViewMyProposalLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -140,8 +119,6 @@
                 android:id="@+id/horizontalScrollViewInterestedUsers"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/relativeLayoutMyProposalChatArea"
-                android:layout_alignRight="@+id/relativeLayoutMyProposalChatArea"
                 android:layout_below="@+id/textViewMyProposalStartTime"
                 android:layout_marginTop="5dp" >
 
@@ -153,66 +130,6 @@
                 </LinearLayout>
             </HorizontalScrollView>
 
-            <RelativeLayout
-                android:id="@+id/relativeLayoutMyProposalChatArea"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_below="@+id/horizontalScrollViewInterestedUsers"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@android:color/white" >
-
-                <ListView
-                    android:id="@+id/listView1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/buttonMyProposalSendMessage"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true" >
-                </ListView>
-
-                <View
-                    android:id="@+id/separatorChatFromCompose"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_above="@+id/editTextMyProposalMessageText"
-                    android:background="@color/grey_action_bar" />
-
-                <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
-
-                <LinearLayout
-                    android:layout_width="0px"
-                    android:layout_height="0px"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true" />
-
-                <EditText
-                    android:id="@+id/editTextMyProposalMessageText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginTop="2dp"
-                    android:layout_toLeftOf="@+id/buttonMyProposalSendMessage"
-                    android:hint="Enter message here"
-                    android:inputType="text"
-                    android:nextFocusLeft="@+id/editTextMyProposalMessageText"
-                    android:nextFocusUp="@+id/editTextMyProposalMessageText"
-                    android:textSize="12sp" />
-
-                <Button
-                    android:id="@+id/buttonMyProposalSendMessage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignTop="@+id/editTextMyProposalMessageText"
-                    android:text="@string/send"
-                    android:textSize="12sp" />
-            </RelativeLayout>
-
             <CheckBox
                 android:id="@+id/checkBoxInterested"
                 android:layout_width="wrap_content"
@@ -222,13 +139,24 @@
                 android:button="@drawable/checkbox_interested"
                 android:text="" />
 
+            <TextView
+                android:id="@+id/textViewMyProposalDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="14dp"
+                android:text="@string/proposal_description"
+                android:textSize="16sp" />
+
             <ImageView
                 android:id="@+id/imageViewChat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/textViewMyProposalDescription"
-                android:layout_alignTop="@+id/textViewMyProposal"
-                android:src="@drawable/chat" />
+                android:layout_alignRight="@+id/textViewMyProposalInterestedCount"
+                android:layout_alignTop="@+id/horizontalScrollViewInterestedUsers"
+                android:src="@drawable/button_chat" />
 
         </RelativeLayout>
     </RelativeLayout>
