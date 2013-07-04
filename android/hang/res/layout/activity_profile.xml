@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/imageButtonFriendsAvailability"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="15dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@string/champagne_limousines"
             android:text="Status"
@@ -156,8 +156,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@+id/textViewMyProposalInterestedCount"
                 android:layout_alignTop="@+id/horizontalScrollViewInterestedUsers"
+                android:layout_marginTop="55dp"
                 android:src="@drawable/button_chat" />
-
         </RelativeLayout>
     </RelativeLayout>
 

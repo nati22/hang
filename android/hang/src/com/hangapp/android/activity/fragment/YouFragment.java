@@ -34,8 +34,6 @@ import com.hangapp.android.model.callback.MyAvailabilityListener;
 import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
-import com.hangapp.android.network.rest.RestClient;
-import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Utils;
 
@@ -57,7 +55,6 @@ public final class YouFragment extends SherlockFragment implements
 	private Proposal myProposal;
 
 	private Database database;
-	private RestClient restClient;
 
 	private Availability myCurrentAvailability;
 
@@ -67,8 +64,6 @@ public final class YouFragment extends SherlockFragment implements
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
-		restClient = new RestClientImpl(database, getActivity()
-				.getApplicationContext());
 	}
 
 	@Override

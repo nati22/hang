@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public final class FeedFragment extends SherlockFragment implements
 	// UI stuff
 	private ListView listViewFriends;
 	private FriendsAdapter adapter;
+	private Button buttonRefresh;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -82,13 +84,14 @@ public final class FeedFragment extends SherlockFragment implements
 		// Reference Views.
 		listViewFriends = (ListView) view
 				.findViewById(R.id.listViewFriendsFragment);
+		buttonRefresh = (Button) view.findViewById(R.id.buttonRefresh);
 
 		// Set up the Adapter.
 		adapter = new FriendsAdapter(getActivity(), incomingBroadcasts);
 		listViewFriends.setAdapter(adapter);
 		listViewFriends.setEmptyView(view.findViewById(android.R.id.empty));
 
-		// Set the ListView's OnItemClickListener to open ProfileActivity.
+		// Set OnClickListeners.
 		listViewFriends.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -100,6 +103,12 @@ public final class FeedFragment extends SherlockFragment implements
 						ProfileActivity.class);
 				proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
 				context.startActivity(proposalLeechIntent);
+			}
+		});
+		buttonRefresh.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				restClient.getMyData();
 			}
 		});
 

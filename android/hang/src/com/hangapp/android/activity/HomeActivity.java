@@ -248,18 +248,4 @@ public final class HomeActivity extends BaseActivity {
 			getSupportActionBar().hide();
 		}
 	}
-
-	/**
-	 * XML onClickListener for the Empty View "Add Outgoing Broadcasts" button.
-	 * This appears here, even though FeedFragment manages the Empty View
-	 * itself... TODO we should change this so that FeedFragment explicitly
-	 * implements this OnClickListener for the button.
-	 */
-	public void addMoreOutgoingBroadcasts(View v) {
-		Intent intent = new Intent();
-		intent.setData(AddOutgoingBroadcastActivity.FRIEND_PICKER);
-		intent.setClass(this, AddOutgoingBroadcastActivity.class);
-		startActivityForResult(intent, RESULT_OK);
-	}
-
 }
