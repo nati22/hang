@@ -75,6 +75,10 @@ final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 
 		database.setMyUserData(myUserObject.getJid(),
 				myUserObject.getFirstName(), myUserObject.getLastName());
+
+		// If the user was successfully saved into the database, directly
+		// execute a GetUserDataAsyncTask call.
+		new GetUserDataAsyncTask(database, context, newUserJid).execute();
 	}
 
 	@Override

@@ -192,6 +192,11 @@ public final class HomeActivity extends BaseActivity {
 									+ " for Facebook user "
 									+ graphUser.getName());
 
+					// You've officially "registered."
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putBoolean(Keys.REGISTERED, true);
+					editor.commit();
+
 					User me = new User(graphUser.getId(), graphUser
 							.getFirstName(), graphUser.getLastName());
 

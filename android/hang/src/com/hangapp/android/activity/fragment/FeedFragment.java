@@ -6,8 +6,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,6 +54,7 @@ public final class FeedFragment extends SherlockFragment implements
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
 
 	// Dependencies.
+	private SharedPreferences prefs;
 	private Database database;
 	private RestClient restClient;
 
@@ -60,6 +63,8 @@ public final class FeedFragment extends SherlockFragment implements
 		super.onCreate(savedInstanceState);
 
 		// Instantiate dependencies.
+		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity()
+				.getApplicationContext());
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getActivity()
 				.getApplicationContext());
