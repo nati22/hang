@@ -49,32 +49,32 @@
             android:orientation="horizontal" />
     </HorizontalScrollView>
 
+    <TextView
+        android:id="@+id/myTextViewMyProposalDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/proposal_description"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/imageViewDeleteMyProposal"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_alignBottom="@+id/myTextViewMyProposalDescription"
+        android:layout_alignRight="@+id/myTextViewMyProposalInterestedCount"
+        android:src="@drawable/delete" />
+
     <ImageView
         android:id="@+id/imageViewChat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/myTextViewMyProposalInterestedCount"
         android:layout_alignTop="@+id/horizontalScrollViewInterestedUsers"
+        android:layout_marginTop="38dp"
         android:src="@drawable/button_chat" />
-
-    <ImageView
-        android:id="@+id/imageViewDeleteMyProposal"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="5dp"
-        android:src="@drawable/delete" />
-
-    <TextView
-        android:id="@+id/myTextViewMyProposalDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageViewDeleteMyProposal"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="24dp"
-        android:text="@string/proposal_description"
-        android:textSize="16sp" />
 
 </RelativeLayout>
