@@ -55,7 +55,6 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewStatus;
 	private RelativeLayout relativeLayoutFriendsProposal;
 	private ImageView imageViewChat;
-	private TextView textViewProposal;
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
@@ -108,7 +107,6 @@ public final class ProfileActivity extends BaseActivity implements
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		relativeLayoutFriendsProposal = (RelativeLayout) findViewById(R.id.relativeLayoutFriendsProposal);
 		imageViewChat = (ImageView) findViewById(R.id.imageViewChat);
-		textViewProposal = (TextView) findViewById(R.id.textViewMyProposal);
 		textViewProposalDescription = (TextView) findViewById(R.id.textViewMyProposalDescription);
 		textViewProposalLocation = (TextView) findViewById(R.id.textViewMyProposalLocation);
 		textViewProposalStartTime = (TextView) findViewById(R.id.textViewMyProposalStartTime);
@@ -164,7 +162,6 @@ public final class ProfileActivity extends BaseActivity implements
 				.createFromAsset(getApplicationContext().getAssets(),
 						Fonts.CHAMPAGNE_LIMOUSINES);
 		textViewStatus.setTypeface(champagneLimousinesFont);
-		textViewProposal.setTypeface(champagneLimousinesFontBold);
 		textViewProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewProposalStartTime.setTypeface(champagneLimousinesFont);
@@ -262,7 +259,6 @@ public final class ProfileActivity extends BaseActivity implements
 			relativeLayoutFriendsProposal.setVisibility(View.GONE);
 		} else {
 			relativeLayoutFriendsProposal.setVisibility(View.VISIBLE);
-			textViewProposal.setText(friend.getFirstName() + "'s Proposal");
 			textViewProposalDescription.setText(friend.getProposal()
 					.getDescription());
 			textViewProposalLocation

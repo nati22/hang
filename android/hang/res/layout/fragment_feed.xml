@@ -20,19 +20,18 @@
             android:id="@android:id/empty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/buttonAddMoreOutgoingBroadcasts"
+            android:layout_above="@+id/buttonRefresh"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="30dp"
             android:text="@string/no_incoming_broadcasts" />
 
         <Button
-            android:id="@+id/buttonAddMoreOutgoingBroadcasts"
+            android:id="@+id/buttonRefresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:onClick="addMoreOutgoingBroadcasts"
-            android:text="@string/add_outgoing_broadcasts"
+            android:text="@string/refresh"
             android:textSize="13sp" />
     </RelativeLayout>
 

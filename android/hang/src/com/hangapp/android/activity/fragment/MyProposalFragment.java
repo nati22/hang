@@ -35,7 +35,6 @@ public final class MyProposalFragment extends SherlockFragment {
 	private final String TAG = MyProposalFragment.class.getSimpleName();
 
 	// UI widgets.
-	private TextView textViewMyProposal;
 	private ImageView imageViewChat;
 	private TextView textViewMyProposalDescription;
 	private TextView textViewMyProposalLocation;
@@ -65,8 +64,6 @@ public final class MyProposalFragment extends SherlockFragment {
 				false);
 
 		// Reference views.
-		textViewMyProposal = (TextView) view
-				.findViewById(R.id.myTextViewMyProposal);
 		imageViewChat = (ImageView) view.findViewById(R.id.imageViewChat);
 		textViewMyProposalDescription = (TextView) view
 				.findViewById(R.id.myTextViewMyProposalDescription);
@@ -88,7 +85,6 @@ public final class MyProposalFragment extends SherlockFragment {
 		Typeface champagneLimousinesFont = Typeface.createFromAsset(
 				getActivity().getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES);
-		textViewMyProposal.setTypeface(champagneLimousinesFontBold);
 		textViewMyProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewMyProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewMyProposalStartTime.setTypeface(champagneLimousinesFont);

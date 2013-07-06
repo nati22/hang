@@ -197,6 +197,11 @@ public final class HomeActivity extends BaseActivity implements
 									+ " for Facebook user "
 									+ graphUser.getName());
 
+					// You've officially "registered."
+					SharedPreferences.Editor editor = prefs.edit();
+					editor.putBoolean(Keys.REGISTERED, true);
+					editor.commit();
+
 					User me = new User(graphUser.getId(), graphUser
 							.getFirstName(), graphUser.getLastName());
 
@@ -253,7 +258,6 @@ public final class HomeActivity extends BaseActivity implements
 			getSupportActionBar().hide();
 		}
 	}
-
 	/**
 	 * XML onClickListener for the Empty View "Add Outgoing Broadcasts" button.
 	 * This appears here, even though FeedFragment manages the Empty View
@@ -305,5 +309,6 @@ public final class HomeActivity extends BaseActivity implements
 			Log.d("HomeActivity", "fragment == null");
 		}
 	}
+
 
 }
