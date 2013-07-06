@@ -150,7 +150,6 @@ public final class ProposalFragment extends SherlockFragment implements
 							toggleInterested.setEnabled(true);
 							removeMeFromHostConfirmedList();
 						}
-
 					}
 				});
 

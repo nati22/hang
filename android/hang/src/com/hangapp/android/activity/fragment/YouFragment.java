@@ -3,6 +3,7 @@ package com.hangapp.android.activity.fragment;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -37,6 +38,7 @@ import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
+import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.Utils;
 
 /**
@@ -45,6 +47,12 @@ import com.hangapp.android.util.Utils;
 public final class YouFragment extends SherlockFragment implements
 		MyUserDataListener, MyAvailabilityListener, MyProposalListener,
 		IncomingBroadcastsListener, OutgoingBroadcastsListener {
+
+	ProposalChangedListener blahblah;
+
+	public interface ProposalChangedListener {
+		public void proposalUpdated(Proposal proposal);
+	}
 
 	private ProfilePictureView profilePictureView;
 	private TextView textViewMyName;
@@ -62,9 +70,22 @@ public final class YouFragment extends SherlockFragment implements
 	private Availability myCurrentAvailability;
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+
+		try {
+			blahblah = (ProposalChangedListener) activity;
+		} catch (ClassCastException e) {
+			throw new ClassCastException(activity.toString());
+		}
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		setRetainInstance(true);
+		
 		// Instantiate dependencies.
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getActivity()
@@ -179,6 +200,8 @@ public final class YouFragment extends SherlockFragment implements
 		Log.i("YouFragment.onMyAvailabilityUpdate", "onMyAvailabilityUpdate: "
 				+ newAvailability.getExpirationDate().toString());
 
+		blahblah.proposalUpdated(null); // //////////////////////////////////////////
+
 		myCurrentAvailability = newAvailability;
 
 		// If the Availability is invalid for some reason, display as grey.
@@ -247,26 +270,41 @@ public final class YouFragment extends SherlockFragment implements
 
 	@Override
 	public void onMyProposalUpdate(Proposal proposal) {
-		if (myProposal.equals(proposal)) {
-			Log.i("YouFragment.onMyProposalUpdate",
-					"Received onMyProposalUpdate with an existing proposal. Not changing Fragment");
-			return;
+		
+		Log.d("YouFragment", "onMyProposalUpdate called");
+		if (proposal != null) {
+			Log.d("YouFragment.proposal.desc", "" + proposal.getDescription());
 		}
-
+		
 		myProposal = proposal;
 
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
-		Fragment fragment = null;
 
+		Log.d("YouFragment", "getFM() = " + getFragmentManager().toString());
+		
 		if (myProposal == null) {
-			fragment = new CreateProposalFragment();
+			Log.d("HomeActivity", "didn't add tag to fragment");
+			Fragment fragment = new CreateProposalFragment();
+			fragment.setRetainInstance(true);
+			fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment);
 		} else {
-			fragment = new MyProposalFragment();
+			Log.d("HomeActivity", "added \"" + Keys.YOU_FRAGMENT_TAG + "\" to fragment");
+			MyProposalFragment fragment = new MyProposalFragment();
+			fragment.setRetainInstance(true);
+			fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment,
+					Keys.YOU_FRAGMENT_TAG);
+			
+			Log.d("HomeActivity", "before being sent, tag of the fragment is " + fragment.getTag());
+			Log.d("HomeActivity", "before being sent, id of the fragment is" + fragment.getId());
+			
+			// pass in the proposal here
+			blahblah.proposalUpdated(myProposal);
+			
 		}
-
-		fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment);
+		
 		fragmentTransaction.commit();
+
 	}
 }

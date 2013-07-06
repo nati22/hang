@@ -22,7 +22,6 @@ import com.hangapp.android.R;
 import com.hangapp.android.activity.ChatActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
-import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
@@ -31,8 +30,7 @@ import com.hangapp.android.util.Keys;
  * {@code YouFragment} will dynamically display either this or
  * {@link CreateProposalFragment} based on whether or not you have a Proposal.
  */
-public final class MyProposalFragment extends SherlockFragment implements
-		MyProposalListener {
+public final class MyProposalFragment extends SherlockFragment {
 
 	private final String TAG = MyProposalFragment.class.getSimpleName();
 
@@ -57,7 +55,6 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
-
 	}
 
 	@Override
@@ -131,47 +128,21 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
-
-		database.addMyProposalListener(this);
-
 		// onMyProposalUpdate(myProposal);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		database.removeMyProposalListener(this);
 	}
 
-	@Override
-	public void onMyProposalUpdate(Proposal proposal) {
-
-		Log.d(TAG, "onMyProposalUpdate called with this ALREADY PRESENT:\n"
-				+ ">>> myProposal desc: " + myProposal.getDescription() + "\n"
-				+ ">>> myProposal loc: " + myProposal.getLocation() + "\n"
-				+ ">>> myProposal time: " + myProposal.getStartTime() + "\n"
-				+ ">>> myProposal int: "
-				+ myProposal.getInterested().toString());
-
-		Log.d(TAG, "onMyProposalUpdate called with this passed in :\n"
-				+ ">>> proposal desc: " + proposal.getDescription() + "\n"
-				+ ">>> proposal loc: " + proposal.getLocation() + "\n"
-				+ ">>> proposal time: " + proposal.getStartTime() + "\n"
-				+ ">>> proposal int: " + proposal.getInterested().toString());
-
-		// Make sure Proposal isn't null
-		if (myProposal == null) {
-			Log.e("MyProposalFragment", "myProposal is null");
+	public void updateProposal(Proposal proposal) {
+		
+		if (proposal == null) {
+			Log.d(TAG, ">>>>>>updateProposal was passed a null proposal");
 			return;
 		}
-
-		/*
-		 * Log.d(TAG, "desc: \"" + myProposal.getDescription() +
-		 * "\", new desc: " + proposal.getDescription()); Log.d(TAG, "loc: \n" +
-		 * myProposal.getLocation() + "\n, new loc: " + proposal.getLocation());
-		 * Log.d(TAG, "int: \n" + myProposal.getInterested().toString());
-		 */
-
+		
 		// Make sure Proposal has changed
 		if (!myProposal.equals(proposal)) {
 			myProposal = proposal;
@@ -182,11 +153,6 @@ public final class MyProposalFragment extends SherlockFragment implements
 
 		// Set Proposal text
 		textViewMyProposalDescription.setText(myProposal.getDescription());
-
-		Log.d(TAG, "setting proposal to " + myProposal.getDescription());
-		Log.d(TAG, "setting location to " + myProposal.getLocation());
-		Log.d(TAG, "setting interested to "
-				+ myProposal.getInterested().toString());
 
 		// Proposal location is optional.
 		if (myProposal.getLocation() == null

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,11 @@ import com.facebook.model.GraphUser;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.LoginFragment;
+import com.hangapp.android.activity.fragment.MyProposalFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
+import com.hangapp.android.activity.fragment.YouFragment.ProposalChangedListener;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
@@ -47,7 +51,8 @@ import com.hangapp.android.util.TabsAdapter;
  * If the user is logged out of Facebook, it shows {@link LoginFragment} and
  * hides its tabs.
  */
-public final class HomeActivity extends BaseActivity {
+public final class HomeActivity extends BaseActivity implements
+		ProposalChangedListener {
 
 	// UI stuff.
 	private NoSlideViewPager mViewPager;
@@ -260,6 +265,45 @@ public final class HomeActivity extends BaseActivity {
 		intent.setData(AddOutgoingBroadcastActivity.FRIEND_PICKER);
 		intent.setClass(this, AddOutgoingBroadcastActivity.class);
 		startActivityForResult(intent, RESULT_OK);
+	}
+
+	public void proposalUpdated(Proposal proposal) {
+		Log.d("HOME ACTIVITY", "the callback worked NIGGA");
+		if (proposal == null) {
+			Log.d("Home", "proposal == null");
+			return;
+		}
+		Log.d("Home activity,", "prop desc received: " + proposal.getDescription());
+		MyProposalFragment fragment = (MyProposalFragment) getSupportFragmentManager()
+				.findFragmentByTag(Keys.YOU_FRAGMENT_TAG);/*.findFragmentById(R.id.frameLayoutYouFragment);
+*/
+		if (fragment == null) {
+			Log.d(HomeActivity.class.getSimpleName(), "fragment is null");
+		} else {
+			Log.d(HomeActivity.class.getSimpleName(), "fragment is " + fragment.getTag().toString());
+		}
+		
+		
+		Fragment fragment1 = (Fragment) getSupportFragmentManager().findFragmentById(2131034314);
+		Fragment fragment2 = (Fragment) getSupportFragmentManager().findFragmentByTag(Keys.YOU_FRAGMENT_TAG);
+		if (fragment1 == null) {
+			Log.d("HomeActivity", "fragment1 == null");
+		} else Log.d("HomeActivity", "it's fragment1 received by id!!");
+		
+		if (fragment2 == null) {
+			Log.d("HomeActivity", "fragment2 == null");
+		} else {
+			Log.d("HomeActivity", "it's fragment2 received by tag!");
+		}
+		
+		Log.d("HomeActivity", "getSFM.toString() = " + getSupportFragmentManager().toString());
+		
+		if (fragment != null) {
+			Log.d("HomeActivity.class", "updating proposal from HomeActivity");
+			fragment.updateProposal(proposal);
+		} else {
+			Log.d("HomeActivity", "fragment == null");
+		}
 	}
 
 }

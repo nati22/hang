@@ -18,9 +18,15 @@ public final class Proposal {
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Proposal)) {
-			Log.e(Proposal.class.getSimpleName(),
-					".equals() called with Proposal against a "
-							+ o.getClass().getName());
+			if (o != null) {
+				Log.e(Proposal.class.getSimpleName(),
+						".equals() called with Proposal against a "
+								+ o.getClass().getName());
+			} else {
+				Log.e(Proposal.class.getSimpleName(),
+						".equals() called with Proposal against null");
+			}
+			
 			return false;
 		} else {
 			Proposal otherProp = (Proposal) o;
