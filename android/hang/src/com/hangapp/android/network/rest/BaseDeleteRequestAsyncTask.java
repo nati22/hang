@@ -1,20 +1,14 @@
 package com.hangapp.android.network.rest;
 
-import java.util.List;
-
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.HttpParams;
 import org.apache.http.util.EntityUtils;
 
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.android.util.HangLog;
 import com.hangapp.android.util.SafeAsyncTask;
 import com.hangapp.android.util.Utils;
 
@@ -39,7 +33,7 @@ class BaseDeleteRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 			// final String errorMessage = "No internet connection detected";
 			// Log.e(errorMessage);
 			// Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-			HangLog.toastE(context, "BaseDeleteRequestAsyncTask",
+			Log.e("BaseDeleteRequestAsyncTask",
 					"No internet connection detected");
 
 			// If there is no Internet connection, then don't run the AsyncTask.
@@ -76,6 +70,6 @@ class BaseDeleteRequestAsyncTask<ResultT> extends SafeAsyncTask<ResultT> {
 	@Override
 	protected void onException(Exception e) throws RuntimeException {
 		super.onException(e);
-		HangLog.toastE(context, "BaseDeleteRequestAsyncTask", e);
+		Log.e("BaseDeleteRequestAsyncTask", e.getMessage());
 	}
 }

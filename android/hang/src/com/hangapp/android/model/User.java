@@ -344,6 +344,7 @@ public final class User implements Comparable<User>, Parcelable {
 		return users;
 	}
 
+	@SuppressWarnings("unused")
 	private static List<User> searchLibraryForJids(Map<String, User> library,
 			List<String> jids) {
 		List<User> users = new ArrayList<User>();

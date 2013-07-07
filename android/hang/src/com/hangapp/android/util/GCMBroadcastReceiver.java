@@ -44,11 +44,11 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				+ messageType.toString());
 
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-			HangLog.toastE(context, TAG, "Send error: "
+			Log.e(TAG, "Send error: "
 					+ intent.getExtras().toString());
 		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
 				.equals(messageType)) {
-			HangLog.toastD(context, TAG, "Deleted messages on server: "
+			Log.d(TAG, "Deleted messages on server: "
 					+ intent.getExtras().toString());
 		} else {
 			// Get message type and sender

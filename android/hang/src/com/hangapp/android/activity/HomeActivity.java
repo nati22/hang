@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -256,8 +255,17 @@ public final class HomeActivity extends BaseActivity implements
 			// Since Facebook isn't logged in, show the LoginFragment.
 			setContentView(R.layout.fragment_login);
 			getSupportActionBar().hide();
+
+			if (exception != null) {
+				Log.e("HomeActivity.onSessionStateChange",
+						"Facebook exception: " + exception.getMessage());
+			} else {
+				Log.i("HomeActivity.onSessionStateChange",
+						"Facebook logged out without exception");
+			}
 		}
 	}
+
 	/**
 	 * XML onClickListener for the Empty View "Add Outgoing Broadcasts" button.
 	 * This appears here, even though FeedFragment manages the Empty View
@@ -272,43 +280,21 @@ public final class HomeActivity extends BaseActivity implements
 	}
 
 	public void proposalUpdated(Proposal proposal) {
-		Log.d("HOME ACTIVITY", "the callback worked NIGGA");
-		if (proposal == null) {
-			Log.d("Home", "proposal == null");
-			return;
-		}
-		Log.d("Home activity,", "prop desc received: " + proposal.getDescription());
-		MyProposalFragment fragment = (MyProposalFragment) getSupportFragmentManager()
-				.findFragmentByTag(Keys.YOU_FRAGMENT_TAG);/*.findFragmentById(R.id.frameLayoutYouFragment);
-*/
-		if (fragment == null) {
-			Log.d(HomeActivity.class.getSimpleName(), "fragment is null");
+		Log.d("HomeActivity.proposalUpdated", "" + proposal);
+
+		MyProposalFragment myProposalFragment = (MyProposalFragment) getSupportFragmentManager()
+				.findFragmentByTag(Keys.MY_PROPOSAL_FRAGMENT_TAG);
+		
+		if (myProposalFragment == null) {
+			Log.i("HomeActivity.proposalUpdated", "MyProposalFragment was null");
+		} else if (myProposalFragment.isVisible()) {
+			Log.i("HomeActivity.proposalUpdated",
+					"MyProposalFragment is visible");
+
+			myProposalFragment.updateProposal(proposal);
 		} else {
-			Log.d(HomeActivity.class.getSimpleName(), "fragment is " + fragment.getTag().toString());
-		}
-		
-		
-		Fragment fragment1 = (Fragment) getSupportFragmentManager().findFragmentById(2131034314);
-		Fragment fragment2 = (Fragment) getSupportFragmentManager().findFragmentByTag(Keys.YOU_FRAGMENT_TAG);
-		if (fragment1 == null) {
-			Log.d("HomeActivity", "fragment1 == null");
-		} else Log.d("HomeActivity", "it's fragment1 received by id!!");
-		
-		if (fragment2 == null) {
-			Log.d("HomeActivity", "fragment2 == null");
-		} else {
-			Log.d("HomeActivity", "it's fragment2 received by tag!");
-		}
-		
-		Log.d("HomeActivity", "getSFM.toString() = " + getSupportFragmentManager().toString());
-		
-		if (fragment != null) {
-			Log.d("HomeActivity.class", "updating proposal from HomeActivity");
-			fragment.updateProposal(proposal);
-		} else {
-			Log.d("HomeActivity", "fragment == null");
+			Log.i("HomeActivity.proposalUpdated",
+					"MyProposalFragment is there but not visible");
 		}
 	}
-
-
 }

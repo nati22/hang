@@ -7,7 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -46,7 +45,7 @@ public final class YouFragment extends SherlockFragment implements
 		MyUserDataListener, MyAvailabilityListener, MyProposalListener,
 		IncomingBroadcastsListener, OutgoingBroadcastsListener {
 
-	ProposalChangedListener blahblah;
+	ProposalChangedListener propChangeListener;
 
 	public interface ProposalChangedListener {
 		public void proposalUpdated(Proposal proposal);
@@ -71,7 +70,7 @@ public final class YouFragment extends SherlockFragment implements
 		super.onAttach(activity);
 
 		try {
-			blahblah = (ProposalChangedListener) activity;
+			propChangeListener = (ProposalChangedListener) activity;
 		} catch (ClassCastException e) {
 			throw new ClassCastException(activity.toString());
 		}
@@ -82,7 +81,7 @@ public final class YouFragment extends SherlockFragment implements
 		super.onCreate(savedInstanceState);
 
 		setRetainInstance(true);
-		
+
 		// Instantiate dependencies.
 		database = Database.getInstance();
 	}
@@ -195,7 +194,7 @@ public final class YouFragment extends SherlockFragment implements
 		Log.i("YouFragment.onMyAvailabilityUpdate", "onMyAvailabilityUpdate: "
 				+ newAvailability.getExpirationDate().toString());
 
-		blahblah.proposalUpdated(null); // //////////////////////////////////////////
+		propChangeListener.proposalUpdated(null);
 
 		myCurrentAvailability = newAvailability;
 
@@ -265,41 +264,31 @@ public final class YouFragment extends SherlockFragment implements
 
 	@Override
 	public void onMyProposalUpdate(Proposal proposal) {
-		
+
 		Log.d("YouFragment", "onMyProposalUpdate called");
 		if (proposal != null) {
 			Log.d("YouFragment.proposal.desc", "" + proposal.getDescription());
 		}
-		
+
 		myProposal = proposal;
 
 		FragmentManager fragmentManager = getFragmentManager();
 		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
 
-		Log.d("YouFragment", "getFM() = " + getFragmentManager().toString());
-		
 		if (myProposal == null) {
-			Log.d("HomeActivity", "didn't add tag to fragment");
-			Fragment fragment = new CreateProposalFragment();
-			fragment.setRetainInstance(true);
+			CreateProposalFragment fragment = new CreateProposalFragment();
 			fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment);
 		} else {
-			Log.d("HomeActivity", "added \"" + Keys.YOU_FRAGMENT_TAG + "\" to fragment");
 			MyProposalFragment fragment = new MyProposalFragment();
-			fragment.setRetainInstance(true);
 			fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment,
-					Keys.YOU_FRAGMENT_TAG);
-			
-			Log.d("HomeActivity", "before being sent, tag of the fragment is " + fragment.getTag());
-			Log.d("HomeActivity", "before being sent, id of the fragment is" + fragment.getId());
-			
-			// pass in the proposal here
-			blahblah.proposalUpdated(myProposal);
-			
-		}
-		
-		fragmentTransaction.commit();
+					Keys.MY_PROPOSAL_FRAGMENT_TAG);
 
+			// pass in the proposal here
+			propChangeListener.proposalUpdated(myProposal);
+		}
+
+		fragmentTransaction.commit();
 	}
+	
 }

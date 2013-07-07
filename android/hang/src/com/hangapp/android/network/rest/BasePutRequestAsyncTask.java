@@ -12,7 +12,6 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.android.util.HangLog;
 import com.hangapp.android.util.SafeAsyncTask;
 import com.hangapp.android.util.Utils;
 
@@ -60,7 +59,7 @@ abstract class BasePutRequestAsyncTask<ResultT> extends
 			// final String errorMessage = "No internet connection detected";
 			// Log.e(errorMessage);
 			// Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-			HangLog.toastE(context, "BasePutRequestAsyncTask.onPreExecute",
+			Log.e("BasePutRequestAsyncTask.onPreExecute",
 					"No internet connection detected");
 
 			// If there is no Internet connection, then don't run the AsyncTask.
@@ -102,6 +101,6 @@ abstract class BasePutRequestAsyncTask<ResultT> extends
 	@Override
 	protected void onException(Exception e) throws RuntimeException {
 		super.onException(e);
-		HangLog.toastE(context, "BasePutRequestAsyncTask.onException", e);
+		Log.e("BasePutRequestAsyncTask.onException", e.getMessage());
 	}
 }

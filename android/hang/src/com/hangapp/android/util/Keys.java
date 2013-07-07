@@ -70,7 +70,7 @@ public final class Keys {
 		public static final String TYPE_NUDGE = "nudge";
 		public static final String TYPE_TICKLE = "tickle";
 	}
-	
-	public static final String YOU_FRAGMENT_TAG = "#dontbelievemechrisbosh";
 
+	public static final String YOU_FRAGMENT_TAG = "#dontbelievemechrisbosh";
+	public static final String MY_PROPOSAL_FRAGMENT_TAG = "myProposalFragment";
 }
