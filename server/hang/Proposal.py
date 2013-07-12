@@ -29,6 +29,7 @@ class ProposalRequestHandler(webapp2.RequestHandler):
             users = []
             for broadcastee_key in user.outgoing_broadcasts:
                 users.append(db.get(broadcastee_key))
+                users.append(user)
 
             tickle_users(users, user)
             
@@ -60,6 +61,7 @@ class ProposalRequestHandler(webapp2.RequestHandler):
         users = []
         for broadcastee_key in user.outgoing_broadcasts:
             users.append(db.get(broadcastee_key))
+            users.append(user)
 
         tickle_users(users, user)
         
@@ -94,6 +96,7 @@ class InterestedRequestHandler(webapp2.RequestHandler):
             users = []
             for broadcastee_key in broadcasting_user.outgoing_broadcasts:
                 users.append(db.get(broadcastee_key))
+                users.append(broadcasting_user)
 
             tickle_users(users, broadcasting_user)            
 
@@ -130,6 +133,7 @@ class InterestedRequestHandler(webapp2.RequestHandler):
             users = []
             for broadcastee_key in broadcasting_user.outgoing_broadcasts:
                 users.append(db.get(broadcastee_key))
+                users.append(broadcasting_user)
 
             tickle_users(users, broadcasting_user) 
 
@@ -182,6 +186,7 @@ class ConfirmedRequestHandler(webapp2.RequestHandler):
             users = []
             for broadcastee_key in broadcasting_user.outgoing_broadcasts:
                 users.append(db.get(broadcastee_key))
+                users.append(broadcasting_user)
 
             tickle_users(users, broadcasting_user) 
 
@@ -218,6 +223,7 @@ class ConfirmedRequestHandler(webapp2.RequestHandler):
             users = []
             for broadcastee_key in broadcasting_user.outgoing_broadcasts:
                 users.append(db.get(broadcastee_key))
+                users.append(broadcasting_user)
 
             tickle_users(users, broadcasting_user) 
 

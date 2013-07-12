@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.android.R;
@@ -40,7 +41,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 		String messageType = gcm.getMessageType(intent);
 
-		Log.i(GCMBroadcastReceiver.class.getSimpleName(), "NUDGE RECEIVED: "
+		Log.i("GCMBroadcastReceiver", "NUDGE RECEIVED: "
 				+ messageType.toString());
 
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
