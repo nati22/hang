@@ -572,7 +572,7 @@ public abstract class ActionBarSherlock {
      * @return {@code true} if menu preparation should proceed.
      */
     protected final boolean callbackPrepareOptionsMenu(Menu menu) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "[callbackPrepareOptionsMenu] menu: " + menu);
+/*        if (BuildConfig.DEBUG) Log.d(TAG, "[callbackPrepareOptionsMenu] menu: " + menu);*/
 
         boolean result = true;
         if (mActivity instanceof OnPreparePanelListener) {
@@ -583,7 +583,7 @@ public abstract class ActionBarSherlock {
             result = listener.onPrepareOptionsMenu(menu);
         }
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "[callbackPrepareOptionsMenu] returning " + result);
+        /*if (BuildConfig.DEBUG) Log.d(TAG, "[callbackPrepareOptionsMenu] returning " + result);*/
         return result;
     }
 

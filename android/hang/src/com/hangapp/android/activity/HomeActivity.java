@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -67,8 +68,7 @@ public final class HomeActivity extends BaseActivity implements
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
+		public void call(Session session, SessionState state, Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -142,8 +142,8 @@ public final class HomeActivity extends BaseActivity implements
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:
-			Log.e("HomeActivity.onOptionsItemSelected",
-					"Unknown item selected: " + item.getAlphabeticShortcut());
+			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
+					+ item.getAlphabeticShortcut());
 			return true;
 		}
 	}
@@ -153,8 +153,8 @@ public final class HomeActivity extends BaseActivity implements
 		super.onSaveInstanceState(outState);
 
 		// Save which tab we had selected into savedInstanceState.
-		outState.putInt("tab", getSupportActionBar()
-				.getSelectedNavigationIndex());
+		outState
+				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
 		uiHelper.onSaveInstanceState(outState);
 	}
 
@@ -193,16 +193,15 @@ public final class HomeActivity extends BaseActivity implements
 				if (graphUser != null) {
 					Log.v("HomeActivity.onResume",
 							"Retrieved Facebook MeRequest, saving data internally"
-									+ " for Facebook user "
-									+ graphUser.getName());
+									+ " for Facebook user " + graphUser.getName());
 
 					// You've officially "registered."
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putBoolean(Keys.REGISTERED, true);
 					editor.commit();
 
-					User me = new User(graphUser.getId(), graphUser
-							.getFirstName(), graphUser.getLastName());
+					User me = new User(graphUser.getId(), graphUser.getFirstName(),
+							graphUser.getLastName());
 
 					// Save the "me" User object into the database.
 					database.setMyUserData(me.getJid(), me.getFirstName(),
@@ -236,6 +235,13 @@ public final class HomeActivity extends BaseActivity implements
 		uiHelper.onDestroy();
 	}
 
+	@Override
+	public void onAttachFragment(Fragment fragment) {
+		// TODO Auto-generated method stub
+		super.onAttachFragment(fragment);
+		Log.e("******************", "attached Fragment with tag = " + fragment.getTag());
+	}
+
 	/**
 	 * HomeActivity "watches" for Facebook session validity in order to show the
 	 * LoginFragment if a logout occurs for any reason.
@@ -243,22 +249,20 @@ public final class HomeActivity extends BaseActivity implements
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		if (state.isOpened()) {
-			Log.i("HomeActivity.onSessionStateChange",
-					"Logged in to Facebook...");
+			Log.i("HomeActivity.onSessionStateChange", "Logged in to Facebook...");
 			// Since Facebook successfully logged in, show the regular tabbed
 			// ActionBar.
 			setContentView(mViewPager);
 			getSupportActionBar().show();
 		} else if (state.isClosed()) {
-			Log.i("HomeActivity.onSessionStateChange",
-					"Logged out of Facebook...");
+			Log.i("HomeActivity.onSessionStateChange", "Logged out of Facebook...");
 			// Since Facebook isn't logged in, show the LoginFragment.
 			setContentView(R.layout.fragment_login);
 			getSupportActionBar().hide();
 
 			if (exception != null) {
-				Log.e("HomeActivity.onSessionStateChange",
-						"Facebook exception: " + exception.getMessage());
+				Log.e("HomeActivity.onSessionStateChange", "Facebook exception: "
+						+ exception.getMessage());
 			} else {
 				Log.i("HomeActivity.onSessionStateChange",
 						"Facebook logged out without exception");
@@ -279,21 +283,27 @@ public final class HomeActivity extends BaseActivity implements
 		startActivityForResult(intent, RESULT_OK);
 	}
 
-	public void proposalUpdated(Proposal proposal) {
-		Log.d("HomeActivity.proposalUpdated", "" + proposal);
-
+	public void notifyAboutProposalChange(Proposal proposal) {
+		
+		Log.d("HomeActivity.onProposalChangedListenerNotified", "" + proposal);
+		if (proposal != null)
+			Log.d("proposal desc", proposal.getDescription());
+		else Log.d("proposal desc", "proposal == NULL");
 		MyProposalFragment myProposalFragment = (MyProposalFragment) getSupportFragmentManager()
 				.findFragmentByTag(Keys.MY_PROPOSAL_FRAGMENT_TAG);
-		
+
 		if (myProposalFragment == null) {
-			Log.i("HomeActivity.proposalUpdated", "MyProposalFragment was null");
+			Log.i("HomeActivity.onProposalChangedListenerNotified",
+					"MyProposalFragment was null");
 		} else if (myProposalFragment.isVisible()) {
-			Log.i("HomeActivity.proposalUpdated",
+			Log.i("HomeActivity.onProposalChangedListenerNotified",
 					"MyProposalFragment is visible");
 
+			Log.i("HomeActivity.onProposalChangedListenerNotified",
+					"going to pass prop desc of " + proposal.getDescription());
 			myProposalFragment.updateProposal(proposal);
 		} else {
-			Log.i("HomeActivity.proposalUpdated",
+			Log.i("HomeActivity.onProposalChangedListenerNotified",
 					"MyProposalFragment is there but not visible");
 		}
 	}

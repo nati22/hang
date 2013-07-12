@@ -29,6 +29,9 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		
+		Log.e("onReceive", "onReceive");
+		
 
 		// Set dependencies
 		notifMgr = (NotificationManager) context
@@ -84,6 +87,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				// v.vibrate(pattern, -1);
 
 			} else if (type != null && type.equals(Keys.FromServer.TYPE_TICKLE)) {
+				Log.d("GCMBroadcastReceiver", "Received a TICKLE");
 				restClient.getMyData();
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");

@@ -386,7 +386,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] event: " + event);
+     /*   if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] event: " + event);*/
 
         final int keyCode = event.getKeyCode();
 
@@ -399,7 +399,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
                 if (action == KeyEvent.ACTION_UP) {
                     mActionMode.finish();
                 }
-                if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] returning true");
+              /*  if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] returning true");*/
                 return true;
             }
 
@@ -408,12 +408,12 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
                 if (action == KeyEvent.ACTION_UP) {
                     wActionBar.collapseActionView();
                 }
-                if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] returning true");
-                return true;
+/*                if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] returning true");
+*/                return true;
             }
         }
 
-        if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] returning false");
+/*        if (BuildConfig.DEBUG) Log.d(TAG, "[dispatchKeyEvent] returning false"); */        
         return false;
     }
 
@@ -583,7 +583,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
 
     @Override
     public boolean onMenuItemClick(android.view.MenuItem item) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "[mNativeItemListener.onMenuItemClick] item: " + item);
+/*        if (BuildConfig.DEBUG) Log.d(TAG, "[mNativeItemListener.onMenuItemClick] item: " + item);*/
 
         final MenuItemImpl sherlockItem = mNativeItemMap.get(item);
         if (sherlockItem != null) {

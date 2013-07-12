@@ -72,5 +72,6 @@ public final class Keys {
 	}
 
 	public static final String YOU_FRAGMENT_TAG = "#dontbelievemechrisbosh";
-	public static final String MY_PROPOSAL_FRAGMENT_TAG = "myProposalFragment";
+	public static final String MY_PROPOSAL_FRAGMENT_TAG = "myProposalFragmentTAG";
+	public static final String CREATE_PROPOSAL_FRAGMENT_TAG = "createProposalFragmentTAG";
 }

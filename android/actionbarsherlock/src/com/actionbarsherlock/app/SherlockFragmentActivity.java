@@ -178,14 +178,14 @@ public class SherlockFragmentActivity extends Watson implements OnActionModeStar
 
     @Override
     public final boolean onPreparePanel(int featureId, View view, android.view.Menu menu) {
-        if (BuildConfig.DEBUG) Log.d(TAG, "[onPreparePanel] featureId: " + featureId + ", view: " + view + ", menu: " + menu);
+/*        if (BuildConfig.DEBUG) Log.d(TAG, "[onPreparePanel] featureId: " + featureId + ", view: " + view + ", menu: " + menu);*/
 
         if (featureId == Window.FEATURE_OPTIONS_PANEL && !mIgnoreNativePrepare) {
             mIgnoreNativePrepare = true;
             boolean result = getSherlock().dispatchPrepareOptionsMenu(menu);
             mIgnoreNativePrepare = false;
 
-            if (BuildConfig.DEBUG) Log.d(TAG, "[onPreparePanel] returning " + result);
+/*            if (BuildConfig.DEBUG) Log.d(TAG, "[onPreparePanel] returning " + result);*/
             return result;
         }
         return super.onPreparePanel(featureId, view, menu);

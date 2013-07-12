@@ -48,7 +48,7 @@ public final class YouFragment extends SherlockFragment implements
 	ProposalChangedListener propChangeListener;
 
 	public interface ProposalChangedListener {
-		public void proposalUpdated(Proposal proposal);
+		public void notifyAboutProposalChange(Proposal proposal);
 	}
 
 	private ProfilePictureView profilePictureView;
@@ -72,6 +72,8 @@ public final class YouFragment extends SherlockFragment implements
 		try {
 			propChangeListener = (ProposalChangedListener) activity;
 		} catch (ClassCastException e) {
+			Log.e("YouFragment",
+					"Couldn't connect to HomeActivity as a ProposalChangedListener");
 			throw new ClassCastException(activity.toString());
 		}
 	}
@@ -106,9 +108,8 @@ public final class YouFragment extends SherlockFragment implements
 		buttonIncomingBroadcasts = (Button) view
 				.findViewById(R.id.buttonIncomingBroadcasts);
 
-		Typeface champagneLimousinesFont = Typeface.createFromAsset(
-				getActivity().getApplicationContext().getAssets(),
-				Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(getActivity()
+				.getApplicationContext().getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
 		Typeface coolveticaFont = Typeface.createFromAsset(getActivity()
 				.getApplicationContext().getAssets(), Fonts.COOLVETICA);
 
@@ -186,15 +187,14 @@ public final class YouFragment extends SherlockFragment implements
 			Log.e("YouFragment.onMyAvailabilityUpdate", "Description was null");
 			return;
 		} else if (newAvailability.getExpirationDate() == null) {
-			Log.e("YouFragment.onMyAvailabilityUpdate",
-					"Expiration date was null");
+			Log.e("YouFragment.onMyAvailabilityUpdate", "Expiration date was null");
 			return;
 		}
 
 		Log.i("YouFragment.onMyAvailabilityUpdate", "onMyAvailabilityUpdate: "
 				+ newAvailability.getExpirationDate().toString());
 
-		propChangeListener.proposalUpdated(null);
+		// propChangeListener.onProposalChangedListenerNotified(null);
 
 		myCurrentAvailability = newAvailability;
 
@@ -202,14 +202,14 @@ public final class YouFragment extends SherlockFragment implements
 		if (myCurrentAvailability == null
 				|| myCurrentAvailability.getStatus() == null
 				|| !myCurrentAvailability.isActive()) {
-			imageButtonMyAvailability.setImageDrawable(getResources()
-					.getDrawable(R.drawable.imagebutton_status_grey));
+			imageButtonMyAvailability.setImageDrawable(getResources().getDrawable(
+					R.drawable.imagebutton_status_grey));
 			textViewStatus.setVisibility(View.GONE);
 		}
 		// Availability is FREE.
 		else if (myCurrentAvailability.getStatus() == Status.FREE) {
-			imageButtonMyAvailability.setImageDrawable(getResources()
-					.getDrawable(R.drawable.imagebutton_status_green));
+			imageButtonMyAvailability.setImageDrawable(getResources().getDrawable(
+					R.drawable.imagebutton_status_green));
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
 
@@ -219,8 +219,8 @@ public final class YouFragment extends SherlockFragment implements
 		}
 		// Availability is BUSY.
 		else if (myCurrentAvailability.getStatus() == Status.BUSY) {
-			imageButtonMyAvailability.setImageDrawable(getResources()
-					.getDrawable(R.drawable.imagebutton_status_red));
+			imageButtonMyAvailability.setImageDrawable(getResources().getDrawable(
+					R.drawable.imagebutton_status_red));
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
 
@@ -278,17 +278,41 @@ public final class YouFragment extends SherlockFragment implements
 
 		if (myProposal == null) {
 			CreateProposalFragment fragment = new CreateProposalFragment();
-			fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment);
-		} else {
-			MyProposalFragment fragment = new MyProposalFragment();
 			fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment,
-					Keys.MY_PROPOSAL_FRAGMENT_TAG);
-
-			// pass in the proposal here
-			propChangeListener.proposalUpdated(myProposal);
+					Keys.CREATE_PROPOSAL_FRAGMENT_TAG);
+			fragmentTransaction.commit();
+		} else {
+			Log.d("", "myProposal != null");
+			
+			
+			// Try to get an already existing MyProposalFragment
+			MyProposalFragment preexistingFragment = (MyProposalFragment) fragmentManager
+					.findFragmentByTag(Keys.MY_PROPOSAL_FRAGMENT_TAG);
+			
+			// If the FragmentManager already has a MyProposalFragment
+			if (preexistingFragment != null) {
+				Log.d("", "preexistingFragment != null");
+				// If the MyProposalFragment is showing
+				if (preexistingFragment.isVisible()) {
+					propChangeListener.notifyAboutProposalChange(proposal);
+				} else {
+					fragmentTransaction.replace(R.id.frameLayoutYouFragment, preexistingFragment,
+							Keys.MY_PROPOSAL_FRAGMENT_TAG);
+					fragmentTransaction.commit();
+				}
+				
+			} else {
+				MyProposalFragment fragment = new MyProposalFragment();
+				fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment,
+						Keys.MY_PROPOSAL_FRAGMENT_TAG);
+				fragmentTransaction.commit();
+			}
+			
+			// Pass in the proposal here
+			propChangeListener.notifyAboutProposalChange(myProposal);
 		}
 
-		fragmentTransaction.commit();
+		
 	}
-	
+
 }

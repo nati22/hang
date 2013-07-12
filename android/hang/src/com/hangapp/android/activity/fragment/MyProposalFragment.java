@@ -3,7 +3,6 @@ package com.hangapp.android.activity.fragment;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,12 +16,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.ChatActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
+import com.hangapp.android.network.rest.RestClient;
+import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
@@ -31,7 +31,7 @@ import com.hangapp.android.util.Keys;
  * {@code YouFragment} will dynamically display either this or
  * {@link CreateProposalFragment} based on whether or not you have a Proposal.
  */
-public final class MyProposalFragment extends SherlockFragment {
+public final class MyProposalFragment extends MyProposalSherlockFragment {
 
 	private final String TAG = MyProposalFragment.class.getSimpleName();
 
@@ -48,6 +48,7 @@ public final class MyProposalFragment extends SherlockFragment {
 
 	private Proposal myProposal;
 	private Database database;
+	private RestClient restClient;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public final class MyProposalFragment extends SherlockFragment {
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
+		restClient = new RestClientImpl(Database.getInstance(), getSherlockActivity());
 	}
 
 	@Override
@@ -115,14 +117,14 @@ public final class MyProposalFragment extends SherlockFragment {
 						"fragment_delete_proposal");
 			}
 		});
-
+		
 		return view;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-
+		restClient.getMyData();
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
 		// onMyProposalUpdate(myProposal);
