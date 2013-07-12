@@ -43,6 +43,14 @@
 			</array>
 		</dict>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>champagne_limousines_bold.ttf</string>
+		<string>champagne_limousines_bold_italic.ttf</string>
+		<string>champagne_limousines_italic.ttf</string>
+		<string>coolvetica.ttf</string>
+		<string>champagne_limousines.ttf</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

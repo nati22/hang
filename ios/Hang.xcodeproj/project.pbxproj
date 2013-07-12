@@ -26,6 +26,13 @@
 		89868801178491F0003B54FF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89868800178491F0003B54FF /* Security.framework */; };
 		89868803178491F4003B54FF /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 89868802178491F4003B54FF /* Social.framework */; };
 		89FFA8D717908B6C0039E3BB /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 89FFA8D617908B6C0039E3BB /* LoginViewController.m */; };
+		89FFA8D9179090430039E3BB /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 89FFA8D8179090430039E3BB /* LoginView.xib */; };
+		89FFA8DC1790910F0039E3BB /* login_background_photo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 89FFA8DB1790910F0039E3BB /* login_background_photo.jpg */; };
+		89FFA8E3179092180039E3BB /* champagne_limousines.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89FFA8DE179092180039E3BB /* champagne_limousines.ttf */; };
+		89FFA8E4179092180039E3BB /* champagne_limousines_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89FFA8DF179092180039E3BB /* champagne_limousines_bold.ttf */; };
+		89FFA8E5179092180039E3BB /* champagne_limousines_bold_italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89FFA8E0179092180039E3BB /* champagne_limousines_bold_italic.ttf */; };
+		89FFA8E6179092180039E3BB /* champagne_limousines_italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89FFA8E1179092180039E3BB /* champagne_limousines_italic.ttf */; };
+		89FFA8E7179092180039E3BB /* coolvetica.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 89FFA8E2179092180039E3BB /* coolvetica.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +61,13 @@
 		89868802178491F4003B54FF /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		89FFA8D517908B6C0039E3BB /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		89FFA8D617908B6C0039E3BB /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		89FFA8D8179090430039E3BB /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
+		89FFA8DB1790910F0039E3BB /* login_background_photo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = login_background_photo.jpg; sourceTree = "<group>"; };
+		89FFA8DE179092180039E3BB /* champagne_limousines.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = champagne_limousines.ttf; sourceTree = "<group>"; };
+		89FFA8DF179092180039E3BB /* champagne_limousines_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = champagne_limousines_bold.ttf; sourceTree = "<group>"; };
+		89FFA8E0179092180039E3BB /* champagne_limousines_bold_italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = champagne_limousines_bold_italic.ttf; sourceTree = "<group>"; };
+		89FFA8E1179092180039E3BB /* champagne_limousines_italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = champagne_limousines_italic.ttf; sourceTree = "<group>"; };
+		89FFA8E2179092180039E3BB /* coolvetica.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = coolvetica.ttf; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +130,7 @@
 				8921CF5D17848D1500F15887 /* AppDelegate.h */,
 				8921CF5E17848D1500F15887 /* AppDelegate.m */,
 				8921CF6617848D1500F15887 /* MainStoryboard.storyboard */,
+				89FFA8D8179090430039E3BB /* LoginView.xib */,
 				8921CF6917848D1500F15887 /* HomeViewController.h */,
 				8921CF6A17848D1500F15887 /* HomeViewController.m */,
 				89FFA8D517908B6C0039E3BB /* LoginViewController.h */,
@@ -128,6 +143,8 @@
 		8921CF5517848D1400F15887 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				89FFA8DD179092180039E3BB /* fonts */,
+				89FFA8DA1790910F0039E3BB /* images */,
 				8921CF5617848D1400F15887 /* Hang-Info.plist */,
 				8921CF5717848D1400F15887 /* InfoPlist.strings */,
 				8921CF5A17848D1400F15887 /* main.m */,
@@ -137,6 +154,26 @@
 				8921CF6417848D1500F15887 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		89FFA8DA1790910F0039E3BB /* images */ = {
+			isa = PBXGroup;
+			children = (
+				89FFA8DB1790910F0039E3BB /* login_background_photo.jpg */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		89FFA8DD179092180039E3BB /* fonts */ = {
+			isa = PBXGroup;
+			children = (
+				89FFA8DE179092180039E3BB /* champagne_limousines.ttf */,
+				89FFA8DF179092180039E3BB /* champagne_limousines_bold.ttf */,
+				89FFA8E0179092180039E3BB /* champagne_limousines_bold_italic.ttf */,
+				89FFA8E1179092180039E3BB /* champagne_limousines_italic.ttf */,
+				89FFA8E2179092180039E3BB /* coolvetica.ttf */,
+			);
+			path = fonts;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,6 +233,13 @@
 				8921CF6517848D1500F15887 /* Default-568h@2x.png in Resources */,
 				8921CF6817848D1500F15887 /* MainStoryboard.storyboard in Resources */,
 				898687F9178491A7003B54FF /* FacebookSDKResources.bundle in Resources */,
+				89FFA8D9179090430039E3BB /* LoginView.xib in Resources */,
+				89FFA8DC1790910F0039E3BB /* login_background_photo.jpg in Resources */,
+				89FFA8E3179092180039E3BB /* champagne_limousines.ttf in Resources */,
+				89FFA8E4179092180039E3BB /* champagne_limousines_bold.ttf in Resources */,
+				89FFA8E5179092180039E3BB /* champagne_limousines_bold_italic.ttf in Resources */,
+				89FFA8E6179092180039E3BB /* champagne_limousines_italic.ttf in Resources */,
+				89FFA8E7179092180039E3BB /* coolvetica.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
