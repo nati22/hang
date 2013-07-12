@@ -150,8 +150,14 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
-			String from = message.getFrom();
-
+			String fromJid = message.getFrom().substring(message.getFrom().indexOf(".com/") + 5);
+			String from;
+			if (database.getOutgoingUser(fromJid) != null) {
+				from = database.getOutgoingUser(fromJid).getFullName();
+			} else if (database.getMyJid().equals(fromJid)) {
+				from = "Me";
+			} else from = "User#" + fromJid;
+			
 			// TODO: Grab the real name of the "from" from the internal
 			// database.
 			// String userJid = from.split("@")[0];
@@ -172,7 +178,7 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 
 			// Populate Views.
 			textViewMessageBody.setText(message.getBody());
-			textViewMessageFrom.setText(from);
+			textViewMessageFrom.setText(from + ":  ");
 
 			return convertView;
 		}
@@ -194,6 +200,18 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 				listViewChatCells.setSelection(listViewChatCells.getCount() - 1);
 			}
 		});
+				
+		scrollMyListViewToBottom();
+	}
+	
+	private void scrollMyListViewToBottom() {
+	    listViewChatCells.post(new Runnable() {
+	        @Override
+	        public void run() {
+	            // Select the last row so it will scroll into view...
+	            listViewChatCells.setSelection(adapter.getCount() - 1);
+	        }
+	    });
 	}
 
 }

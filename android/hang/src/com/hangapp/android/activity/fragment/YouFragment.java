@@ -284,7 +284,6 @@ public final class YouFragment extends SherlockFragment implements
 		} else {
 			Log.d("", "myProposal != null");
 			
-			
 			// Try to get an already existing MyProposalFragment
 			MyProposalFragment preexistingFragment = (MyProposalFragment) fragmentManager
 					.findFragmentByTag(Keys.MY_PROPOSAL_FRAGMENT_TAG);

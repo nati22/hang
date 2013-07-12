@@ -30,9 +30,6 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		
-		Log.e("onReceive", "onReceive");
-		
-
 		// Set dependencies
 		notifMgr = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);

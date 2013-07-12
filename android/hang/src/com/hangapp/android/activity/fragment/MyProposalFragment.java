@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.ChatActivity;
@@ -31,7 +32,7 @@ import com.hangapp.android.util.Keys;
  * {@code YouFragment} will dynamically display either this or
  * {@link CreateProposalFragment} based on whether or not you have a Proposal.
  */
-public final class MyProposalFragment extends MyProposalSherlockFragment {
+public final class MyProposalFragment extends SherlockFragment {
 
 	private final String TAG = MyProposalFragment.class.getSimpleName();
 
@@ -56,7 +57,8 @@ public final class MyProposalFragment extends MyProposalSherlockFragment {
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
-		restClient = new RestClientImpl(Database.getInstance(), getSherlockActivity());
+		restClient = new RestClientImpl(Database.getInstance(),
+				getSherlockActivity());
 	}
 
 	@Override
@@ -85,9 +87,8 @@ public final class MyProposalFragment extends MyProposalSherlockFragment {
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
 				getActivity().getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-		Typeface champagneLimousinesFont = Typeface.createFromAsset(
-				getActivity().getApplicationContext().getAssets(),
-				Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(getActivity()
+				.getApplicationContext().getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
 		textViewMyProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewMyProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewMyProposalStartTime.setTypeface(champagneLimousinesFont);
@@ -99,8 +100,7 @@ public final class MyProposalFragment extends MyProposalSherlockFragment {
 			@Override
 			public void onClick(View v) {
 				Intent chatActivityIntent = new Intent(MyProposalFragment.this
-						.getActivity().getApplicationContext(),
-						ChatActivity.class);
+						.getActivity().getApplicationContext(), ChatActivity.class);
 				chatActivityIntent.putExtra(Keys.HOST_JID, database.getMyJid());
 				startActivity(chatActivityIntent);
 			}
@@ -113,11 +113,10 @@ public final class MyProposalFragment extends MyProposalSherlockFragment {
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 
 				DeleteProposalDialogFragment deleteProposalDialogFragment = new DeleteProposalDialogFragment();
-				deleteProposalDialogFragment.show(fm,
-						"fragment_delete_proposal");
+				deleteProposalDialogFragment.show(fm, "fragment_delete_proposal");
 			}
 		});
-		
+
 		return view;
 	}
 
@@ -136,12 +135,12 @@ public final class MyProposalFragment extends MyProposalSherlockFragment {
 	}
 
 	public void updateProposal(Proposal proposal) {
-		
+
 		if (proposal == null) {
 			Log.d(TAG, ">>>>>>updateProposal was passed a null proposal");
 			return;
 		}
-		
+
 		// Make sure Proposal has changed
 		if (!myProposal.equals(proposal)) {
 			myProposal = proposal;
