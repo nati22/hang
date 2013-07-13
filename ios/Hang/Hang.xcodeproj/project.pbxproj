@@ -34,6 +34,12 @@
 		8956655D1790BD6C00279947 /* YouViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8956655C1790BD6C00279947 /* YouViewController.m */; };
 		895665601790BE3400279947 /* login_background_photo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 8956655F1790BE3400279947 /* login_background_photo.jpg */; };
 		896D97891791FA6800414244 /* SetAvailabilityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 896D97881791FA6800414244 /* SetAvailabilityViewController.m */; };
+		896D979F1792051C00414244 /* green_button_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D97991792051C00414244 /* green_button_pressed.png */; };
+		896D97A01792051C00414244 /* green_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D979A1792051C00414244 /* green_button.png */; };
+		896D97A11792051C00414244 /* grey_button_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D979B1792051C00414244 /* grey_button_pressed.png */; };
+		896D97A21792051C00414244 /* grey_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D979C1792051C00414244 /* grey_button.png */; };
+		896D97A31792051C00414244 /* red_button_pressed.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D979D1792051C00414244 /* red_button_pressed.png */; };
+		896D97A41792051C00414244 /* red_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D979E1792051C00414244 /* red_button.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +89,12 @@
 		8956655F1790BE3400279947 /* login_background_photo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = login_background_photo.jpg; sourceTree = "<group>"; };
 		896D97871791FA6800414244 /* SetAvailabilityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetAvailabilityViewController.h; sourceTree = "<group>"; };
 		896D97881791FA6800414244 /* SetAvailabilityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetAvailabilityViewController.m; sourceTree = "<group>"; };
+		896D97991792051C00414244 /* green_button_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = green_button_pressed.png; sourceTree = "<group>"; };
+		896D979A1792051C00414244 /* green_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = green_button.png; sourceTree = "<group>"; };
+		896D979B1792051C00414244 /* grey_button_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grey_button_pressed.png; sourceTree = "<group>"; };
+		896D979C1792051C00414244 /* grey_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = grey_button.png; sourceTree = "<group>"; };
+		896D979D1792051C00414244 /* red_button_pressed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red_button_pressed.png; sourceTree = "<group>"; };
+		896D979E1792051C00414244 /* red_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = red_button.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -208,6 +220,12 @@
 		8956655E1790BE3400279947 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				896D97991792051C00414244 /* green_button_pressed.png */,
+				896D979A1792051C00414244 /* green_button.png */,
+				896D979B1792051C00414244 /* grey_button_pressed.png */,
+				896D979C1792051C00414244 /* grey_button.png */,
+				896D979D1792051C00414244 /* red_button_pressed.png */,
+				896D979E1792051C00414244 /* red_button.png */,
 				8956655F1790BE3400279947 /* login_background_photo.jpg */,
 			);
 			path = images;
@@ -291,6 +309,12 @@
 				895665261790B93B00279947 /* MainStoryboard.storyboard in Resources */,
 				8956654A1790B9B400279947 /* FacebookSDKResources.bundle in Resources */,
 				895665601790BE3400279947 /* login_background_photo.jpg in Resources */,
+				896D979F1792051C00414244 /* green_button_pressed.png in Resources */,
+				896D97A01792051C00414244 /* green_button.png in Resources */,
+				896D97A11792051C00414244 /* grey_button_pressed.png in Resources */,
+				896D97A21792051C00414244 /* grey_button.png in Resources */,
+				896D97A31792051C00414244 /* red_button_pressed.png in Resources */,
+				896D97A41792051C00414244 /* red_button.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

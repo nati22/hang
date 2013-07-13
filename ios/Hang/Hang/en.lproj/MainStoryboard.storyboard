@@ -228,30 +228,36 @@
                                     <action selector="share:" destination="74S-tv-vOM" eventType="touchUpInside" id="YSr-TR-ljK"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x20-Aj-Mb6">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x20-Aj-Mb6">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="93" id="SBQ-hi-9Nc"/>
-                                    <constraint firstAttribute="height" constant="89" id="SSL-Tl-91s"/>
+                                    <constraint firstAttribute="height" constant="90" id="sjO-ij-ECc"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Available">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Available" backgroundImage="green_button.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="highlighted">
+                                <state key="selected" backgroundImage="green_button_pressed.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" backgroundImage="green_button_pressed.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GJE-L6-qae">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenHighlighted="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GJE-L6-qae">
                                 <constraints>
                                     <constraint firstAttribute="width" constant="93" id="YbF-g4-xEG"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" title="Busy">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Busy" backgroundImage="red_button.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
-                                <state key="highlighted">
+                                <state key="selected" backgroundImage="red_button_pressed.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" backgroundImage="red_button_pressed.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
@@ -264,7 +270,7 @@
                             <constraint firstAttribute="bottom" secondItem="BAG-xp-M4s" secondAttribute="bottom" constant="20" symbolic="YES" type="default" id="LjF-7U-06U"/>
                             <constraint firstItem="x20-Aj-Mb6" firstAttribute="leading" secondItem="BAG-xp-M4s" secondAttribute="leading" type="default" id="Mnq-Xo-tYz"/>
                             <constraint firstItem="R0c-Au-Kk0" firstAttribute="trailing" secondItem="0cn-V1-Y2B" secondAttribute="trailing" type="default" id="Obz-Sg-kjp"/>
-                            <constraint firstItem="GJE-L6-qae" firstAttribute="bottom" secondItem="x20-Aj-Mb6" secondAttribute="bottom" type="default" id="UXE-3t-Tt5"/>
+                            <constraint firstItem="GJE-L6-qae" firstAttribute="bottom" secondItem="x20-Aj-Mb6" secondAttribute="bottom" type="default" id="WCH-od-exF"/>
                             <constraint firstItem="R0c-Au-Kk0" firstAttribute="leading" secondItem="0cn-V1-Y2B" secondAttribute="leading" type="default" id="ZvK-uO-hiW"/>
                             <constraint firstItem="GJE-L6-qae" firstAttribute="trailing" secondItem="BAG-xp-M4s" secondAttribute="trailing" type="default" id="liT-1O-7b4"/>
                             <constraint firstItem="R0c-Au-Kk0" firstAttribute="top" secondItem="0cn-V1-Y2B" secondAttribute="top" type="default" id="r57-ZR-yOF"/>
@@ -329,7 +335,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Bjb-3U-McG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="412" y="-1340"/>
+            <point key="canvasLocation" x="240" y="-1324"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="2nV-9F-ag3">
@@ -440,11 +446,15 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cVO-BV-l4a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="42" y="-246"/>
+            <point key="canvasLocation" x="-26" y="-282"/>
         </scene>
     </scenes>
     <resources>
+        <image name="green_button.png" width="709" height="664"/>
+        <image name="green_button_pressed.png" width="688" height="662"/>
         <image name="login_background_photo.jpg" width="869" height="1229"/>
+        <image name="red_button.png" width="676" height="654"/>
+        <image name="red_button_pressed.png" width="647" height="650"/>
     </resources>
     <classes>
         <class className="FBProfilePictureView" superclassName="UIView">
