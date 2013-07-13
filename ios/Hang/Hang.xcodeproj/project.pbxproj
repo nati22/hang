@@ -44,7 +44,7 @@
 		896D97B2179213CD00414244 /* share_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D97B0179213CD00414244 /* share_button.png */; };
 		896D97B91792158000414244 /* feed.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D97B71792158000414244 /* feed.png */; };
 		896D97BA1792158000414244 /* you.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D97B81792158000414244 /* you.png */; };
-		896D97BC1792176500414244 /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D97BB1792176500414244 /* refresh.png */; };
+		896D97C117921B8000414244 /* CreateProposalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 896D97C017921B8000414244 /* CreateProposalViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,7 +104,8 @@
 		896D97B0179213CD00414244 /* share_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = share_button.png; sourceTree = "<group>"; };
 		896D97B71792158000414244 /* feed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = feed.png; sourceTree = "<group>"; };
 		896D97B81792158000414244 /* you.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = you.png; sourceTree = "<group>"; };
-		896D97BB1792176500414244 /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = refresh.png; sourceTree = "<group>"; };
+		896D97BF17921B8000414244 /* CreateProposalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateProposalViewController.h; sourceTree = "<group>"; };
+		896D97C017921B8000414244 /* CreateProposalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateProposalViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +181,8 @@
 				8956651B1790B93B00279947 /* AppDelegate.h */,
 				8956651C1790B93B00279947 /* AppDelegate.m */,
 				895665241790B93B00279947 /* MainStoryboard.storyboard */,
+				896D97BF17921B8000414244 /* CreateProposalViewController.h */,
+				896D97C017921B8000414244 /* CreateProposalViewController.m */,
 				895665551790BD5B00279947 /* FeedViewController.h */,
 				895665561790BD5B00279947 /* FeedViewController.m */,
 				895665581790BD6400279947 /* LoginViewController.h */,
@@ -230,7 +233,6 @@
 		8956655E1790BE3400279947 /* images */ = {
 			isa = PBXGroup;
 			children = (
-				896D97BB1792176500414244 /* refresh.png */,
 				896D97B71792158000414244 /* feed.png */,
 				896D97B81792158000414244 /* you.png */,
 				896D97AF179213CD00414244 /* share_button_pressed.png */,
@@ -334,7 +336,6 @@
 				896D97B2179213CD00414244 /* share_button.png in Resources */,
 				896D97B91792158000414244 /* feed.png in Resources */,
 				896D97BA1792158000414244 /* you.png in Resources */,
-				896D97BC1792176500414244 /* refresh.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +376,7 @@
 				8956655A1790BD6400279947 /* LoginViewController.m in Sources */,
 				8956655D1790BD6C00279947 /* YouViewController.m in Sources */,
 				896D97891791FA6800414244 /* SetAvailabilityViewController.m in Sources */,
+				896D97C117921B8000414244 /* CreateProposalViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
