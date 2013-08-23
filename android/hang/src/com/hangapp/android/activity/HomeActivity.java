@@ -20,6 +20,8 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.LoginFragment;
@@ -200,6 +202,8 @@ public final class HomeActivity extends BaseActivity implements
 					editor.putBoolean(Keys.REGISTERED, true);
 					editor.commit();
 
+					checkPlayServices();
+					
 					User me = new User(graphUser.getId(), graphUser.getFirstName(),
 							graphUser.getLastName());
 
@@ -215,6 +219,28 @@ public final class HomeActivity extends BaseActivity implements
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Check the device to make sure it has the Google Play Services APK. If
+	 * it doesn't, display a dialog that allows users to download the APK from
+	 * the Google Play Store or enable it in the device's system settings.
+	 */
+	private boolean checkPlayServices() {
+		final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+		
+	    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+	    if (resultCode != ConnectionResult.SUCCESS) {
+	        if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+	            GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+	                    PLAY_SERVICES_RESOLUTION_REQUEST).show();
+	        } else {
+	            Log.i("onResume", "This device is not supported.");
+	            finish();
+	        }
+	        return false;
+	    }
+	    return true;
 	}
 
 	@Override

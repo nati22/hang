@@ -42,7 +42,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 		String messageType = gcm.getMessageType(intent);
 
 		Log.i("GCMBroadcastReceiver", "NUDGE RECEIVED: "
-				+ messageType.toString());
+				+ messageType);
 
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
 			Log.e(TAG, "Send error: "
