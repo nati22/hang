@@ -223,6 +223,8 @@ public final class HomeActivity extends BaseActivity implements
 				}
 			}
 		});
+		
+
 	}
 
 	/**

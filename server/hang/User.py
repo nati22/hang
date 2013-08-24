@@ -243,7 +243,7 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             broadcastee.put()
             broadcaster.put()
 
-            push_to_user(broadcastee, broadcaster, 'tickle')
+            push_to_user(broadcastee, broadcaster, 'new_broadcast')
             
             self.response.write(json.dumps(broadcastee.get_partial_json()))
             

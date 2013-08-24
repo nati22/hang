@@ -24,13 +24,14 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 	static final String TAG = "GCMDemo";
 	public static final int NUDGE_NOTIFY_ID = 1;
+	public static final int BROADCAST_NOTIFY_ID = 2;
 	private NotificationManager notifMgr;
 	private RestClient restClient;
 	private Database database;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		
+
 		// Set dependencies
 		notifMgr = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -41,21 +42,17 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 		String messageType = gcm.getMessageType(intent);
 
-		Log.i("GCMBroadcastReceiver", "NUDGE RECEIVED: "
-				+ messageType);
+		Log.i("GCMBroadcastReceiver", "NUDGE RECEIVED: " + messageType);
 
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-			Log.e(TAG, "Send error: "
-					+ intent.getExtras().toString());
-		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
-				.equals(messageType)) {
+			Log.e(TAG, "Send error: " + intent.getExtras().toString());
+		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
 			Log.d(TAG, "Deleted messages on server: "
 					+ intent.getExtras().toString());
 		} else {
 			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
-			String senderFn = intent.getExtras().getString(
-					Keys.FromServer.NUDGER);
+			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
 
 			if (type != null && type.equals(Keys.FromServer.TYPE_NUDGE)) {
 
@@ -67,12 +64,11 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 								senderFn + " wants to know what you're up to!")
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
-								BitmapFactory.decodeResource(
-										context.getResources(),
+								BitmapFactory.decodeResource(context.getResources(),
 										R.drawable.ic_launcher_huge))
 						.setContentIntent(
-								PendingIntent.getActivity(context, 0,
-										nudgeIntent, 0)).build();
+								PendingIntent.getActivity(context, 0, nudgeIntent, 0))
+						.build();
 
 				notifMgr.notify(NUDGE_NOTIFY_ID, notif);
 
@@ -87,6 +83,25 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 			} else if (type != null && type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				Log.d("GCMBroadcastReceiver", "Received a TICKLE");
 				restClient.getMyData();
+			} else if (type != null
+					&& type.equals(Keys.FromServer.TYPE_NEW_BROADCAST)) {
+				Log.d("GCMBroadcastReceiver", "Received a NEW BROADCAST");
+
+				Intent newBroadcastIntent = new Intent(context, HomeActivity.class);
+
+				Notification notif = new NotificationCompat.Builder(context)
+						.setContentTitle("You have a new Broadcast!")
+						.setContentText(senderFn + " is now broadcasting to you!")
+						.setSmallIcon(R.drawable.ic_launcher)
+						.setLargeIcon(
+								BitmapFactory.decodeResource(context.getResources(),
+										R.drawable.ic_launcher_huge))
+						.setContentIntent(
+								PendingIntent.getActivity(context, 0,
+										newBroadcastIntent, 0)).build();
+				
+				notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
+
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");
 			}
@@ -94,5 +109,4 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 		}
 		setResultCode(Activity.RESULT_OK);
 	}
-
 }
