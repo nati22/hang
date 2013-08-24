@@ -71,6 +71,8 @@ public final class Keys {
 		public static final String TYPE_TICKLE = "tickle";
 		public static final String TYPE_NEW_BROADCAST = "new_broadcast";
 	}
+	
+	public static final String TAB_INTENT = "whichtab";
 
 	public static final String YOU_FRAGMENT_TAG = "#dontbelievemechrisbosh";
 	public static final String MY_PROPOSAL_FRAGMENT_TAG = "myProposalFragmentTAG";

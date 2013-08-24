@@ -65,11 +65,12 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
 								BitmapFactory.decodeResource(context.getResources(),
-										R.drawable.ic_launcher_huge))
+										R.drawable.ic_launcher))
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0, nudgeIntent, 0))
 						.build();
 
+				notif.flags = Notification.FLAG_AUTO_CANCEL;
 				notifMgr.notify(NUDGE_NOTIFY_ID, notif);
 
 				Vibrator v = (Vibrator) context
@@ -88,6 +89,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				Log.d("GCMBroadcastReceiver", "Received a NEW BROADCAST");
 
 				Intent newBroadcastIntent = new Intent(context, HomeActivity.class);
+				newBroadcastIntent.putExtra(Keys.TAB_INTENT, 0);
 
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You have a new Broadcast!")
@@ -95,12 +97,20 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
 								BitmapFactory.decodeResource(context.getResources(),
-										R.drawable.ic_launcher_huge))
+										R.drawable.ic_launcher))
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0,
-										newBroadcastIntent, 0)).build();
+										newBroadcastIntent, 0))
+										
+						.build();
+				notif.flags = Notification.FLAG_AUTO_CANCEL;
 				
 				notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
+			
+				
+				Vibrator v = (Vibrator) context
+						.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(400);
 
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");

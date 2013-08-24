@@ -224,7 +224,12 @@ public final class HomeActivity extends BaseActivity implements
 			}
 		});
 		
-
+		// Check if a certain tab should be opened (especially from a notification)
+		int initialTab = getIntent().getIntExtra(Keys.TAB_INTENT, -1);
+		if (initialTab!= -1) 
+			getSupportActionBar().setSelectedNavigationItem(initialTab);
+		
+		
 	}
 
 	/**
