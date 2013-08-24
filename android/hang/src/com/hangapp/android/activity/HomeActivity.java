@@ -26,6 +26,7 @@ import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.LoginFragment;
 import com.hangapp.android.activity.fragment.MyProposalFragment;
+import com.hangapp.android.activity.fragment.ProposalsFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.activity.fragment.YouFragment.ProposalChangedListener;
 import com.hangapp.android.database.Database;
@@ -70,7 +71,8 @@ public final class HomeActivity extends BaseActivity implements
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(Session session, SessionState state, Exception exception) {
+		public void call(Session session, SessionState state,
+				Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -100,9 +102,10 @@ public final class HomeActivity extends BaseActivity implements
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
+		mTabsAdapter.addTab(bar.newTab(), ProposalsFragment.class, null);
 
 		// Style the Action Bar tabs.
-		String[] tabNames = { "FEED", "YOU" };
+		String[] tabNames = { "FEED", "YOU", "PROPOSALS" };
 		Typeface champagneLimousinesFont = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
@@ -144,8 +147,8 @@ public final class HomeActivity extends BaseActivity implements
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:
-			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
-					+ item.getAlphabeticShortcut());
+			Log.e("HomeActivity.onOptionsItemSelected",
+					"Unknown item selected: " + item.getAlphabeticShortcut());
 			return true;
 		}
 	}
@@ -155,8 +158,8 @@ public final class HomeActivity extends BaseActivity implements
 		super.onSaveInstanceState(outState);
 
 		// Save which tab we had selected into savedInstanceState.
-		outState
-				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
+		outState.putInt("tab", getSupportActionBar()
+				.getSelectedNavigationIndex());
 		uiHelper.onSaveInstanceState(outState);
 	}
 
@@ -195,7 +198,8 @@ public final class HomeActivity extends BaseActivity implements
 				if (graphUser != null) {
 					Log.v("HomeActivity.onResume",
 							"Retrieved Facebook MeRequest, saving data internally"
-									+ " for Facebook user " + graphUser.getName());
+									+ " for Facebook user "
+									+ graphUser.getName());
 
 					// You've officially "registered."
 					SharedPreferences.Editor editor = prefs.edit();
@@ -203,9 +207,9 @@ public final class HomeActivity extends BaseActivity implements
 					editor.commit();
 
 					checkPlayServices();
-					
-					User me = new User(graphUser.getId(), graphUser.getFirstName(),
-							graphUser.getLastName());
+
+					User me = new User(graphUser.getId(), graphUser
+							.getFirstName(), graphUser.getLastName());
 
 					// Save the "me" User object into the database.
 					database.setMyUserData(me.getJid(), me.getFirstName(),
@@ -220,27 +224,28 @@ public final class HomeActivity extends BaseActivity implements
 			}
 		});
 	}
-	
+
 	/**
-	 * Check the device to make sure it has the Google Play Services APK. If
-	 * it doesn't, display a dialog that allows users to download the APK from
-	 * the Google Play Store or enable it in the device's system settings.
+	 * Check the device to make sure it has the Google Play Services APK. If it
+	 * doesn't, display a dialog that allows users to download the APK from the
+	 * Google Play Store or enable it in the device's system settings.
 	 */
 	private boolean checkPlayServices() {
 		final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-		
-	    int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
-	    if (resultCode != ConnectionResult.SUCCESS) {
-	        if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-	            GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-	                    PLAY_SERVICES_RESOLUTION_REQUEST).show();
-	        } else {
-	            Log.i("onResume", "This device is not supported.");
-	            finish();
-	        }
-	        return false;
-	    }
-	    return true;
+
+		int resultCode = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(this);
+		if (resultCode != ConnectionResult.SUCCESS) {
+			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+				GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+						PLAY_SERVICES_RESOLUTION_REQUEST).show();
+			} else {
+				Log.i("onResume", "This device is not supported.");
+				finish();
+			}
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -265,7 +270,8 @@ public final class HomeActivity extends BaseActivity implements
 	public void onAttachFragment(Fragment fragment) {
 		// TODO Auto-generated method stub
 		super.onAttachFragment(fragment);
-		Log.e("******************", "attached Fragment with tag = " + fragment.getTag());
+		Log.e("******************",
+				"attached Fragment with tag = " + fragment.getTag());
 	}
 
 	/**
@@ -275,20 +281,22 @@ public final class HomeActivity extends BaseActivity implements
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		if (state.isOpened()) {
-			Log.i("HomeActivity.onSessionStateChange", "Logged in to Facebook...");
+			Log.i("HomeActivity.onSessionStateChange",
+					"Logged in to Facebook...");
 			// Since Facebook successfully logged in, show the regular tabbed
 			// ActionBar.
 			setContentView(mViewPager);
 			getSupportActionBar().show();
 		} else if (state.isClosed()) {
-			Log.i("HomeActivity.onSessionStateChange", "Logged out of Facebook...");
+			Log.i("HomeActivity.onSessionStateChange",
+					"Logged out of Facebook...");
 			// Since Facebook isn't logged in, show the LoginFragment.
 			setContentView(R.layout.fragment_login);
 			getSupportActionBar().hide();
 
 			if (exception != null) {
-				Log.e("HomeActivity.onSessionStateChange", "Facebook exception: "
-						+ exception.getMessage());
+				Log.e("HomeActivity.onSessionStateChange",
+						"Facebook exception: " + exception.getMessage());
 			} else {
 				Log.i("HomeActivity.onSessionStateChange",
 						"Facebook logged out without exception");
@@ -310,11 +318,12 @@ public final class HomeActivity extends BaseActivity implements
 	}
 
 	public void notifyAboutProposalChange(Proposal proposal) {
-		
+
 		Log.d("HomeActivity.onProposalChangedListenerNotified", "" + proposal);
 		if (proposal != null)
 			Log.d("proposal desc", proposal.getDescription());
-		else Log.d("proposal desc", "proposal == NULL");
+		else
+			Log.d("proposal desc", "proposal == NULL");
 		MyProposalFragment myProposalFragment = (MyProposalFragment) getSupportFragmentManager()
 				.findFragmentByTag(Keys.MY_PROPOSAL_FRAGMENT_TAG);
 

@@ -126,7 +126,10 @@ public final class IncomingBroadcastsActivity extends BaseActivity implements
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
 		this.incomingBroadcasts.clear();
-		this.incomingBroadcasts.addAll(incomingBroadcasts);
+		
+		if (incomingBroadcasts != null) {
+			this.incomingBroadcasts.addAll(incomingBroadcasts);
+		}
 
 		adapter.notifyDataSetChanged();
 	}

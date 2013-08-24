@@ -63,7 +63,7 @@
         android:textSize="12sp" />
 
     <TextView
-        android:id="@+id/textViewProposalDescriptionPreview"
+        android:id="@+id/textViewProposalsCellDescription"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_alignLeft="@+id/textViewFriendName"
