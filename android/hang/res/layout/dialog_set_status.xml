@@ -10,8 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
         android:gravity="center_horizontal"
         android:text="set availability"
         android:textColor="@android:color/black"
@@ -23,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
         android:layout_marginTop="5dp"
+        android:gravity="center_horizontal"
         android:orientation="horizontal" >
 
         <RadioButton
@@ -55,9 +54,10 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/radioGroupFreeBusy"
         android:layout_marginLeft="14dp"
-        android:text=""
-        android:textColor="@android:color/black"
-        android:textSize="14sp" />
+        android:text="til when?"
+        android:textColor="@color/grey_dark_background"
+        android:textStyle="italic"
+        android:textSize="12sp" />
 
     <SeekBar
         android:id="@+id/seekBarAvailabilityDuration"
@@ -68,12 +68,27 @@
         android:layout_below="@+id/textViewAvailabilityDuration"
         android:max="8"
         android:progress="1" />
+    
+    <EditText
+        android:id="@+id/availabilityText"
+        android:layout_width="200dp"
+        android:layout_margin="5dp"
+        android:layout_height="25dp"
+        android:maxLength="120"
+		android:layout_centerHorizontal="true"
+		android:hint="status (optional)"
+		android:textSize="13sp"
+		android:background="@android:color/white"
+		android:textColor="@android:color/black"
+		android:textStyle="italic"
+		android:singleLine="true"
+        android:layout_below="@id/seekBarAvailabilityDuration" />
 
     <Button
         android:id="@+id/buttonSetAvailability"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/seekBarAvailabilityDuration"
+        android:layout_below="@+id/availabilityText"
         android:layout_centerHorizontal="true"
         android:text="done"
         android:textSize="12sp" />

@@ -9,6 +9,7 @@ class StatusRequestHandler(webapp2.RequestHandler):
             # Grab the PUT request parameters and put them into variables.
             param_color = self.request.get('color')
             param_exp = self.request.get('exp')
+            param_status_text = self.request.get('text')
             
             # Create the Key for the User query we're about to perform
             key_user = db.Key.from_path('User', jid)
@@ -20,6 +21,7 @@ class StatusRequestHandler(webapp2.RequestHandler):
             # TODO: Sanity check statuses to ensure that they're a valid color. 
             user.status_color = param_color
             user.status_expiration_date = param_exp
+            user.status_description = param_status_text
             
             # Save it back into the datastore.
             user.put()

@@ -130,6 +130,7 @@ public final class Database {
 				.toString());
 		prefsEditor.putString(Keys.AVAILABILITY_EXPIRATION_DATE, availability
 				.getExpirationDate().toString());
+		prefsEditor.putString(Keys.STATUS_TEXT, availability.getDescription());
 
 		prefsEditor.commit();
 
@@ -164,7 +165,7 @@ public final class Database {
 		DateTime expirationDate = DateTime.parse(dateString);
 
 		Availability myAvailability = new Availability(statusColor,
-				expirationDate);
+				expirationDate, prefs.getString(Keys.STATUS_TEXT, null));
 
 		if (!myAvailability.isActive()) {
 			return null;

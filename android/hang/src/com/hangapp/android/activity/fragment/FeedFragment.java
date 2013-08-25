@@ -171,16 +171,15 @@ public final class FeedFragment extends SherlockFragment implements
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.cell_friend_fragment,
-						null);
+				convertView = inflater.inflate(R.layout.cell_friend_fragment, null);
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
 						.findViewById(R.id.profilePictureView);
 				holder.textViewFriendName = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
-				holder.textViewProposalDescriptionPreview = (TextView) convertView
-						.findViewById(R.id.textViewProposalsCellDescription);
+				holder.textViewAvailabilityDescription = (TextView) convertView
+						.findViewById(R.id.textViewAvailabilityDescription);
 				holder.imageViewAvailability = (ImageView) convertView
 						.findViewById(R.id.imageButtonAvailability);
 				holder.textViewAvailabilityExpirationDate = (TextView) convertView
@@ -196,10 +195,9 @@ public final class FeedFragment extends SherlockFragment implements
 						.getApplicationContext().getAssets(), Fonts.COOLVETICA);
 
 				holder.textViewFriendName.setTypeface(champagneLimousinesBold);
-				holder.textViewProposalDescriptionPreview
+				holder.textViewAvailabilityDescription
 						.setTypeface(champagneLimousines);
-				holder.textViewAvailabilityExpirationDate
-						.setTypeface(coolvetica);
+				holder.textViewAvailabilityExpirationDate.setTypeface(coolvetica);
 
 				convertView.setTag(holder);
 			} else {
@@ -210,12 +208,13 @@ public final class FeedFragment extends SherlockFragment implements
 			holder.profilePictureView.setProfileId(user.getJid());
 			holder.textViewFriendName.setText(user.getFullName());
 
-			// If the user has a Proposal, then show the Proposal icon.
-			if (user.getProposal() != null) {
-				holder.textViewProposalDescriptionPreview.setText(user
-						.getProposal().getDescription());
-			} else {
-				holder.textViewProposalDescriptionPreview.setText("");
+			// Set status text to empty string
+			holder.textViewAvailabilityDescription.setText("");
+			// If the user has an Availability, then show Availability description.
+			if (user.getAvailability().getDescription() != null
+					&& !user.getAvailability().getDescription().equals("null")) {
+				holder.textViewAvailabilityDescription.setText(user
+						.getAvailability().getDescription());
 			}
 
 			// Set the user's status icon based on his Availability.
@@ -228,26 +227,25 @@ public final class FeedFragment extends SherlockFragment implements
 				holder.imageViewAvailability.setImageDrawable(getResources()
 						.getDrawable(R.drawable.status_green));
 
-				int remainingHours = Utils.getRemainingHours(user
-						.getAvailability().getExpirationDate());
-				holder.textViewAvailabilityExpirationDate
-						.setText(remainingHours + "h");
+				int remainingHours = Utils.getRemainingHours(user.getAvailability()
+						.getExpirationDate());
+				holder.textViewAvailabilityExpirationDate.setText(remainingHours
+						+ "h");
 			} else if (user.getAvailability().getStatus() == Status.BUSY) {
 				holder.imageViewAvailability.setImageDrawable(getResources()
 						.getDrawable(R.drawable.status_red));
 
-				int remainingHours = Utils.getRemainingHours(user
-						.getAvailability().getExpirationDate());
-				holder.textViewAvailabilityExpirationDate
-						.setText(remainingHours + "h");
+				int remainingHours = Utils.getRemainingHours(user.getAvailability()
+						.getExpirationDate());
+				holder.textViewAvailabilityExpirationDate.setText(remainingHours
+						+ "h");
 			} else {
-				Log.e("FeedFragment.getView",
-						"Unknown user availability status: "
-								+ user.getAvailability().getStatus());
+				Log.e("FeedFragment.getView", "Unknown user availability status: "
+						+ user.getAvailability().getStatus());
 			}
 
 			// Make Facebook icon function as the NUDGE button.
-			holder.profilePictureView.setOnClickListener(new OnClickListener() {
+			holder.imageViewAvailability.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					restClient.sendNudge(user.getJid());
@@ -263,7 +261,7 @@ public final class FeedFragment extends SherlockFragment implements
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
 			TextView textViewFriendName;
-			TextView textViewProposalDescriptionPreview;
+			TextView textViewAvailabilityDescription;
 			ImageView imageViewAvailability;
 			TextView textViewAvailabilityExpirationDate;
 		}

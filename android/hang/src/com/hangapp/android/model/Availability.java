@@ -15,6 +15,7 @@ public final class Availability implements Comparable<Availability> {
 
 	private Status status;
 	private DateTime expirationDate;
+	private String statusDesc;
 
 	/**
 	 * Convenience constructor that takes a String for the Availability Status
@@ -29,9 +30,10 @@ public final class Availability implements Comparable<Availability> {
 	 * @param Date
 	 *            expirationDate
 	 */
-	public Availability(String statusString, DateTime expirationDate) {
+	public Availability(String statusString, DateTime expirationDate, String statusText) {
 		this.status = parseStatus(statusString);
 		this.expirationDate = expirationDate;
+		this.statusDesc = statusText;
 	}
 
 	/**
@@ -45,17 +47,16 @@ public final class Availability implements Comparable<Availability> {
 	 * @param Date
 	 *            expirationDate
 	 */
-	public Availability(Status color, DateTime expirationDate) {
+	public Availability(Status color, DateTime expirationDate, String statusText) {
 		this.status = color;
 		this.expirationDate = expirationDate;
+		this.statusDesc = statusText;
 	}
 
 	public String getDescription() {
 		// if (!isActive()) {
 		// return "No Availability.";
 		// }
-
-		String description = "Status";
 
 		// switch (status) {
 		// case FREE:
@@ -87,7 +88,7 @@ public final class Availability implements Comparable<Availability> {
 		// + status.toString());
 		// }
 
-		return description;
+		return statusDesc != null ? statusDesc : "...";
 	}
 
 	public Status getStatus() {

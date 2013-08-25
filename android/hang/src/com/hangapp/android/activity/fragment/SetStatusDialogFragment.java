@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -34,6 +35,7 @@ public class SetStatusDialogFragment extends DialogFragment {
 	private TextView textViewAvailabilityDuration;
 	private SeekBar seekBarAvailabilityDuration;
 	private Button buttonSetAvailability;
+	private EditText editTextStatus;
 
 	private Database database;
 	private RestClient restClient;
@@ -70,6 +72,7 @@ public class SetStatusDialogFragment extends DialogFragment {
 				.findViewById(R.id.seekBarAvailabilityDuration);
 		buttonSetAvailability = (Button) view
 				.findViewById(R.id.buttonSetAvailability);
+		editTextStatus = (EditText) view.findViewById(R.id.availabilityText);
 
 		// Set fonts.
 		Typeface tf = Typeface.createFromAsset(getActivity()
@@ -100,8 +103,8 @@ public class SetStatusDialogFragment extends DialogFragment {
 					}
 
 					@Override
-					public void onProgressChanged(SeekBar seekBar,
-							int progress, boolean fromUser) {
+					public void onProgressChanged(SeekBar seekBar, int progress,
+							boolean fromUser) {
 						DateTime expirationDate = getExpirationDate();
 
 						textViewAvailabilityDuration.setText("until: "
@@ -130,7 +133,7 @@ public class SetStatusDialogFragment extends DialogFragment {
 
 		DateTime expirationDate = getExpirationDate();
 
-		Availability newAvailability = new Availability(status, expirationDate);
+		Availability newAvailability = new Availability(status, expirationDate, editTextStatus.getText().toString());
 		database.setMyAvailability(newAvailability);
 		restClient.updateMyAvailability(newAvailability);
 

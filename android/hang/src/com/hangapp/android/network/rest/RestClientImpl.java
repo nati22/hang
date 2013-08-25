@@ -58,11 +58,13 @@ public final class RestClientImpl implements RestClient {
 		if (status != null) {
 			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
-			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR,
-					status.getStatus().toString()));
+			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR, status
+					.getStatus().toString()));
 			parameters.add(new BasicNameValuePair(
-					Keys.AVAILABILITY_EXPIRATION_DATE, status
-							.getExpirationDate().toString()));
+					Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
+							.toString()));
+			parameters.add(new BasicNameValuePair(Keys.STATUS_TEXT, status
+					.getDescription()));
 			new SetAvailabilityAsyncTask(database, context, jid, parameters)
 					.execute();
 		} else {
@@ -78,12 +80,12 @@ public final class RestClientImpl implements RestClient {
 		String jid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION,
-				proposal.getDescription()));
+		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION, proposal
+				.getDescription()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_LOCATION, proposal
 				.getLocation()));
-		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_START_TIME,
-				proposal.getStartTime().toString()));
+		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_START_TIME, proposal
+				.getStartTime().toString()));
 
 		if (!proposal.getInterested().isEmpty()) {
 			for (String interestedUserJid : proposal.getInterested()) {

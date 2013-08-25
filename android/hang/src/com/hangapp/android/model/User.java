@@ -144,6 +144,14 @@ public final class User implements Comparable<User>, Parcelable {
 		String statusColor = userJsonObject.getString(Keys.AVAILABILITY_COLOR);
 		String statusExpirationDateString = userJsonObject
 				.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
+		String statusText = userJsonObject.getString(Keys.STATUS_TEXT);
+		if (statusText == null || statusText.equals("null")) {
+			Log.i("User.parseMyUserData", "No status text received for "
+					+ firstName);
+			statusText = "";
+		} else {
+			Log.i("User.parseMyUserData", "statusText != null && statusText != \"null\"");
+		}
 
 		DateTime date;
 		if (statusExpirationDateString != null
@@ -153,7 +161,7 @@ public final class User implements Comparable<User>, Parcelable {
 			date = null;
 		}
 
-		availability = new Availability(statusColor, date);
+		availability = new Availability(statusColor, date, statusText);
 		user.setAvailability(availability);
 
 		// Grab the Proposal String fields from JSON
@@ -168,15 +176,17 @@ public final class User implements Comparable<User>, Parcelable {
 				.getJSONArray(Keys.PROPOSAL_INTERESTED);
 		JSONArray proposalConfirmedJidsArray = userJsonObject
 				.getJSONArray(Keys.PROPOSAL_CONFIRMED);
-		
+
 		List<String> proposalInterestedJidStrings = new ArrayList<String>();
 		List<String> proposalConfirmedJidStrings = new ArrayList<String>();
-		
+
 		for (int i = 0; i < proposalInterestedJidsArray.length(); i++) {
-			proposalInterestedJidStrings.add(proposalInterestedJidsArray.getString(i));
+			proposalInterestedJidStrings.add(proposalInterestedJidsArray
+					.getString(i));
 		}
 		for (int i = 0; i < proposalConfirmedJidsArray.length(); i++) {
-			proposalConfirmedJidStrings.add(proposalConfirmedJidsArray.getString(i));
+			proposalConfirmedJidStrings.add(proposalConfirmedJidsArray
+					.getString(i));
 		}
 
 		if (proposalLocation.equals("null")) {
@@ -209,15 +219,15 @@ public final class User implements Comparable<User>, Parcelable {
 		// Populate IncomingBroadcast strings
 		List<String> incomingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < incomingBroadcastsJsonArray.length(); i++) {
-			incomingBroadcastsStrings.add(incomingBroadcastsJsonArray
-					.getString(i));
+			incomingBroadcastsStrings
+					.add(incomingBroadcastsJsonArray.getString(i));
 		}
 
 		// Populate OutgoingBroadcast strings
 		List<String> outgoingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < outgoingBroadcastsJsonArray.length(); i++) {
-			outgoingBroadcastsStrings.add(outgoingBroadcastsJsonArray
-					.getString(i));
+			outgoingBroadcastsStrings
+					.add(outgoingBroadcastsJsonArray.getString(i));
 		}
 
 		user.setIncomingBroadcasts(incomingBroadcastsStrings);
@@ -254,8 +264,8 @@ public final class User implements Comparable<User>, Parcelable {
 		Iterator<?> keys = library.keys();
 
 		while (keys.hasNext()) {
-			JSONObject userJsonObject = library.getJSONObject((String) keys
-					.next());
+			JSONObject userJsonObject = library
+					.getJSONObject((String) keys.next());
 
 			Log.i(User.class.getSimpleName(),
 					"Parsing user JSON object from library: "
@@ -274,6 +284,7 @@ public final class User implements Comparable<User>, Parcelable {
 						.getString(Keys.AVAILABILITY_COLOR);
 				String statusExpirationDateString = userJsonObject
 						.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
+				String statusText = userJsonObject.getString(Keys.STATUS_TEXT);
 
 				DateTime expirationDate = null;
 
@@ -282,7 +293,7 @@ public final class User implements Comparable<User>, Parcelable {
 				}
 
 				Availability availability = new Availability(statusColor,
-						expirationDate);
+						expirationDate, statusText);
 
 				// TODO: Use new Availability model.
 				user.setAvailability(availability);
@@ -307,8 +318,7 @@ public final class User implements Comparable<User>, Parcelable {
 				} else if (proposalLocation.equals("null")) {
 					throw new JSONException("proposalLocation is \"null\"");
 				} else if (proposalStartTimeString.equals("null")) {
-					throw new JSONException(
-							"proposalStartTimeString is \"null\"");
+					throw new JSONException("proposalStartTimeString is \"null\"");
 				}
 
 				// TODO: Switch to JodaTime (IN YO FACE)
