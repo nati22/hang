@@ -24,7 +24,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
-import com.hangapp.android.activity.fragment.LoginFragment;
 import com.hangapp.android.activity.fragment.MyProposalFragment;
 import com.hangapp.android.activity.fragment.ProposalsFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
@@ -168,11 +167,18 @@ public final class HomeActivity extends BaseActivity implements
 		super.onResume();
 		uiHelper.onResume();
 
+		// First thing's first: check to see if the user has Google Play
+		// services installed. If he doesn't, let the Google SDK show
+		// the Dialog that redirects him to the Google Play store to install
+		// it.
+		checkPlayServices();
+
 		boolean userIsRegistered = prefs.getBoolean(Keys.REGISTERED, false);
 
 		// If the user hasn't registered yet, then show the LoginFragment.
 		if (!userIsRegistered) {
-			setContentView(R.layout.fragment_login);
+			setContentView(R.layout.login);
+
 			getSupportActionBar().hide();
 		}
 		// Otherwise, show the regular tabbed ActionBar.
@@ -205,8 +211,6 @@ public final class HomeActivity extends BaseActivity implements
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putBoolean(Keys.REGISTERED, true);
 					editor.commit();
-
-					checkPlayServices();
 
 					User me = new User(graphUser.getId(), graphUser
 							.getFirstName(), graphUser.getLastName());
@@ -298,7 +302,7 @@ public final class HomeActivity extends BaseActivity implements
 			Log.i("HomeActivity.onSessionStateChange",
 					"Logged out of Facebook...");
 			// Since Facebook isn't logged in, show the LoginFragment.
-			setContentView(R.layout.fragment_login);
+			setContentView(R.layout.login);
 			getSupportActionBar().hide();
 
 			if (exception != null) {

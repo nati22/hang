@@ -1,5 +1,7 @@
 package com.hangapp.android.activity;
 
+import java.util.Arrays;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.net.Uri;
@@ -38,6 +40,13 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	private Database database;
 	private RestClient restClient;
+
+	// Helper interface for Facebook FriendPicker widget. It uses
+	// this interface to query whether or not the friend with that
+	// Facebook ID has your Facebook app installed.
+	private interface GraphUserWithInstalled extends GraphUser {
+		Boolean getInstalled();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,8 +93,23 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 							finishActivity();
 						}
 					});
-			fragmentToShow = friendPickerFragment;
+			// Set the Friend picker to filter only friends that have the Hang
+			// app installed on their device (Facebook GraphUser query handles
+			// this for us).
+			friendPickerFragment.setExtraFields(Arrays.asList("installed"));
+			friendPickerFragment
+					.setFilter(new PickerFragment.GraphObjectFilter<GraphUser>() {
+						@Override
+						public boolean includeItem(GraphUser graphObject) {
+							Boolean installed = graphObject.cast(
+									GraphUserWithInstalled.class)
+									.getInstalled();
+							return (installed != null)
+									&& installed.booleanValue();
+						}
+					});
 
+			fragmentToShow = friendPickerFragment;
 		} else {
 			// Nothing to do, finish
 			setResult(RESULT_CANCELED);

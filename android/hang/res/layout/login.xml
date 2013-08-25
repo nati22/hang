@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+	BEWARE: There is no actual Fragment currently associated with this XML file.
+	Instead, HomeActivity inflates this XML directly whenever it wants to show
+	the Login screen. Put any Java logic you need for this view
+	into HomeActivity. 
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_image" >
+    android:background="@android:color/white" >
 
-    <ImageView
-        android:id="@+id/imageViewAppName"
-        android:layout_width="150dp"
-        android:layout_height="75dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/hang_logo_full" />
-
-    <com.facebook.widget.LoginButton
-        android:id="@+id/facebookLoginButton"
+    <TextView
+        android:id="@+id/textViewLoginScreenLogo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/relativeLayout1"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/imageViewLoginImage"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/app_name"
+        android:textSize="40sp" />
+
+    <ImageView
+        android:id="@+id/imageViewLoginImage"
+        android:layout_width="150dp"
+        android:layout_height="75dp"
+        android:layout_above="@+id/facebookLoginButton"
         android:layout_alignParentLeft="true"
-        android:layout_marginBottom="7dp"
-        android:layout_marginLeft="7dp" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="140dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/login_image" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout1"
@@ -49,5 +60,14 @@
             android:text="Sign in now"
             android:textColor="@color/grey_action_bar" />
     </RelativeLayout>
+
+    <com.facebook.widget.LoginButton
+        android:id="@+id/facebookLoginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/relativeLayout1"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="7dp"
+        android:layout_marginLeft="7dp" />
 
 </RelativeLayout>

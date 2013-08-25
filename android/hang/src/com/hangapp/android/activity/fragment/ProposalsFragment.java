@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
@@ -77,13 +79,13 @@ public class ProposalsFragment extends SherlockFragment implements
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				// Context context = ProposalsFragment.this.getActivity();
-				// User user = incomingBroadcasts.get(position);
-				//
-				// Intent proposalLeechIntent = new Intent(context,
-				// ProfileActivity.class);
-				// proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
-				// context.startActivity(proposalLeechIntent);
+				Context context = ProposalsFragment.this.getActivity();
+				User user = incomingBroadcasts.get(position);
+
+				Intent proposalLeechIntent = new Intent(context,
+						ProfileActivity.class);
+				proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
+				context.startActivity(proposalLeechIntent);
 			}
 		});
 

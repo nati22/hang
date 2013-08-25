@@ -9,7 +9,6 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.hangapp.android.R;
-import com.hangapp.android.activity.fragment.LoginFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.util.BaseActivity;
 
