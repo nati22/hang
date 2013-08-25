@@ -243,7 +243,7 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             broadcastee.put()
             broadcaster.put()
 
-            push_to_user(broadcastee, broadcaster, 'tickle')
+            push_to_user(broadcastee, broadcaster, 'new_broadcast')
             
             self.response.write(json.dumps(broadcastee.get_partial_json()))
             
@@ -283,17 +283,17 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
 #            else: self.response.write("%s isn't even Broadcasting to %s!\n" % (broadcaster.first_name, broadcastee.first_name))
 
              # Remove broadcaster jid from broadcastee's incoming_broadcasts
+            broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
+            broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
+            broadcastee.put()
+            broadcaster.put()
+
+            # Tell the user.                
+            push_to_user(broadcastee, broadcaster, 'tickle')
+            # Girum said not to but "ehh"
+            push_to_user(broadcaster, broadcastee, 'tickle')
+
             if key_broadcaster_jid in broadcastee.incoming_broadcasts and key_broadcastee_jid in broadcaster.outgoing_broadcasts:
-                broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
-                broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
-                broadcastee.put()
-                broadcaster.put()
-
-                # Tell the user.                
-                push_to_user(broadcastee, broadcaster, 'tickle')
-                # Girum said not to but "ehh"
-                push_to_user(broadcaster, broadcastee, 'tickle')
-
                 self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
             else:
                 self.response.write("There is an inconsistency in %s and %s's Broadcast data!\n" % (broadcastee.first_name, broadcaster.first_name))

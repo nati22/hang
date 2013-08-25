@@ -61,7 +61,7 @@ public final class Keys {
 	 * I'm sure this is a terrible, terrible idea but I wanted to show that
 	 * these Keys are specifically for receiving nudges from GCM
 	 */
-	public class FromServer {
+	public static class FromServer {
 		public static final String FROM = "from";
 		public static final String COLLAPSE_KEY = "collapse_key";
 		public static final String NUDGER = "nudger";
@@ -69,7 +69,10 @@ public final class Keys {
 
 		public static final String TYPE_NUDGE = "nudge";
 		public static final String TYPE_TICKLE = "tickle";
+		public static final String TYPE_NEW_BROADCAST = "new_broadcast";
 	}
+	
+	public static final String TAB_INTENT = "whichtab";
 
 	public static final String YOU_FRAGMENT_TAG = "#dontbelievemechrisbosh";
 	public static final String MY_PROPOSAL_FRAGMENT_TAG = "myProposalFragmentTAG";
