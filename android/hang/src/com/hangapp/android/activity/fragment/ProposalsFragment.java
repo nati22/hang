@@ -2,6 +2,7 @@ package com.hangapp.android.activity.fragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
@@ -227,9 +228,11 @@ public class ProposalsFragment extends SherlockFragment implements
 		this.incomingBroadcasts.clear();
 
 		// Remove users who have no Proposal from the new List<User>.
-		for (User user : incomingBroadcasts) {
+		for (Iterator<User> iterator = incomingBroadcasts.iterator(); iterator
+				.hasNext();) {
+			User user = iterator.next();
 			if (user.getProposal() == null) {
-				incomingBroadcasts.remove(user);
+				iterator.remove();
 			}
 		}
 
