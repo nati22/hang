@@ -267,8 +267,8 @@ public final class ProfileActivity extends BaseActivity implements
 			// Refresh list
 			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 
-			// Add this proposal to the Users list of "seen proposals"
-			if (!database.getMySeenProposals().contains(friend.getJid())) {
+			// Add this proposal to the Users list of "seen proposals" //TODO: optimize O(n)
+			if (friend.getProposal() != null && !database.getMySeenProposals().contains(friend.getJid())) {
 				database.addSeenProposal(friend.getJid());
 				restClient.setSeenProposal(friend.getJid());
 				Log.i("ProfileActivity",
@@ -277,8 +277,6 @@ public final class ProfileActivity extends BaseActivity implements
 				Log.i("ProfileActivity", friend.getFirstName()
 						+ "'s proposal already seen");
 			}
-
-
 		}
 	}
 

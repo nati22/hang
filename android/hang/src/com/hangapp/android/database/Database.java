@@ -488,7 +488,7 @@ public final class Database {
 		editor.commit();
 
 		for (SeenProposalsListener listener : seenProposalsListeners) {
-			listener.onMySeenProposalsUpdate();
+			listener.onMySeenProposalsUpdate(seenProposals);
 		}
 
 	}
@@ -514,7 +514,7 @@ public final class Database {
 		editor.commit();
 
 		for (SeenProposalsListener listener : seenProposalsListeners) {
-			listener.onMySeenProposalsUpdate();
+			listener.onMySeenProposalsUpdate(seenProposals);
 		}
 	}
 
@@ -549,7 +549,7 @@ public final class Database {
 		editor.commit();
 
 		for (SeenProposalsListener listener : seenProposalsListeners) {
-			listener.onMySeenProposalsUpdate();
+			listener.onMySeenProposalsUpdate(seenProposals);
 		}
 
 	}

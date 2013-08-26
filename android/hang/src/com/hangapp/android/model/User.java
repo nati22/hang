@@ -16,13 +16,13 @@ import android.util.Log;
 
 import com.hangapp.android.util.Keys;
 
-public final class User implements Comparable<User>, Parcelable {
+public class User implements Comparable<User>, Parcelable {
 	/**
 	 * A {@link User}'s JID is his Facebook ID.
 	 */
-	private String jid;
-	private String firstName;
-	private String lastName;
+	protected String jid;
+	protected String firstName;
+	protected String lastName;
 	private Availability availability;
 	private Proposal proposal;
 	private List<String> incomingBroadcasts;

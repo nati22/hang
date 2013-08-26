@@ -2,13 +2,16 @@ package com.hangapp.android.activity.fragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Parcel;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +41,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	private ProposalsAdapter adapter;
 
 	// Member datum.
-	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
+	private ArrayList<SeeableUser> incomingBroadcasts = new ArrayList<SeeableUser>();
 
 	// Dependencies.
 	private Database database;
@@ -52,7 +55,7 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		// Reload the incoming broadcasts from savedInstanceState.
 		if (savedInstanceState != null) {
-			ArrayList<User> savedIncomingBroadcasts = savedInstanceState
+			ArrayList<SeeableUser> savedIncomingBroadcasts = savedInstanceState
 					.getParcelableArrayList(Keys.FRIENDS);
 			incomingBroadcasts.clear();
 			incomingBroadcasts.addAll(savedIncomingBroadcasts);
@@ -110,6 +113,12 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		database.addIncomingBroadcastsListener(this);
 		database.addSeenProposalListener(this);
+
+		List<User> incomingBroadcasts = database.getMyIncomingBroadcasts();
+		onIncomingBroadcastsUpdate(incomingBroadcasts);
+
+		List<String> seenJids = database.getMySeenProposals();
+		onMySeenProposalsUpdate(seenJids);
 	}
 
 	@Override
@@ -121,12 +130,12 @@ public class ProposalsFragment extends SherlockFragment implements
 	}
 
 	private static class ProposalsAdapter extends BaseAdapter {
-		private List<User> friends;
+		private List<SeeableUser> friends;
 		private LayoutInflater inflater;
 		private Context context;
 		private Database database;
 
-		public ProposalsAdapter(Context context, List<User> friends,
+		public ProposalsAdapter(Context context, List<SeeableUser> friends,
 				Database database) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
@@ -153,73 +162,79 @@ public class ProposalsFragment extends SherlockFragment implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 
-			final User user = friends.get(position);
+			final SeeableUser seenUser = friends.get(position);
 
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
 				convertView = inflater.inflate(R.layout.cell_proposals_fragment,
 						null);
-
-				if (!database.getMySeenProposals().contains(user.getJid())) {
-					Log.d("ProposalsAdapter.getView", "coloring " + user.getFirstName() + "'s cell");
-					Log.i("getMySeenProposals looks like...", "" + database.getMySeenProposals().toString());
-					convertView.setBackgroundColor(context.getResources().getColor(
-							R.color.teal));
-				}
-
-				// Reference views
-				holder.profilePictureView = (ProfilePictureView) convertView
-						.findViewById(R.id.profilePictureView);
-				holder.textViewFriendName = (TextView) convertView
-						.findViewById(R.id.textViewFriendName);
-				holder.textViewProposalDescription = (TextView) convertView
-						.findViewById(R.id.textViewProposalsCellDescription);
-				holder.textViewProposalLocation = (TextView) convertView
-						.findViewById(R.id.textViewProposalsCellLocation);
-				holder.textViewProposalStartTime = (TextView) convertView
-						.findViewById(R.id.textViewProposalsCellStartTime);
-				holder.textViewProposalInterested = (TextView) convertView
-						.findViewById(R.id.textViewProposalsCellInterested);
-
-				// Get the fonts used in this cell.
-				Typeface champagneLimousinesBold = Typeface.createFromAsset(
-						context.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-				Typeface champagneLimousines = Typeface.createFromAsset(
-						context.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
-
-				// Set the fonts of this cell's TextViews.
-				holder.textViewFriendName.setTypeface(champagneLimousinesBold);
-				holder.textViewProposalDescription
-						.setTypeface(champagneLimousinesBold);
-				holder.textViewProposalLocation
-						.setTypeface(champagneLimousinesBold);
-				holder.textViewProposalStartTime.setTypeface(champagneLimousines);
-				holder.textViewProposalInterested
-						.setTypeface(champagneLimousinesBold);
-
-				// Save the newly generated convertView into the "holder"
-				// object.
-				convertView.setTag(holder);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
+			// If this user's proposal hasn't been seen, color in cell bg
+			if (!seenUser.seen) {
+				Log.d("ProposalsAdapter.getView",
+						"coloring " + seenUser.getFirstName() + "'s cell");
+				Log.i("getMySeenProposals looks like...", ""
+						+ database.getMySeenProposals().toString());
+				convertView.setBackgroundColor(context.getResources().getColor(
+						R.color.teal));
+			} else {
+				convertView.setBackgroundColor(context.getResources().getColor(
+						android.R.color.white));
+			}
+
+			// Reference views
+			holder.profilePictureView = (ProfilePictureView) convertView
+					.findViewById(R.id.profilePictureView);
+			holder.textViewFriendName = (TextView) convertView
+					.findViewById(R.id.textViewFriendName);
+			holder.textViewProposalDescription = (TextView) convertView
+					.findViewById(R.id.textViewProposalsCellDescription);
+			holder.textViewProposalLocation = (TextView) convertView
+					.findViewById(R.id.textViewProposalsCellLocation);
+			holder.textViewProposalStartTime = (TextView) convertView
+					.findViewById(R.id.textViewProposalsCellStartTime);
+			holder.textViewProposalInterested = (TextView) convertView
+					.findViewById(R.id.textViewProposalsCellInterested);
+
+			// Get the fonts used in this cell.
+			Typeface champagneLimousinesBold = Typeface.createFromAsset(
+					context.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
+			Typeface champagneLimousines = Typeface.createFromAsset(
+					context.getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
+
+			// Set the fonts of this cell's TextViews.
+			holder.textViewFriendName.setTypeface(champagneLimousinesBold);
+			holder.textViewProposalDescription
+					.setTypeface(champagneLimousinesBold);
+			holder.textViewProposalLocation
+					.setTypeface(champagneLimousinesBold);
+			holder.textViewProposalStartTime.setTypeface(champagneLimousines);
+			holder.textViewProposalInterested
+					.setTypeface(champagneLimousinesBold);
+
+			// Save the newly generated convertView into the "holder"
+			// object.
+			convertView.setTag(holder);
+
 			// Populate the Views with correct data.
-			holder.profilePictureView.setProfileId(user.getJid());
-			holder.textViewFriendName.setText(user.getFullName());
-			holder.textViewProposalDescription.setText(user.getProposal()
+			holder.profilePictureView.setProfileId(seenUser.getJid());
+			holder.textViewFriendName.setText(seenUser.getFullName());
+			holder.textViewProposalDescription.setText(seenUser.getProposal()
 					.getDescription());
-			holder.textViewProposalLocation.setText(user.getProposal()
+			holder.textViewProposalLocation.setText(seenUser.getProposal()
 					.getLocation());
-			holder.textViewProposalStartTime.setText(user.getProposal()
+			holder.textViewProposalStartTime.setText(seenUser.getProposal()
 					.getStartTime().toString("h:mm aa"));
 
 			// Construct the internationalized string for the number of users
 			// interested in this Proposal. Then use it to populate the
 			// TextView.
-			final int numberOfUsersInterested = user.getProposal().getInterested()
-					.size();
+			final int numberOfUsersInterested = seenUser.getProposal()
+					.getInterested().size();
 			final String interestedString = String.format(context.getResources()
 					.getString(R.string.count_interested), numberOfUsersInterested);
 			holder.textViewProposalInterested.setText(interestedString);
@@ -252,15 +267,49 @@ public class ProposalsFragment extends SherlockFragment implements
 			}
 		}
 
+		// Convert Users to SeenUsers to give them seen "state" booleans
+		for (User user : incomingBroadcasts) {
+			SeeableUser seenUser = new SeeableUser(user);
+			this.incomingBroadcasts.add(seenUser);
+		}
+
 		// Add the ones that are left to the internal List<User>.
-		this.incomingBroadcasts.addAll(incomingBroadcasts);
+		// this.incomingBroadcasts.addAll(incomingBroadcasts);
 		Collections.sort(this.incomingBroadcasts);
 		adapter.notifyDataSetChanged();
 	}
 
-	@Override
-	public void onMySeenProposalsUpdate() {
-		adapter.notifyDataSetChanged();
+	private static class SeeableUser extends User {
 
+		public SeeableUser(User user) {
+			super(user.getJid(), user.getFirstName(), user.getLastName());
+			super.setAvailability(user.getAvailability());
+			super.setProposal(user.getProposal());
+		}
+
+		public SeeableUser(String jid, String firstName, String lastName) {
+			super(jid, firstName, lastName);
+		}
+
+		public SeeableUser(Parcel in) {
+			super(in);
+		}
+
+		public boolean seen = false;
 	}
+
+	@Override
+	public void onMySeenProposalsUpdate(List<String> seenJids) {
+		Set<String> seenJidsSet = new HashSet<String>(seenJids);
+
+		for (SeeableUser seeableUser : this.incomingBroadcasts) {
+			if (seenJidsSet.contains(seeableUser.getJid())) {
+				seeableUser.seen = true;
+			} else {
+				seeableUser.seen = false;
+			}
+		}
+		adapter.notifyDataSetChanged();
+	}
+
 }
