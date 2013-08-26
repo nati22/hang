@@ -20,6 +20,7 @@ import com.hangapp.android.model.callback.MyAvailabilityListener;
 import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseApplication;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.Utils;
@@ -43,6 +44,9 @@ public final class Database {
 	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
 
+	private XMPP xmpp;
+	private Context context;
+
 	/** Private constructor */
 	private Database() {
 	}
@@ -59,6 +63,8 @@ public final class Database {
 	public void initialize(Context context) {
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		// this.usersDataSource = new UsersDataSource(context);
+		this.context = context;
+		this.xmpp = XMPP.getInstance();
 	}
 
 	public boolean addIncomingBroadcastsListener(
@@ -476,6 +482,42 @@ public final class Database {
 
 	public String getMyFullName() {
 		return getMyFirstName() + " " + getMyLastName();
+	}
+
+	/**
+	 * Returns a list of the JIDs of the users whose Proposals I'm currently
+	 * interested in.
+	 * 
+	 * This is useful for knowing which JIDs I'm currently "subscribed" to in
+	 * XMPP.
+	 * 
+	 * @return
+	 */
+	public List<String> getJidsImInterestedIn() {
+		String interestedJidsString = prefs.getString(
+				Keys.JIDS_IM_INTERESTED_IN, null);
+
+		if (interestedJidsString != null) {
+			return Utils.convertStringToArray(interestedJidsString);
+		} else {
+			return null;
+		}
+	}
+
+	public void setJidsImInterestedIn(List<String> interestedJids) {
+		String interestedJidsString = Utils
+				.convertStringArrayToString(interestedJids);
+
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Keys.JIDS_IM_INTERESTED_IN, interestedJidsString);
+		editor.commit();
+
+		String myJid = getMyJid();
+
+		// Attempt to join the MUC belonging to each of the JIDs that I am
+		// interested in.
+//		xmpp.initialize(context); // TODO: Un-hack me.
+		xmpp.joinMucs(myJid, interestedJids);
 	}
 
 	/**

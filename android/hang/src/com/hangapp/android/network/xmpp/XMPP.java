@@ -16,38 +16,41 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.MessagesDataSource;
 import com.hangapp.android.model.callback.MucListener;
 import com.hangapp.android.util.Keys;
+import com.hangapp.android.util.Utils;
 
 /**
  * Front-facing XMPP interface. This class uses {@link XMPPIntentService} in the
  * background. If you want to use XMPP from a client class, inject this class as
  * your dependency.
  */
-public class XMPP {
+final public class XMPP {
 
 	private static XMPP instance = new XMPP();
-	private static Map<String, MultiUserChat> mucs = new HashMap<String, MultiUserChat>();
+	private Map<String, MultiUserChat> mucMap = new HashMap<String, MultiUserChat>();
+	private Context context;
+	/**
+	 * The <a href="http://en.wikipedia.org/wiki/Data_access_object">Data Access
+	 * Object</a> to our SQLite database for XMPP messages.
+	 */
+	private MessagesDataSource messagesDataSource;
+	private Map<String, ArrayList<MucListener>> mucMessageListeners = new HashMap<String, ArrayList<MucListener>>();
+	List<String> mucsToJoin = new ArrayList<String>();
 
 	private XMPP() {
 	}
 
 	public void initialize(Context context) {
+		this.context = context;
 		this.messagesDataSource = new MessagesDataSource(context);
 	}
 
 	public static synchronized XMPP getInstance() {
 		return instance;
 	}
-
-	/**
-	 * The <a href="http://en.wikipedia.org/wiki/Data_access_object">Data Access
-	 * Object</a> to our SQLite database for XMPP messages.
-	 */
-	private MessagesDataSource messagesDataSource;
-
-	private static Map<String, ArrayList<MucListener>> mucMessageListeners = new HashMap<String, ArrayList<MucListener>>();
 
 	/**
 	 * The only front-facing XMPPConnection method in this class. You should
@@ -118,19 +121,27 @@ public class XMPP {
 	 * Helper method for MyPacketListeners to add Messages to the SQLite
 	 * database.
 	 */
-	void addMucMessage(String mucName, Message message) {
-		Log.d("XMPP", "Opening SQLite datasource");
+	boolean addMucMessage(String mucName, Message message) {
+		boolean mucMessageAdded = false;
+
 		messagesDataSource.open();
-		messagesDataSource.createMessage(mucName, message);
+
+		// TODO: Move these SQLite calls into an AsyncTask of some sort
+		// (i.e: move them OFF of the UI thread).
+		mucMessageAdded = messagesDataSource.createMessage(mucName, message);
 		List<Message> messages = getAllMessages(mucName);
 
-		for (MucListener listener : mucMessageListeners.get(mucName)) {
-			Log.d("XMPP", "Added muc message: " + message.getBody()
-					+ ", notifying listener: " + listener.toString());
-			listener.onMucMessageUpdate(mucName, messages);
+		if (mucMessageListeners.get(mucName) != null) {
+			for (MucListener listener : mucMessageListeners.get(mucName)) {
+				Log.i("XMPP", "Added muc message: " + message.getBody()
+						+ ", notifying listener: " + listener.toString());
+				listener.onMucMessageUpdate(mucName, messages);
+			}
 		}
 
 		messagesDataSource.close();
+
+		return mucMessageAdded;
 	}
 
 	/**
@@ -149,38 +160,55 @@ public class XMPP {
 	/**
 	 * Join an MUC on the UI thread, so that the MessageListener for the MUC is
 	 * also added in the UI thread.
+	 * 
+	 * TODO: Queue up MUCs who failed to join and attempt to join them later,
+	 * using exponential backoff.
 	 */
-	public void joinMuc(final String mucName, String myJid) {
+	@Deprecated
+	public boolean joinMuc(final String mucName, String myJid) {
+		Log.i("XMPP.joinMuc", "Attempting to join muc: " + mucName);
+
+		// Grab a reference to the single XMPPConnection that we use
+		// from the utility XMPPIntentService class.
 		XMPPConnection xmppConnection = XMPPIntentService.xmppConnection;
-		MultiUserChat muc = mucs.get(mucName);
 
 		if (!xmppConnection.isConnected()) {
 			Log.e("XMPPPIntentService.joinMuc()",
 					"Failed to join muc: not connected");
-			return;
+			return false;
 		}
 
 		if (!xmppConnection.isAuthenticated()) {
 			Log.e("XMPPPIntentService.joinMuc()",
 					"Failed to join muc: not authenticated");
-			return;
+			return false;
 		}
 
+		// Pull the MultiUserChatObject from our map of Muc's Jid -> Muc Object
+		// map.
+		MultiUserChat muc = mucMap.get(mucName);
+
+		// If the MUC Object from the map hasn't been instantiated yet,
+		// instantiate one and throw it into the Map.
+		// This technique is called "lazy instantiation".
 		if (muc == null) {
 			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
 					+ XMPPIntentService.XMPP_SERVER_URL);
-			mucs.put(mucName, muc);
+			mucMap.put(mucName, muc);
 		}
 
 		try {
-			if (muc.isJoined()) {
-				muc.leave();
-			}
+			// // Leave the MUC and rejoin unconditionally: this is so that we
+			// get
+			// // the server to re-send us all of the Messages in that MUC.
+			// if (muc.isJoined()) {
+			// muc.leave();
+			// }
 			muc.join(myJid);
 		} catch (XMPPException e) {
 			Log.e("XMPPPIntentService.joinMuc()",
 					"Failed to join muc: " + e.getMessage());
-			return;
+			return false;
 		}
 
 		Log.i("XMPPIntentService.joinMuc()", "Joined muc: " + mucName);
@@ -188,27 +216,39 @@ public class XMPP {
 		muc.addMessageListener(new PacketListener() {
 			@Override
 			public void processPacket(final Packet packet) {
-				if (packet instanceof Message) {
-					Message message = (Message) packet;
+				boolean gotNewMessage = false;
 
-					addMucMessage(mucName, message);
+				if (packet instanceof Message) {
+					final Message message = (Message) packet;
+
+					gotNewMessage = addMucMessage(mucName, message);
+
+					if (gotNewMessage) {
+						Utils.showNotification(context, "Message from "
+								+ message.getFrom(), message.getBody(),
+								HomeActivity.class, 3);
+					}
 				}
 			}
 		});
 
 		Log.i("XMPP", "Muc " + mucName + " message listeners: ");
+		return true;
 	}
 
 	/**
 	 * Leave the MUC in the UI thread.
 	 */
 	public void leaveMuc(String mucName) {
-		MultiUserChat muc = mucs.get(mucName);
+		MultiUserChat muc = mucMap.get(mucName);
 
+		// If the MUC Object from the map hasn't been instantiated yet,
+		// instantiate one and throw it into the Map.
+		// This technique is called "lazy instantiation".
 		if (muc == null) {
 			muc = new MultiUserChat(XMPPIntentService.xmppConnection, mucName
 					+ "@conference." + XMPPIntentService.XMPP_SERVER_URL);
-			mucs.put(mucName, muc);
+			mucMap.put(mucName, muc);
 		}
 
 		muc.leave();
@@ -218,13 +258,13 @@ public class XMPP {
 	 * Send an MUC message in the UI thread.
 	 */
 	public void sendMucMessage(String myJid, String mucName, String message) {
-		MultiUserChat muc = mucs.get(mucName);
+		MultiUserChat muc = mucMap.get(mucName);
 
 		if (muc == null) {
 			joinMuc(mucName, myJid);
 		}
 
-		muc = mucs.get(mucName);
+		muc = mucMap.get(mucName);
 
 		try {
 			muc.sendMessage(message);
@@ -232,5 +272,24 @@ public class XMPP {
 			Log.e("XMPPIntentService.sendMucMessage()",
 					"Couldn't send XMPP muc message: " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Front-facing method used to clear out the queue of Mucs to join and
+	 * populate it with a new set of Mucs to join. Also tells XMPP to start the
+	 * "join" process on all of them.
+	 * 
+	 * @param myJid
+	 * @param mucsToJoin
+	 */
+	public synchronized void joinMucs(String myJid, List<String> mucsToJoin) {
+		this.mucsToJoin.clear();
+		this.mucsToJoin.addAll(mucsToJoin);
+
+		// Once you modify the existing internal list of Mucs to join, just
+		// start the regular Connect process to ensure that XMPPConnection
+		// and authentication is all good before attempting to join each
+		// of those Mucs.
+		connect(myJid, context);
 	}
 }

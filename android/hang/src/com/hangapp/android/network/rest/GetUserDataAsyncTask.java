@@ -1,5 +1,6 @@
 package com.hangapp.android.network.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -49,5 +50,46 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 		database.setMyOutgoingBroadcasts(me.getOutgoingBroadcasts());
 		database.setMyAvailability(me.getAvailability());
 		database.setMyProposal(me.getProposal());
+
+		// Use the resulting user data to construct a list of JIDs of users
+		// whose Proposals I am interested in.
+		database.setJidsImInterestedIn(getJidsImInterestedIn(me));
+	}
+
+	/**
+	 * Helper method to loop through my new Incoming Broadcasts and construct a
+	 * list of JIDs of users whose Proposals I am interested in.
+	 * 
+	 * @param me
+	 * @return
+	 */
+	private List<String> getJidsImInterestedIn(User me) {
+		List<String> jidsImInterestedIn = new ArrayList<String>(me
+				.getIncomingBroadcasts().size());
+
+		for (String incomingBroadcastJid : me.getIncomingBroadcasts()) {
+			// Reference the Incoming Broadcast User object for that JID.
+			User incomingBroadcast = database
+					.getIncomingUser(incomingBroadcastJid);
+
+			// If the Incoming Broadcast indeed has a Proposal and an Interested
+			// list...
+			if (incomingBroadcast != null
+					&& incomingBroadcast.getProposal() != null
+					&& incomingBroadcast.getProposal().getInterested() != null) {
+
+				// If my JID shows up in this user's Proposal's Interested list,
+				// then this Incoming Broadcast is a JID that I'm "Interested"
+				// in. Add him to my list of "JIDs I'm Interested in".
+				for (String incomingBroadcastInterestedJid : incomingBroadcast
+						.getProposal().getInterested()) {
+					if (incomingBroadcastInterestedJid.equals(me.getJid())) {
+						jidsImInterestedIn.add(incomingBroadcastJid);
+					}
+				}
+			}
+		}
+
+		return jidsImInterestedIn;
 	}
 }

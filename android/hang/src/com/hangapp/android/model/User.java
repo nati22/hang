@@ -150,7 +150,8 @@ public final class User implements Comparable<User>, Parcelable {
 					+ firstName);
 			statusText = "";
 		} else {
-			Log.i("User.parseMyUserData", "statusText != null && statusText != \"null\"");
+			Log.i("User.parseMyUserData",
+					"statusText != null && statusText != \"null\"");
 		}
 
 		DateTime date;
@@ -219,15 +220,15 @@ public final class User implements Comparable<User>, Parcelable {
 		// Populate IncomingBroadcast strings
 		List<String> incomingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < incomingBroadcastsJsonArray.length(); i++) {
-			incomingBroadcastsStrings
-					.add(incomingBroadcastsJsonArray.getString(i));
+			incomingBroadcastsStrings.add(incomingBroadcastsJsonArray
+					.getString(i));
 		}
 
 		// Populate OutgoingBroadcast strings
 		List<String> outgoingBroadcastsStrings = new ArrayList<String>();
 		for (int i = 0; i < outgoingBroadcastsJsonArray.length(); i++) {
-			outgoingBroadcastsStrings
-					.add(outgoingBroadcastsJsonArray.getString(i));
+			outgoingBroadcastsStrings.add(outgoingBroadcastsJsonArray
+					.getString(i));
 		}
 
 		user.setIncomingBroadcasts(incomingBroadcastsStrings);
@@ -264,8 +265,8 @@ public final class User implements Comparable<User>, Parcelable {
 		Iterator<?> keys = library.keys();
 
 		while (keys.hasNext()) {
-			JSONObject userJsonObject = library
-					.getJSONObject((String) keys.next());
+			JSONObject userJsonObject = library.getJSONObject((String) keys
+					.next());
 
 			Log.i(User.class.getSimpleName(),
 					"Parsing user JSON object from library: "
@@ -318,7 +319,8 @@ public final class User implements Comparable<User>, Parcelable {
 				} else if (proposalLocation.equals("null")) {
 					throw new JSONException("proposalLocation is \"null\"");
 				} else if (proposalStartTimeString.equals("null")) {
-					throw new JSONException("proposalStartTimeString is \"null\"");
+					throw new JSONException(
+							"proposalStartTimeString is \"null\"");
 				}
 
 				// TODO: Switch to JodaTime (IN YO FACE)

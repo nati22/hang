@@ -17,6 +17,7 @@ public final class Keys {
 	public static final String PROPOSAL_CONFIRMED = "conf";
 	public static final String OUTGOING = "out";
 	public static final String INCOMING = "inc";
+	public static final String JIDS_IM_INTERESTED_IN = "jids_im_interested_in";
 	public static final String LIBRARY = "lib";
 	public static final String REGISTRATION_ID = "regid";
 	public static final String FRIENDS = "friends";
@@ -40,6 +41,7 @@ public final class Keys {
 	public static final int XMPP_JOIN_MUC = 104;
 	public static final int XMPP_LEAVE_MUC = 105;
 	public static final int XMPP_SEND_MUC_MESSAGE = 106;
+	public static final int XMPP_JOIN_ALL_MUCS = 107;
 
 	/*
 	 * BroadcastReceiver message codes.
@@ -71,7 +73,7 @@ public final class Keys {
 		public static final String TYPE_TICKLE = "tickle";
 		public static final String TYPE_NEW_BROADCAST = "new_broadcast";
 	}
-	
+
 	public static final String TAB_INTENT = "whichtab";
 
 	public static final String YOU_FRAGMENT_TAG = "#dontbelievemechrisbosh";

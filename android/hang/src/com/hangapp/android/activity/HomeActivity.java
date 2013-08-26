@@ -1,11 +1,13 @@
 package com.hangapp.android.activity;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,6 +36,7 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.network.xmpp.XMPP;
+import com.hangapp.android.network.xmpp.XMPPBroadcastReceiver;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
@@ -65,6 +68,9 @@ public final class HomeActivity extends BaseActivity implements
 	private Database database;
 	private RestClient restClient;
 	private XMPP xmpp;
+
+	// TODO: Remove me.
+	XMPPBroadcastReceiver xmppBroadcastReceiver;
 
 	// Facebook SDK member variables.
 	private UiLifecycleHelper uiHelper;
@@ -128,6 +134,20 @@ public final class HomeActivity extends BaseActivity implements
 		if (savedInstanceState != null) {
 			bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}
+
+//		// Register XMPPBroadcastReceiver.
+//		// TODO: Move me to the correct location.
+//		IntentFilter filter = new IntentFilter(
+//				XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER);
+//		filter.addCategory(Intent.CATEGORY_DEFAULT);
+//		registerReceiver(xmppBroadcastReceiver, filter);
+
+//		LocalBroadcastManager.getInstance(this)
+//				.registerReceiver(
+//						xmppBroadcastReceiver,
+//						new IntentFilter(
+//								XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER));
+
 	}
 
 	@Override
@@ -227,13 +247,13 @@ public final class HomeActivity extends BaseActivity implements
 				}
 			}
 		});
-		
-		// Check if a certain tab should be opened (especially from a notification)
+
+		// Check if a certain tab should be opened (especially from a
+		// notification)
 		int initialTab = getIntent().getIntExtra(Keys.TAB_INTENT, -1);
-		if (initialTab!= -1) 
+		if (initialTab != -1)
 			getSupportActionBar().setSelectedNavigationItem(initialTab);
-		
-		
+
 	}
 
 	/**

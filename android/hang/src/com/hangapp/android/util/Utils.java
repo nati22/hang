@@ -7,9 +7,18 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Vibrator;
+import android.support.v4.app.NotificationCompat;
+
+import com.hangapp.android.R;
 
 public final class Utils {
 	public static final String BASE_URL = "http://therealhangapp.appspot.com/rest";
@@ -60,6 +69,33 @@ public final class Utils {
 		}
 
 		return Hours.hoursBetween(rightNow, expirationDate).getHours();
+	}
+
+	public static void showNotification(Context context, String title,
+			String notificationString, Class<?> activityToOpen,
+			int notificationId) {
+		Intent nudgeIntent = new Intent(context, activityToOpen);
+
+		NotificationManager notifMgr = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		Notification notif = new NotificationCompat.Builder(context)
+				.setContentTitle(title)
+				.setContentText(notificationString)
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setLargeIcon(
+						BitmapFactory.decodeResource(context.getResources(),
+								R.drawable.ic_launcher))
+				.setContentIntent(
+						PendingIntent.getActivity(context, 0, nudgeIntent, 0))
+				.build();
+
+		notif.flags = Notification.FLAG_AUTO_CANCEL;
+		notifMgr.notify(notificationId, notif);
+
+		Vibrator v = (Vibrator) context
+				.getSystemService(Context.VIBRATOR_SERVICE);
+		v.vibrate(400);
 	}
 
 }

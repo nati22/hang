@@ -197,9 +197,6 @@ public final class ProfileActivity extends BaseActivity implements
 							linLayoutInterested);
 				}
 			} else {
-				Toast.makeText(this,
-						"Proposal deleted for " + friend.getFirstName(),
-						Toast.LENGTH_SHORT).show();
 				Log.i(ProposalFragment.class.getSimpleName(),
 						"onIncomingBroadcastsUpdate called with NO PROPOSAL.");
 				this.finish();

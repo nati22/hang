@@ -114,8 +114,8 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 	protected void onPause() {
 		super.onPause();
 
-		// Leave the MUC.
-		xmpp.leaveMuc(mucName);
+//		// Leave the MUC.
+//		xmpp.leaveMuc(mucName);
 
 		// "Unsubscribe" this activity from new MUC messages.
 		xmpp.removeMucListener(mucName, this);

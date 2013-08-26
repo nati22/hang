@@ -37,7 +37,12 @@ public final class XMPPIntentService extends IntentService {
 	 * <br />
 	 * We don't have to worry about concurrent access to the same variable
 	 * because {@link IntentService} guarantees that onHandleIntent() handles a
-	 * single {@link Intent} at a time, in a queue.
+	 * single {@link Intent} at a time, in a queue.'
+	 * 
+	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! THIS INTENT SERVICE WILL BE
+	 * DESTROYED AS SOON AS ONHANDLEINTENT() IS DONE RUNNING! THIS MEANS THAT
+	 * THE XMPPCONNECTION MAINTAINED INSIDE HERE WILL ALSO BE DESTROYED! FIX
+	 * THIS! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	 */
 	static XMPPConnection xmppConnection;
 
@@ -103,6 +108,16 @@ public final class XMPPIntentService extends IntentService {
 
 			login(myJid);
 			return;
+			// case Keys.XMPP_JOIN_ALL_MUCS:
+			// // Sanity check.
+			// if (myJid == null) {
+			// Log.e("XMPPIntentService",
+			// "Can't join all XMPP Mucs: Null myJid");
+			// return;
+			// }
+			//
+			// joinMucs(myJid);
+			// return;
 		case Keys.XMPP_LOGOUT:
 			logout();
 			return;
@@ -226,8 +241,16 @@ public final class XMPPIntentService extends IntentService {
 
 		if (xmppConnection.isAuthenticated()) {
 			Log.d("XMPPIntentService.login()", "Logged into XMPP");
-			// If login succeeded, then we're done. Let this IntentService die.
-			// Do nothing.
+			// If login succeeded, then move onto attempting to join all of the
+			// Mucs.
+			// Send off a Broadcast to do this on the UI thread.
+			Intent joinMucsBroadcastIntent = new Intent();
+			joinMucsBroadcastIntent
+					.setAction(XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER);
+			joinMucsBroadcastIntent.putExtra(Keys.JID, myJid);
+			sendBroadcast(joinMucsBroadcastIntent);
+
+			// joinMucs(myJid);
 		} else {
 			// If login failed, then start over from connect().
 			Log.e("XMPPIntentService.login()", "XMPP login failed. connect");
