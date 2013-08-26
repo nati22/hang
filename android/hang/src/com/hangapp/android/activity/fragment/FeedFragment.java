@@ -211,10 +211,17 @@ public final class FeedFragment extends SherlockFragment implements
 			// Set status text to empty string
 			holder.textViewAvailabilityDescription.setText("");
 			// If the user has an Availability, then show Availability description.
-			if (user.getAvailability().getDescription() != null
-					&& !user.getAvailability().getDescription().equals("null")) {
-				holder.textViewAvailabilityDescription.setText(user
-						.getAvailability().getDescription());
+			if (user.getAvailability() != null) {
+				if (user.getAvailability().getDescription() != null
+						&& !user.getAvailability().getDescription().equals("null")) {
+					holder.textViewAvailabilityDescription.setText(user
+							.getAvailability().getDescription());
+				}
+				Log.v("FeedFragment.getView", user.getFirstName()
+						+ " has no Availability description");
+			} else {
+				Log.v("FeedFragment.getView", user.getFirstName()
+						+ " has no Availability");
 			}
 
 			// Set the user's status icon based on his Availability.
@@ -244,14 +251,20 @@ public final class FeedFragment extends SherlockFragment implements
 						+ user.getAvailability().getStatus());
 			}
 
-			// Make Facebook icon function as the NUDGE button.
+			// Make availabiliy icon function as the NUDGE button.
 			holder.imageViewAvailability.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					restClient.sendNudge(user.getJid());
-					Toast.makeText(context,
-							"Sending a nudge to " + user.getFirstName(),
-							Toast.LENGTH_SHORT).show();
+					if (!user.getAvailability().isActive()) {
+						restClient.sendNudge(user.getJid());
+						Toast.makeText(context,
+								"Sending a nudge to " + user.getFirstName(),
+								Toast.LENGTH_SHORT).show();
+					} else {
+						Toast.makeText(context,
+								"They have a status! Leave them alone!",
+								Toast.LENGTH_SHORT).show();
+					}
 				}
 			});
 

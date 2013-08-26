@@ -39,6 +39,13 @@ class User(db.Model):
     proposal_interested_jids = db.ListProperty(str)
     proposal_confirmed_jids = db.ListProperty(str)
 
+    proposals_seen_jids = db.ListProperty(str)
+
+    # This is if we want to keep simple stats per user 
+    # total_proposals = db.IntegerProperty()
+    # total_availabilities = db.IntegerProperty()
+    # total_statuses = db.IntegerProperty()
+
     def get_partial_json(self):
         return {
             'jid': self.key().name(),
@@ -140,7 +147,7 @@ class UserRequestHandler(webapp2.RequestHandler):
             if int_jid not in library_json:
                 library_json[int_jid] = interested_user.get_stranger_json()
             
-        # Convert the interested users to JSON objects    
+        # Convert the confirmed users to JSON objects    
         confirmed_users_jids = []
         for confirmed_user in confirmed_users:
             conf_jid = confirmed_user.key().name()
@@ -163,6 +170,7 @@ class UserRequestHandler(webapp2.RequestHandler):
             'time': user.proposal_time,
             'int': interested_users_jids,
             'conf': confirmed_users_jids,
+            'seen' : user.proposals_seen_jids,
             'lib' : library_json
         }
         
@@ -311,6 +319,13 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
              # Remove broadcaster jid from broadcastee's incoming_broadcasts
             broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
             broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
+
+            # Remove broadcaster jid from broadcastee's seen proposals (if present)
+            if jid in broadcastee.proposals_seen_jids:
+                broadcastee.proposals_seen_jids.remove(jid)
+            else:
+                self.response.write(jid + " is not in " + broadcastee.first_name + "'s seen proposals\n")
+
             broadcastee.put()
             broadcaster.put()
 

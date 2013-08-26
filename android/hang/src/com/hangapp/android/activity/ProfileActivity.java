@@ -158,15 +158,13 @@ public final class ProfileActivity extends BaseActivity implements
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-		Typeface champagneLimousinesFont = Typeface
-				.createFromAsset(getApplicationContext().getAssets(),
-						Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(
+				getApplicationContext().getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
 		textViewStatus.setTypeface(champagneLimousinesFont);
 		textViewProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewProposalStartTime.setTypeface(champagneLimousinesFont);
-		textViewProposalInterestedCount
-				.setTypeface(champagneLimousinesFontBold);
+		textViewProposalInterestedCount.setTypeface(champagneLimousinesFontBold);
 	}
 
 	@Override
@@ -193,8 +191,7 @@ public final class ProfileActivity extends BaseActivity implements
 							.getIncomingUser(friend.getJid()).getProposal()
 							.getInterested());
 
-					updateHorizontalList(listInterestedJids,
-							linLayoutInterested);
+					updateHorizontalList(listInterestedJids, linLayoutInterested);
 				}
 			} else {
 				Log.i(ProposalFragment.class.getSimpleName(),
@@ -223,23 +220,21 @@ public final class ProfileActivity extends BaseActivity implements
 		else if (friend.getAvailability().getStatus() == Status.FREE) {
 			imageButtonFriendsAvailability.setImageDrawable(getResources()
 					.getDrawable(R.drawable.status_green));
+			textViewFriendsAvailabilityExpirationDate.setVisibility(View.VISIBLE);
+			int hoursRemaining = Utils.getRemainingHours(friend.getAvailability()
+					.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate
-					.setVisibility(View.VISIBLE);
-			int hoursRemaining = Utils.getRemainingHours(friend
-					.getAvailability().getExpirationDate());
-			textViewFriendsAvailabilityExpirationDate.setText(hoursRemaining
-					+ "h");
+					.setText(hoursRemaining + "h");
 		}
 		// Busy.
 		else if (friend.getAvailability().getStatus() == Status.BUSY) {
 			imageButtonFriendsAvailability.setImageDrawable(getResources()
 					.getDrawable(R.drawable.status_red));
+			textViewFriendsAvailabilityExpirationDate.setVisibility(View.VISIBLE);
+			int hoursRemaining = Utils.getRemainingHours(friend.getAvailability()
+					.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate
-					.setVisibility(View.VISIBLE);
-			int hoursRemaining = Utils.getRemainingHours(friend
-					.getAvailability().getExpirationDate());
-			textViewFriendsAvailabilityExpirationDate.setText(hoursRemaining
-					+ "h");
+					.setText(hoursRemaining + "h");
 		}
 		// Error state.
 		else {
@@ -258,10 +253,9 @@ public final class ProfileActivity extends BaseActivity implements
 			relativeLayoutFriendsProposal.setVisibility(View.VISIBLE);
 			textViewProposalDescription.setText(friend.getProposal()
 					.getDescription());
-			textViewProposalLocation
-					.setText(friend.getProposal().getLocation());
-			textViewProposalStartTime.setText(friend.getProposal()
-					.getStartTime().toString("h:mm aa"));
+			textViewProposalLocation.setText(friend.getProposal().getLocation());
+			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
+					.toString("h:mm aa"));
 
 			// Set "my" interested checkbox
 			if (friend.getProposal().getInterested() != null) {
@@ -272,6 +266,18 @@ public final class ProfileActivity extends BaseActivity implements
 
 			// Refresh list
 			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
+
+			// Add this proposal to the Users list of "seen proposals"
+			if (!database.getMySeenProposals().contains(friend.getJid())) {
+				database.addSeenProposal(friend.getJid());
+				restClient.setSeenProposal(friend.getJid());
+				Log.i("ProfileActivity",
+						"first time seeing " + friend.getFirstName() + "'s prop");
+			} else {
+				Log.i("ProfileActivity", friend.getFirstName()
+						+ "'s proposal already seen");
+			}
+
 
 		}
 	}
@@ -289,8 +295,7 @@ public final class ProfileActivity extends BaseActivity implements
 				+ " elements");
 
 		Log.i(ProposalFragment.class.getSimpleName(),
-				"removed " + linLayout.getChildCount()
-						+ " elements from linLayout");
+				"removed " + linLayout.getChildCount() + " elements from linLayout");
 		linLayout.removeAllViews();
 
 		for (int i = 0; i < jids.size(); i++) {

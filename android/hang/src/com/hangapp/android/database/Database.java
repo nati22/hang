@@ -20,6 +20,7 @@ import com.hangapp.android.model.callback.MyAvailabilityListener;
 import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
+import com.hangapp.android.model.callback.SeenProposalsListener;
 import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseApplication;
 import com.hangapp.android.util.Keys;
@@ -43,6 +44,7 @@ public final class Database {
 	private List<MyAvailabilityListener> myStatusListeners = new ArrayList<MyAvailabilityListener>();
 	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
+	private List<SeenProposalsListener> seenProposalsListeners = new ArrayList<SeenProposalsListener>();
 
 	private XMPP xmpp;
 	private Context context;
@@ -109,6 +111,14 @@ public final class Database {
 
 	public boolean removeMyUserDataListener(MyUserDataListener listener) {
 		return myUserDataListeners.remove(listener);
+	}
+
+	public boolean addSeenProposalListener(SeenProposalsListener listener) {
+		return seenProposalsListeners.add(listener);
+	}
+
+	public boolean removeSeenProposalListener(SeenProposalsListener listener) {
+		return seenProposalsListeners.remove(listener);
 	}
 
 	public void setMyAvailability(Availability availability) {
@@ -468,6 +478,82 @@ public final class Database {
 		}
 	}
 
+	public void setMySeenProposals(List<String> seenProposals) {
+		// Convert the List<String>'s to single comma separated Strings.
+		String seenProposalsStringList = Utils
+				.convertStringArrayToString(seenProposals);
+
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsStringList);
+		editor.commit();
+
+		for (SeenProposalsListener listener : seenProposalsListeners) {
+			listener.onMySeenProposalsUpdate();
+		}
+
+	}
+
+	public void addSeenProposal(String broadcasterJid) {
+		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
+				null);
+
+		List<String> seenProposals = Utils
+				.convertStringToArray(seenProposalsListString);
+
+		if (!seenProposals.contains(broadcasterJid)) {
+			seenProposals.add(broadcasterJid);
+		} else {
+			Log.i("Database.addSeenProposal()", "Proposal has been seen before");
+		}
+
+		seenProposalsListString = Utils
+				.convertStringArrayToString(seenProposals);
+
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);
+		editor.commit();
+
+		for (SeenProposalsListener listener : seenProposalsListeners) {
+			listener.onMySeenProposalsUpdate();
+		}
+	}
+
+	public List<String> getMySeenProposals() {
+		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
+				null);
+
+		if (seenProposalsListString == null)
+			return null;
+
+		return Utils.convertStringToArray(seenProposalsListString);
+	}
+
+	public void deleteMySeenProposal(String proposalJid) {
+		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
+				null);
+
+		List<String> seenProposals = Utils
+				.convertStringToArray(seenProposalsListString);
+
+		boolean removed = seenProposals.remove(proposalJid);
+
+		if (removed)
+			Log.i("Database.deleteMySeenProposal", "seenProposals.remove("
+					+ proposalJid + ") returned false");
+
+		seenProposalsListString = Utils
+				.convertStringArrayToString(seenProposals);
+
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);
+		editor.commit();
+
+		for (SeenProposalsListener listener : seenProposalsListeners) {
+			listener.onMySeenProposalsUpdate();
+		}
+
+	}
+
 	public String getMyJid() {
 		return prefs.getString(Keys.JID, null);
 	}
@@ -485,8 +571,8 @@ public final class Database {
 	}
 
 	/**
-	 * Returns a list of the JIDs of the users whose Proposals I'm currently
-	 * interested in.
+	 * <<<<<<< HEAD Returns a list of the JIDs of the users whose Proposals I'm
+	 * currently interested in.
 	 * 
 	 * This is useful for knowing which JIDs I'm currently "subscribed" to in
 	 * XMPP.
@@ -516,13 +602,15 @@ public final class Database {
 
 		// Attempt to join the MUC belonging to each of the JIDs that I am
 		// interested in.
-//		xmpp.initialize(context); // TODO: Un-hack me.
+		// xmpp.initialize(context); // TODO: Un-hack me.
 		xmpp.joinMucs(myJid, interestedJids);
 	}
 
 	/**
 	 * Helper method only to be used by the REST calls, as they finish parsing
-	 * in the JSON for the library.
+	 * in the JSON for the library. ======= Helper method only to be used by the
+	 * REST calls, as they finish parsing in the JSON for the library. >>>>>>>
+	 * 177b45476535132f4f2c242136f66e89d3e2680b
 	 */
 	public void saveLibrary(List<User> newLibrary) {
 		// usersDataSource.open();

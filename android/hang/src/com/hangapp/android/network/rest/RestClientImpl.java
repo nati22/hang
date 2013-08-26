@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.hangapp.android.activity.fragment.SetStatusDialogFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Proposal;
@@ -180,23 +181,31 @@ public final class RestClientImpl implements RestClient {
 
 	@Override
 	public void deleteInterested(String broadcasterJid) {
-
-		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
-
 		new DeleteInterestedAsyncTask(database, context, database.getMyJid(),
 				broadcasterJid).execute();
-
 	}
 
 	@Override
 	public void deleteConfirmed(String broadcasterJid) {
 
+		new DeleteConfirmedAsyncTask(database, context, database.getMyJid(),
+				broadcasterJid).execute();
+	}
+
+	@Override
+	public void setSeenProposal(String broadcasterJid) {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
 
-		new DeleteConfirmedAsyncTask(database, context, database.getMyJid(),
-				broadcasterJid).execute();
+		new SetProposalSeenAsyncTask(database, context, database.getMyJid(),
+				parameters).execute();
+	}
+
+	@Override
+	public void deleteSeenProposal(String broadcasterJid) {
+
+		new DeleteProposalSeenAsyncTask(database, context, database.getMyJid(),
+				broadcasterJid);
 	}
 
 }

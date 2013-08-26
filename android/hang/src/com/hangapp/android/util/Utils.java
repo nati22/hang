@@ -58,7 +58,10 @@ public final class Utils {
 		}
 
 		String[] arr = str.split(",");
-		return Arrays.asList(arr);
+		
+		// Arrays.asList alone returns a fixed-length list 
+		// so we need to return it as a new ArrayList
+		return new ArrayList<String>(Arrays.asList(arr));
 	}
 
 	public static int getRemainingHours(DateTime expirationDate) {

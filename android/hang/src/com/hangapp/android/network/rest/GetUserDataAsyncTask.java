@@ -50,6 +50,7 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 		database.setMyOutgoingBroadcasts(me.getOutgoingBroadcasts());
 		database.setMyAvailability(me.getAvailability());
 		database.setMyProposal(me.getProposal());
+		database.setMySeenProposals(me.getSeenProposals());
 
 		// Use the resulting user data to construct a list of JIDs of users
 		// whose Proposals I am interested in.

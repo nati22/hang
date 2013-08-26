@@ -27,6 +27,7 @@ public final class User implements Comparable<User>, Parcelable {
 	private Proposal proposal;
 	private List<String> incomingBroadcasts;
 	private List<String> outgoingBroadcasts;
+	private List<String> seenProposals;
 
 	public User(String jid, String firstName, String lastName) {
 		super();
@@ -81,6 +82,14 @@ public final class User implements Comparable<User>, Parcelable {
 
 	public void setOutgoingBroadcasts(List<String> outgoingBroadcasts) {
 		this.outgoingBroadcasts = outgoingBroadcasts;
+	}
+	
+	public List<String> getSeenProposals() {
+		return seenProposals;
+	}
+	
+	public void setSeenProposals(List<String> seenProposals) {
+		this.seenProposals = seenProposals;
 	}
 
 	@Override
@@ -233,6 +242,16 @@ public final class User implements Comparable<User>, Parcelable {
 
 		user.setIncomingBroadcasts(incomingBroadcastsStrings);
 		user.setOutgoingBroadcasts(outgoingBroadcastsStrings);
+
+		// Get Proposals that this User has seen 
+		JSONArray seenProposalsArray = userJsonObject
+				.getJSONArray(Keys.PROPOSAL_SEEN);
+		
+		List<String> seenProposalsStrings = new ArrayList<String>();
+		for (int i = 0; i < seenProposalsArray.length(); i++)
+			seenProposalsStrings.add(seenProposalsArray.getString(i));
+		
+		user.setSeenProposals(seenProposalsStrings);
 
 		return user;
 	}
