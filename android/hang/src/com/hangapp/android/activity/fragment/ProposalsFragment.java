@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +26,12 @@ import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
+import com.hangapp.android.model.callback.SeenProposalsListener;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
 public class ProposalsFragment extends SherlockFragment implements
-		IncomingBroadcastsListener {
+		IncomingBroadcastsListener, SeenProposalsListener {
 
 	// UI stuff
 	private ListView listViewFriends;
@@ -71,7 +73,9 @@ public class ProposalsFragment extends SherlockFragment implements
 				.findViewById(R.id.listViewProposalsFragment);
 
 		// Set up the Adapter.
-		adapter = new ProposalsAdapter(getActivity(), incomingBroadcasts);
+		adapter = new ProposalsAdapter(getActivity(), incomingBroadcasts,
+				database);
+
 		listViewFriends.setAdapter(adapter);
 		listViewFriends.setEmptyView(view.findViewById(android.R.id.empty));
 
@@ -105,6 +109,7 @@ public class ProposalsFragment extends SherlockFragment implements
 		super.onResume();
 
 		database.addIncomingBroadcastsListener(this);
+		database.addSeenProposalListener(this);
 	}
 
 	@Override
@@ -112,17 +117,21 @@ public class ProposalsFragment extends SherlockFragment implements
 		super.onPause();
 
 		database.removeIncomingBroadcastsListener(this);
+		database.removeSeenProposalListener(this);
 	}
 
 	private static class ProposalsAdapter extends BaseAdapter {
 		private List<User> friends;
 		private LayoutInflater inflater;
 		private Context context;
+		private Database database;
 
-		public ProposalsAdapter(Context context, List<User> friends) {
+		public ProposalsAdapter(Context context, List<User> friends,
+				Database database) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
 			this.friends = friends;
+			this.database = database;
 		}
 
 		@Override
@@ -149,8 +158,15 @@ public class ProposalsFragment extends SherlockFragment implements
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(
-						R.layout.cell_proposals_fragment, null);
+				convertView = inflater.inflate(R.layout.cell_proposals_fragment,
+						null);
+
+				if (!database.getMySeenProposals().contains(user.getJid())) {
+					Log.d("ProposalsAdapter.getView", "coloring " + user.getFirstName() + "'s cell");
+					Log.i("getMySeenProposals looks like...", "" + database.getMySeenProposals().toString());
+					convertView.setBackgroundColor(context.getResources().getColor(
+							R.color.teal));
+				}
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
@@ -178,8 +194,7 @@ public class ProposalsFragment extends SherlockFragment implements
 						.setTypeface(champagneLimousinesBold);
 				holder.textViewProposalLocation
 						.setTypeface(champagneLimousinesBold);
-				holder.textViewProposalStartTime
-						.setTypeface(champagneLimousines);
+				holder.textViewProposalStartTime.setTypeface(champagneLimousines);
 				holder.textViewProposalInterested
 						.setTypeface(champagneLimousinesBold);
 
@@ -203,11 +218,10 @@ public class ProposalsFragment extends SherlockFragment implements
 			// Construct the internationalized string for the number of users
 			// interested in this Proposal. Then use it to populate the
 			// TextView.
-			final int numberOfUsersInterested = user.getProposal()
-					.getInterested().size();
-			final String interestedString = String.format(context
-					.getResources().getString(R.string.count_interested),
-					numberOfUsersInterested);
+			final int numberOfUsersInterested = user.getProposal().getInterested()
+					.size();
+			final String interestedString = String.format(context.getResources()
+					.getString(R.string.count_interested), numberOfUsersInterested);
 			holder.textViewProposalInterested.setText(interestedString);
 
 			return convertView;
@@ -220,7 +234,9 @@ public class ProposalsFragment extends SherlockFragment implements
 			TextView textViewProposalLocation;
 			TextView textViewProposalStartTime;
 			TextView textViewProposalInterested;
+
 		}
+
 	}
 
 	@Override
@@ -240,5 +256,11 @@ public class ProposalsFragment extends SherlockFragment implements
 		this.incomingBroadcasts.addAll(incomingBroadcasts);
 		Collections.sort(this.incomingBroadcasts);
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onMySeenProposalsUpdate() {
+		adapter.notifyDataSetChanged();
+
 	}
 }

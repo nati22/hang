@@ -21,11 +21,15 @@ public interface RestClient {
 
 	public void sendNudge(String targetJid);
 
-	public void setInterested(String broadcasteeJid);
+	public void setInterested(String broadcasterJid);
 
-	public void setConfirmed(String broadcasteeJid);
+	public void setConfirmed(String broadcasterJid);
 
-	public void deleteInterested(String broadcasteeJid);
+	public void deleteInterested(String broadcasterJid);
 
-	public void deleteConfirmed(String broadcasteeJid);
+	public void deleteConfirmed(String broadcasterJid);
+	
+	public void setSeenProposal(String broadcasterJid);
+	
+	public void deleteSeenProposal(String broadcasterJid);
 }

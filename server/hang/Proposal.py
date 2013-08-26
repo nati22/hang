@@ -57,6 +57,16 @@ class ProposalRequestHandler(webapp2.RequestHandler):
 
         user.put()
 
+        # Modify Broadcastees proposals_seen_jids fields if they were interested
+        for key in user.outgoing_broadcasts:
+            broadcastee = db.get(key)
+            if jid in broadcastee.proposals_seen_jids:
+                broadcastee.proposals_seen_jids.remove(jid)
+                broadcastee.put()
+            else:
+                self.response.write(key.name() + " not in " + broadcastee.first_name + "'s seen proposals\n")
+
+
         # Make list of Users to tickle
         users = []
         for broadcastee_key in user.outgoing_broadcasts:
@@ -230,4 +240,55 @@ class ConfirmedRequestHandler(webapp2.RequestHandler):
             self.response.write("User " + jid + " is no longer Confirmed for " + broadcasting_user.first_name + "'s Proposal.\n")
         else:
             self.response.write("User " + jid + " wasn't even Confirmed for " + broadcasting_user.first_name + "'s Proposal, idiot!!!\n")
+        return
+
+class ProposalSeenHandler(webapp2.RequestHandler):
+    def get(self, jid):
+        self.response.write("proposal seen GET handler")
+        return
+
+    def put(self, jid):
+        # Grab the PUT request parameter (the Broadcasting User's jid)
+        param_target = self.request.get('target')
+
+        # Create a Key for the Broadcastee that has seen the proposal
+        key_seeing_user = db.Key.from_path('User', jid)
+
+        # Retrieve the User object for said Broadcastee
+        seeing_user = db.get(key_seeing_user)
+
+        # Check if the proposal has been seen
+        if param_target not in seeing_user.proposals_seen_jids:
+            # Add the jid of the Broadcaster to the Broadcastee's proposals_seen list
+            seeing_user.proposals_seen_jids.append(param_target)
+
+        # Save it back into the datastore.
+        seeing_user.put()
+
+        # If all goes well, send back a confirmation message
+        self.response.write(seeing_user.first_name + " has seen the proposal of user #" + param_target)
+
+        return
+
+    def delete(self, jid):
+        # Grab the DELETE request parameter (the Broadcasting User's jid)
+        param_target = self.request.get('target')
+
+        # Create a Key for the Broadcastee that had seen the proposal
+        key_seeing_user = db.Key.from_path('User', jid)
+
+        # Retrieve the User object for said Broadcastee
+        seeing_user = db.get(key_seeing_user)
+
+        # Ensure the proposal has been seen
+        if param_target in seeing_user.proposals_seen_jids:
+            # Remove the jid of the former Broadcaster from the Broadcastee's proposals_seen list
+            seeing_user.proposals_seen_jids.remove(param_target)
+
+        # Save it back into the datastore.
+        seeing_user.put()
+
+        # If all goes well, send back a confirmation message
+        self.response.write(seeing_user.first_name + " has NO LONGER seen the proposal of user #" + param_target)
+
         return

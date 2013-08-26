@@ -12,13 +12,13 @@ import com.hangapp.android.model.Proposal;
 
 class SetProposalAsyncTask extends BasePutRequestAsyncTask<Proposal> {
 	private static final String USERS_URI_SUFFIX = "/users/";
-	private static final String STATUS_URI_SUFFIX = "/proposal";
+	private static final String PROPOSAL_URI_SUFFIX = "/proposal";
 
 	private Database database;
 
 	protected SetProposalAsyncTask(Database database, Context context,
 			String jid, List<NameValuePair> parameters) {
-		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX, parameters);
+		super(context, USERS_URI_SUFFIX + jid + PROPOSAL_URI_SUFFIX, parameters);
 
 		// Set dependencies.
 		this.database = database;

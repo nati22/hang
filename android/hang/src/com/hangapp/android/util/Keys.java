@@ -18,6 +18,7 @@ public final class Keys {
 	public static final String OUTGOING = "out";
 	public static final String INCOMING = "inc";
 	public static final String LIBRARY = "lib";
+	public static final String PROPOSAL_SEEN = "seen";
 	public static final String REGISTRATION_ID = "regid";
 	public static final String FRIENDS = "friends";
 	public static final String HOST_JID = "host_jid";

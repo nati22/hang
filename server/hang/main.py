@@ -17,7 +17,7 @@
 import webapp2
 from User import UserRequestHandler, BroadcastRequestHandler, NudgeRequestHandler
 from Status import StatusRequestHandler
-from Proposal import ProposalRequestHandler, InterestedRequestHandler, ConfirmedRequestHandler
+from Proposal import ProposalRequestHandler, InterestedRequestHandler, ConfirmedRequestHandler, ProposalSeenHandler
 #from push import NotificationReceivedRequestHandler
             
 class HelloWorldRequestHandler(webapp2.RequestHandler):
@@ -33,5 +33,6 @@ app = webapp2.WSGIApplication([
     (r'/users/(\d+)/nudge', NudgeRequestHandler),
     (r'/users/(\d+)/proposal', ProposalRequestHandler),
     (r'/users/(\d+)/proposal/interested', InterestedRequestHandler),
-    (r'/users/(\d+)/proposal/confirmed', ConfirmedRequestHandler)
+    (r'/users/(\d+)/proposal/confirmed', ConfirmedRequestHandler),
+    (r'/users/(\d+)/proposal/seen', ProposalSeenHandler)
 ], debug=True)
