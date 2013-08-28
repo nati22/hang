@@ -56,7 +56,9 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 			if (type != null && type.equals(Keys.FromServer.TYPE_NUDGE)) {
 
 				Intent nudgeIntent = new Intent(context, HomeActivity.class);
-
+				
+			//	ProfilePictureView 
+				Log.i(TAG, "" + intent.getExtras().getString(Keys.FromServer.FROM));
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You got a nudge!")
 						.setContentText(

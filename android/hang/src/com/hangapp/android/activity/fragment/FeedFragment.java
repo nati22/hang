@@ -2,7 +2,10 @@ package com.hangapp.android.activity.fragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+
+import org.joda.time.DateTime;
 
 import android.content.Context;
 import android.content.Intent;
@@ -208,12 +211,9 @@ public final class FeedFragment extends SherlockFragment implements
 			}
 
 			if (!holder.profilePictureView.getProfileId().equals(user.getJid())) {
-				Toast.makeText(
-						context,
-						"prevjid: " + holder.profilePictureView.getProfileId()
-								+ " != newjid: " + user.getJid(), Toast.LENGTH_SHORT)
-						.show();
-				holder.profilePictureView.setProfileId(user.getJid());
+				Log.d("FriendsFragment.getView",
+						holder.profilePictureView.getProfileId() + " != newjid: "
+								+ user.getJid());
 			}
 			holder.textViewFriendName.setText(user.getFullName());
 
@@ -271,9 +271,26 @@ public final class FeedFragment extends SherlockFragment implements
 								"Sending a nudge to " + user.getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else {
-						Toast.makeText(context,
-								"They have a status! Leave them alone!",
-								Toast.LENGTH_SHORT).show();
+						// Determine hrs and min left
+						DateTime expDateTime = user.getAvailability()
+								.getExpirationDate();
+						DateTime currentDateTime = new DateTime();
+						int hrsLeft = 0;
+						int minLeft = 0;
+						long diff = expDateTime.toDate().getTime()
+								- currentDateTime.toDate().getTime();
+						int min = (int) (diff / (60 * 1000));
+						int hrs = 0;
+						while (min >= 60) {
+							hrs++;
+							min = min - 60;
+						}
+
+						// Display remaining time to user
+						Toast.makeText(
+								context,
+								hrs + " hr" + ((hrs > 1) ? "s " : " ") + min
+										+ " min remaining", Toast.LENGTH_SHORT).show();
 					}
 				}
 			});
