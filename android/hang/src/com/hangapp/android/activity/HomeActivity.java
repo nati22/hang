@@ -262,20 +262,20 @@ public final class HomeActivity extends BaseActivity implements
 	 * Google Play Store or enable it in the device's system settings.
 	 */
 	private boolean checkPlayServices() {
-		final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-		int resultCode = GooglePlayServicesUtil
-				.isGooglePlayServicesAvailable(this);
-		if (resultCode != ConnectionResult.SUCCESS) {
-			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-				GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-						PLAY_SERVICES_RESOLUTION_REQUEST).show();
-			} else {
-				Log.i("onResume", "This device is not supported.");
-				finish();
-			}
-			return false;
-		}
+//		final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+//		
+//		int resultCode = GooglePlayServicesUtil
+//				.isGooglePlayServicesAvailable(this);
+//		if (resultCode != ConnectionResult.SUCCESS) {
+//			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+//				GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+//						PLAY_SERVICES_RESOLUTION_REQUEST).show();
+//			} else {
+//				Log.i("onResume", "This device is not supported.");
+//				finish();
+//			}
+//			return false;
+//		}
 		return true;
 	}
 
