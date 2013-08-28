@@ -146,7 +146,7 @@ public class SetStatusDialogFragment extends DialogFragment {
 				rightNow.getMonthOfYear(), rightNow.getDayOfMonth(),
 				rightNow.getHourOfDay(), 0);
 		expirationDate = expirationDate.plusHours(seekBarAvailabilityDuration
-				.getProgress() + 2);
+				.getProgress() + 1);
 
 		return expirationDate;
 	}

@@ -21,9 +21,6 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 		this.context = context;
 		this.intent = intent;
 
-		Log.e("XMPPBroadcastReceiver",
-				"BROADCAST RECEIVER FINALLY CALLED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
 		String myJid = intent.getStringExtra(Keys.JID);
 
 		joinMucs(myJid);

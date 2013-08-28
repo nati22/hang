@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 
@@ -17,6 +19,8 @@ public class StatusIcon extends ImageButton implements OnClickListener {
 	Database db;
 	RestClient restClient;
 	User user;
+	
+	private TextView textViewTimeRemaining;
 
 	public StatusIcon(Context context, Database db, RestClient restClient,
 			User user) {
@@ -45,7 +49,12 @@ public class StatusIcon extends ImageButton implements OnClickListener {
 	}
 
 	public void setup() {
+		// this is where the views inside the statusicon would be initialized
 
+	}
+	
+	public void setAvailabilityColor(Availability.Status color) {
+		
 	}
 
 }

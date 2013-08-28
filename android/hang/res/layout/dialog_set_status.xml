@@ -66,8 +66,8 @@
         android:layout_alignLeft="@+id/textViewAvailabilityDuration"
         android:layout_alignRight="@+id/radioGroupFreeBusy"
         android:layout_below="@+id/textViewAvailabilityDuration"
-        android:max="8"
-        android:progress="1" />
+        android:max="10"
+        android:progress="0" />
     
     <EditText
         android:id="@+id/availabilityText"
