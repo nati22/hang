@@ -105,7 +105,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				notif.flags = Notification.FLAG_AUTO_CANCEL;
 				
 				notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
-			
+
 				
 				Vibrator v = (Vibrator) context
 						.getSystemService(Context.VIBRATOR_SERVICE);

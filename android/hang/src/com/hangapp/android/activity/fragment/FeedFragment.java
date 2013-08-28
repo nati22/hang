@@ -200,18 +200,28 @@ public final class FeedFragment extends SherlockFragment implements
 				holder.textViewAvailabilityExpirationDate.setTypeface(coolvetica);
 
 				convertView.setTag(holder);
+
+				// Populate the Views.
+				holder.profilePictureView.setProfileId(user.getJid());
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			// Populate the Views.
-			holder.profilePictureView.setProfileId(user.getJid());
+			if (!holder.profilePictureView.getProfileId().equals(user.getJid())) {
+				Toast.makeText(
+						context,
+						"prevjid: " + holder.profilePictureView.getProfileId()
+								+ " != newjid: " + user.getJid(), Toast.LENGTH_SHORT)
+						.show();
+				holder.profilePictureView.setProfileId(user.getJid());
+			}
 			holder.textViewFriendName.setText(user.getFullName());
 
 			// Set status text to empty string
 			holder.textViewAvailabilityDescription.setText("");
 			// If the user has an Availability, then show Availability description.
-			if (user.getAvailability() != null) {
+			if (user.getAvailability() != null
+					&& user.getAvailability().isActive()) {
 				if (user.getAvailability().getDescription() != null
 						&& !user.getAvailability().getDescription().equals("null")) {
 					holder.textViewAvailabilityDescription.setText(user
