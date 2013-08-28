@@ -81,6 +81,7 @@ public final class Utils {
 			min = min - 60;
 		}
 
+		Log.i(TAG, hrs + "hrs " + min + " min");
 		if (hrs == 0) {
 			// TODO: Eventually we should add a countdown so we can display
 			if (min < 30) return "<30m";
