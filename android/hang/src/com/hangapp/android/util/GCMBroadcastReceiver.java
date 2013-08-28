@@ -115,6 +115,8 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");
+				Log.e(TAG, "intent.toString() " + intent.getExtras().toString());
+				
 			}
 
 		}

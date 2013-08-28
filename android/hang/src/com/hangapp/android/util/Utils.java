@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
+import org.joda.time.Minutes;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -17,12 +18,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.hangapp.android.R;
 
 public final class Utils {
 	public static final String BASE_URL = "http://therealhangapp.appspot.com/rest";
 	public static final String USERS_URL = BASE_URL + "/users";
+	public static final String TAG = "Utils";
 
 	/**
 	 * Returns true IFF this device is connected to the internet, either through
@@ -58,10 +61,42 @@ public final class Utils {
 		}
 
 		String[] arr = str.split(",");
-		
-		// Arrays.asList alone returns a fixed-length list 
+
+		// Arrays.asList alone returns a fixed-length list
 		// so we need to return it as a new ArrayList
 		return new ArrayList<String>(Arrays.asList(arr));
+	}
+
+	public static String getAbbvRemainingTimeString(DateTime expirationDate) {
+		DateTime rightNow = new DateTime();
+
+		if (expirationDate.isBefore(rightNow))
+			return null;
+
+		int hrs = 0;
+		int min = Minutes.minutesBetween(rightNow, expirationDate).getMinutes();
+		
+		while (min >= 60) {
+			hrs++;
+			min = min - 60;
+		}
+
+		if (hrs == 0) {
+			// TODO: Eventually we should add a countdown so we can display
+			if (min < 30) return "<30m";
+			return "<1h";
+		} else if (min < 30) {
+			Log.i(TAG, "< 30 min past the hr, posting " + hrs);
+			return hrs + "h";
+		} else if (min >= 30) {
+			Log.i(TAG, "> 30 min past the hr, posting " + (hrs + 1));
+			hrs++;
+			return hrs + "h";
+		} else {
+			Log.e(TAG, hrs + " hrs " + min + " min");
+			return null;
+		}
+
 	}
 
 	public static int getRemainingHours(DateTime expirationDate) {
@@ -75,8 +110,7 @@ public final class Utils {
 	}
 
 	public static void showNotification(Context context, String title,
-			String notificationString, Class<?> activityToOpen,
-			int notificationId) {
+			String notificationString, Class<?> activityToOpen, int notificationId) {
 		Intent nudgeIntent = new Intent(context, activityToOpen);
 
 		NotificationManager notifMgr = (NotificationManager) context

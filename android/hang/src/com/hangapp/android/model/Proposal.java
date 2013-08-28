@@ -2,6 +2,7 @@ package com.hangapp.android.model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
@@ -127,7 +128,18 @@ public final class Proposal {
 	}
 
 	public boolean isActive() {
-		return false;
+		//TODO: For now, Proposals expire after 2 hours.
+		
+		int minLeft = 0;
+		long diff = startTime.toDate().getTime()
+				- new Date().getTime();
+		int min = (int) (diff / (60 * 1000));
+		
+		if (min < 120) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public static boolean descriptionIsValid(String proposalDescription) {

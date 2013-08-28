@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -203,65 +204,69 @@ public final class FeedFragment extends SherlockFragment implements
 				holder.textViewAvailabilityExpirationDate.setTypeface(coolvetica);
 
 				convertView.setTag(holder);
-
-				// Populate the Views.
-				holder.profilePictureView.setProfileId(user.getJid());
+				Log.i("holder", "cell for " + user.getFirstName() + " == null");
 			} else {
 				holder = (ViewHolder) convertView.getTag();
+				Log.i("holder", "cell for " + user.getFirstName() + " != null");
 			}
 
-			if (!holder.profilePictureView.getProfileId().equals(user.getJid())) {
-				Log.d("FriendsFragment.getView",
-						holder.profilePictureView.getProfileId() + " != newjid: "
-								+ user.getJid());
-			}
+			holder.profilePictureView.setProfileId(user.getJid());
+
 			holder.textViewFriendName.setText(user.getFullName());
 
-			// Set status text to empty string
-			holder.textViewAvailabilityDescription.setText("");
-			// If the user has an Availability, then show Availability description.
-			if (user.getAvailability() != null
-					&& user.getAvailability().isActive()) {
-				if (user.getAvailability().getDescription() != null
-						&& !user.getAvailability().getDescription().equals("null")) {
-					holder.textViewAvailabilityDescription.setText(user
-							.getAvailability().getDescription());
-				}
-				Log.v("FeedFragment.getView", user.getFirstName()
-						+ " has no Availability description");
-			} else {
-				Log.v("FeedFragment.getView", user.getFirstName()
-						+ " has no Availability");
-			}
+			// Check if the user has an Availability..
+			if (user.getAvailability() != null) {
 
-			// Set the user's status icon based on his Availability.
-			if (user.getAvailability() == null
-					|| user.getAvailability().getStatus() == null) {
+				// Check if their status is active
+				if (user.getAvailability().isActive()) {
+
+					// Set description if it's there
+					if (user.getAvailability().getDescription() != null
+							&& !user.getAvailability().getDescription().equals("null")) {
+						holder.textViewAvailabilityDescription.setText(user
+								.getAvailability().getDescription());
+					}
+
+					// Set availability button
+					if (user.getAvailability().getStatus() == Status.FREE) {
+						holder.imageViewAvailability.setImageDrawable(getResources()
+								.getDrawable(R.drawable.status_green));
+
+						String remainingTime = Utils.getAbbvRemainingTimeString(user
+								.getAvailability().getExpirationDate());
+						holder.textViewAvailabilityExpirationDate
+								.setText(remainingTime);
+					} else if (user.getAvailability().getStatus() == Status.BUSY) {
+						holder.imageViewAvailability.setImageDrawable(getResources()
+								.getDrawable(R.drawable.status_red));
+
+						String remainingTime = Utils.getAbbvRemainingTimeString(user
+								.getAvailability().getExpirationDate());
+						holder.textViewAvailabilityExpirationDate
+								.setText(remainingTime);
+					} else {
+						// Then Status is neither FREE or BUSY
+						Log.e("FeedFragment.getView",
+								"Unknown user availability status: "
+										+ user.getAvailability().getStatus());
+					}
+
+				} else {
+					// Then status has expired
+					holder.imageViewAvailability.setImageDrawable(getResources()
+							.getDrawable(R.drawable.status_grey));
+				}
+
+			} else {
+				// Then the user has a null availability
 				holder.imageViewAvailability.setImageDrawable(getResources()
 						.getDrawable(R.drawable.status_grey));
-				holder.textViewAvailabilityExpirationDate.setText("");
-			} else if (user.getAvailability().getStatus() == Status.FREE) {
-				holder.imageViewAvailability.setImageDrawable(getResources()
-						.getDrawable(R.drawable.status_green));
 
-				int remainingHours = Utils.getRemainingHours(user.getAvailability()
-						.getExpirationDate());
-				holder.textViewAvailabilityExpirationDate.setText(remainingHours
-						+ "h");
-			} else if (user.getAvailability().getStatus() == Status.BUSY) {
-				holder.imageViewAvailability.setImageDrawable(getResources()
-						.getDrawable(R.drawable.status_red));
-
-				int remainingHours = Utils.getRemainingHours(user.getAvailability()
-						.getExpirationDate());
-				holder.textViewAvailabilityExpirationDate.setText(remainingHours
-						+ "h");
-			} else {
-				Log.e("FeedFragment.getView", "Unknown user availability status: "
-						+ user.getAvailability().getStatus());
+				Log.e("FeedFragment", user.getFirstName()
+						+ "'s getAvailability == null");
 			}
 
-			// Make availabiliy icon function as the NUDGE button.
+			// Make availability icon function as the NUDGE button.
 			holder.imageViewAvailability.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -275,11 +280,8 @@ public final class FeedFragment extends SherlockFragment implements
 						DateTime expDateTime = user.getAvailability()
 								.getExpirationDate();
 						DateTime currentDateTime = new DateTime();
-						int hrsLeft = 0;
-						int minLeft = 0;
-						long diff = expDateTime.toDate().getTime()
-								- currentDateTime.toDate().getTime();
-						int min = (int) (diff / (60 * 1000));
+						int min = Minutes.minutesBetween(currentDateTime,
+								expDateTime).getMinutes();
 						int hrs = 0;
 						while (min >= 60) {
 							hrs++;

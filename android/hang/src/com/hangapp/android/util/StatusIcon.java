@@ -44,4 +44,8 @@ public class StatusIcon extends ImageButton implements OnClickListener {
 		}
 	}
 
+	public void setup() {
+
+	}
+
 }
