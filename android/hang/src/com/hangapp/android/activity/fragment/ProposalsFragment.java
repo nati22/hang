@@ -110,7 +110,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-
+		
 		database.addIncomingBroadcastsListener(this);
 		database.addSeenProposalListener(this);
 

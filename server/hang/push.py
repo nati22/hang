@@ -18,7 +18,7 @@ def tickle_users(users, sender):
     # return 
 
 def push_to_user(user, sender, type):
-    data = {'type': type, 'nudger': sender.first_name}
+    data = {'type': type, 'nudger': sender.first_name, 'toFn' : user.first_name, 'toLn' : user.last_name}
 
     gcm = GCM(API_KEY)
 

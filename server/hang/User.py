@@ -215,28 +215,7 @@ class UserRequestHandler(webapp2.RequestHandler):
             # If we couldn't grab the PUT request parameters, then show an error.
             self.response.write('Invalid inputs: Couldn\'t grab the PUT request parameters.\n')
             return
-
-# @db.transactional
-# def addBroadcast(broadcaster, key_broadcaster_jid, broadcastee, key_broadcastee_jid, response):
-#     # Add broadcaster jid to broadcastee's incoming_broadcasts
-#     if key_broadcaster_jid not in broadcastee.incoming_broadcasts:
-#         broadcastee.incoming_broadcasts.append(key_broadcaster_jid)
-#     else: 
-#         response.write("%s is already receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
-#         return
-        
-#     # Add broadcastee jid to broadcaster's outgoing_broadcasts
-#     if key_broadcastee_jid not in broadcaster.outgoing_broadcasts:
-#         broadcaster.outgoing_broadcasts.append(key_broadcastee_jid)
-#     else: 
-#         response.write(json.dumps({"error message": "%s is already broadcasting to %s.\n" % (broadcaster.first_name, broadcastee.first_name)}))
-#         return
-
-#     broadcastee.put()
-#     broadcaster.put()
-
-#     push_to_user(broadcastee, broadcaster, 'new_broadcast')
-        
+       
 class BroadcastRequestHandler(webapp2.RequestHandler):
     def put(self, jid):
         try:

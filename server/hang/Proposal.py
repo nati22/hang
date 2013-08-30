@@ -27,6 +27,7 @@ class ProposalRequestHandler(webapp2.RequestHandler):
 
             # Make list of Users to tickle
             users = []
+
             for broadcastee_key in user.outgoing_broadcasts:
                 users.append(db.get(broadcastee_key))
                 users.append(user)
