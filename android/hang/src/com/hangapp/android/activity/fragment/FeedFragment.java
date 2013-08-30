@@ -221,28 +221,27 @@ public final class FeedFragment extends SherlockFragment implements
 			}
 
 			holder.profilePictureView.setProfileId(user.getJid());
-
 			holder.textViewFriendName.setText(user.getFullName());
 
-			// Check if the user has an Availability..
+			// Reset the description
+			holder.textViewAvailabilityDescription.setText("");
+			
+			// TODO: These sanity checks are already done in the StatusIcon...we should
+			// find a way to consolidate the code (set the desc from the StatusIcon???)
 			if (user.getAvailability() != null) {
-
-				// Check if their status is active
 				if (user.getAvailability().isActive()) {
-
 					// Set description if it's there
 					if (user.getAvailability().getDescription() != null
 							&& !user.getAvailability().getDescription().equals("null")) {
 						holder.textViewAvailabilityDescription.setText(user
 								.getAvailability().getDescription());
-					} else
-						holder.textViewAvailabilityDescription.setText("");
+					}
 				}
 			}
 
 			holder.statusIcon.initialize(context, database, restClient, user,
 					convertView);
-			holder.statusIcon.update(user.getAvailability());
+			holder.statusIcon.setAvailabilityColor(user.getAvailability());
 			holder.statusIcon.setOnClickListener(new OnClickListener() {
 
 				@Override
