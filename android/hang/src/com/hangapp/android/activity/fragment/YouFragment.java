@@ -204,6 +204,10 @@ public final class YouFragment extends SherlockFragment implements
 				|| !myCurrentAvailability.isActive()) {
 			imageButtonMyAvailability.setImageDrawable(getResources().getDrawable(
 					R.drawable.imagebutton_status_grey));
+			
+			String remainingHours = Utils.getAbbvRemainingTimeString(myCurrentAvailability
+					.getExpirationDate());
+			textViewMyAvailabilityExpirationDate.setText(remainingHours);
 			textViewStatus.setVisibility(View.GONE);
 		}
 		// Availability is FREE.
@@ -213,9 +217,9 @@ public final class YouFragment extends SherlockFragment implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
 
-			int remainingHours = Utils.getRemainingHours(myCurrentAvailability
+			String remainingHours = Utils.getAbbvRemainingTimeString(myCurrentAvailability
 					.getExpirationDate());
-			textViewMyAvailabilityExpirationDate.setText(remainingHours + "h");
+			textViewMyAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Availability is BUSY.
 		else if (myCurrentAvailability.getStatus() == Status.BUSY) {
@@ -224,9 +228,9 @@ public final class YouFragment extends SherlockFragment implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
 
-			int remainingHours = Utils.getRemainingHours(myCurrentAvailability
+			String remainingHours = Utils.getAbbvRemainingTimeString(myCurrentAvailability
 					.getExpirationDate());
-			textViewMyAvailabilityExpirationDate.setText(remainingHours + "h");
+			textViewMyAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Error state.
 		else {

@@ -85,7 +85,7 @@ public final class Utils {
 		if (hrs == 0) {
 			// TODO: Eventually we should add a countdown so we can display
 			if (min < 30) return "<30m";
-			return "<1h";
+			return "1h";
 		} else if (min < 30) {
 			Log.i(TAG, "< 30 min past the hr, posting " + hrs);
 			return hrs + "h";

@@ -5,6 +5,7 @@ import org.joda.time.DateTime;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -119,23 +120,34 @@ public class SetStatusDialogFragment extends DialogFragment {
 		Availability.Status status = null;
 
 		switch (radioGroupFreeBusy.getCheckedRadioButtonId()) {
+
 		case R.id.radioButtonFree:
 			status = Status.FREE;
+			Log.i("setStatus", "picked green");
+			Log.i("status", "status = " + status.toString());
 			break;
 		case R.id.radioButtonBusy:
 			status = Status.BUSY;
+			Log.i("setStatus", "picked red");
+
 			break;
 		default:
 			Toast.makeText(getActivity(), "Choose if you're Free or Busy",
 					Toast.LENGTH_LONG).show();
+			Log.i("setStatus", "Toast displayed.");
 			return;
 		}
+
+		Log.i("status", "status = " + status.toString());
 
 		DateTime expirationDate = getExpirationDate();
 
 		Availability newAvailability = new Availability(status, expirationDate, editTextStatus.getText().toString());
 		database.setMyAvailability(newAvailability);
+		Log.i("*******", "avail status = " + newAvailability.getStatus());
+		Log.i("(((((((", "avail status tostring" + newAvailability.getStatus().toString());
 		restClient.updateMyAvailability(newAvailability);
+
 
 		dismiss();
 	}

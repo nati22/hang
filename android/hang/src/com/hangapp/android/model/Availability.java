@@ -148,7 +148,7 @@ public final class Availability implements Comparable<Availability> {
 	 */
 	public boolean isActive() {
 		return expirationDate != null
-				&& Utils.getRemainingHours(expirationDate) > 0;
+				&& expirationDate.isAfter(new DateTime());
 	}
 
 	/**
