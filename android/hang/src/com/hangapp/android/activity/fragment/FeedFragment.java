@@ -274,68 +274,28 @@ public final class FeedFragment extends SherlockFragment implements
 				}
 			});
 
-			/*
-			 * // Check if the user has an Availability.. if
-			 * (user.getAvailability() != null) {
-			 * 
-			 * // Check if their status is active if
-			 * (user.getAvailability().isActive()) {
-			 * 
-			 * // Set description if it's there if
-			 * (user.getAvailability().getDescription() != null &&
-			 * !user.getAvailability().getDescription().equals("null")) {
-			 * holder.textViewAvailabilityDescription.setText(user
-			 * .getAvailability().getDescription()); }
-			 * 
-			 * // Set availability button if (user.getAvailability().getStatus() ==
-			 * Status.FREE) {
-			 * holder.imageViewAvailability.setImageDrawable(getResources()
-			 * .getDrawable(R.drawable.status_green));
-			 * 
-			 * String remainingTime = Utils.getAbbvRemainingTimeString(user
-			 * .getAvailability().getExpirationDate());
-			 * holder.textViewAvailabilityExpirationDate .setText(remainingTime); }
-			 * else if (user.getAvailability().getStatus() == Status.BUSY) {
-			 * holder.imageViewAvailability.setImageDrawable(getResources()
-			 * .getDrawable(R.drawable.status_red));
-			 * 
-			 * String remainingTime = Utils.getAbbvRemainingTimeString(user
-			 * .getAvailability().getExpirationDate());
-			 * holder.textViewAvailabilityExpirationDate .setText(remainingTime); }
-			 * else { // Then Status is neither FREE or BUSY
-			 * Log.e("FeedFragment.getView", "Unknown user availability status: " +
-			 * user.getAvailability().getStatus()); }
-			 * 
-			 * } else { // Then status has expired
-			 * holder.imageViewAvailability.setImageDrawable(getResources()
-			 * .getDrawable(R.drawable.status_grey)); }
-			 * 
-			 * } else { // Then the user has a null availability
-			 * holder.imageViewAvailability.setImageDrawable(getResources()
-			 * .getDrawable(R.drawable.status_grey));
-			 * 
-			 * Log.e("FeedFragment", user.getFirstName() +
-			 * "'s getAvailability == null"); }
-			 * 
-			 * // Make availability icon function as the NUDGE button.
-			 * holder.imageViewAvailability.setOnClickListener(new
-			 * OnClickListener() {
-			 * 
-			 * @Override public void onClick(View v) { if
-			 * (!user.getAvailability().isActive()) {
-			 * restClient.sendNudge(user.getJid()); Toast.makeText(context,
-			 * "Sending a nudge to " + user.getFirstName(),
-			 * Toast.LENGTH_SHORT).show(); } else { // Determine hrs and min left
-			 * DateTime expDateTime = user.getAvailability() .getExpirationDate();
-			 * DateTime currentDateTime = new DateTime(); int min =
-			 * Minutes.minutesBetween(currentDateTime, expDateTime).getMinutes();
-			 * int hrs = 0; while (min >= 60) { hrs++; min = min - 60; }
-			 * 
-			 * // Display remaining time to user Toast.makeText( context, hrs +
-			 * " hr" + ((hrs > 1) ? "s " : " ") + min + " min remaining",
-			 * Toast.LENGTH_SHORT).show(); } } });
-			 */
+			final int pos = position;
+			convertView.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					if (user.getProposal() == null) {
+						Toast.makeText(context,
+								"User has no proposal",
+								Toast.LENGTH_SHORT).show(); 
+						return;
+					}
+					Context context = FeedFragment.this.getActivity();
+					User user = incomingBroadcasts.get(pos);
 
+					Intent proposalLeechIntent = new Intent(context,
+							ProfileActivity.class);
+					proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
+					context.startActivity(proposalLeechIntent);
+					
+				}
+			});
+			
 			return convertView;
 		}
 
