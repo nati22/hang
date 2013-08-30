@@ -79,7 +79,7 @@ public class StatusIcon extends ImageButton /* implements OnClickListener */{
 		if (availability == null || availability.getStatus() == null
 				|| availability.getExpirationDate() == null) {
 			this.setImageDrawable(getResources().getDrawable(
-					R.drawable.status_grey));
+					!isPressed ? R.drawable.status_grey : R.drawable.status_grey_pushed));
 			textViewTimeRemaining.setText("0h");
 			Log.e("StatusIcon.setAvailabilityColor",
 					"either availability, its Status, its ExpDate or all are null");
@@ -95,17 +95,16 @@ public class StatusIcon extends ImageButton /* implements OnClickListener */{
 					+ "'s Status is inactive");
 			return;
 		}
-
+		
 		// All seems good, so let's set the status
 		if (availability.getStatus().equals(Status.BUSY)) {
 			this.setImageDrawable(getResources()
-					.getDrawable(R.drawable.status_red));
+					.getDrawable(!isPressed ? R.drawable.status_red : R.drawable.status_red_pushed));
 			String remainingTime = Utils.getAbbvRemainingTimeString(availability
 					.getExpirationDate());
 			textViewTimeRemaining.setText(remainingTime);
 		} else if (availability.getStatus().equals(Status.FREE)) {
-			this.setImageDrawable(getResources().getDrawable(
-					R.drawable.status_green));
+			this.setImageDrawable(getResources().getDrawable(!isPressed ? R.drawable.status_green : R.drawable.status_green_pushed));
 			String remainingTime = Utils.getAbbvRemainingTimeString(availability
 					.getExpirationDate());
 			textViewTimeRemaining.setText(remainingTime);
@@ -116,4 +115,23 @@ public class StatusIcon extends ImageButton /* implements OnClickListener */{
 		}
 	}
 
+	private boolean isPressed = false;
+
+	/**
+	 * This allows the user to set the availability with an initially pressed
+	 * state.
+	 * 
+	 * @param availability
+	 * @param isPressed
+	 */
+	public void setAvailabilityColor(Availability availability, boolean isPressed) {
+		this.isPressed = isPressed;
+		setAvailabilityColor(availability);
+	}
+	
+	public void setPressed(boolean isPressed) {
+		this.isPressed = isPressed;
+		setAvailabilityColor(user.getAvailability());
+	
+	}
 }

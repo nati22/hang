@@ -95,20 +95,6 @@ public final class FeedFragment extends SherlockFragment implements
 		listViewFriends.setAdapter(adapter);
 		listViewFriends.setEmptyView(view.findViewById(android.R.id.empty));
 
-		// Set OnClickListeners.
-		listViewFriends.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Context context = FeedFragment.this.getActivity();
-				User user = incomingBroadcasts.get(position);
-
-				Intent proposalLeechIntent = new Intent(context,
-						ProfileActivity.class);
-				proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
-				context.startActivity(proposalLeechIntent);
-			}
-		});
 		buttonRefresh.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -184,17 +170,8 @@ public final class FeedFragment extends SherlockFragment implements
 						.findViewById(R.id.textViewFriendName);
 				holder.textViewAvailabilityDescription = (TextView) convertView
 						.findViewById(R.id.textViewAvailabilityDescription);
-				/*
-				 * holder.imageViewAvailability = (ImageView) convertView
-				 * .findViewById(R.id.imageButtonAvailability);
-				 */
 				holder.statusIcon = (StatusIcon) convertView
 						.findViewById(R.id.imageButtonAvailability);
-				/*
-				 * holder.textViewAvailabilityExpirationDate = (TextView)
-				 * convertView
-				 * .findViewById(R.id.textViewAvailabilityExpirationDate);
-				 */
 
 				Typeface champagneLimousinesBold = Typeface.createFromAsset(
 						getActivity().getApplicationContext().getAssets(),
@@ -202,17 +179,11 @@ public final class FeedFragment extends SherlockFragment implements
 				Typeface champagneLimousines = Typeface.createFromAsset(
 						getActivity().getApplicationContext().getAssets(),
 						Fonts.CHAMPAGNE_LIMOUSINES);
-				/*
-				 * Typeface coolvetica = Typeface.createFromAsset(getActivity()
-				 * .getApplicationContext().getAssets(), Fonts.COOLVETICA);
-				 */
 
 				holder.textViewFriendName.setTypeface(champagneLimousinesBold);
 				holder.textViewAvailabilityDescription
 						.setTypeface(champagneLimousines);
-				/*
-				 * holder.textViewAvailabilityExpirationDate.setTypeface(coolvetica);
-				 */
+
 				convertView.setTag(holder);
 				Log.i("holder", "cell for " + user.getFirstName() + " == null");
 			} else {
@@ -225,17 +196,18 @@ public final class FeedFragment extends SherlockFragment implements
 
 			// Reset the description
 			holder.textViewAvailabilityDescription.setText("");
-			
-			// TODO: These sanity checks are already done in the StatusIcon...we should
-			// find a way to consolidate the code (set the desc from the StatusIcon???)
-			if (user.getAvailability() != null) {
-				if (user.getAvailability().isActive()) {
-					// Set description if it's there
-					if (user.getAvailability().getDescription() != null
-							&& !user.getAvailability().getDescription().equals("null")) {
-						holder.textViewAvailabilityDescription.setText(user
-								.getAvailability().getDescription());
-					}
+
+			// TODO: These sanity checks are already done in the StatusIcon...we
+			// should
+			// find a way to consolidate the code (set the desc from the
+			// StatusIcon???)
+			if (user.getAvailability() != null
+					&& user.getAvailability().isActive()) {
+				// Set description if it's there
+				if (user.getAvailability().getDescription() != null
+						&& !user.getAvailability().getDescription().equals("null")) {
+					holder.textViewAvailabilityDescription.setText(user
+							.getAvailability().getDescription());
 				}
 			}
 
@@ -251,14 +223,13 @@ public final class FeedFragment extends SherlockFragment implements
 						Toast.makeText(context,
 								"Sending a nudge to " + user.getFirstName(),
 								Toast.LENGTH_SHORT).show();
+						((StatusIcon)v).setPressed(true);
 					} else {
 						// Determine hrs and min left
-						DateTime expDateTime = user.getAvailability()
-								.getExpirationDate();
-						DateTime currentDateTime = new DateTime();
-						int min = Minutes
-								.minutesBetween(currentDateTime, expDateTime)
+						int min = Minutes.minutesBetween(new DateTime(),
+								user.getAvailability().getExpirationDate())
 								.getMinutes();
+						
 						int hrs = 0;
 						while (min >= 60) {
 							hrs++;
@@ -276,13 +247,12 @@ public final class FeedFragment extends SherlockFragment implements
 
 			final int pos = position;
 			convertView.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					if (user.getProposal() == null) {
-						Toast.makeText(context,
-								"User has no proposal",
-								Toast.LENGTH_SHORT).show(); 
+						Toast.makeText(context, "User has no proposal",
+								Toast.LENGTH_SHORT).show();
 						return;
 					}
 					Context context = FeedFragment.this.getActivity();
@@ -292,10 +262,10 @@ public final class FeedFragment extends SherlockFragment implements
 							ProfileActivity.class);
 					proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
 					context.startActivity(proposalLeechIntent);
-					
+
 				}
 			});
-			
+
 			return convertView;
 		}
 
