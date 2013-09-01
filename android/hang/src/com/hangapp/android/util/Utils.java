@@ -71,7 +71,7 @@ public final class Utils {
 		DateTime rightNow = new DateTime();
 
 		if (expirationDate.isBefore(rightNow))
-			return null;
+			return "0h";
 
 		int hrs = 0;
 		int min = Minutes.minutesBetween(rightNow, expirationDate).getMinutes();

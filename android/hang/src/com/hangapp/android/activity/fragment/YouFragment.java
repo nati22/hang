@@ -204,9 +204,9 @@ public final class YouFragment extends SherlockFragment implements
 				|| !myCurrentAvailability.isActive()) {
 			imageButtonMyAvailability.setImageDrawable(getResources().getDrawable(
 					R.drawable.imagebutton_status_grey));
-			
-			String remainingHours = Utils.getAbbvRemainingTimeString(myCurrentAvailability
-					.getExpirationDate());
+			String remainingHours = Utils
+					.getAbbvRemainingTimeString(myCurrentAvailability
+							.getExpirationDate());
 			textViewMyAvailabilityExpirationDate.setText(remainingHours);
 			textViewStatus.setVisibility(View.GONE);
 		}
@@ -217,8 +217,9 @@ public final class YouFragment extends SherlockFragment implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
 
-			String remainingHours = Utils.getAbbvRemainingTimeString(myCurrentAvailability
-					.getExpirationDate());
+			String remainingHours = Utils
+					.getAbbvRemainingTimeString(myCurrentAvailability
+							.getExpirationDate());
 			textViewMyAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Availability is BUSY.
@@ -228,8 +229,9 @@ public final class YouFragment extends SherlockFragment implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(myCurrentAvailability.getDescription());
 
-			String remainingHours = Utils.getAbbvRemainingTimeString(myCurrentAvailability
-					.getExpirationDate());
+			String remainingHours = Utils
+					.getAbbvRemainingTimeString(myCurrentAvailability
+							.getExpirationDate());
 			textViewMyAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Error state.
@@ -287,11 +289,11 @@ public final class YouFragment extends SherlockFragment implements
 			fragmentTransaction.commit();
 		} else {
 			Log.d("", "myProposal != null");
-			
+
 			// Try to get an already existing MyProposalFragment
 			MyProposalFragment preexistingFragment = (MyProposalFragment) fragmentManager
 					.findFragmentByTag(Keys.MY_PROPOSAL_FRAGMENT_TAG);
-			
+
 			// If the FragmentManager already has a MyProposalFragment
 			if (preexistingFragment != null) {
 				Log.d("", "preexistingFragment != null");
@@ -299,23 +301,22 @@ public final class YouFragment extends SherlockFragment implements
 				if (preexistingFragment.isVisible()) {
 					propChangeListener.notifyAboutProposalChange(proposal);
 				} else {
-					fragmentTransaction.replace(R.id.frameLayoutYouFragment, preexistingFragment,
-							Keys.MY_PROPOSAL_FRAGMENT_TAG);
+					fragmentTransaction.replace(R.id.frameLayoutYouFragment,
+							preexistingFragment, Keys.MY_PROPOSAL_FRAGMENT_TAG);
 					fragmentTransaction.commit();
 				}
-				
+
 			} else {
 				MyProposalFragment fragment = new MyProposalFragment();
 				fragmentTransaction.replace(R.id.frameLayoutYouFragment, fragment,
 						Keys.MY_PROPOSAL_FRAGMENT_TAG);
 				fragmentTransaction.commit();
 			}
-			
+
 			// Pass in the proposal here
 			propChangeListener.notifyAboutProposalChange(myProposal);
 		}
 
-		
 	}
 
 }
