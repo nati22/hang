@@ -2,6 +2,7 @@ package com.hangapp.android.activity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.jivesoftware.smack.packet.Message;
 
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -301,11 +303,11 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		linLayout.removeAllViews();
 
 		for (int i = 0; i < jids.size(); i++) {
-			String jid = jids.get(i);
+			final String jid = jids.get(i);
 
 			// Get the cell
 			View view = LayoutInflater.from(this).inflate(
-					R.layout.cell_profile_icon, null);
+					R.layout.cell_profile_icon_mini, null);
 
 			// Set the FB Profile pic
 			ProfilePictureView icon = (ProfilePictureView) view
@@ -313,11 +315,48 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 			Log.i(ProposalFragment.class.getSimpleName(),
 					"Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
+			icon.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					String fn;
+					// Check if it's me
+					if (myJid.equals(jid)) {
+						// TODO: This is 100% pointless and should be removed :)
+						switch (new Random().nextInt(2)) {
+						case 0:
+							Toast.makeText(getApplicationContext(), "Look familiar?",
+									Toast.LENGTH_SHORT).show();
+							return;
+						default:
+							Toast.makeText(getApplicationContext(), "Guess who?",
+									Toast.LENGTH_SHORT).show();
+						}
+
+					} else if (database.getIncomingUser(jid) != null) {
+						// Then this is someone broadcasting to me
+						Toast.makeText(getApplicationContext(),
+								"It's " + database.getIncomingUser(jid).getFirstName(),
+								Toast.LENGTH_SHORT).show();
+					} else if (database.getOutgoingUser(jid) != null) {
+						// Then this is someone I'm broadcasting to
+						Toast.makeText(getApplicationContext(),
+								"It's " + database.getOutgoingUser(jid).getFirstName(),
+								Toast.LENGTH_SHORT).show();
+					} else {
+						// This is a stranger to me
+						Toast.makeText(
+								getApplicationContext(),
+								database.getIncomingUser(mucName).getFirstName()
+										+ "'s friend", Toast.LENGTH_SHORT).show();
+					}
+
+				}
+			});
 
 			linLayout.addView(view);
 
 		}
 
 	}
-
 }

@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.facebook.widget.ProfilePictureView
+<!--     <com.facebook.widget.ProfilePictureView
         android:id="@+id/profilePictureViewMessageFrom"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentLeft="true" >
-    </com.facebook.widget.ProfilePictureView>
+    </com.facebook.widget.ProfilePictureView> -->
 
     <TextView
         android:id="@+id/textViewMessageBody2"
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/profilePictureViewMessageFrom"
+        android:layout_marginLeft="2dp"
         android:text="(message from)"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/blue_muc_chat"

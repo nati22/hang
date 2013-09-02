@@ -395,10 +395,6 @@ public final class Database {
 			return null;
 		}
 
-		Log.i("getIncomingUser", "user " + library.get(jid).getFirstName()
-				+ " has " + library.get(jid).getProposal().getInterested().size()
-				+ " interested");
-
 		return library.get(jid);
 	}
 

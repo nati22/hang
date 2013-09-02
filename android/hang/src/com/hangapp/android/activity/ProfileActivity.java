@@ -58,7 +58,7 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
-/*	private CheckBox checkBoxInterested;*/
+	/* private CheckBox checkBoxInterested; */
 	private TextView textViewProposalInterestedCount;
 	// private HorizontalScrollView horizontalScrollViewInterestedUsers;
 	// private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
@@ -111,9 +111,10 @@ public final class ProfileActivity extends BaseActivity implements
 		textViewProposalLocation = (TextView) findViewById(R.id.textViewMyProposalLocation);
 		textViewProposalStartTime = (TextView) findViewById(R.id.textViewMyProposalStartTime);
 		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
-/*		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
-*/		// horizontalScrollViewInterestedUsers = (HorizontalScrollView)
-		// findViewById(R.id.horizontalScrollViewInterestedUsers);
+		/*
+		 * checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
+		 */// horizontalScrollViewInterestedUsers = (HorizontalScrollView)
+			// findViewById(R.id.horizontalScrollViewInterestedUsers);
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterested);
 
 		// Set OnClickListeners.
@@ -127,32 +128,22 @@ public final class ProfileActivity extends BaseActivity implements
 			}
 		});
 
-/*		// If User is Interested/Confirmed, check the appropriate ToggleButton
-		if (friend.getProposal() != null) {
-			if (friend.getProposal().getInterested() != null) {
-				if (friend.getProposal().getInterested()
-						.contains(database.getMyJid()))
-					checkBoxInterested.setChecked(true);
-			}
-		}
-
-		// Set CheckBox.
-		checkBoxInterested
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
-						// Add yourself to the Interested list of this user.
-						if (isChecked) {
-							addMeToHostInterestedList();
-						}
-						// Remove yourself from the Interested list of this
-						// user.
-						else {
-							removeMeFromHostInterestedList();
-						}
-					}
-				});*/
+		/*
+		 * // If User is Interested/Confirmed, check the appropriate ToggleButton
+		 * if (friend.getProposal() != null) { if
+		 * (friend.getProposal().getInterested() != null) { if
+		 * (friend.getProposal().getInterested() .contains(database.getMyJid()))
+		 * checkBoxInterested.setChecked(true); } }
+		 * 
+		 * // Set CheckBox. checkBoxInterested .setOnCheckedChangeListener(new
+		 * OnCheckedChangeListener() {
+		 * 
+		 * @Override public void onCheckedChanged(CompoundButton buttonView,
+		 * boolean isChecked) { // Add yourself to the Interested list of this
+		 * user. if (isChecked) { addMeToHostInterestedList(); } // Remove
+		 * yourself from the Interested list of this // user. else {
+		 * removeMeFromHostInterestedList(); } } });
+		 */
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -257,18 +248,21 @@ public final class ProfileActivity extends BaseActivity implements
 			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
 					.toString("h:mm aa"));
 
-/*			// Set "my" interested checkbox
-			if (friend.getProposal().getInterested() != null) {
-				if (friend.getProposal().getInterested()
-						.contains(database.getMyJid()))
-					checkBoxInterested.setChecked(true);
-			}*/
+			/*
+			 * // Set "my" interested checkbox if
+			 * (friend.getProposal().getInterested() != null) { if
+			 * (friend.getProposal().getInterested()
+			 * .contains(database.getMyJid())) checkBoxInterested.setChecked(true);
+			 * }
+			 */
 
 			// Refresh list
 			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 
-			// Add this proposal to the Users list of "seen proposals" //TODO: optimize O(n)
-			if (friend.getProposal() != null && !database.getMySeenProposals().contains(friend.getJid())) {
+			// Add this proposal to the Users list of "seen proposals" //TODO:
+			// optimize O(n)
+			if (friend.getProposal() != null
+					&& !database.getMySeenProposals().contains(friend.getJid())) {
 				database.addSeenProposal(friend.getJid());
 				restClient.setSeenProposal(friend.getJid());
 				Log.i("ProfileActivity",
@@ -309,6 +303,15 @@ public final class ProfileActivity extends BaseActivity implements
 			Log.i(ProposalFragment.class.getSimpleName(),
 					"Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
+			icon.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Toast.makeText(getApplicationContext(), "hey",
+							Toast.LENGTH_SHORT).show();
+
+				}
+			});
 
 			linLayout.addView(view);
 

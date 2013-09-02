@@ -9,102 +9,26 @@
         android:layout_height="1dp"
         android:layout_below="@+id/horizontalScrollViewInterestedUsers"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="1dp"
-        android:layout_marginTop="1dp"
-        android:background="@android:color/darker_gray" />
+        android:background="@android:color/black" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollViewInterestedUsersChat"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/profile_picture_width"
-        android:layout_below="@+id/textViewMyProposalStartTime"
-        android:layout_marginTop="5dp" >
+        android:layout_below="@+id/separatorRosterFromChat"
+
+        android:background="@color/grey_dark_background" >
 
         <LinearLayout
             android:id="@+id/linearLayoutInterestedChat"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/grey_dark_background"
+            android:gravity="center_vertical"
+                    android:paddingBottom="2dp"
             android:orientation="horizontal" >
         </LinearLayout>
     </HorizontalScrollView>
-
-    <!--
-    <HorizontalScrollView
-        android:id="@+id/horizontalScrollViewInterestedUsers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true" >
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" >
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/imageViewStatus3"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" />
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/imageViewStatus2"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" />
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/buttonRoster"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" />
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/imageViewStatus4"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/imageViewStatus5"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/imageViewStatus6"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/imageViewStatus7"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" >
-            </com.facebook.widget.ProfilePictureView>
-
-            <com.facebook.widget.ProfilePictureView
-                android:id="@+id/imageViewStatus8"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/roster"
-                android:contentDescription="@string/roster" >
-            </com.facebook.widget.ProfilePictureView>
-        </LinearLayout>
-    </HorizontalScrollView>
-    -->
 
     <ListView
         android:id="@+id/listViewChatCells"
