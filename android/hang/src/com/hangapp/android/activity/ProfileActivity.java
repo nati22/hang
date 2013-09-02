@@ -54,11 +54,11 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewFriendsAvailabilityExpirationDate;
 	private TextView textViewStatus;
 	private RelativeLayout relativeLayoutFriendsProposal;
-	private ImageView imageViewChat;
+	private ImageView imageViewOpenChat;
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
-	private CheckBox checkBoxInterested;
+/*	private CheckBox checkBoxInterested;*/
 	private TextView textViewProposalInterestedCount;
 	// private HorizontalScrollView horizontalScrollViewInterestedUsers;
 	// private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
@@ -106,18 +106,18 @@ public final class ProfileActivity extends BaseActivity implements
 		textViewFriendsAvailabilityExpirationDate = (TextView) findViewById(R.id.textViewFriendsAvailabilityExpirationDate);
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
 		relativeLayoutFriendsProposal = (RelativeLayout) findViewById(R.id.relativeLayoutFriendsProposal);
-		imageViewChat = (ImageView) findViewById(R.id.imageViewChat);
+		imageViewOpenChat = (ImageView) findViewById(R.id.imageViewChat);
 		textViewProposalDescription = (TextView) findViewById(R.id.textViewMyProposalDescription);
 		textViewProposalLocation = (TextView) findViewById(R.id.textViewMyProposalLocation);
 		textViewProposalStartTime = (TextView) findViewById(R.id.textViewMyProposalStartTime);
 		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
-		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
-		// horizontalScrollViewInterestedUsers = (HorizontalScrollView)
+/*		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
+*/		// horizontalScrollViewInterestedUsers = (HorizontalScrollView)
 		// findViewById(R.id.horizontalScrollViewInterestedUsers);
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterested);
 
 		// Set OnClickListeners.
-		imageViewChat.setOnClickListener(new OnClickListener() {
+		imageViewOpenChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent chatActivityIntent = new Intent(ProfileActivity.this,
@@ -127,7 +127,7 @@ public final class ProfileActivity extends BaseActivity implements
 			}
 		});
 
-		// If User is Interested/Confirmed, check the appropriate ToggleButton
+/*		// If User is Interested/Confirmed, check the appropriate ToggleButton
 		if (friend.getProposal() != null) {
 			if (friend.getProposal().getInterested() != null) {
 				if (friend.getProposal().getInterested()
@@ -152,7 +152,7 @@ public final class ProfileActivity extends BaseActivity implements
 							removeMeFromHostInterestedList();
 						}
 					}
-				});
+				});*/
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -257,12 +257,12 @@ public final class ProfileActivity extends BaseActivity implements
 			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
 					.toString("h:mm aa"));
 
-			// Set "my" interested checkbox
+/*			// Set "my" interested checkbox
 			if (friend.getProposal().getInterested() != null) {
 				if (friend.getProposal().getInterested()
 						.contains(database.getMyJid()))
 					checkBoxInterested.setChecked(true);
-			}
+			}*/
 
 			// Refresh list
 			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());

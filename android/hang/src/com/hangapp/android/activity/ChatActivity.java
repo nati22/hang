@@ -13,13 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.fragment.ProposalFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.User;
+import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.model.callback.MucListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.xmpp.XMPP;
@@ -41,7 +46,8 @@ import com.hangapp.android.util.Keys;
  * The JID of an MUC (the MUC's name) is always the JID of the user who owns
  * that Proposal.
  */
-public final class ChatActivity extends BaseActivity implements MucListener {
+public final class ChatActivity extends BaseActivity implements MucListener,
+		IncomingBroadcastsListener {
 
 	// UI widgets.
 	private EditText editTextChatMessage;
@@ -51,6 +57,9 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 	// Member datum.
 	private String mucName;
 	private List<Message> messages = new ArrayList<Message>();
+	private String myJid;
+	private LinearLayout linLayoutInterested;
+	private List<String> listInterestedJids = new ArrayList<String>();
 
 	// Dependencies.
 	private Database database;
@@ -80,12 +89,13 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 		}
 
 		// Join the Muc.
-		String myJid = database.getMyJid();
+		myJid = database.getMyJid();
 		xmpp.joinMuc(mucName, myJid);
 
 		// Reference Views.
 		editTextChatMessage = (EditText) findViewById(R.id.editTextChatMessage);
 		listViewChatCells = (ListView) findViewById(R.id.listViewChatCells);
+		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterestedChat);
 
 		// Setup adapter.
 		adapter = new MessageAdapter(this, R.id.listViewChatCells);
@@ -99,12 +109,18 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 		// "Subscribe" this activity to new MUC messages.
 		xmpp.addMucListener(mucName, this);
 
+		// Setup listener
+		database.addIncomingBroadcastsListener(this);
+
 		// Clear out the member datum list of messages for this Activity.
 		messages.clear();
 
 		// Then, grab the cached messages for this MUC from SQLite.
 		List<Message> mucMessages = xmpp.getAllMessages(mucName);
 		messages.addAll(mucMessages);
+
+		// Refresh list
+		onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 
 		// Notify data set changed.
 		adapter.notifyDataSetChanged();
@@ -114,8 +130,11 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 	protected void onPause() {
 		super.onPause();
 
-//		// Leave the MUC.
-//		xmpp.leaveMuc(mucName);
+		// Remove listener
+		database.removeIncomingBroadcastsListener(this);
+
+		// // Leave the MUC.
+		// xmpp.leaveMuc(mucName);
 
 		// "Unsubscribe" this activity from new MUC messages.
 		xmpp.removeMucListener(mucName, this);
@@ -150,14 +169,16 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
-			String fromJid = message.getFrom().substring(message.getFrom().indexOf(".com/") + 5);
+			String fromJid = message.getFrom().substring(
+					message.getFrom().indexOf(".com/") + 5);
 			String from;
-			if (database.getOutgoingUser(fromJid) != null) {
-				from = database.getOutgoingUser(fromJid).getFullName();
-			} else if (database.getMyJid().equals(fromJid)) {
+			if (database.getMyJid().equals(fromJid)) {
 				from = "Me";
-			} else from = "User#" + fromJid;
-			
+			} else if (database.getOutgoingUser(fromJid) != null) {
+				from = database.getOutgoingUser(fromJid).getFullName();
+			} else
+				from = "User#" + fromJid;
+
 			// TODO: Grab the real name of the "from" from the internal
 			// database.
 			// String userJid = from.split("@")[0];
@@ -187,8 +208,8 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 	@Override
 	public void onMucMessageUpdate(String mucName, final List<Message> messages) {
 		for (Message message : messages) {
-			Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "
-					+ message.getBody());
+			Log.i("ChatActivity.onMucMessageUpdate",
+					"Got muc message: " + message.getBody());
 		}
 
 		this.messages.clear();
@@ -200,18 +221,103 @@ public final class ChatActivity extends BaseActivity implements MucListener {
 				listViewChatCells.setSelection(listViewChatCells.getCount() - 1);
 			}
 		});
-				
+
 		scrollMyListViewToBottom();
 	}
-	
+
 	private void scrollMyListViewToBottom() {
-	    listViewChatCells.post(new Runnable() {
-	        @Override
-	        public void run() {
-	            // Select the last row so it will scroll into view...
-	            listViewChatCells.setSelection(adapter.getCount() - 1);
-	        }
-	    });
+		listViewChatCells.post(new Runnable() {
+			@Override
+			public void run() {
+				// Select the last row so it will scroll into view...
+				listViewChatCells.setSelection(adapter.getCount() - 1);
+			}
+		});
+	}
+
+	@Override
+	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
+
+		// If this is the user's own chat
+		if (myJid.equals(mucName)) {
+
+			// Check if my interested list has been updated
+			if (!database.getMyProposal().getInterested()
+					.equals(listInterestedJids)) {
+				listInterestedJids.clear();
+				listInterestedJids.addAll(database.getMyProposal().getInterested());
+
+				// Update horizontal list
+				updateHorizontalList(listInterestedJids, linLayoutInterested);
+			}
+
+		} else if (incomingBroadcasts.contains(database.getIncomingUser(mucName))) {
+			// Then this is one of the User's broadcasters chats
+			Log.i("ChatActivity.onIncomingBroadcastsUpdate()", "this is "
+					+ database.getIncomingUser(mucName).getFirstName() + "'s chat");
+
+			// Check if their interested list has been updated
+			if (!database.getIncomingUser(mucName).getProposal().getInterested()
+					.equals(listInterestedJids)) {
+				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
+						"their original interested list read: "
+								+ listInterestedJids.toString());
+
+				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
+						"that list is being replaced with: "
+								+ database.getIncomingUser(mucName).getProposal()
+										.getInterested().toString());
+				listInterestedJids.clear();
+				listInterestedJids.addAll(database.getIncomingUser(mucName)
+						.getProposal().getInterested());
+
+				// Update horizontal list
+				updateHorizontalList(listInterestedJids, linLayoutInterested);
+			} else {
+				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
+						"their list hasn't changed: " + listInterestedJids.toString());
+			}
+
+		} else {
+			Log.e("ChatActivity.onIncomingBroadcastsUpdate()", "myJid = " + myJid);
+			Log.e("ChatActivity.onIncomingBroadcastsUpdate()", "mucName = "
+					+ mucName);
+			Log.e("ChatActivity.onIncomingBroadcastsUpdate()",
+					"incomingBroadcasts.toString() = "
+							+ incomingBroadcasts.toString());
+			Toast.makeText(getApplicationContext(),
+					"There was an error opening this chat", Toast.LENGTH_SHORT)
+					.show();
+			this.finish();
+		}
+	}
+
+	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
+		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
+				+ " elements");
+
+		Log.i(ProposalFragment.class.getSimpleName(),
+				"removed " + linLayout.getChildCount() + " elements from linLayout");
+		linLayout.removeAllViews();
+
+		for (int i = 0; i < jids.size(); i++) {
+			String jid = jids.get(i);
+
+			// Get the cell
+			View view = LayoutInflater.from(this).inflate(
+					R.layout.cell_profile_icon, null);
+
+			// Set the FB Profile pic
+			ProfilePictureView icon = (ProfilePictureView) view
+					.findViewById(R.id.profilePictureIcon);
+			Log.i(ProposalFragment.class.getSimpleName(),
+					"Creating fb icon with jid " + jid);
+			icon.setProfileId(jid);
+
+			linLayout.addView(view);
+
+		}
+
 	}
 
 }

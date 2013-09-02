@@ -14,6 +14,22 @@
         android:background="@android:color/darker_gray" />
 
     <HorizontalScrollView
+        android:id="@+id/horizontalScrollViewInterestedUsersChat"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/profile_picture_width"
+        android:layout_below="@+id/textViewMyProposalStartTime"
+        android:layout_marginTop="5dp" >
+
+        <LinearLayout
+            android:id="@+id/linearLayoutInterestedChat"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!--
+    <HorizontalScrollView
         android:id="@+id/horizontalScrollViewInterestedUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,6 +104,7 @@
             </com.facebook.widget.ProfilePictureView>
         </LinearLayout>
     </HorizontalScrollView>
+    -->
 
     <ListView
         android:id="@+id/listViewChatCells"
@@ -95,7 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editTextChatMessage"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/horizontalScrollViewInterestedUsers"
+        android:layout_below="@+id/horizontalScrollViewInterestedUsersChat"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll" >
     </ListView>
