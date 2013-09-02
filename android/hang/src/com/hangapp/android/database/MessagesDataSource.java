@@ -49,19 +49,23 @@ public final class MessagesDataSource {
 	 * @return
 	 */
 	public boolean createMessage(String mucName, Message message) {
-		ContentValues values = new ContentValues();
-		values.put(MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID,
-				message.getPacketID());
-		values.put(MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME, mucName);
-		values.put(MySQLiteHelper.COLUMN_MESSAGE_FROM, message.getFrom());
-		values.put(MySQLiteHelper.COLUMN_MESSAGE_BODY, message.getBody());
-
 		boolean success = false;
+
 		try {
-			success = database.insert(MySQLiteHelper.TABLE_MESSAGES, null,
-					values) != -1;
+			ContentValues values = new ContentValues();
+			values.put(MySQLiteHelper.COLUMN_MESSAGE_PACKET_ID,
+					message.getPacketID());
+			values.put(MySQLiteHelper.COLUMN_MESSAGE_MUC_NAME, mucName);
+			values.put(MySQLiteHelper.COLUMN_MESSAGE_FROM, message.getFrom());
+			values.put(MySQLiteHelper.COLUMN_MESSAGE_BODY, message.getBody());
+
+			success = database.insertOrThrow(MySQLiteHelper.TABLE_MESSAGES,
+					null, values) != -1;
 		} catch (Exception e) {
-			Log.e("MessagesDataSource.createMessage", e.getMessage());
+			Log.v("MessagesDataSource.createMessage",
+					"Did not insert message \""
+							+ message.getBody()
+							+ "\" into SQLite. Packet ID probably already existed in SQLite table.");
 		}
 
 		return success;

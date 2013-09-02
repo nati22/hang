@@ -21,6 +21,9 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 		this.context = context;
 		this.intent = intent;
 
+		Log.i("XMPPBroadcastReceiver.onReceive()",
+				"XMPP Broadcast Receiver started.");
+
 		String myJid = intent.getStringExtra(Keys.JID);
 
 		joinMucs(myJid);
@@ -39,7 +42,7 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 			// If you try to join the muc without being connected, then
 			// try to
 			// connect again.
-			if (!XMPPIntentService.xmppConnection.isConnected()) {
+			if (!xmpp.xmppConnection.isConnected()) {
 				Log.e("XMPPIntentService.login()", "Can't login: not connected");
 
 				// Not connected, so attempt to connect.
@@ -50,7 +53,7 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 			// If you try to join Mucs without being logged in, then try
 			// to
 			// login again.
-			if (!XMPPIntentService.xmppConnection.isAuthenticated()) {
+			if (!xmpp.xmppConnection.isAuthenticated()) {
 				xmpp.login(myJid, context);
 				return;
 			}
@@ -59,6 +62,8 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 			boolean didJoinMuc = xmpp.joinMuc(mucToJoin, myJid);
 
 			if (didJoinMuc) {
+				Log.i("XMPPBroadcastReceiver#joinMucs()", "XMPP joined muc"
+						+ mucToJoin);
 				mucsToJoinIterator.remove();
 			}
 		}

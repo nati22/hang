@@ -1,13 +1,11 @@
 package com.hangapp.android.activity;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +20,6 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.MyProposalFragment;
@@ -36,7 +32,6 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.network.xmpp.XMPP;
-import com.hangapp.android.network.xmpp.XMPPBroadcastReceiver;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
@@ -68,9 +63,6 @@ public final class HomeActivity extends BaseActivity implements
 	private Database database;
 	private RestClient restClient;
 	private XMPP xmpp;
-
-	// TODO: Remove me.
-	XMPPBroadcastReceiver xmppBroadcastReceiver;
 
 	// Facebook SDK member variables.
 	private UiLifecycleHelper uiHelper;
@@ -134,19 +126,6 @@ public final class HomeActivity extends BaseActivity implements
 		if (savedInstanceState != null) {
 			bar.setSelectedNavigationItem(savedInstanceState.getInt("tab", 0));
 		}
-
-//		// Register XMPPBroadcastReceiver.
-//		// TODO: Move me to the correct location.
-//		IntentFilter filter = new IntentFilter(
-//				XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER);
-//		filter.addCategory(Intent.CATEGORY_DEFAULT);
-//		registerReceiver(xmppBroadcastReceiver, filter);
-
-//		LocalBroadcastManager.getInstance(this)
-//				.registerReceiver(
-//						xmppBroadcastReceiver,
-//						new IntentFilter(
-//								XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER));
 
 	}
 
@@ -262,20 +241,20 @@ public final class HomeActivity extends BaseActivity implements
 	 * Google Play Store or enable it in the device's system settings.
 	 */
 	private boolean checkPlayServices() {
-//		final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-//		
-//		int resultCode = GooglePlayServicesUtil
-//				.isGooglePlayServicesAvailable(this);
-//		if (resultCode != ConnectionResult.SUCCESS) {
-//			if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-//				GooglePlayServicesUtil.getErrorDialog(resultCode, this,
-//						PLAY_SERVICES_RESOLUTION_REQUEST).show();
-//			} else {
-//				Log.i("onResume", "This device is not supported.");
-//				finish();
-//			}
-//			return false;
-//		}
+		// final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+		//
+		// int resultCode = GooglePlayServicesUtil
+		// .isGooglePlayServicesAvailable(this);
+		// if (resultCode != ConnectionResult.SUCCESS) {
+		// if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+		// GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+		// PLAY_SERVICES_RESOLUTION_REQUEST).show();
+		// } else {
+		// Log.i("onResume", "This device is not supported.");
+		// finish();
+		// }
+		// return false;
+		// }
 		return true;
 	}
 

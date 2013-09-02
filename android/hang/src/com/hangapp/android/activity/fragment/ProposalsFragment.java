@@ -41,10 +41,29 @@ public class ProposalsFragment extends SherlockFragment implements
 	private ProposalsAdapter adapter;
 
 	// Member datum.
-	private ArrayList<SeeableUser> incomingBroadcasts = new ArrayList<SeeableUser>();
+	private ArrayList<UserWithSeenState> incomingBroadcasts = new ArrayList<UserWithSeenState>();
 
 	// Dependencies.
 	private Database database;
+
+	private static class UserWithSeenState extends User {
+
+		public UserWithSeenState(User user) {
+			super(user.getJid(), user.getFirstName(), user.getLastName());
+			super.setAvailability(user.getAvailability());
+			super.setProposal(user.getProposal());
+		}
+
+		public UserWithSeenState(String jid, String firstName, String lastName) {
+			super(jid, firstName, lastName);
+		}
+
+		public UserWithSeenState(Parcel in) {
+			super(in);
+		}
+
+		public boolean seen = false;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -55,7 +74,7 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		// Reload the incoming broadcasts from savedInstanceState.
 		if (savedInstanceState != null) {
-			ArrayList<SeeableUser> savedIncomingBroadcasts = savedInstanceState
+			ArrayList<UserWithSeenState> savedIncomingBroadcasts = savedInstanceState
 					.getParcelableArrayList(Keys.FRIENDS);
 			incomingBroadcasts.clear();
 			incomingBroadcasts.addAll(savedIncomingBroadcasts);
@@ -110,7 +129,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 		database.addIncomingBroadcastsListener(this);
 		database.addSeenProposalListener(this);
 
@@ -130,13 +149,13 @@ public class ProposalsFragment extends SherlockFragment implements
 	}
 
 	private static class ProposalsAdapter extends BaseAdapter {
-		private List<SeeableUser> friends;
+		private List<UserWithSeenState> friends;
 		private LayoutInflater inflater;
 		private Context context;
 		private Database database;
 
-		public ProposalsAdapter(Context context, List<SeeableUser> friends,
-				Database database) {
+		public ProposalsAdapter(Context context,
+				List<UserWithSeenState> friends, Database database) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
 			this.friends = friends;
@@ -162,13 +181,13 @@ public class ProposalsFragment extends SherlockFragment implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 
-			final SeeableUser seenUser = friends.get(position);
+			final UserWithSeenState seenUser = friends.get(position);
 
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.cell_proposals_fragment,
-						null);
+				convertView = inflater.inflate(
+						R.layout.cell_proposals_fragment, null);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
@@ -235,8 +254,9 @@ public class ProposalsFragment extends SherlockFragment implements
 			// TextView.
 			final int numberOfUsersInterested = seenUser.getProposal()
 					.getInterested().size();
-			final String interestedString = String.format(context.getResources()
-					.getString(R.string.count_interested), numberOfUsersInterested);
+			final String interestedString = String.format(context
+					.getResources().getString(R.string.count_interested),
+					numberOfUsersInterested);
 			holder.textViewProposalInterested.setText(interestedString);
 
 			return convertView;
@@ -258,51 +278,35 @@ public class ProposalsFragment extends SherlockFragment implements
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
 		this.incomingBroadcasts.clear();
 
-		// Remove users who have no Proposal from the new List<User>.
-		for (Iterator<User> iterator = incomingBroadcasts.iterator(); iterator
-				.hasNext();) {
-			User user = iterator.next();
-			if (user.getProposal() == null) {
-				iterator.remove();
+		if (incomingBroadcasts != null) {
+			// Remove users who have no Proposal from the new List<User>.
+			for (Iterator<User> iterator = incomingBroadcasts.iterator(); iterator
+					.hasNext();) {
+				User user = iterator.next();
+				if (user.getProposal() == null) {
+					iterator.remove();
+				}
 			}
+
+			// Convert Users to SeenUsers to give them seen "state" booleans
+			for (User user : incomingBroadcasts) {
+				UserWithSeenState seenUser = new UserWithSeenState(user);
+				this.incomingBroadcasts.add(seenUser);
+			}
+
+			// Add the ones that are left to the internal List<User>.
+			// this.incomingBroadcasts.addAll(incomingBroadcasts);
+			Collections.sort(this.incomingBroadcasts);
 		}
 
-		// Convert Users to SeenUsers to give them seen "state" booleans
-		for (User user : incomingBroadcasts) {
-			SeeableUser seenUser = new SeeableUser(user);
-			this.incomingBroadcasts.add(seenUser);
-		}
-
-		// Add the ones that are left to the internal List<User>.
-		// this.incomingBroadcasts.addAll(incomingBroadcasts);
-		Collections.sort(this.incomingBroadcasts);
 		adapter.notifyDataSetChanged();
-	}
-
-	private static class SeeableUser extends User {
-
-		public SeeableUser(User user) {
-			super(user.getJid(), user.getFirstName(), user.getLastName());
-			super.setAvailability(user.getAvailability());
-			super.setProposal(user.getProposal());
-		}
-
-		public SeeableUser(String jid, String firstName, String lastName) {
-			super(jid, firstName, lastName);
-		}
-
-		public SeeableUser(Parcel in) {
-			super(in);
-		}
-
-		public boolean seen = false;
 	}
 
 	@Override
 	public void onMySeenProposalsUpdate(List<String> seenJids) {
 		Set<String> seenJidsSet = new HashSet<String>(seenJids);
 
-		for (SeeableUser seeableUser : this.incomingBroadcasts) {
+		for (UserWithSeenState seeableUser : this.incomingBroadcasts) {
 			if (seenJidsSet.contains(seeableUser.getJid())) {
 				seeableUser.seen = true;
 			} else {

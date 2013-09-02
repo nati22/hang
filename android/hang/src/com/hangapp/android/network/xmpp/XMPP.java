@@ -12,6 +12,7 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -30,6 +31,22 @@ import com.hangapp.android.util.Utils;
 final public class XMPP {
 
 	private static XMPP instance = new XMPP();
+
+	/**
+	 * Maintain a single, static {@link XMPPConnection} through the lifecycle of
+	 * the whole app. <br />
+	 * <br />
+	 * We don't have to worry about concurrent access to the same variable
+	 * because {@link IntentService} guarantees that onHandleIntent() handles a
+	 * single {@link Intent} at a time, in a queue.'
+	 * 
+	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! THIS INTENT SERVICE WILL BE
+	 * DESTROYED AS SOON AS ONHANDLEINTENT() IS DONE RUNNING! THIS MEANS THAT
+	 * THE XMPPCONNECTION MAINTAINED INSIDE HERE WILL ALSO BE DESTROYED! FIX
+	 * THIS! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 */
+	XMPPConnection xmppConnection;
+
 	private Map<String, MultiUserChat> mucMap = new HashMap<String, MultiUserChat>();
 	private Context context;
 	/**
@@ -170,7 +187,7 @@ final public class XMPP {
 
 		// Grab a reference to the single XMPPConnection that we use
 		// from the utility XMPPIntentService class.
-		XMPPConnection xmppConnection = XMPPIntentService.xmppConnection;
+		// XMPPConnection xmppConnection = XMPPIntentService.xmppConnection;
 
 		if (!xmppConnection.isConnected()) {
 			Log.e("XMPPPIntentService.joinMuc()",
@@ -246,8 +263,8 @@ final public class XMPP {
 		// instantiate one and throw it into the Map.
 		// This technique is called "lazy instantiation".
 		if (muc == null) {
-			muc = new MultiUserChat(XMPPIntentService.xmppConnection, mucName
-					+ "@conference." + XMPPIntentService.XMPP_SERVER_URL);
+			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
+					+ XMPPIntentService.XMPP_SERVER_URL);
 			mucMap.put(mucName, muc);
 		}
 
