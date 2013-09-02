@@ -6,4 +6,5 @@
     <dimen name="mini_profile_picture_width">50dp</dimen>
     <dimen name="status_icon_width">40dp</dimen>
     <dimen name="status_rem_time_font_size">12sp</dimen>
+    <dimen name="proposal_cell_height">80dp</dimen>
 </resources>
