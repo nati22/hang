@@ -34,8 +34,8 @@
 
         <ImageButton
             android:id="@+id/imageButtonFriendsAvailability"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="@dimen/status_icon_width"
+            android:layout_height="@dimen/status_icon_width"
             android:layout_below="@+id/textViewFriendsName"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
@@ -55,7 +55,8 @@
             android:gravity="center"
             android:text="0h"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+           android:textStyle="bold"
+            android:textSize="@dimen/status_rem_time_font_size" />
 
         <TextView
             android:id="@+id/textViewStatus"

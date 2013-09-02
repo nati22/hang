@@ -26,6 +26,7 @@ import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.ProposalFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Availability.Status;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
@@ -58,7 +59,7 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewProposalDescription;
 	private TextView textViewProposalLocation;
 	private TextView textViewProposalStartTime;
-	/* private CheckBox checkBoxInterested; */
+	private CheckBox checkBoxInterested;
 	private TextView textViewProposalInterestedCount;
 	// private HorizontalScrollView horizontalScrollViewInterestedUsers;
 	// private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
@@ -111,10 +112,9 @@ public final class ProfileActivity extends BaseActivity implements
 		textViewProposalLocation = (TextView) findViewById(R.id.textViewMyProposalLocation);
 		textViewProposalStartTime = (TextView) findViewById(R.id.textViewMyProposalStartTime);
 		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
-		/*
-		 * checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
-		 */// horizontalScrollViewInterestedUsers = (HorizontalScrollView)
-			// findViewById(R.id.horizontalScrollViewInterestedUsers);
+		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
+		// / horizontalScrollViewInterestedUsers = (HorizontalScrollView)
+		// findViewById(R.id.horizontalScrollViewInterestedUsers);
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterested);
 
 		// Set OnClickListeners.
@@ -128,22 +128,32 @@ public final class ProfileActivity extends BaseActivity implements
 			}
 		});
 
-		/*
-		 * // If User is Interested/Confirmed, check the appropriate ToggleButton
-		 * if (friend.getProposal() != null) { if
-		 * (friend.getProposal().getInterested() != null) { if
-		 * (friend.getProposal().getInterested() .contains(database.getMyJid()))
-		 * checkBoxInterested.setChecked(true); } }
-		 * 
-		 * // Set CheckBox. checkBoxInterested .setOnCheckedChangeListener(new
-		 * OnCheckedChangeListener() {
-		 * 
-		 * @Override public void onCheckedChanged(CompoundButton buttonView,
-		 * boolean isChecked) { // Add yourself to the Interested list of this
-		 * user. if (isChecked) { addMeToHostInterestedList(); } // Remove
-		 * yourself from the Interested list of this // user. else {
-		 * removeMeFromHostInterestedList(); } } });
-		 */
+		// If User is Interested/Confirmed, check the appropriate ToggleButton
+		if (friend.getProposal() != null) {
+			if (friend.getProposal().getInterested() != null) {
+				if (friend.getProposal().getInterested()
+						.contains(database.getMyJid()))
+					checkBoxInterested.setChecked(true);
+			}
+		}
+
+		// Set CheckBox.
+		checkBoxInterested
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						// Add yourself to the Interested list of this user.
+						if (isChecked) {
+							addMeToHostInterestedList();
+						}
+						// Remove yourself from the Interested list of this
+						// user.
+						else {
+							removeMeFromHostInterestedList();
+						}
+					}
+				});
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -189,6 +199,10 @@ public final class ProfileActivity extends BaseActivity implements
 						"onIncomingBroadcastsUpdate called with NO PROPOSAL.");
 				this.finish();
 			}
+
+			updateAvailabilityIcon(database.getIncomingUser(friend.getJid())
+					.getAvailability());
+
 		}
 	}
 
@@ -200,41 +214,8 @@ public final class ProfileActivity extends BaseActivity implements
 		profilePictureViewFriendIcon.setProfileId(friend.getJid());
 		textViewFriendsName.setText(friend.getFullName());
 
-		// Grey.
-		if (friend.getAvailability() == null
-				|| !friend.getAvailability().isActive()) {
-			imageButtonFriendsAvailability.setImageDrawable(getResources()
-					.getDrawable(R.drawable.status_grey));
-			textViewFriendsAvailabilityExpirationDate.setVisibility(View.GONE);
-		}
-		// Free.
-		else if (friend.getAvailability().getStatus() == Status.FREE) {
-			imageButtonFriendsAvailability.setImageDrawable(getResources()
-					.getDrawable(R.drawable.status_green));
-			textViewFriendsAvailabilityExpirationDate.setVisibility(View.VISIBLE);
-			int hoursRemaining = Utils.getRemainingHours(friend.getAvailability()
-					.getExpirationDate());
-			textViewFriendsAvailabilityExpirationDate
-					.setText(hoursRemaining + "h");
-		}
-		// Busy.
-		else if (friend.getAvailability().getStatus() == Status.BUSY) {
-			imageButtonFriendsAvailability.setImageDrawable(getResources()
-					.getDrawable(R.drawable.status_red));
-			textViewFriendsAvailabilityExpirationDate.setVisibility(View.VISIBLE);
-			int hoursRemaining = Utils.getRemainingHours(friend.getAvailability()
-					.getExpirationDate());
-			textViewFriendsAvailabilityExpirationDate
-					.setText(hoursRemaining + "h");
-		}
-		// Error state.
-		else {
-			Log.e("ProfileActivity.onResume",
-					"Error state: " + friend.getAvailability());
-			imageButtonFriendsAvailability.setImageDrawable(getResources()
-					.getDrawable(R.drawable.status_grey));
-			textViewFriendsAvailabilityExpirationDate.setVisibility(View.GONE);
-		}
+		updateAvailabilityIcon(database.getIncomingUser(friend.getJid())
+				.getAvailability());
 
 		if (friend.getProposal() == null) {
 			Log.e("ProfileActivity.onResume", friend.getFirstName()
@@ -271,6 +252,48 @@ public final class ProfileActivity extends BaseActivity implements
 				Log.i("ProfileActivity", friend.getFirstName()
 						+ "'s proposal already seen");
 			}
+		}
+	}
+
+	private void updateAvailabilityIcon(Availability availability) {
+
+		// If they have an Availability
+		if (availability == null || availability.getStatus() == null
+				|| !availability.isActive()) {
+			imageButtonFriendsAvailability.setImageDrawable(getResources()
+					.getDrawable(R.drawable.imagebutton_status_grey));
+			String remainingHours = Utils.getAbbvRemainingTimeString(availability
+					.getExpirationDate());
+			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
+			textViewStatus.setVisibility(View.INVISIBLE);
+		}
+		// Availability is FREE.
+		else if (availability.getStatus() == Status.FREE) {
+			imageButtonFriendsAvailability.setImageDrawable(getResources()
+					.getDrawable(R.drawable.imagebutton_status_green));
+			textViewStatus.setVisibility(View.VISIBLE);
+			textViewStatus.setText(availability.getDescription());
+
+			String remainingHours = Utils.getAbbvRemainingTimeString(availability
+					.getExpirationDate());
+			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
+		}
+		// Availability is BUSY.
+		else if (availability.getStatus() == Status.BUSY) {
+			imageButtonFriendsAvailability.setImageDrawable(getResources()
+					.getDrawable(R.drawable.imagebutton_status_red));
+			textViewStatus.setVisibility(View.VISIBLE);
+			textViewStatus.setText(availability.getDescription());
+
+			String remainingHours = Utils.getAbbvRemainingTimeString(availability
+					.getExpirationDate());
+			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
+		}
+		// Error state.
+		else {
+			Log.e("YouFragment.onMyAvailabilityUpdate",
+					"Unknown availability state: " + availability);
+			return;
 		}
 	}
 
