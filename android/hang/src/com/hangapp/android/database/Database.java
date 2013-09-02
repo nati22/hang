@@ -418,6 +418,14 @@ public final class Database {
 
 		return library.get(jid);
 	}
+	
+	public void addFilteredUser(String jid) {
+		
+	}
+	
+	public void removeFilteredUser(String jid) {
+		
+	}
 
 	public void setMyUserData(String jid, String firstName, String lastName) {
 		SharedPreferences.Editor editor = prefs.edit();

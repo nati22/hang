@@ -280,22 +280,6 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             broadcastee = db.get(key_broadcastee_jid)
 
             # Remove broadcaster jid from broadcastee's incoming_broadcasts
-#            if key_broadcaster_jid in broadcastee.incoming_broadcasts:
-#                broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
-#                broadcastee.put()
-#                self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
-#            else: self.response.write("%s isn't even receiving Broadcasts from %s!\n" % (broadcastee.first_name, broadcaster.first_name))
-#                
-#            # Remove broadcastee jid from broadcaster's outgoing_broadcasts
-#            if key_broadcastee_jid in broadcaster.outgoing_broadcasts:
-#                broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
-#                broadcaster.put()
-#
-#                # Tell the user.                
-#                self.response.write("%s is no longer broadcasting to %s.\n" % (broadcaster.first_name, broadcastee.first_name))
-#            else: self.response.write("%s isn't even Broadcasting to %s!\n" % (broadcaster.first_name, broadcastee.first_name))
-
-             # Remove broadcaster jid from broadcastee's incoming_broadcasts
             broadcastee.incoming_broadcasts.remove(key_broadcaster_jid)
             broadcaster.outgoing_broadcasts.remove(key_broadcastee_jid)
 
@@ -323,6 +307,10 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             # If we couldn't grab the DELETE request parameters, then show an error.
             self.response.write('Invalid inputs: Couldn\'t grab the DELETE request parameters.\n')
             return
+
+class MultipleBroadcastRequestHandler(webapp2.RequestHandler):
+    def post(self, jid):
+
 
 class NudgeRequestHandler(webapp2.RequestHandler):
     def post(self, jid):
