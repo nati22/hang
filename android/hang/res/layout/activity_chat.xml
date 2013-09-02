@@ -16,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/profile_picture_width"
         android:layout_below="@+id/separatorRosterFromChat"
-
         android:background="@color/grey_dark_background" >
 
         <LinearLayout
@@ -25,8 +24,8 @@
             android:layout_height="match_parent"
             android:background="@color/grey_dark_background"
             android:gravity="center_vertical"
-                    android:paddingBottom="2dp"
-            android:orientation="horizontal" >
+            android:orientation="horizontal"
+            android:paddingBottom="2dp" >
         </LinearLayout>
     </HorizontalScrollView>
 

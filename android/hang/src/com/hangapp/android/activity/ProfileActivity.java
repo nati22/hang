@@ -121,10 +121,21 @@ public final class ProfileActivity extends BaseActivity implements
 		imageViewOpenChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent chatActivityIntent = new Intent(ProfileActivity.this,
-						ChatActivity.class);
-				chatActivityIntent.putExtra(Keys.HOST_JID, friend.getJid());
-				startActivity(chatActivityIntent);
+				if (friend.getProposal().getInterested()
+						.contains(database.getMyJid())
+						|| friend.getJid().equals(database.getMyJid())) {
+					Log.i("ProfileActivity.imageViewOpenChat.onClick", "interested: " + friend.getProposal().getInterested().toString());
+					Intent chatActivityIntent = new Intent(ProfileActivity.this,
+							ChatActivity.class);
+					chatActivityIntent.putExtra(Keys.HOST_JID, friend.getJid());
+					startActivity(chatActivityIntent);
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Sorry, you don't have permission to enter the chat.",
+							Toast.LENGTH_SHORT).show();
+					Log.w("ProfileActivity", "interested list: " + friend.getProposal().getInterested().toString());
+				}
+
 			}
 		});
 

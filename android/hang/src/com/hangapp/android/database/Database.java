@@ -225,7 +225,7 @@ public final class Database {
 		editor.putString(Keys.PROPOSAL_START_TIME, proposal.getStartTime()
 				.toString());
 		editor.putString(Keys.PROPOSAL_INTERESTED, interestedString);
-		editor.putString(Keys.PROPOSAL_INTERESTED, confirmedString);
+		editor.putString(Keys.PROPOSAL_CONFIRMED, confirmedString);
 
 		editor.commit();
 
@@ -245,6 +245,7 @@ public final class Database {
 				Keys.PROPOSAL_START_TIME, null);
 		String proposalInterestedString = prefs.getString(
 				Keys.PROPOSAL_INTERESTED, null);
+		
 		String proposalConfirmedString = prefs.getString(Keys.PROPOSAL_CONFIRMED,
 				null);
 

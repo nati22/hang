@@ -246,8 +246,21 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 			// Check if my interested list has been updated
 			if (!database.getMyProposal().getInterested()
 					.equals(listInterestedJids)) {
+				Log.w("ChatActivity.onIncomingBroadcastsUpdate", "this is my chat");
+				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
+						"replacing a list of " + listInterestedJids.size()
+								+ " with a list of "
+								+ database.getMyProposal().getInterested().size()
+								+ " which is \""
+								+ database.getMyProposal().getInterested().get(0)
+								+ "\"");
 				listInterestedJids.clear();
 				listInterestedJids.addAll(database.getMyProposal().getInterested());
+
+				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
+						"listInterestedJids has size " + listInterestedJids.size());
+				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
+						"listInterestedJids = " + listInterestedJids.toString());
 
 				// Update horizontal list
 				updateHorizontalList(listInterestedJids, linLayoutInterested);
