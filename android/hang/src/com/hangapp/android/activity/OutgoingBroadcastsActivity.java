@@ -187,7 +187,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 			textViewOutgoingBroadcastName.setText(outgoingBroadcast
 					.getFullName());
 			textViewOutgoingBroadcastStatus
-					.setText(hisStatus != null ? hisStatus.getDescription()
+					.setText((hisStatus != null) ? hisStatus.getDescription()
 							: "Unknown Availability");
 
 			// Set OnClickListeners.
