@@ -116,8 +116,8 @@ public final class IncomingBroadcastsActivity extends BaseActivity implements
 			textViewIncomingBroadcastName.setText(incomingBroadcast
 					.getFullName());
 			textViewIncomingBroadcastStatus
-					.setText(hisStatus != null ? hisStatus.getDescription()
-							: "Unknown Availability");
+					.setText((hisStatus != null && hisStatus.isActive()) ? hisStatus.getDescription()
+							: "");
 
 			return convertView;
 		}

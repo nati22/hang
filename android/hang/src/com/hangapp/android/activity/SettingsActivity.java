@@ -106,7 +106,6 @@ public final class SettingsActivity extends BaseActivity {
 			// TODO: Logout of XMPP.
 			// xmpp.logout();
 			finish();
-			Log.d("SettingsAct", this.getCallingActivity().getClassName());
 		}
 	}
 }

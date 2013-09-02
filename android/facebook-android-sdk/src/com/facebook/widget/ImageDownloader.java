@@ -20,6 +20,8 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.util.Log;
+
 import com.facebook.FacebookException;
 import com.facebook.internal.Utility;
 
@@ -237,16 +239,21 @@ class ImageDownloader {
 
                 default:
                     stream = connection.getErrorStream();
-                    InputStreamReader reader = new InputStreamReader(stream);
-                    char[] buffer = new char[128];
-                    int bufferLength;
-                    StringBuilder errorMessageBuilder = new StringBuilder();
-                    while ((bufferLength = reader.read(buffer, 0, buffer.length)) > 0) {
-                        errorMessageBuilder.append(buffer, 0, bufferLength);
-                    }
-                    Utility.closeQuietly(reader);
+                    try {
+                  	  InputStreamReader reader = new InputStreamReader(stream);
+                       char[] buffer = new char[128];
+                       int bufferLength;
+                       StringBuilder errorMessageBuilder = new StringBuilder();
+                       while ((bufferLength = reader.read(buffer, 0, buffer.length)) > 0) {
+                           errorMessageBuilder.append(buffer, 0, bufferLength);
+                       }
+                       Utility.closeQuietly(reader);
 
-                    error = new FacebookException(errorMessageBuilder.toString());
+                       error = new FacebookException(errorMessageBuilder.toString());
+                    } catch (Exception e) {
+                  	  Log.e("ImageDownloader.java", "FatalException...Facebook Sdk #4: " + e.getMessage());
+                    }
+                    
                     break;
             }
         } catch (IOException e) {
