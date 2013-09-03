@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 import webapp2
-from User import UserRequestHandler, BroadcastRequestHandler, NudgeRequestHandler
+from User import UserRequestHandler, BroadcastRequestHandler, NudgeRequestHandler, MultipleBroadcastRequestHandler
 from Status import StatusRequestHandler
 from Proposal import ProposalRequestHandler, InterestedRequestHandler, ConfirmedRequestHandler, ProposalSeenHandler
 #from push import NotificationReceivedRequestHandler
@@ -29,6 +29,7 @@ app = webapp2.WSGIApplication([
     ('/', HelloWorldRequestHandler),
     (r'/users/(\d+)', UserRequestHandler),  # Maps /users/{jid} to the Users request handler.
     (r'/users/(\d+)/broadcast', BroadcastRequestHandler), 
+    (r'/users/(\d+)/broadcasts', MultipleBroadcastRequestHandler), 
     (r'/users/(\d+)/status', StatusRequestHandler),
     (r'/users/(\d+)/nudge', NudgeRequestHandler),
     (r'/users/(\d+)/proposal', ProposalRequestHandler),

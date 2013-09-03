@@ -9,11 +9,15 @@ import android.util.Log;
 
 public class AddMultipleBroadcastsAsyncTask extends BasePutRequestAsyncTask<String>{
 
+	private static final String USERS_URI_SUFFIX = "/users/";
+	private static final String BROADCAST_URI_SUFFIX = "/broadcasts";
+
+	// Set dependencies.
 	private RestClient restClient;
 	
 	protected AddMultipleBroadcastsAsyncTask(Context context, RestClient restClient, String uriSuffix,
 			List<NameValuePair> parameters) {
-		super(context, uriSuffix, parameters);
+		super(context, USERS_URI_SUFFIX + uriSuffix + BROADCAST_URI_SUFFIX, parameters);
 		
 		this.restClient = restClient;
 	}

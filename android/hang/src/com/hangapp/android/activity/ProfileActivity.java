@@ -124,7 +124,9 @@ public final class ProfileActivity extends BaseActivity implements
 				if (friend.getProposal().getInterested()
 						.contains(database.getMyJid())
 						|| friend.getJid().equals(database.getMyJid())) {
-					Log.i("ProfileActivity.imageViewOpenChat.onClick", "interested: " + friend.getProposal().getInterested().toString());
+					Log.i("ProfileActivity.imageViewOpenChat.onClick",
+							"interested: "
+									+ friend.getProposal().getInterested().toString());
 					Intent chatActivityIntent = new Intent(ProfileActivity.this,
 							ChatActivity.class);
 					chatActivityIntent.putExtra(Keys.HOST_JID, friend.getJid());
@@ -133,7 +135,8 @@ public final class ProfileActivity extends BaseActivity implements
 					Toast.makeText(getApplicationContext(),
 							"Sorry, you don't have permission to enter the chat.",
 							Toast.LENGTH_SHORT).show();
-					Log.w("ProfileActivity", "interested list: " + friend.getProposal().getInterested().toString());
+					Log.w("ProfileActivity", "interested list: "
+							+ friend.getProposal().getInterested().toString());
 				}
 
 			}
@@ -337,12 +340,21 @@ public final class ProfileActivity extends BaseActivity implements
 			Log.i(ProposalFragment.class.getSimpleName(),
 					"Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
+
+			String name;
+			if (database.getIncomingUser(jid) != null) {
+				name = database.getIncomingUser(jid).getFirstName();
+			} else if (database.getOutgoingUser(jid) != null) {
+				name = database.getOutgoingUser(jid).getFirstName();
+			} else
+				name = "";
+			final String toastName = name;
 			icon.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(getApplicationContext(), "hey",
-							Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), toastName, Toast.LENGTH_SHORT)
+							.show();
 
 				}
 			});

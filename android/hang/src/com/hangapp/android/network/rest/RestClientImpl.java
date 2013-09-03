@@ -140,6 +140,20 @@ public final class RestClientImpl implements RestClient {
 		new AddBroadcastAsyncTask(database, this, context, myJid, parameters)
 				.execute();
 	}
+	
+	@Override
+	public void addBroadcastees(List<String> broadcasteeJIDs) {
+		String myJid = database.getMyJid();
+		
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		for (String broadcasteeJID : broadcasteeJIDs) {
+			parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
+		}
+		
+		new AddMultipleBroadcastsAsyncTask(context, this, myJid, parameters);
+		
+		
+	}
 
 	@Override
 	public void sendNudge(String targetJid) {

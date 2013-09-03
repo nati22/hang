@@ -207,9 +207,8 @@ class UserRequestHandler(webapp2.RequestHandler):
                 # Save the new User into the datastore.
                 user.put()
                 
-                # Tell the user. 
-               # self.response.write(json.dumps(user.get_partial_json()))
-                self.response.write(json.dumps(user.get_partial_json(), separators=(',', ':')))
+               # Tell the user.
+               self.response.write(json.dumps(user.get_partial_json(), separators=(',', ':')))
             
         except (TypeError, ValueError):
             # If we couldn't grab the PUT request parameters, then show an error.
@@ -236,8 +235,6 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             if broadcastee is None:
                 self.response.write(json.dumps({'error_message': "User %s doesn't exist on hang server" % param_target}));
                 return
-
-        #    addBroadcast(broadcaster, key_broadcaster_jid, broadcastee, key_broadcastee_jid, self.response)
 
             # Add broadcaster jid to broadcastee's incoming_broadcasts
             if key_broadcaster_jid not in broadcastee.incoming_broadcasts:
@@ -297,7 +294,7 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             # Girum said not to but "ehh"
             push_to_user(broadcaster, broadcastee, 'tickle')
 
-            if key_broadcaster_jid in broadcastee.incoming_broadcasts and key_broadcastee_jid in broadcaster.outgoing_broadcasts:
+            if key_broadcaster_jid not in broadcastee.incoming_broadcasts and key_broadcastee_jid not in broadcaster.outgoing_broadcasts:
                 self.response.write("%s is no longer receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
             else:
                 self.response.write("There is an inconsistency in %s and %s's Broadcast data!\n" % (broadcastee.first_name, broadcaster.first_name))
@@ -310,7 +307,10 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
 
 class MultipleBroadcastRequestHandler(webapp2.RequestHandler):
     def post(self, jid):
-
+        # Grab the POST request parameters and put them into variables.
+        param_target = self.request.get_all('target')
+        for x in param_target:
+            self.response.write(x)
 
 class NudgeRequestHandler(webapp2.RequestHandler):
     def post(self, jid):
