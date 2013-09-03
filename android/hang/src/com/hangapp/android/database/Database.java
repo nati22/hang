@@ -245,9 +245,9 @@ public final class Database {
 				Keys.PROPOSAL_START_TIME, null);
 		String proposalInterestedString = prefs.getString(
 				Keys.PROPOSAL_INTERESTED, null);
-		
-		String proposalConfirmedString = prefs.getString(Keys.PROPOSAL_CONFIRMED,
-				null);
+
+		String proposalConfirmedString = prefs.getString(
+				Keys.PROPOSAL_CONFIRMED, null);
 
 		if (proposalDescription == null) {
 			Log.e("Database.getMyProposal", "proposalDescription was null");
@@ -312,8 +312,8 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyIncomingBroadcasts() {
-		String incomingBroadcastJidsStringArray = prefs.getString(Keys.INCOMING,
-				null);
+		String incomingBroadcastJidsStringArray = prefs.getString(
+				Keys.INCOMING, null);
 
 		if (incomingBroadcastJidsStringArray == null) {
 			return null;
@@ -337,7 +337,8 @@ public final class Database {
 				myIncomingBroadcasts.add(incomingBroadcast);
 			} else {
 				Log.e("Database.getMyIncomingBroadcasts",
-						"No incoming broadcast for jid: " + incomingBroadcastJid);
+						"No incoming broadcast for jid: "
+								+ incomingBroadcastJid);
 			}
 		}
 
@@ -350,8 +351,8 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyOutgoingBroadcasts() {
-		String outgoingBroadcastJidsStringArray = prefs.getString(Keys.OUTGOING,
-				null);
+		String outgoingBroadcastJidsStringArray = prefs.getString(
+				Keys.OUTGOING, null);
 
 		if (outgoingBroadcastJidsStringArray == null) {
 			return null;
@@ -370,7 +371,8 @@ public final class Database {
 				myOutgoingBroadcasts.add(outgoingBroadcast);
 			} else {
 				Log.e("Database.getMyOutgoingBroadcasts",
-						"No outgoing broadcast for jid: " + outgoingBroadcastJid);
+						"No outgoing broadcast for jid: "
+								+ outgoingBroadcastJid);
 			}
 		}
 
@@ -378,8 +380,8 @@ public final class Database {
 	}
 
 	public User getIncomingUser(String jid) {
-		String incomingBroadcastJidsStringArray = prefs.getString(Keys.INCOMING,
-				null);
+		String incomingBroadcastJidsStringArray = prefs.getString(
+				Keys.INCOMING, null);
 
 		if (incomingBroadcastJidsStringArray == null) {
 			Log.e("Database.getIncomingUser",
@@ -400,8 +402,8 @@ public final class Database {
 	}
 
 	public User getOutgoingUser(String jid) {
-		String outgoingBroadcastJidsStringArray = prefs.getString(Keys.OUTGOING,
-				null);
+		String outgoingBroadcastJidsStringArray = prefs.getString(
+				Keys.OUTGOING, null);
 
 		if (outgoingBroadcastJidsStringArray == null) {
 			return null;
@@ -501,8 +503,8 @@ public final class Database {
 	}
 
 	public void addSeenProposal(String broadcasterJid) {
-		String seenProposalsListString = prefs
-				.getString(Keys.PROPOSAL_SEEN, null);
+		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
+				null);
 
 		List<String> seenProposals = Utils
 				.convertStringToArray(seenProposalsListString);
@@ -513,7 +515,8 @@ public final class Database {
 			Log.i("Database.addSeenProposal()", "Proposal has been seen before");
 		}
 
-		seenProposalsListString = Utils.convertStringArrayToString(seenProposals);
+		seenProposalsListString = Utils
+				.convertStringArrayToString(seenProposals);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);
@@ -525,8 +528,8 @@ public final class Database {
 	}
 
 	public List<String> getMySeenProposals() {
-		String seenProposalsListString = prefs
-				.getString(Keys.PROPOSAL_SEEN, null);
+		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
+				null);
 
 		if (seenProposalsListString == null)
 			return null;
@@ -535,8 +538,8 @@ public final class Database {
 	}
 
 	public void deleteMySeenProposal(String proposalJid) {
-		String seenProposalsListString = prefs
-				.getString(Keys.PROPOSAL_SEEN, null);
+		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
+				null);
 
 		List<String> seenProposals = Utils
 				.convertStringToArray(seenProposalsListString);
@@ -547,7 +550,8 @@ public final class Database {
 			Log.i("Database.deleteMySeenProposal", "seenProposals.remove("
 					+ proposalJid + ") returned false");
 
-		seenProposalsListString = Utils.convertStringArrayToString(seenProposals);
+		seenProposalsListString = Utils
+				.convertStringArrayToString(seenProposals);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);
@@ -585,8 +589,8 @@ public final class Database {
 	 * @return
 	 */
 	public List<String> getJidsImInterestedIn() {
-		String interestedJidsString = prefs.getString(Keys.JIDS_IM_INTERESTED_IN,
-				null);
+		String interestedJidsString = prefs.getString(
+				Keys.JIDS_IM_INTERESTED_IN, null);
 
 		if (interestedJidsString != null) {
 			return Utils.convertStringToArray(interestedJidsString);
@@ -607,13 +611,13 @@ public final class Database {
 
 		// Attempt to join the MUC belonging to each of the JIDs that I am
 		// interested in.
-		// xmpp.initialize(context); // TODO: Un-hack me.
+		// TODO: You should join your own MUC, if you have one.
 		xmpp.joinMucs(myJid, interestedJids);
 	}
 
 	/**
-	 * Helper method only to be used by the REST calls, as they finish parsing in
-	 * the JSON for the library. ======= Helper method only to be used by the
+	 * Helper method only to be used by the REST calls, as they finish parsing
+	 * in the JSON for the library. ======= Helper method only to be used by the
 	 * REST calls, as they finish parsing in the JSON for the library. >>>>>>>
 	 * 177b45476535132f4f2c242136f66e89d3e2680b
 	 */

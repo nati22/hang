@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -91,6 +91,9 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		}
 
 		// Join the Muc.
+		// TODO: Remove me. Don't directly join the MUC from here; instead just
+		// add this MUC to the list of MUCs to join and have XMPPIntentService
+		// do it for you.
 		myJid = database.getMyJid();
 		xmpp.joinMuc(mucName, myJid);
 
@@ -171,6 +174,8 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
+			// TODO: Put this into a Utility method when you duplicate the logic
+			// for Chat notifications.
 			String fromJid = message.getFrom().substring(
 					message.getFrom().indexOf(".com/") + 5);
 			String from;
@@ -210,8 +215,8 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 	@Override
 	public void onMucMessageUpdate(String mucName, final List<Message> messages) {
 		for (Message message : messages) {
-			Log.i("ChatActivity.onMucMessageUpdate",
-					"Got muc message: " + message.getBody());
+			Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "
+					+ message.getBody());
 		}
 
 		this.messages.clear();
@@ -246,19 +251,24 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 			// Check if my interested list has been updated
 			if (!database.getMyProposal().getInterested()
 					.equals(listInterestedJids)) {
-				Log.w("ChatActivity.onIncomingBroadcastsUpdate", "this is my chat");
 				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
-						"replacing a list of " + listInterestedJids.size()
+						"this is my chat");
+				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
+						"replacing a list of "
+								+ listInterestedJids.size()
 								+ " with a list of "
-								+ database.getMyProposal().getInterested().size()
+								+ database.getMyProposal().getInterested()
+										.size()
 								+ " which is \""
-								+ database.getMyProposal().getInterested().get(0)
-								+ "\"");
+								+ database.getMyProposal().getInterested()
+										.get(0) + "\"");
 				listInterestedJids.clear();
-				listInterestedJids.addAll(database.getMyProposal().getInterested());
+				listInterestedJids.addAll(database.getMyProposal()
+						.getInterested());
 
 				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
-						"listInterestedJids has size " + listInterestedJids.size());
+						"listInterestedJids has size "
+								+ listInterestedJids.size());
 				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
 						"listInterestedJids = " + listInterestedJids.toString());
 
@@ -266,22 +276,25 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 				updateHorizontalList(listInterestedJids, linLayoutInterested);
 			}
 
-		} else if (incomingBroadcasts.contains(database.getIncomingUser(mucName))) {
+		} else if (incomingBroadcasts.contains(database
+				.getIncomingUser(mucName))) {
 			// Then this is one of the User's broadcasters chats
 			Log.i("ChatActivity.onIncomingBroadcastsUpdate()", "this is "
-					+ database.getIncomingUser(mucName).getFirstName() + "'s chat");
+					+ database.getIncomingUser(mucName).getFirstName()
+					+ "'s chat");
 
 			// Check if their interested list has been updated
-			if (!database.getIncomingUser(mucName).getProposal().getInterested()
-					.equals(listInterestedJids)) {
+			if (!database.getIncomingUser(mucName).getProposal()
+					.getInterested().equals(listInterestedJids)) {
 				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
 						"their original interested list read: "
 								+ listInterestedJids.toString());
 
 				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
 						"that list is being replaced with: "
-								+ database.getIncomingUser(mucName).getProposal()
-										.getInterested().toString());
+								+ database.getIncomingUser(mucName)
+										.getProposal().getInterested()
+										.toString());
 				listInterestedJids.clear();
 				listInterestedJids.addAll(database.getIncomingUser(mucName)
 						.getProposal().getInterested());
@@ -290,11 +303,13 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 				updateHorizontalList(listInterestedJids, linLayoutInterested);
 			} else {
 				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
-						"their list hasn't changed: " + listInterestedJids.toString());
+						"their list hasn't changed: "
+								+ listInterestedJids.toString());
 			}
 
 		} else {
-			Log.e("ChatActivity.onIncomingBroadcastsUpdate()", "myJid = " + myJid);
+			Log.e("ChatActivity.onIncomingBroadcastsUpdate()", "myJid = "
+					+ myJid);
 			Log.e("ChatActivity.onIncomingBroadcastsUpdate()", "mucName = "
 					+ mucName);
 			Log.e("ChatActivity.onIncomingBroadcastsUpdate()",
@@ -312,7 +327,8 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 				+ " elements");
 
 		Log.i(ProposalFragment.class.getSimpleName(),
-				"removed " + linLayout.getChildCount() + " elements from linLayout");
+				"removed " + linLayout.getChildCount()
+						+ " elements from linLayout");
 		linLayout.removeAllViews();
 
 		for (int i = 0; i < jids.size(); i++) {
@@ -338,30 +354,38 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 						// TODO: This is 100% pointless and should be removed :)
 						switch (new Random().nextInt(2)) {
 						case 0:
-							Toast.makeText(getApplicationContext(), "Look familiar?",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(),
+									"Look familiar?", Toast.LENGTH_SHORT)
+									.show();
 							return;
 						default:
-							Toast.makeText(getApplicationContext(), "Guess who?",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(),
+									"Guess who?", Toast.LENGTH_SHORT).show();
 						}
 
 					} else if (database.getIncomingUser(jid) != null) {
 						// Then this is someone broadcasting to me
-						Toast.makeText(getApplicationContext(),
-								"It's " + database.getIncomingUser(jid).getFirstName(),
+						Toast.makeText(
+								getApplicationContext(),
+								"It's "
+										+ database.getIncomingUser(jid)
+												.getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else if (database.getOutgoingUser(jid) != null) {
 						// Then this is someone I'm broadcasting to
-						Toast.makeText(getApplicationContext(),
-								"It's " + database.getOutgoingUser(jid).getFirstName(),
+						Toast.makeText(
+								getApplicationContext(),
+								"It's "
+										+ database.getOutgoingUser(jid)
+												.getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else {
 						// This is a stranger to me
 						Toast.makeText(
 								getApplicationContext(),
-								database.getIncomingUser(mucName).getFirstName()
-										+ "'s friend", Toast.LENGTH_SHORT).show();
+								database.getIncomingUser(mucName)
+										.getFirstName() + "'s friend",
+								Toast.LENGTH_SHORT).show();
 					}
 
 				}

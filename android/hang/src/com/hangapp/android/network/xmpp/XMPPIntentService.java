@@ -32,21 +32,6 @@ public final class XMPPIntentService extends IntentService {
 	static final String XMPP_SERVER_URL = "ec2-184-72-81-86.compute-1.amazonaws.com";
 
 	/**
-	 * Maintain a single, static {@link XMPPConnection} through the lifecycle of
-	 * the whole app. <br />
-	 * <br />
-	 * We don't have to worry about concurrent access to the same variable
-	 * because {@link IntentService} guarantees that onHandleIntent() handles a
-	 * single {@link Intent} at a time, in a queue.'
-	 * 
-	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! THIS INTENT SERVICE WILL BE
-	 * DESTROYED AS SOON AS ONHANDLEINTENT() IS DONE RUNNING! THIS MEANS THAT
-	 * THE XMPPCONNECTION MAINTAINED INSIDE HERE WILL ALSO BE DESTROYED! FIX
-	 * THIS! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	 */
-	static XMPPConnection xmppConnection;
-
-	/**
 	 * Hold a reference to the front-facing XMPP object.
 	 */
 	private static XMPP xmpp;
@@ -131,17 +116,17 @@ public final class XMPPIntentService extends IntentService {
 	protected void connect(String myJid) {
 		// If this is the first time running, then initialize the XMPP
 		// connection.
-		if (xmppConnection == null) {
+		if (xmpp.xmppConnection == null) {
 			// Setup aSmack.
 			SmackAndroid.init(getApplicationContext());
 			ConfigureProviderManager.configureProviderManager();
 
 			// Initialize the XMPPConnection itself. Point it to our EC2 server.
-			xmppConnection = new XMPPConnection(XMPP_SERVER_URL);
+			xmpp.xmppConnection = new XMPPConnection(XMPP_SERVER_URL);
 		}
 
 		// If you're already connected, then just attempt to login.
-		if (xmppConnection.isConnected()) {
+		if (xmpp.xmppConnection.isConnected()) {
 			Log.e("XMPPIntentService.connect()", "Already connected");
 
 			// Already connected, so attempt to login.
@@ -152,7 +137,7 @@ public final class XMPPIntentService extends IntentService {
 		// Otherwise, attempt to connect to XMPP.
 		try {
 			SASLAuthentication.supportSASLMechanism("PLAIN", 0);
-			xmppConnection.connect();
+			xmpp.xmppConnection.connect();
 		} catch (XMPPException e) {
 			Log.e("XMPPIntentService.connect()", e.getMessage());
 
@@ -161,12 +146,12 @@ public final class XMPPIntentService extends IntentService {
 			return;
 		}
 
-		if (xmppConnection.isConnected()) {
+		if (xmpp.xmppConnection.isConnected()) {
 			Log.d("XMPPIntentService.connect()", "Connected to XMPP");
 			// If the Connection succeeded, then add your
 			// ConnectionListener.
-			xmppConnection.removeConnectionListener(mConnectionListener);
-			xmppConnection.addConnectionListener(mConnectionListener);
+			xmpp.xmppConnection.removeConnectionListener(mConnectionListener);
+			xmpp.xmppConnection.addConnectionListener(mConnectionListener);
 
 			// Attempt to login.
 			xmpp.login(myJid, getApplicationContext());
@@ -182,7 +167,7 @@ public final class XMPPIntentService extends IntentService {
 	protected void register(String myJid) {
 		// If you try to login without being connected, then try to connect
 		// again.
-		if (!xmppConnection.isConnected()) {
+		if (!xmpp.xmppConnection.isConnected()) {
 			Log.e("XMPPIntentService.register()", "Can't login: not connected");
 
 			// Not connected, so attempt to connect.
@@ -192,7 +177,7 @@ public final class XMPPIntentService extends IntentService {
 
 		// If you try to register when you're already authenticated, then you're
 		// done -- you don't have to register because you're already logged in.
-		if (xmppConnection.isAuthenticated()) {
+		if (xmpp.xmppConnection.isAuthenticated()) {
 			Log.e("XMPPIntentService.register()",
 					"Can't register: already authenticated");
 			// Do nothing.
@@ -200,7 +185,8 @@ public final class XMPPIntentService extends IntentService {
 		}
 
 		try {
-			AccountManager accountManager = xmppConnection.getAccountManager();
+			AccountManager accountManager = xmpp.xmppConnection
+					.getAccountManager();
 			accountManager.createAccount(myJid, myJid);
 		} catch (XMPPException e) {
 			Log.e("XMPPIntentService.register()",
@@ -214,7 +200,7 @@ public final class XMPPIntentService extends IntentService {
 	protected void login(String myJid) {
 		// If you try to login without being connected, then try to connect
 		// again.
-		if (!xmppConnection.isConnected()) {
+		if (!xmpp.xmppConnection.isConnected()) {
 			Log.e("XMPPIntentService.login()", "Can't login: not connected");
 
 			// Not connected, so attempt to connect.
@@ -222,14 +208,14 @@ public final class XMPPIntentService extends IntentService {
 			return;
 		}
 
-		if (xmppConnection.isAuthenticated()) {
+		if (xmpp.xmppConnection.isAuthenticated()) {
 			Log.e("XMPPIntentService.login()", "XMPP already authenticated");
 			return;
 		}
 
 		try {
 			Log.i("XMPPIntentService.login()", "XMPP: attempting to login.");
-			xmppConnection.login(myJid, myJid);
+			xmpp.xmppConnection.login(myJid, myJid);
 			Log.i("XMPPIntentService.login()", "XMPP: login attempt finished.");
 		} catch (XMPPException e) {
 			// Show the error. Attempt to register.
@@ -239,11 +225,17 @@ public final class XMPPIntentService extends IntentService {
 			return;
 		}
 
-		if (xmppConnection.isAuthenticated()) {
+		if (xmpp.xmppConnection.isAuthenticated()) {
 			Log.d("XMPPIntentService.login()", "Logged into XMPP");
 			// If login succeeded, then move onto attempting to join all of the
 			// Mucs.
 			// Send off a Broadcast to do this on the UI thread.
+			if (xmpp.mucsToJoin.isEmpty()) {
+				Log.v("XMPPIntentService.login()",
+						"Won't join MUCs: All MUCs already joined");
+				return;
+			}
+
 			Intent joinMucsBroadcastIntent = new Intent();
 			joinMucsBroadcastIntent
 					.setAction(XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER);

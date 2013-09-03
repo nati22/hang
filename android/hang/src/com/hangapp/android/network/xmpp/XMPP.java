@@ -12,9 +12,11 @@ import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
+import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.MessagesDataSource;
@@ -30,6 +32,22 @@ import com.hangapp.android.util.Utils;
 final public class XMPP {
 
 	private static XMPP instance = new XMPP();
+
+	/**
+	 * Maintain a single, static {@link XMPPConnection} through the lifecycle of
+	 * the whole app. <br />
+	 * <br />
+	 * We don't have to worry about concurrent access to the same variable
+	 * because {@link IntentService} guarantees that onHandleIntent() handles a
+	 * single {@link Intent} at a time, in a queue.'
+	 * 
+	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! THIS INTENT SERVICE WILL BE
+	 * DESTROYED AS SOON AS ONHANDLEINTENT() IS DONE RUNNING! THIS MEANS THAT
+	 * THE XMPPCONNECTION MAINTAINED INSIDE HERE WILL ALSO BE DESTROYED! FIX
+	 * THIS! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 */
+	XMPPConnection xmppConnection;
+
 	private Map<String, MultiUserChat> mucMap = new HashMap<String, MultiUserChat>();
 	private Context context;
 	/**
@@ -52,6 +70,11 @@ final public class XMPP {
 		return instance;
 	}
 
+	private boolean isDoneJoiningAllChatrooms() {
+		return xmppConnection != null && xmppConnection.isConnected()
+				&& xmppConnection.isAuthenticated() && mucsToJoin.isEmpty();
+	}
+
 	/**
 	 * The only front-facing XMPPConnection method in this class. You should
 	 * call this method once from front-facing code, and this package should
@@ -59,6 +82,15 @@ final public class XMPP {
 	 * reconnections on failure, etc.
 	 */
 	public void connect(String myJid, Context context) {
+		if (isDoneJoiningAllChatrooms()) {
+			Log.v("XMPP.connect()",
+					"Won't connect to XMPP: Already authenticated");
+			return;
+		}
+
+		Toast.makeText(context, "Connecting to chat...", Toast.LENGTH_SHORT)
+				.show();
+
 		Intent connectIntent = new Intent(context, XMPPIntentService.class);
 		connectIntent.putExtra(Keys.MESSAGE, Keys.XMPP_CONNECT);
 		connectIntent.putExtra(Keys.JID, myJid);
@@ -170,7 +202,7 @@ final public class XMPP {
 
 		// Grab a reference to the single XMPPConnection that we use
 		// from the utility XMPPIntentService class.
-		XMPPConnection xmppConnection = XMPPIntentService.xmppConnection;
+		// XMPPConnection xmppConnection = XMPPIntentService.xmppConnection;
 
 		if (!xmppConnection.isConnected()) {
 			Log.e("XMPPPIntentService.joinMuc()",
@@ -213,11 +245,16 @@ final public class XMPP {
 
 		Log.i("XMPPIntentService.joinMuc()", "Joined muc: " + mucName);
 
+		// aSmack defines that you must add a Message Listener to the MUC
+		// *after* you've joined the MUC. It will throw an exception otherwise.
 		muc.addMessageListener(new PacketListener() {
 			@Override
 			public void processPacket(final Packet packet) {
 				boolean gotNewMessage = false;
 
+				// Smack upcasts all Messages to the "Packet" superclass, 
+				// regardless of whether or not you actually have a Message
+				// (alternatives include IQs, Presences, etc).
 				if (packet instanceof Message) {
 					final Message message = (Message) packet;
 
@@ -246,8 +283,8 @@ final public class XMPP {
 		// instantiate one and throw it into the Map.
 		// This technique is called "lazy instantiation".
 		if (muc == null) {
-			muc = new MultiUserChat(XMPPIntentService.xmppConnection, mucName
-					+ "@conference." + XMPPIntentService.XMPP_SERVER_URL);
+			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
+					+ XMPPIntentService.XMPP_SERVER_URL);
 			mucMap.put(mucName, muc);
 		}
 

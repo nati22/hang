@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.collect.Iterables;
 import com.hangapp.android.util.Keys;
@@ -20,6 +21,13 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		this.context = context;
 		this.intent = intent;
+
+		Log.i("XMPPBroadcastReceiver.onReceive()",
+				"XMPP Broadcast Receiver started.");
+
+		Toast.makeText(context,
+				"Connected to chat. Joining Proposal Chatrooms...",
+				Toast.LENGTH_SHORT).show();
 
 		String myJid = intent.getStringExtra(Keys.JID);
 
@@ -39,7 +47,7 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 			// If you try to join the muc without being connected, then
 			// try to
 			// connect again.
-			if (!XMPPIntentService.xmppConnection.isConnected()) {
+			if (!xmpp.xmppConnection.isConnected()) {
 				Log.e("XMPPIntentService.login()", "Can't login: not connected");
 
 				// Not connected, so attempt to connect.
@@ -50,7 +58,7 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 			// If you try to join Mucs without being logged in, then try
 			// to
 			// login again.
-			if (!XMPPIntentService.xmppConnection.isAuthenticated()) {
+			if (!xmpp.xmppConnection.isAuthenticated()) {
 				xmpp.login(myJid, context);
 				return;
 			}
@@ -59,9 +67,14 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 			boolean didJoinMuc = xmpp.joinMuc(mucToJoin, myJid);
 
 			if (didJoinMuc) {
+				Log.i("XMPPBroadcastReceiver#joinMucs()", "XMPP joined muc: "
+						+ mucToJoin);
 				mucsToJoinIterator.remove();
 			}
 		}
+
+		Toast.makeText(context, "Joined all Proposal chatrooms",
+				Toast.LENGTH_SHORT).show();
 	}
 
 }
