@@ -16,6 +16,7 @@ import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.MessagesDataSource;
@@ -69,6 +70,11 @@ final public class XMPP {
 		return instance;
 	}
 
+	private boolean isDoneJoiningAllChatrooms() {
+		return xmppConnection != null && xmppConnection.isConnected()
+				&& xmppConnection.isAuthenticated() && mucsToJoin.isEmpty();
+	}
+
 	/**
 	 * The only front-facing XMPPConnection method in this class. You should
 	 * call this method once from front-facing code, and this package should
@@ -76,6 +82,15 @@ final public class XMPP {
 	 * reconnections on failure, etc.
 	 */
 	public void connect(String myJid, Context context) {
+		if (isDoneJoiningAllChatrooms()) {
+			Log.v("XMPP.connect()",
+					"Won't connect to XMPP: Already authenticated");
+			return;
+		}
+
+		Toast.makeText(context, "Connecting to chat...", Toast.LENGTH_SHORT)
+				.show();
+
 		Intent connectIntent = new Intent(context, XMPPIntentService.class);
 		connectIntent.putExtra(Keys.MESSAGE, Keys.XMPP_CONNECT);
 		connectIntent.putExtra(Keys.JID, myJid);
@@ -230,11 +245,16 @@ final public class XMPP {
 
 		Log.i("XMPPIntentService.joinMuc()", "Joined muc: " + mucName);
 
+		// aSmack defines that you must add a Message Listener to the MUC
+		// *after* you've joined the MUC. It will throw an exception otherwise.
 		muc.addMessageListener(new PacketListener() {
 			@Override
 			public void processPacket(final Packet packet) {
 				boolean gotNewMessage = false;
 
+				// Smack upcasts all Messages to the "Packet" superclass, 
+				// regardless of whether or not you actually have a Message
+				// (alternatives include IQs, Presences, etc).
 				if (packet instanceof Message) {
 					final Message message = (Message) packet;
 

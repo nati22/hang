@@ -230,6 +230,12 @@ public final class XMPPIntentService extends IntentService {
 			// If login succeeded, then move onto attempting to join all of the
 			// Mucs.
 			// Send off a Broadcast to do this on the UI thread.
+			if (xmpp.mucsToJoin.isEmpty()) {
+				Log.v("XMPPIntentService.login()",
+						"Won't join MUCs: All MUCs already joined");
+				return;
+			}
+
 			Intent joinMucsBroadcastIntent = new Intent();
 			joinMucsBroadcastIntent
 					.setAction(XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER);

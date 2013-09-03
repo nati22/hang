@@ -141,6 +141,7 @@ public class CreateProposalFragment extends SherlockFragment {
 		switch (radioGroupHowSoon.getCheckedRadioButtonId()) {
 		case R.id.radioButtonNow1:
 			// Do nothing. Proposal starts right now.
+			proposalStartTime = proposalStartTime.plusSeconds(THIRTY);
 			break;
 		case R.id.radioButton15Min1:
 			proposalStartTime = proposalStartTime.plusMinutes(FIFTEEN);

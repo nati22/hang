@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.common.collect.Iterables;
 import com.hangapp.android.util.Keys;
@@ -23,6 +24,10 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 
 		Log.i("XMPPBroadcastReceiver.onReceive()",
 				"XMPP Broadcast Receiver started.");
+
+		Toast.makeText(context,
+				"Connected to chat. Joining Proposal Chatrooms...",
+				Toast.LENGTH_SHORT).show();
 
 		String myJid = intent.getStringExtra(Keys.JID);
 
@@ -62,11 +67,14 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 			boolean didJoinMuc = xmpp.joinMuc(mucToJoin, myJid);
 
 			if (didJoinMuc) {
-				Log.i("XMPPBroadcastReceiver#joinMucs()", "XMPP joined muc"
+				Log.i("XMPPBroadcastReceiver#joinMucs()", "XMPP joined muc: "
 						+ mucToJoin);
 				mucsToJoinIterator.remove();
 			}
 		}
+
+		Toast.makeText(context, "Joined all Proposal chatrooms",
+				Toast.LENGTH_SHORT).show();
 	}
 
 }
