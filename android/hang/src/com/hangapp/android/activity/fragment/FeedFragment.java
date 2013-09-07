@@ -16,11 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +28,6 @@ import com.hangapp.android.R;
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
-import com.hangapp.android.model.Availability.Status;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
@@ -39,7 +35,6 @@ import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.StatusIcon;
-import com.hangapp.android.util.Utils;
 
 /**
  * The leftmost tab inside {@link HomeActivity}.

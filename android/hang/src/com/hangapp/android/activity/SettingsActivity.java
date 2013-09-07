@@ -3,8 +3,12 @@ package com.hangapp.android.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.audobox.Audobox;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -28,12 +32,13 @@ public final class SettingsActivity extends BaseActivity {
 	// Dependencies.
 	private Database database;
 
+	private Button buttonAudoboxFeedback;
+
 	// Facebook SDK stuff.
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
+		public void call(Session session, SessionState state, Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -45,6 +50,18 @@ public final class SettingsActivity extends BaseActivity {
 
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
+
+		// Inflate XML
+		buttonAudoboxFeedback = (Button) findViewById(R.id.audoboxButton);
+		
+		buttonAudoboxFeedback.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Audobox.createFeedbackDialog(SettingsActivity.this)
+						.withApiKey("7bca550e257ff1b0f42ea5f5007d7d3a").show();
+			}
+		});
 
 		// Enable the "Up" button.
 		getSupportActionBar().setHomeButtonEnabled(true);
