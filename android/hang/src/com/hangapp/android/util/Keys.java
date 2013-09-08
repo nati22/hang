@@ -111,4 +111,10 @@ public final class Keys {
 		}
 		
 	}
+	
+	/**
+	 * Google Analytics Keys
+	 */
+	public static final String GOOGLE_ANALYTICS_TRACKING_ID = "UA-43852319-1";
+	
 }
