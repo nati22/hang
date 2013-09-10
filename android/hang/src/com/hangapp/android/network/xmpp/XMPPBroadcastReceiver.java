@@ -15,12 +15,10 @@ public class XMPPBroadcastReceiver extends BroadcastReceiver {
 
 	public static final String XMPP_BROADCAST_RECEIVER = "com.hangapp";
 	private Context context;
-	private Intent intent;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		this.context = context;
-		this.intent = intent;
 
 		Log.i("XMPPBroadcastReceiver.onReceive()",
 				"XMPP Broadcast Receiver started.");

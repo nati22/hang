@@ -5,18 +5,14 @@ import android.util.Log;
 
 import com.hangapp.android.database.Database;
 
-final class DeleteMyAvailabilityAsyncTask extends BaseDeleteRequestAsyncTask {
+final class DeleteMyAvailabilityAsyncTask extends
+		BaseDeleteRequestAsyncTask<String> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/status";
-
-	private Database database;
 
 	protected DeleteMyAvailabilityAsyncTask(Database database, Context context,
 			String jid) {
 		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX);
-
-		// Set dependencies
-		this.database = database;
 	}
 
 	@Override

@@ -23,7 +23,6 @@ import android.widget.Toast;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
-import com.hangapp.android.activity.fragment.ProposalFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
@@ -126,13 +125,15 @@ public final class ProfileActivity extends BaseActivity implements
 						|| friend.getJid().equals(database.getMyJid())) {
 					Log.i("ProfileActivity.imageViewOpenChat.onClick",
 							"interested: "
-									+ friend.getProposal().getInterested().toString());
-					Intent chatActivityIntent = new Intent(ProfileActivity.this,
-							ChatActivity.class);
+									+ friend.getProposal().getInterested()
+											.toString());
+					Intent chatActivityIntent = new Intent(
+							ProfileActivity.this, ChatActivity.class);
 					chatActivityIntent.putExtra(Keys.HOST_JID, friend.getJid());
 					startActivity(chatActivityIntent);
 				} else {
-					Toast.makeText(getApplicationContext(),
+					Toast.makeText(
+							getApplicationContext(),
 							"Sorry, you don't have permission to enter the chat.",
 							Toast.LENGTH_SHORT).show();
 					Log.w("ProfileActivity", "interested list: "
@@ -173,13 +174,15 @@ public final class ProfileActivity extends BaseActivity implements
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-		Typeface champagneLimousinesFont = Typeface.createFromAsset(
-				getApplicationContext().getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface
+				.createFromAsset(getApplicationContext().getAssets(),
+						Fonts.CHAMPAGNE_LIMOUSINES);
 		textViewStatus.setTypeface(champagneLimousinesFont);
 		textViewProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewProposalStartTime.setTypeface(champagneLimousinesFont);
-		textViewProposalInterestedCount.setTypeface(champagneLimousinesFontBold);
+		textViewProposalInterestedCount
+				.setTypeface(champagneLimousinesFontBold);
 	}
 
 	@Override
@@ -188,14 +191,6 @@ public final class ProfileActivity extends BaseActivity implements
 		if (database.getIncomingUser(friend.getJid()) != null) {
 			// If they still have a proposal
 			if (database.getIncomingUser(friend.getJid()).getProposal() != null) {
-				Log.i(ProposalFragment.class.getSimpleName(),
-						"onIncomingBroadcastsUpdate called with "
-								+ database.getIncomingUser(friend.getJid())
-										.getProposal().getInterested().size()
-								+ " interested, and "
-								+ database.getIncomingUser(friend.getJid())
-										.getProposal().getConfirmed().size()
-								+ " confirmed.");
 
 				// Find out if User's Interested was updated
 				if (!database.getIncomingUser(friend.getJid()).getProposal()
@@ -206,11 +201,10 @@ public final class ProfileActivity extends BaseActivity implements
 							.getIncomingUser(friend.getJid()).getProposal()
 							.getInterested());
 
-					updateHorizontalList(listInterestedJids, linLayoutInterested);
+					updateHorizontalList(listInterestedJids,
+							linLayoutInterested);
 				}
 			} else {
-				Log.i(ProposalFragment.class.getSimpleName(),
-						"onIncomingBroadcastsUpdate called with NO PROPOSAL.");
 				this.finish();
 			}
 
@@ -239,16 +233,17 @@ public final class ProfileActivity extends BaseActivity implements
 			relativeLayoutFriendsProposal.setVisibility(View.VISIBLE);
 			textViewProposalDescription.setText(friend.getProposal()
 					.getDescription());
-			textViewProposalLocation.setText(friend.getProposal().getLocation());
-			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
-					.toString("h:mm aa"));
+			textViewProposalLocation
+					.setText(friend.getProposal().getLocation());
+			textViewProposalStartTime.setText(friend.getProposal()
+					.getStartTime().toString("h:mm aa"));
 
 			/*
 			 * // Set "my" interested checkbox if
 			 * (friend.getProposal().getInterested() != null) { if
 			 * (friend.getProposal().getInterested()
-			 * .contains(database.getMyJid())) checkBoxInterested.setChecked(true);
-			 * }
+			 * .contains(database.getMyJid()))
+			 * checkBoxInterested.setChecked(true); }
 			 */
 
 			// Refresh list
@@ -261,7 +256,8 @@ public final class ProfileActivity extends BaseActivity implements
 				database.addSeenProposal(friend.getJid());
 				restClient.setSeenProposal(friend.getJid());
 				Log.i("ProfileActivity",
-						"first time seeing " + friend.getFirstName() + "'s prop");
+						"first time seeing " + friend.getFirstName()
+								+ "'s prop");
 			} else {
 				Log.i("ProfileActivity", friend.getFirstName()
 						+ "'s proposal already seen");
@@ -276,8 +272,9 @@ public final class ProfileActivity extends BaseActivity implements
 				|| !availability.isActive()) {
 			imageButtonFriendsAvailability.setImageDrawable(getResources()
 					.getDrawable(R.drawable.imagebutton_status_grey));
-			String remainingHours = Utils.getAbbvRemainingTimeString(availability
-					.getExpirationDate());
+			String remainingHours = Utils
+					.getAbbvRemainingTimeString(availability
+							.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
 			textViewStatus.setVisibility(View.INVISIBLE);
 		}
@@ -288,8 +285,9 @@ public final class ProfileActivity extends BaseActivity implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(availability.getDescription());
 
-			String remainingHours = Utils.getAbbvRemainingTimeString(availability
-					.getExpirationDate());
+			String remainingHours = Utils
+					.getAbbvRemainingTimeString(availability
+							.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Availability is BUSY.
@@ -299,8 +297,9 @@ public final class ProfileActivity extends BaseActivity implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(availability.getDescription());
 
-			String remainingHours = Utils.getAbbvRemainingTimeString(availability
-					.getExpirationDate());
+			String remainingHours = Utils
+					.getAbbvRemainingTimeString(availability
+							.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Error state.
@@ -320,11 +319,6 @@ public final class ProfileActivity extends BaseActivity implements
 	}
 
 	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
-		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
-				+ " elements");
-
-		Log.i(ProposalFragment.class.getSimpleName(),
-				"removed " + linLayout.getChildCount() + " elements from linLayout");
 		linLayout.removeAllViews();
 
 		for (int i = 0; i < jids.size(); i++) {
@@ -337,8 +331,6 @@ public final class ProfileActivity extends BaseActivity implements
 			// Set the FB Profile pic
 			ProfilePictureView icon = (ProfilePictureView) view
 					.findViewById(R.id.profilePictureIcon);
-			Log.i(ProposalFragment.class.getSimpleName(),
-					"Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
 
 			String name;
@@ -353,8 +345,8 @@ public final class ProfileActivity extends BaseActivity implements
 
 				@Override
 				public void onClick(View v) {
-					Toast.makeText(getApplicationContext(), toastName, Toast.LENGTH_SHORT)
-							.show();
+					Toast.makeText(getApplicationContext(), toastName,
+							Toast.LENGTH_SHORT).show();
 
 				}
 			});

@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
-import com.hangapp.android.activity.fragment.ProposalFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
@@ -323,12 +322,6 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 	}
 
 	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
-		Log.i(ProposalFragment.class.getSimpleName(), "jids has " + jids.size()
-				+ " elements");
-
-		Log.i(ProposalFragment.class.getSimpleName(),
-				"removed " + linLayout.getChildCount()
-						+ " elements from linLayout");
 		linLayout.removeAllViews();
 
 		for (int i = 0; i < jids.size(); i++) {
@@ -341,14 +334,11 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 			// Set the FB Profile pic
 			ProfilePictureView icon = (ProfilePictureView) view
 					.findViewById(R.id.profilePictureIcon);
-			Log.i(ProposalFragment.class.getSimpleName(),
-					"Creating fb icon with jid " + jid);
 			icon.setProfileId(jid);
 			icon.setOnClickListener(new OnClickListener() {
 
 				@Override
 				public void onClick(View v) {
-					String fn;
 					// Check if it's me
 					if (myJid.equals(jid)) {
 						// TODO: This is 100% pointless and should be removed :)

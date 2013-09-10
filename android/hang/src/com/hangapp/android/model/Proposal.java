@@ -27,7 +27,7 @@ public final class Proposal {
 				Log.e(Proposal.class.getSimpleName(),
 						".equals() called with Proposal against null");
 			}
-			
+
 			return false;
 		} else {
 			Proposal otherProp = (Proposal) o;
@@ -128,13 +128,11 @@ public final class Proposal {
 	}
 
 	public boolean isActive() {
-		//TODO: For now, Proposals expire after 2 hours.
-		
-		int minLeft = 0;
-		long diff = startTime.toDate().getTime()
-				- new Date().getTime();
+		// TODO: For now, Proposals expire after 2 hours.
+
+		long diff = startTime.toDate().getTime() - new Date().getTime();
 		int min = (int) (diff / (60 * 1000));
-		
+
 		if (min < 120) {
 			return true;
 		} else {

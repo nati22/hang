@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,8 +55,6 @@ import com.hangapp.android.util.TabsAdapter;
 public final class HomeActivity extends BaseActivity implements
 		ProposalChangedListener {
 
-
-
 	// UI stuff.
 	private NoSlideViewPager mViewPager;
 	private TabsAdapter mTabsAdapter;
@@ -72,7 +69,8 @@ public final class HomeActivity extends BaseActivity implements
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(Session session, SessionState state, Exception exception) {
+		public void call(Session session, SessionState state,
+				Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -131,8 +129,6 @@ public final class HomeActivity extends BaseActivity implements
 		}
 
 	}
-	
-
 
 	@Override
 	protected void onStart() {
@@ -142,7 +138,7 @@ public final class HomeActivity extends BaseActivity implements
 		// Start Google Analytics session
 		EasyTracker.getInstance(this).activityStart(this);
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -163,14 +159,14 @@ public final class HomeActivity extends BaseActivity implements
 		switch (item.getItemId()) {
 		case R.id.menu_refresh:
 			restClient.getMyData();
-			
+
 			return true;
 		case R.id.menu_settings:
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:
-			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
-					+ item.getAlphabeticShortcut());
+			Log.e("HomeActivity.onOptionsItemSelected",
+					"Unknown item selected: " + item.getAlphabeticShortcut());
 			return true;
 		}
 	}
@@ -180,8 +176,8 @@ public final class HomeActivity extends BaseActivity implements
 		super.onSaveInstanceState(outState);
 
 		// Save which tab we had selected into savedInstanceState.
-		outState
-				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
+		outState.putInt("tab", getSupportActionBar()
+				.getSelectedNavigationIndex());
 		uiHelper.onSaveInstanceState(outState);
 	}
 
@@ -227,15 +223,16 @@ public final class HomeActivity extends BaseActivity implements
 				if (graphUser != null) {
 					Log.v("HomeActivity.onResume",
 							"Retrieved Facebook MeRequest, saving data internally"
-									+ " for Facebook user " + graphUser.getName());
+									+ " for Facebook user "
+									+ graphUser.getName());
 
 					// You've officially "registered."
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putBoolean(Keys.REGISTERED, true);
 					editor.commit();
 
-					User me = new User(graphUser.getId(), graphUser.getFirstName(),
-							graphUser.getLastName());
+					User me = new User(graphUser.getId(), graphUser
+							.getFirstName(), graphUser.getLastName());
 
 					// Save the "me" User object into the database.
 					database.setMyUserData(me.getJid(), me.getFirstName(),
@@ -299,14 +296,6 @@ public final class HomeActivity extends BaseActivity implements
 		uiHelper.onDestroy();
 	}
 
-	@Override
-	public void onAttachFragment(Fragment fragment) {
-		// TODO Auto-generated method stub
-		super.onAttachFragment(fragment);
-		Log.e("******************",
-				"attached Fragment with tag = " + fragment.getTag());
-	}
-
 	/**
 	 * HomeActivity "watches" for Facebook session validity in order to show the
 	 * LoginFragment if a logout occurs for any reason.
@@ -314,20 +303,24 @@ public final class HomeActivity extends BaseActivity implements
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		if (state.isOpened()) {
-			Log.i("HomeActivity.onSessionStateChange", "Logged in to Facebook...");
+			Log.i("HomeActivity.onSessionStateChange",
+					"Logged in to Facebook...");
 			// Since Facebook successfully logged in, show the regular tabbed
 			// ActionBar.
+			// TODO: Use real fragment transactions instead of this ghetto
+			// double-call of setContentView().
 			setContentView(mViewPager);
 			getSupportActionBar().show();
 		} else if (state.isClosed()) {
-			Log.i("HomeActivity.onSessionStateChange", "Logged out of Facebook...");
+			Log.i("HomeActivity.onSessionStateChange",
+					"Logged out of Facebook...");
 			// Since Facebook isn't logged in, show the LoginFragment.
 			setContentView(R.layout.login);
 			getSupportActionBar().hide();
 
 			if (exception != null) {
-				Log.e("HomeActivity.onSessionStateChange", "Facebook exception: "
-						+ exception.getMessage());
+				Log.e("HomeActivity.onSessionStateChange",
+						"Facebook exception: " + exception.getMessage());
 			} else {
 				Log.i("HomeActivity.onSessionStateChange",
 						"Facebook logged out without exception");
