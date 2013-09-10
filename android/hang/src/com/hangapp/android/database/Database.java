@@ -39,11 +39,11 @@ public final class Database {
 
 	private Map<String, User> library = new HashMap<String, User>();
 
-	private List<IncomingBroadcastsListener> incomingBroadcastsListeners = new ArrayList<IncomingBroadcastsListener>();
-	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
-	private List<MyAvailabilityListener> myStatusListeners = new ArrayList<MyAvailabilityListener>();
-	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
+	private List<IncomingBroadcastsListener> incomingBroadcastsListeners = new ArrayList<IncomingBroadcastsListener>();
+	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
+	private List<MyAvailabilityListener> myStatusListeners = new ArrayList<MyAvailabilityListener>();
+	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
 	private List<SeenProposalsListener> seenProposalsListeners = new ArrayList<SeenProposalsListener>();
 
 	private XMPP xmpp;
@@ -157,7 +157,7 @@ public final class Database {
 	 */
 	public Availability getMyAvailability() {
 
-		Availability.Status statusColor = Availability.parseStatus(prefs
+		Availability.Status statusColor = Availability.Status.fromString(prefs
 				.getString(Keys.AVAILABILITY_COLOR, null));
 		String dateString = prefs.getString(Keys.AVAILABILITY_EXPIRATION_DATE,
 				null);
@@ -510,8 +510,7 @@ public final class Database {
 			Log.i("Database.addSeenProposal()", "Proposal has been seen before");
 		}
 
-		seenProposalsListString = Utils
-				.convertArrayToString(seenProposals);
+		seenProposalsListString = Utils.convertArrayToString(seenProposals);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);
@@ -545,8 +544,7 @@ public final class Database {
 			Log.i("Database.deleteMySeenProposal", "seenProposals.remove("
 					+ proposalJid + ") returned false");
 
-		seenProposalsListString = Utils
-				.convertArrayToString(seenProposals);
+		seenProposalsListString = Utils.convertArrayToString(seenProposals);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);

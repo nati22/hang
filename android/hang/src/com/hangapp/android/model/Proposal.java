@@ -16,40 +16,12 @@ public final class Proposal {
 	private List<String> interestedUsers;
 	private List<String> confirmedUsers;
 
-	@Override
-	public boolean equals(Object o) {
-		if (!(o instanceof Proposal)) {
-			if (o != null) {
-				Log.e(Proposal.class.getSimpleName(),
-						".equals() called with Proposal against a "
-								+ o.getClass().getName());
-			} else {
-				Log.e(Proposal.class.getSimpleName(),
-						".equals() called with Proposal against null");
-			}
-
-			return false;
-		} else {
-			Proposal otherProp = (Proposal) o;
-			if (otherProp.getDescription().equals(this.description)
-					&& otherProp.getLocation().equals(this.location)
-					&& otherProp.getStartTime().equals(this.startTime)
-					&& otherProp.interestedUsers.equals(this.interestedUsers)
-					&& otherProp.confirmedUsers.equals(this.confirmedUsers)) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-
-	public static final int DESCRIPTION_MAX_CHARS = 100;
-	public static final int LOCATION_MAX_CHARS = 50;
-
 	/**
 	 * A proposal's default duration, in hours.
 	 */
-	public static final Integer PROPOSAL_DURATION = 2;
+	public static final Integer PROPOSAL_DURATION_IN_HOURS = 2;
+	public static final int LOCATION_MAX_CHARS = 50;
+	public static final int DESCRIPTION_MAX_CHARS = 100;
 
 	public Proposal(String description, String location, DateTime time) {
 		this.description = description;
@@ -133,7 +105,7 @@ public final class Proposal {
 		long diff = startTime.toDate().getTime() - new Date().getTime();
 		int min = (int) (diff / (60 * 1000));
 
-		if (min < 120) {
+		if (min < PROPOSAL_DURATION_IN_HOURS * 60) {
 			return true;
 		} else {
 			return false;
@@ -156,6 +128,33 @@ public final class Proposal {
 
 	public static boolean timeIsValid(Calendar proposalTime) {
 		return !proposalTime.before(Calendar.getInstance());
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Proposal)) {
+			if (o != null) {
+				Log.e(Proposal.class.getSimpleName(),
+						".equals() called with Proposal against a "
+								+ o.getClass().getName());
+			} else {
+				Log.e(Proposal.class.getSimpleName(),
+						".equals() called with Proposal against null");
+			}
+
+			return false;
+		} else {
+			Proposal otherProp = (Proposal) o;
+			if (otherProp.getDescription().equals(this.description)
+					&& otherProp.getLocation().equals(this.location)
+					&& otherProp.getStartTime().equals(this.startTime)
+					&& otherProp.interestedUsers.equals(this.interestedUsers)
+					&& otherProp.confirmedUsers.equals(this.confirmedUsers)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
 	}
 
 }
