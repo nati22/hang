@@ -18,7 +18,6 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.database.MessagesDataSource;
 import com.hangapp.android.model.callback.MucListener;
@@ -283,12 +282,10 @@ final public class XMPP {
 							return;
 						}
 
-						String from = Utils.convertJidToName(fromJid,
-								database);
+						String from = Utils.convertJidToName(fromJid, database);
 
 						Utils.showChatNotification(context, "Message from "
-								+ from, message.getBody(), HomeActivity.class,
-								3);
+								+ from, message.getBody(), fromJid);
 					}
 				}
 			}

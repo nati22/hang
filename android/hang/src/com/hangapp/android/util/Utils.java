@@ -19,15 +19,18 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.hangapp.android.R;
+import com.hangapp.android.activity.ChatActivity;
 import com.hangapp.android.database.Database;
 
 public final class Utils {
 	public static final String BASE_URL = "http://therealhangapp.appspot.com/rest";
 	public static final String USERS_URL = BASE_URL + "/users";
 	public static final String TAG = "Utils";
+	public static final int MUC_MESSAGE_RECEIVED_NOTIFICATION_ID = 3;
 
 	/**
 	 * Returns true IFF this device is connected to the internet, either through
@@ -116,9 +119,17 @@ public final class Utils {
 	}
 
 	public static void showChatNotification(Context context, String title,
-			String notificationString, Class<?> activityToOpen,
-			int notificationId) {
-		Intent nudgeIntent = new Intent(context, activityToOpen);
+			String notificationString, String hostJid) {
+		Intent nudgeIntent = new Intent(context, ChatActivity.class);
+		nudgeIntent.putExtra(Keys.HOST_JID, hostJid);
+
+		// Open up ChatActivity, but put HomeActivity behind it on the
+		// Android Activity back stack.
+		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
+		stackBuilder.addParentStack(ChatActivity.class);
+		stackBuilder.addNextIntent(nudgeIntent);
+		PendingIntent pendingIntent = stackBuilder.getPendingIntent(0,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		NotificationManager notifMgr = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -130,12 +141,10 @@ public final class Utils {
 				.setLargeIcon(
 						BitmapFactory.decodeResource(context.getResources(),
 								R.drawable.ic_launcher))
-				.setContentIntent(
-						PendingIntent.getActivity(context, 0, nudgeIntent, 0))
-				.build();
+				.setContentIntent(pendingIntent).build();
 
 		notif.flags = Notification.FLAG_AUTO_CANCEL;
-		notifMgr.notify(notificationId, notif);
+		notifMgr.notify(MUC_MESSAGE_RECEIVED_NOTIFICATION_ID, notif);
 
 		Vibrator v = (Vibrator) context
 				.getSystemService(Context.VIBRATOR_SERVICE);

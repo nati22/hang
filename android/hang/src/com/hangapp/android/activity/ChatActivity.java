@@ -366,10 +366,7 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 
 				}
 			});
-
 			linLayout.addView(view);
-
 		}
-
 	}
 }
