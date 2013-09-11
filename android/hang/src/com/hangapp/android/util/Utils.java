@@ -41,7 +41,7 @@ public final class Utils {
 		return activeNetworkInfo != null;
 	}
 
-	public static String convertStringArrayToString(List<String> stringArray) {
+	public static String convertArrayToString(List<String> stringArray) {
 		if (stringArray == null) {
 			return null;
 		}
@@ -70,12 +70,13 @@ public final class Utils {
 	public static String getAbbvRemainingTimeString(DateTime expirationDate) {
 		DateTime rightNow = new DateTime();
 
-		if (expirationDate.isBefore(rightNow))
+		if (expirationDate.isBefore(rightNow)) {
 			return "0h";
+		}
 
 		int hrs = 0;
 		int min = Minutes.minutesBetween(rightNow, expirationDate).getMinutes();
-		
+
 		while (min >= 60) {
 			hrs++;
 			min = min - 60;
@@ -84,13 +85,15 @@ public final class Utils {
 		Log.i(TAG, hrs + "hrs " + min + " min");
 		if (hrs == 0) {
 			// TODO: Eventually we should add a countdown so we can display
-			if (min < 30) return "<30m";
+			if (min < 30) {
+				return "<30m";
+			}
 			return "1h";
 		} else if (min < 30) {
-			Log.i(TAG, "< 30 min past the hr, posting " + hrs);
+			Log.v(TAG, "< 30 min past the hr, posting " + hrs);
 			return hrs + "h";
 		} else if (min >= 30) {
-			Log.i(TAG, "> 30 min past the hr, posting " + (hrs + 1));
+			Log.v(TAG, "> 30 min past the hr, posting " + (hrs + 1));
 			hrs++;
 			return hrs + "h";
 		} else {
@@ -110,8 +113,9 @@ public final class Utils {
 		return Hours.hoursBetween(rightNow, expirationDate).getHours();
 	}
 
-	public static void showNotification(Context context, String title,
-			String notificationString, Class<?> activityToOpen, int notificationId) {
+	public static void showChatNotification(Context context, String title,
+			String notificationString, Class<?> activityToOpen,
+			int notificationId) {
 		Intent nudgeIntent = new Intent(context, activityToOpen);
 
 		NotificationManager notifMgr = (NotificationManager) context

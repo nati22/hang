@@ -2,8 +2,6 @@ package com.hangapp.android.model;
 
 import org.joda.time.DateTime;
 
-import com.hangapp.android.util.Utils;
-
 import android.util.Log;
 
 public final class Availability implements Comparable<Availability> {
@@ -30,8 +28,9 @@ public final class Availability implements Comparable<Availability> {
 	 * @param Date
 	 *            expirationDate
 	 */
-	public Availability(String statusString, DateTime expirationDate, String statusText) {
-		this.status = parseStatus(statusString);
+	public Availability(String statusString, DateTime expirationDate,
+			String statusText) {
+		this.status = Status.fromString(statusString);
 		this.expirationDate = expirationDate;
 		this.statusDesc = statusText;
 	}
@@ -114,29 +113,11 @@ public final class Availability implements Comparable<Availability> {
 	 */
 
 	public void setColor(String colorString) {
-		this.status = parseStatus(colorString);
+		this.status = Status.fromString(colorString);
 	}
 
 	public void setExpirationDate(DateTime expirationDate) {
 		this.expirationDate = expirationDate;
-	}
-
-	/**
-	 * Helper function that parses a {@link Availability.Status} from a String.
-	 * 
-	 * @param colorString
-	 * @return
-	 */
-	public static Status parseStatus(String colorString) {
-		// Convert the StatusColor string back to its enum
-		Status parsedColor = null;
-		for (Status color : Status.values()) {
-			if (color.toString().equals(colorString)) {
-				parsedColor = color;
-			}
-		}
-
-		return parsedColor;
 	}
 
 	public String toString() {
@@ -147,8 +128,7 @@ public final class Availability implements Comparable<Availability> {
 	 * @return True if this status is active.
 	 */
 	public boolean isActive() {
-		return expirationDate != null
-				&& expirationDate.isAfter(new DateTime());
+		return expirationDate != null && expirationDate.isAfter(new DateTime());
 	}
 
 	/**
@@ -160,6 +140,26 @@ public final class Availability implements Comparable<Availability> {
 
 		private Status(int value) {
 			this.value = value;
+		}
+
+		/**
+		 * Helper function that parses a {@link Availability.Status} from a
+		 * String, or null if the given string doesn't equal any of the existing
+		 * Statuses.
+		 * 
+		 * @param colorString
+		 * @return
+		 */
+		public static Status fromString(String colorString) {
+			// Convert the StatusColor string back to its enum
+			Status parsedColor = null;
+			for (Status color : Status.values()) {
+				if (color.toString().equals(colorString)) {
+					parsedColor = color;
+				}
+			}
+
+			return parsedColor;
 		}
 
 		int value;

@@ -7,23 +7,17 @@ import org.apache.http.NameValuePair;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 
-class SetAvailabilityAsyncTask extends
-		BasePutRequestAsyncTask<Availability> {
+class SetAvailabilityAsyncTask extends BasePutRequestAsyncTask<Availability> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/status";
 
-	private Database database;
-
-	protected SetAvailabilityAsyncTask(Database database, Context context,
-			String jid, List<NameValuePair> parameters) {
+	protected SetAvailabilityAsyncTask(Context context, String jid,
+			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX, parameters);
 
-		// Set dependencies.
-		this.database = database;
 	}
 
 	@Override

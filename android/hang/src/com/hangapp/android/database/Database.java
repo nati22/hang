@@ -39,15 +39,14 @@ public final class Database {
 
 	private Map<String, User> library = new HashMap<String, User>();
 
-	private List<IncomingBroadcastsListener> incomingBroadcastsListeners = new ArrayList<IncomingBroadcastsListener>();
-	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
-	private List<MyAvailabilityListener> myStatusListeners = new ArrayList<MyAvailabilityListener>();
-	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
 	private List<MyUserDataListener> myUserDataListeners = new ArrayList<MyUserDataListener>();
+	private List<IncomingBroadcastsListener> incomingBroadcastsListeners = new ArrayList<IncomingBroadcastsListener>();
+	private List<OutgoingBroadcastsListener> outgoingBroadcastsListeners = new ArrayList<OutgoingBroadcastsListener>();
+	private List<MyAvailabilityListener> myStatusListeners = new ArrayList<MyAvailabilityListener>();
+	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
 	private List<SeenProposalsListener> seenProposalsListeners = new ArrayList<SeenProposalsListener>();
 
 	private XMPP xmpp;
-	private Context context;
 
 	/** Private constructor */
 	private Database() {
@@ -59,13 +58,9 @@ public final class Database {
 
 	/**
 	 * This method should be called exactly once, from {@link BaseApplication}.
-	 * 
-	 * @param context
 	 */
 	public void initialize(Context context) {
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		// this.usersDataSource = new UsersDataSource(context);
-		this.context = context;
 		this.xmpp = XMPP.getInstance();
 	}
 
@@ -162,7 +157,7 @@ public final class Database {
 	 */
 	public Availability getMyAvailability() {
 
-		Availability.Status statusColor = Availability.parseStatus(prefs
+		Availability.Status statusColor = Availability.Status.fromString(prefs
 				.getString(Keys.AVAILABILITY_COLOR, null));
 		String dateString = prefs.getString(Keys.AVAILABILITY_EXPIRATION_DATE,
 				null);
@@ -215,9 +210,9 @@ public final class Database {
 		SharedPreferences.Editor editor = prefs.edit();
 
 		// Convert the each of the String arrays into a comma-separated String.
-		String interestedString = Utils.convertStringArrayToString(proposal
+		String interestedString = Utils.convertArrayToString(proposal
 				.getInterested());
-		String confirmedString = Utils.convertStringArrayToString(proposal
+		String confirmedString = Utils.convertArrayToString(proposal
 				.getConfirmed());
 
 		editor.putString(Keys.PROPOSAL_DESCRIPTION, proposal.getDescription());
@@ -420,13 +415,13 @@ public final class Database {
 
 		return library.get(jid);
 	}
-	
+
 	public void addFilteredUser(String jid) {
-		
+
 	}
-	
+
 	public void removeFilteredUser(String jid) {
-		
+
 	}
 
 	public void setMyUserData(String jid, String firstName, String lastName) {
@@ -446,7 +441,7 @@ public final class Database {
 	public void setMyIncomingBroadcasts(List<String> incomingBroadcasts) {
 		// Convert the List<String>'s to single comma separated Strings.
 		String incomingStringList = Utils
-				.convertStringArrayToString(incomingBroadcasts);
+				.convertArrayToString(incomingBroadcasts);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.INCOMING, incomingStringList);
@@ -468,7 +463,7 @@ public final class Database {
 	public void setMyOutgoingBroadcasts(List<String> outgoingBroadcasts) {
 		// Convert the List<String>'s to single comma separated Strings.
 		String outgoingStringList = Utils
-				.convertStringArrayToString(outgoingBroadcasts);
+				.convertArrayToString(outgoingBroadcasts);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.OUTGOING, outgoingStringList);
@@ -490,7 +485,7 @@ public final class Database {
 	public void setMySeenProposals(List<String> seenProposals) {
 		// Convert the List<String>'s to single comma separated Strings.
 		String seenProposalsStringList = Utils
-				.convertStringArrayToString(seenProposals);
+				.convertArrayToString(seenProposals);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsStringList);
@@ -515,8 +510,7 @@ public final class Database {
 			Log.i("Database.addSeenProposal()", "Proposal has been seen before");
 		}
 
-		seenProposalsListString = Utils
-				.convertStringArrayToString(seenProposals);
+		seenProposalsListString = Utils.convertArrayToString(seenProposals);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);
@@ -550,8 +544,7 @@ public final class Database {
 			Log.i("Database.deleteMySeenProposal", "seenProposals.remove("
 					+ proposalJid + ") returned false");
 
-		seenProposalsListString = Utils
-				.convertStringArrayToString(seenProposals);
+		seenProposalsListString = Utils.convertArrayToString(seenProposals);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.PROPOSAL_SEEN, seenProposalsListString);
@@ -601,7 +594,7 @@ public final class Database {
 
 	public void setJidsImInterestedIn(List<String> interestedJids) {
 		String interestedJidsString = Utils
-				.convertStringArrayToString(interestedJids);
+				.convertArrayToString(interestedJids);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.JIDS_IM_INTERESTED_IN, interestedJidsString);
@@ -612,7 +605,7 @@ public final class Database {
 		// Attempt to join the MUC belonging to each of the JIDs that I am
 		// interested in.
 		// TODO: You should join your own MUC, if you have one.
-		xmpp.joinMucs(myJid, interestedJids);
+		xmpp.setListOfMucsToJoinAndConnect(myJid, interestedJids);
 	}
 
 	/**

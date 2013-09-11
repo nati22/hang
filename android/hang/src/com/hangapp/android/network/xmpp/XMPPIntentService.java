@@ -54,8 +54,6 @@ public final class XMPPIntentService extends IntentService {
 
 		// Figure out which message the Intent is sending.
 		int message = intent.getIntExtra(Keys.MESSAGE, 0);
-		Log.d("TAG", "XMPPIntentService started with intent message: "
-				+ message);
 
 		// Pull out all extras. Sanity check them later, when you need them.
 		String myJid = intent.getStringExtra(Keys.JID);
@@ -64,7 +62,6 @@ public final class XMPPIntentService extends IntentService {
 		// Intent.
 		switch (message) {
 		case Keys.XMPP_CONNECT:
-
 			// Sanity check.
 			if (myJid == null) {
 				Log.e("XMPPIntentService", "Can't connect to XMPP: Null myJid");
@@ -74,7 +71,6 @@ public final class XMPPIntentService extends IntentService {
 			connect(myJid);
 			return;
 		case Keys.XMPP_REGISTER:
-
 			// Sanity check.
 			if (myJid == null) {
 				Log.e("XMPPIntentService", "Can't register to XMPP: Null myJid");
@@ -93,16 +89,6 @@ public final class XMPPIntentService extends IntentService {
 
 			login(myJid);
 			return;
-			// case Keys.XMPP_JOIN_ALL_MUCS:
-			// // Sanity check.
-			// if (myJid == null) {
-			// Log.e("XMPPIntentService",
-			// "Can't join all XMPP Mucs: Null myJid");
-			// return;
-			// }
-			//
-			// joinMucs(myJid);
-			// return;
 		case Keys.XMPP_LOGOUT:
 			logout();
 			return;
@@ -114,6 +100,8 @@ public final class XMPPIntentService extends IntentService {
 	}
 
 	protected void connect(String myJid) {
+		Log.v("XMPPIntentService", "XMPPIntentService: connect()");
+
 		// If this is the first time running, then initialize the XMPP
 		// connection.
 		if (xmpp.xmppConnection == null) {
@@ -165,6 +153,8 @@ public final class XMPPIntentService extends IntentService {
 	}
 
 	protected void register(String myJid) {
+		Log.v("XMPPIntentService", "XMPPIntentService: register()");
+
 		// If you try to login without being connected, then try to connect
 		// again.
 		if (!xmpp.xmppConnection.isConnected()) {
@@ -198,6 +188,8 @@ public final class XMPPIntentService extends IntentService {
 	}
 
 	protected void login(String myJid) {
+		Log.v("XMPPIntentService", "XMPPIntentService: login()");
+
 		// If you try to login without being connected, then try to connect
 		// again.
 		if (!xmpp.xmppConnection.isConnected()) {
@@ -251,7 +243,9 @@ public final class XMPPIntentService extends IntentService {
 	}
 
 	protected void logout() {
+		Log.v("XMPPIntentService", "XMPPIntentService: logout()");
 
+		// TODO
 	}
 
 }

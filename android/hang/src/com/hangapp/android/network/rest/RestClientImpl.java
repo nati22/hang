@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.hangapp.android.activity.fragment.SetStatusDialogFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Proposal;
@@ -59,15 +58,14 @@ public final class RestClientImpl implements RestClient {
 		if (status != null) {
 			List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
-			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR, status
-					.getStatus().toString()));
+			parameters.add(new BasicNameValuePair(Keys.AVAILABILITY_COLOR,
+					status.getStatus().toString()));
 			parameters.add(new BasicNameValuePair(
-					Keys.AVAILABILITY_EXPIRATION_DATE, status.getExpirationDate()
-							.toString()));
+					Keys.AVAILABILITY_EXPIRATION_DATE, status
+							.getExpirationDate().toString()));
 			parameters.add(new BasicNameValuePair(Keys.STATUS_TEXT, status
 					.getDescription()));
-			new SetAvailabilityAsyncTask(database, context, jid, parameters)
-					.execute();
+			new SetAvailabilityAsyncTask(context, jid, parameters).execute();
 		} else {
 			new DeleteMyAvailabilityAsyncTask(database, context, jid).execute();
 		}
@@ -81,12 +79,12 @@ public final class RestClientImpl implements RestClient {
 		String jid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION, proposal
-				.getDescription()));
+		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_DESCRIPTION,
+				proposal.getDescription()));
 		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_LOCATION, proposal
 				.getLocation()));
-		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_START_TIME, proposal
-				.getStartTime().toString()));
+		parameters.add(new BasicNameValuePair(Keys.PROPOSAL_START_TIME,
+				proposal.getStartTime().toString()));
 
 		if (!proposal.getInterested().isEmpty()) {
 			for (String interestedUserJid : proposal.getInterested()) {
@@ -102,7 +100,7 @@ public final class RestClientImpl implements RestClient {
 			}
 		}
 
-		new SetProposalAsyncTask(database, context, jid, parameters).execute();
+		new SetProposalAsyncTask(context, jid, parameters).execute();
 
 		// TODO: Send a tickle to my recipients
 	}
@@ -137,22 +135,20 @@ public final class RestClientImpl implements RestClient {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 
-		new AddBroadcastAsyncTask(database, this, context, myJid, parameters)
-				.execute();
+		new AddBroadcastAsyncTask(this, context, myJid, parameters).execute();
 	}
-	
+
 	@Override
 	public void addBroadcastees(List<String> broadcasteeJIDs) {
 		String myJid = database.getMyJid();
-		
+
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		for (String broadcasteeJID : broadcasteeJIDs) {
 			parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 		}
-		
+
 		new AddMultipleBroadcastsAsyncTask(context, this, myJid, parameters);
-		
-		
+
 	}
 
 	@Override
@@ -195,7 +191,7 @@ public final class RestClientImpl implements RestClient {
 
 	@Override
 	public void deleteInterested(String broadcasterJid) {
-		new DeleteInterestedAsyncTask(database, context, database.getMyJid(),
+		new DeleteInterestedAsyncTask(this, context, database.getMyJid(),
 				broadcasterJid).execute();
 	}
 
@@ -211,14 +207,14 @@ public final class RestClientImpl implements RestClient {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
 
-		new SetProposalSeenAsyncTask(database, context, database.getMyJid(),
-				parameters).execute();
+		new SetProposalSeenAsyncTask(context, database.getMyJid(), parameters)
+				.execute();
 	}
 
 	@Override
 	public void deleteSeenProposal(String broadcasterJid) {
 
-		new DeleteProposalSeenAsyncTask(database, context, database.getMyJid(),
+		new DeleteProposalSeenAsyncTask(this, context, database.getMyJid(),
 				broadcasterJid);
 	}
 

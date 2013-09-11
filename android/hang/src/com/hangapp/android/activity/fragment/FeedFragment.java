@@ -156,7 +156,8 @@ public final class FeedFragment extends SherlockFragment implements
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.cell_friend_fragment, null);
+				convertView = inflater.inflate(R.layout.cell_friend_fragment,
+						null);
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
@@ -200,14 +201,14 @@ public final class FeedFragment extends SherlockFragment implements
 					&& user.getAvailability().isActive()) {
 				// Set description if it's there
 				if (user.getAvailability().getDescription() != null
-						&& !user.getAvailability().getDescription().equals("null")) {
+						&& !user.getAvailability().getDescription()
+								.equals("null")) {
 					holder.textViewAvailabilityDescription.setText(user
 							.getAvailability().getDescription());
 				}
 			}
 
-			holder.statusIcon.initialize(context, database, restClient, user,
-					convertView);
+			holder.statusIcon.initialize(context, user, convertView);
 			holder.statusIcon.setAvailabilityColor(user.getAvailability());
 			holder.statusIcon.setOnClickListener(new OnClickListener() {
 
@@ -218,13 +219,13 @@ public final class FeedFragment extends SherlockFragment implements
 						Toast.makeText(context,
 								"Sending a nudge to " + user.getFirstName(),
 								Toast.LENGTH_SHORT).show();
-						((StatusIcon)v).setPressed(true);
+						((StatusIcon) v).setPressed(true);
 					} else {
 						// Determine hrs and min left
 						int min = Minutes.minutesBetween(new DateTime(),
 								user.getAvailability().getExpirationDate())
 								.getMinutes();
-						
+
 						int hrs = 0;
 						while (min >= 60) {
 							hrs++;
@@ -235,7 +236,8 @@ public final class FeedFragment extends SherlockFragment implements
 						Toast.makeText(
 								context,
 								hrs + " hr" + ((hrs > 1) ? "s " : " ") + min
-										+ " min remaining", Toast.LENGTH_SHORT).show();
+										+ " min remaining", Toast.LENGTH_SHORT)
+								.show();
 					}
 				}
 			});

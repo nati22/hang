@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.MessagesDataSource;
 import com.hangapp.android.model.callback.MucListener;
+import com.hangapp.android.util.BaseApplication;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.Utils;
 
@@ -41,15 +42,14 @@ final public class XMPP {
 	 * because {@link IntentService} guarantees that onHandleIntent() handles a
 	 * single {@link Intent} at a time, in a queue.'
 	 * 
-	 * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! THIS INTENT SERVICE WILL BE
-	 * DESTROYED AS SOON AS ONHANDLEINTENT() IS DONE RUNNING! THIS MEANS THAT
-	 * THE XMPPCONNECTION MAINTAINED INSIDE HERE WILL ALSO BE DESTROYED! FIX
-	 * THIS! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	 * TODO: How long does this field persist? Is that why XMPP keeps
+	 * disconnecting on us?
 	 */
 	XMPPConnection xmppConnection;
 
 	private Map<String, MultiUserChat> mucMap = new HashMap<String, MultiUserChat>();
 	private Context context;
+
 	/**
 	 * The <a href="http://en.wikipedia.org/wiki/Data_access_object">Data Access
 	 * Object</a> to our SQLite database for XMPP messages.
@@ -61,6 +61,11 @@ final public class XMPP {
 	private XMPP() {
 	}
 
+	/**
+	 * To be called exactly one time: from {@link BaseApplication}
+	 * 
+	 * @param context
+	 */
 	public void initialize(Context context) {
 		this.context = context;
 		this.messagesDataSource = new MessagesDataSource(context);
@@ -196,9 +201,8 @@ final public class XMPP {
 	 * TODO: Queue up MUCs who failed to join and attempt to join them later,
 	 * using exponential backoff.
 	 */
-	@Deprecated
 	public boolean joinMuc(final String mucName, String myJid) {
-		Log.i("XMPP.joinMuc", "Attempting to join muc: " + mucName);
+		Log.v("XMPP.joinMuc", "Attempting to join muc: " + mucName);
 
 		// Grab a reference to the single XMPPConnection that we use
 		// from the utility XMPPIntentService class.
@@ -243,7 +247,7 @@ final public class XMPP {
 			return false;
 		}
 
-		Log.i("XMPPIntentService.joinMuc()", "Joined muc: " + mucName);
+		Log.v("XMPPIntentService.joinMuc()", "Joined muc: " + mucName);
 
 		// aSmack defines that you must add a Message Listener to the MUC
 		// *after* you've joined the MUC. It will throw an exception otherwise.
@@ -252,7 +256,7 @@ final public class XMPP {
 			public void processPacket(final Packet packet) {
 				boolean gotNewMessage = false;
 
-				// Smack upcasts all Messages to the "Packet" superclass, 
+				// Smack upcasts all Messages to the "Packet" superclass,
 				// regardless of whether or not you actually have a Message
 				// (alternatives include IQs, Presences, etc).
 				if (packet instanceof Message) {
@@ -261,7 +265,11 @@ final public class XMPP {
 					gotNewMessage = addMucMessage(mucName, message);
 
 					if (gotNewMessage) {
-						Utils.showNotification(context, "Message from "
+						// TODO: Parse the message that you got for who actually
+						// sent you the message. Once you have his JID, join
+						// ChatActivity for his JID.
+
+						Utils.showChatNotification(context, "Message from "
 								+ message.getFrom(), message.getBody(),
 								HomeActivity.class, 3);
 					}
@@ -269,7 +277,7 @@ final public class XMPP {
 			}
 		});
 
-		Log.i("XMPP", "Muc " + mucName + " message listeners: ");
+		Log.v("XMPP", "Muc " + mucName + " message listeners: ");
 		return true;
 	}
 
@@ -319,7 +327,8 @@ final public class XMPP {
 	 * @param myJid
 	 * @param mucsToJoin
 	 */
-	public synchronized void joinMucs(String myJid, List<String> mucsToJoin) {
+	public synchronized void setListOfMucsToJoinAndConnect(String myJid,
+			List<String> mucsToJoin) {
 		this.mucsToJoin.clear();
 		this.mucsToJoin.addAll(mucsToJoin);
 
