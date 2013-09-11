@@ -12,9 +12,10 @@ public class BaseApplication extends Application {
 		super.onCreate();
 
 		// Initialize the Database.
-		Database.getInstance().initialize(getApplicationContext());
+		Database database = Database.getInstance();
+		database.initialize(getApplicationContext());
 
 		// Initialize the XMPP object.
-		XMPP.getInstance().initialize(getApplicationContext());
+		XMPP.getInstance().initialize(database, getApplicationContext());
 	}
 }

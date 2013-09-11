@@ -19,6 +19,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hangapp.android.activity.HomeActivity;
+import com.hangapp.android.database.Database;
 import com.hangapp.android.database.MessagesDataSource;
 import com.hangapp.android.model.callback.MucListener;
 import com.hangapp.android.util.BaseApplication;
@@ -48,6 +49,7 @@ final public class XMPP {
 	XMPPConnection xmppConnection;
 
 	private Map<String, MultiUserChat> mucMap = new HashMap<String, MultiUserChat>();
+	private Database database;
 	private Context context;
 
 	/**
@@ -66,7 +68,8 @@ final public class XMPP {
 	 * 
 	 * @param context
 	 */
-	public void initialize(Context context) {
+	public void initialize(Database database, Context context) {
+		this.database = database;
 		this.context = context;
 		this.messagesDataSource = new MessagesDataSource(context);
 	}
@@ -252,6 +255,8 @@ final public class XMPP {
 		// aSmack defines that you must add a Message Listener to the MUC
 		// *after* you've joined the MUC. It will throw an exception otherwise.
 		muc.addMessageListener(new PacketListener() {
+			// TODO: Don't just create a new PacketListener instance for every
+			// MUC. Instead, make them all reference the same object.
 			@Override
 			public void processPacket(final Packet packet) {
 				boolean gotNewMessage = false;
@@ -268,10 +273,22 @@ final public class XMPP {
 						// TODO: Parse the message that you got for who actually
 						// sent you the message. Once you have his JID, join
 						// ChatActivity for his JID.
+						final String fromJid = Utils
+								.parseJidFromMessage(message);
+
+						// If I sent this message, then don't make a
+						// notification for it.
+						final String myJid = database.getMyJid();
+						if (myJid != null && myJid.equals(fromJid)) {
+							return;
+						}
+
+						String from = Utils.convertJidToName(fromJid,
+								database);
 
 						Utils.showChatNotification(context, "Message from "
-								+ message.getFrom(), message.getBody(),
-								HomeActivity.class, 3);
+								+ from, message.getBody(), HomeActivity.class,
+								3);
 					}
 				}
 			}

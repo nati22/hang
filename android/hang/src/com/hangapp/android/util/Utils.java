@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
@@ -21,6 +22,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.hangapp.android.R;
+import com.hangapp.android.database.Database;
 
 public final class Utils {
 	public static final String BASE_URL = "http://therealhangapp.appspot.com/rest";
@@ -138,6 +140,32 @@ public final class Utils {
 		Vibrator v = (Vibrator) context
 				.getSystemService(Context.VIBRATOR_SERVICE);
 		v.vibrate(400);
+	}
+
+	public static String parseJidFromMessage(Message message) {
+		return message.getFrom().substring(
+				message.getFrom().indexOf(".com/") + 5);
+	}
+
+	/**
+	 * Takes a JID and converts it to the person's name. Will return the string
+	 * "me" if the JID is equal to the current user's JID.
+	 * 
+	 * @return
+	 */
+	public static String convertJidToName(String fromJid, Database database) {
+		final String myJid = database.getMyJid();
+		String from;
+
+		if (myJid != null && myJid.equals(fromJid)) {
+			from = "Me"; // TODO: Internationalize.
+		} else if (database.getOutgoingUser(fromJid) != null) {
+			from = database.getOutgoingUser(fromJid).getFullName();
+		} else {
+			from = "User#" + fromJid;
+		}
+
+		return from;
 	}
 
 }

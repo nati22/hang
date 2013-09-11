@@ -31,6 +31,7 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Keys;
+import com.hangapp.android.util.Utils;
 
 /**
  * Get to this Activity via the "Chat" icon in {@link YouFragment} and
@@ -173,25 +174,10 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Message message = getItem(position);
 
-			// TODO: Put this into a Utility method when you duplicate the logic
-			// for Chat notifications.
-			String fromJid = message.getFrom().substring(
-					message.getFrom().indexOf(".com/") + 5);
-			String from;
-			if (database.getMyJid().equals(fromJid)) {
-				from = "Me";
-			} else if (database.getOutgoingUser(fromJid) != null) {
-				from = database.getOutgoingUser(fromJid).getFullName();
-			} else
-				from = "User#" + fromJid;
-
-			// TODO: Grab the real name of the "from" from the internal
-			// database.
-			// String userJid = from.split("@")[0];
+			String fromJid = Utils.parseJidFromMessage(message);
+			String from = Utils.convertJidToName(fromJid, database);
 
 			// Inflate the cell if necessary.
-			// TODO: The cell Type could be different, based on if it's an
-			// incoming or outgoing cell.
 			if (convertView == null) {
 				convertView = LayoutInflater.from(getContext()).inflate(
 						R.layout.cell_incoming_message, null);
