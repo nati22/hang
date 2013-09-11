@@ -18,7 +18,6 @@ public class AddMultipleBroadcastsAsyncTask extends BasePutRequestAsyncTask<Stri
 	protected AddMultipleBroadcastsAsyncTask(Context context, RestClient restClient, String uriSuffix,
 			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + uriSuffix + BROADCAST_URI_SUFFIX, parameters);
-		
 		this.restClient = restClient;
 	}
 	

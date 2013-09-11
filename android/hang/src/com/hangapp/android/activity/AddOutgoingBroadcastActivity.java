@@ -1,6 +1,8 @@
 package com.hangapp.android.activity;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -88,8 +90,7 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			friendPickerFragment
 					.setOnDoneButtonClickedListener(new PickerFragment.OnDoneButtonClickedListener() {
 						@Override
-						public void onDoneButtonClicked(
-								PickerFragment<?> fragment) {
+						public void onDoneButtonClicked(PickerFragment<?> fragment) {
 							finishActivity();
 						}
 					});
@@ -102,10 +103,8 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 						@Override
 						public boolean includeItem(GraphUser graphObject) {
 							Boolean installed = graphObject.cast(
-									GraphUserWithInstalled.class)
-									.getInstalled();
-							return (installed != null)
-									&& installed.booleanValue();
+									GraphUserWithInstalled.class).getInstalled();
+							return (installed != null) && installed.booleanValue();
 						}
 					});
 
@@ -117,8 +116,8 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			return;
 		}
 
-		manager.beginTransaction()
-				.replace(R.id.picker_fragment, fragmentToShow).commit();
+		manager.beginTransaction().replace(R.id.picker_fragment, fragmentToShow)
+				.commit();
 	}
 
 	private void onError(Exception error) {
@@ -127,13 +126,13 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	private void onError(String error, final boolean finishActivity) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.error_dialog_title)
+		builder
+				.setTitle(R.string.error_dialog_title)
 				.setMessage(error)
 				.setPositiveButton(R.string.error_dialog_button_text,
 						new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(
-									DialogInterface dialogInterface, int i) {
+							public void onClick(DialogInterface dialogInterface, int i) {
 								if (finishActivity) {
 									finishActivity();
 								}
@@ -169,12 +168,31 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 	}
 
 	private void saveSelection() {
-		for (GraphUser graphUser : friendPickerFragment.getSelection()) {
-			Log.i("AddOutgoingBroadcastActivity.finishActivity",
-					"Adding broadcastee: " + graphUser.getName());
-			Toast.makeText(this, "Adding broadcastee: " + graphUser.getName(),
+		if (friendPickerFragment.getSelection().size() == 1) {
+
+			restClient.addBroadcastee(friendPickerFragment.getSelection().get(0)
+					.getId());
+
+		} else if (friendPickerFragment.getSelection().size() > 1) {
+
+			List<String> parameters = new ArrayList<String>();
+
+			for (GraphUser graphUser : friendPickerFragment.getSelection()) {
+				Log.i("AddOutgoingBroadcastActivity.finishActivity",
+						"Adding broadcastee: " + graphUser.getName());
+
+				parameters.add(graphUser.getId());
+			}
+
+			restClient.addBroadcastees(parameters);
+
+		} else {
+			Log.e("AddOutgoingBroadcastActivity.saveSelection",
+					"friendPickerFragment.getSelection().size() = "
+							+ friendPickerFragment.getSelection().size());
+			
+			Toast.makeText(getApplicationContext(), "Error...see LogCat",
 					Toast.LENGTH_SHORT).show();
-			restClient.addBroadcastee(graphUser.getId());
 		}
 	}
 }

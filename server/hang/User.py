@@ -207,8 +207,8 @@ class UserRequestHandler(webapp2.RequestHandler):
                 # Save the new User into the datastore.
                 user.put()
                 
-               # Tell the user.
-               self.response.write(json.dumps(user.get_partial_json(), separators=(',', ':')))
+                # Tell the user.
+                self.response.write(json.dumps(user.get_partial_json(), separators=(',', ':')))
             
         except (TypeError, ValueError):
             # If we couldn't grab the PUT request parameters, then show an error.
@@ -306,11 +306,55 @@ class BroadcastRequestHandler(webapp2.RequestHandler):
             return
 
 class MultipleBroadcastRequestHandler(webapp2.RequestHandler):
-    def post(self, jid):
+    def put(self, jid):
+        # Create the Keys for the Broadcaster               
+        key_broadcaster_jid = db.Key.from_path('User', jid)
+
+        # Retrieve the User object for the Broadcaster
+        broadcaster = db.get(key_broadcaster_jid)
+
+        self.response.write("body = " + self.request.body + "\n")
+
+        if broadcaster is None:
+            self.response.write(json.dumps({"error_message": "User %s doesn't exist on hang server" % jid}))
+            return;
+
         # Grab the POST request parameters and put them into variables.
-        param_target = self.request.get_all('target')
-        for x in param_target:
-            self.response.write(x)
+        param_target = self.request.get_all('target')        
+
+        for broadcastee_jid in param_target:
+            # Create the Key for this Broadcastee
+            key_broadcastee_jid = db.Key.from_path('User', broadcastee_jid)
+
+            # Retrieve the User object for this Broadcastee
+            broadcastee = db.get(key_broadcastee_jid)
+
+            if broadcastee is None:
+                self.response.write(json.dumps({'error_message': "User %s doesn't exist on hang server" % param_target}));
+                return
+
+            # Add broadcaster jid to broadcastee's incoming_broadcasts
+            if key_broadcaster_jid not in broadcastee.incoming_broadcasts:
+                broadcastee.incoming_broadcasts.append(key_broadcaster_jid)
+            else: 
+                self.response.write("%s is already receiving Broadcasts from %s.\n" % (broadcastee.first_name, broadcaster.first_name))
+                continue    
+
+            # Add broadcastee jid to broadcaster's outgoing_broadcasts
+            if key_broadcastee_jid not in broadcaster.outgoing_broadcasts:
+                broadcaster.outgoing_broadcasts.append(key_broadcastee_jid)
+            else: 
+                self.response.write(json.dumps({"error message": "%s is already broadcasting to %s.\n" % (broadcaster.first_name, broadcastee.first_name)}))
+                continue
+
+            self.response.write(broadcaster.first_name + " is now broadcasting to " + broadcastee.first_name + "\n")
+
+            broadcastee.put()
+            broadcaster.put()
+
+            push_to_user(broadcastee, broadcaster, 'new_broadcast')
+
+        return
 
 class NudgeRequestHandler(webapp2.RequestHandler):
     def post(self, jid):
