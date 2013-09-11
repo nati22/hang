@@ -61,8 +61,8 @@ public final class Keys {
 	public static final String SERVER_ADDRESS = "@conference.ec2-54-242-9-67.compute-1.amazonaws.com/";
 
 	/**
-	 * I'm sure this is a terrible, terrible idea but I wanted to show that these
-	 * Keys are specifically for receiving nudges from GCM
+	 * I'm sure this is a terrible, terrible idea but I wanted to show that
+	 * these Keys are specifically for receiving nudges from GCM
 	 */
 	public static class FromServer {
 		public static final String FROM = "from";
@@ -85,8 +85,9 @@ public final class Keys {
 	 * Flurry Keys
 	 */
 	public static final String FLURRY_KEY = "NKR88TW7NKXYS5XDZ2DC";
+
 	public static class FlurryEvent {
-		
+
 		/* Tracking page views */
 		public static final String VIEW_FEED_FRAGMENT = "VIEW_FEED_FRAGMENT";
 		public static final String VIEW_YOU_FRAGMENT = "VIEW_YOU_FRAGMENT";
@@ -96,25 +97,24 @@ public final class Keys {
 		public static final String VIEW_OUTGOING_BROADCASTS = "VIEW_OUTGOING_BROADCASTS";
 		public static final String VIEW_PROPOSAL = "VIEW_PROPOSAL";
 		public static final String VIEW_CHATROOM = "VIEW_CHATROOM";
-		
-		
+
 		public static final String MANUAL_REFRESH = "MANUAL_REFRESH";
 		public static final String NUDGE_USER = "NUDGE_USER";
 		public static final String PROPOSAL_CREATED = "PROPOSAL_CREATED";
 		public static final String STATUS_UPDATED_WITH_TEXT = "STATUS_UPDATED_WITH_TEXT";
 		public static final String STATUS_UPDATED_WITHOUT_TEXT = "STATUS_UPDATED_WITHOUT_TEXT";
 		public static final String PROPOSAL_VIEWED = "PROPOSAL_VIEWED";
-		
+
 		public static class params {
 			public static final String USER_JID = "USER_JID";
 			public static final String USER_FULL_NAME = "USER_FULL_NAME";
 		}
-		
+
 	}
-	
+
 	/**
 	 * Google Analytics Keys
 	 */
 	public static final String GOOGLE_ANALYTICS_TRACKING_ID = "UA-43852319-1";
-	
+
 }
