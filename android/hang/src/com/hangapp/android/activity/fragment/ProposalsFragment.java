@@ -137,7 +137,9 @@ public class ProposalsFragment extends SherlockFragment implements
 		onIncomingBroadcastsUpdate(incomingBroadcasts);
 
 		List<String> seenJids = database.getMySeenProposals();
-		onMySeenProposalsUpdate(seenJids);
+		if (seenJids != null) {
+			onMySeenProposalsUpdate(seenJids);
+		}
 	}
 
 	@Override
@@ -154,8 +156,8 @@ public class ProposalsFragment extends SherlockFragment implements
 		private Context context;
 		private Database database;
 
-		public ProposalsAdapter(Context context,
-				List<UserWithSeenState> friends, Database database) {
+		public ProposalsAdapter(Context context, List<UserWithSeenState> friends,
+				Database database) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
 			this.friends = friends;
@@ -186,8 +188,8 @@ public class ProposalsFragment extends SherlockFragment implements
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(
-						R.layout.cell_proposals_fragment, null);
+				convertView = inflater.inflate(R.layout.cell_proposals_fragment,
+						null);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
@@ -229,11 +231,9 @@ public class ProposalsFragment extends SherlockFragment implements
 			holder.textViewFriendName.setTypeface(champagneLimousinesBold);
 			holder.textViewProposalDescription
 					.setTypeface(champagneLimousinesBold);
-			holder.textViewProposalLocation
-					.setTypeface(champagneLimousinesBold);
+			holder.textViewProposalLocation.setTypeface(champagneLimousinesBold);
 			holder.textViewProposalStartTime.setTypeface(champagneLimousines);
-			holder.textViewProposalInterested
-					.setTypeface(champagneLimousinesBold);
+			holder.textViewProposalInterested.setTypeface(champagneLimousinesBold);
 
 			// Save the newly generated convertView into the "holder"
 			// object.
@@ -254,9 +254,8 @@ public class ProposalsFragment extends SherlockFragment implements
 			// TextView.
 			final int numberOfUsersInterested = seenUser.getProposal()
 					.getInterested().size();
-			final String interestedString = String.format(context
-					.getResources().getString(R.string.count_interested),
-					numberOfUsersInterested);
+			final String interestedString = String.format(context.getResources()
+					.getString(R.string.count_interested), numberOfUsersInterested);
 			holder.textViewProposalInterested.setText(interestedString);
 
 			return convertView;
