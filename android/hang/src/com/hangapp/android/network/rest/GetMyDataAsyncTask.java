@@ -6,10 +6,11 @@ import java.util.List;
 import android.content.Context;
 
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Me;
 import com.hangapp.android.model.User;
 import com.hangapp.android.network.xmpp.XMPP;
 
-final class GetMyDataAsyncTask extends BaseGetRequestAsyncTask<User> {
+final class GetMyDataAsyncTask extends BaseGetRequestAsyncTask<Me> {
 
 	private static final String URL_SUFFIX = "/users/";
 
@@ -17,8 +18,8 @@ final class GetMyDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 	private XMPP xmpp;
 	private List<User> library;
 
-	protected GetMyDataAsyncTask(Database database, XMPP xmpp,
-			Context context, String jid) {
+	protected GetMyDataAsyncTask(Database database, XMPP xmpp, Context context,
+			String jid) {
 		super(context, URL_SUFFIX + jid);
 
 		// Set dependencies.
@@ -27,22 +28,22 @@ final class GetMyDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 	}
 
 	@Override
-	public User call() throws Exception {
+	public Me call() throws Exception {
 		// Execute the GET request
 		super.call();
 
 		// Try to parse the resulting JSON for my user data.
-		User me = User.parseMyUserData(responseString);
+		Me me = Me.parseMyUserData(responseString);
 
 		// Try to parse the resulting JSON for the library.
-		library = User.parseLibrary(responseString);
+		library = Me.parseLibrary(responseString);
 
 		// If it worked, return the User.
 		return me;
 	}
 
 	@Override
-	protected void onSuccess(User me) throws Exception {
+	protected void onSuccess(Me me) throws Exception {
 		// Save the library of other users' data into the database.
 		// Do this first so that the setMy* calls after this work.
 		database.saveLibrary(library);
@@ -80,7 +81,7 @@ final class GetMyDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 	 * @param me
 	 * @return
 	 */
-	private List<String> getJidsImInterestedIn(User me) {
+	private List<String> getJidsImInterestedIn(Me me) {
 		List<String> jidsImInterestedIn = new ArrayList<String>(me
 				.getIncomingBroadcasts().size());
 

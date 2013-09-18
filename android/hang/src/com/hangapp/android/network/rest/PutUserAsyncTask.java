@@ -66,17 +66,16 @@ final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 
 		// Parse the response from the PUT request.
 		Log.d("PutUserAsyncTask.call()", responseString);
-		User myUserObject = User.parseUserNameData(responseString);
+		User me = User.parseUser(responseString);
 
-		return myUserObject;
+		return me;
 	}
 
 	@Override
-	protected void onSuccess(User myUserObject) throws Exception {
-		super.onSuccess(myUserObject);
+	protected void onSuccess(User me) throws Exception {
+		super.onSuccess(me);
 
-		database.setMyUserData(myUserObject.getJid(),
-				myUserObject.getFirstName(), myUserObject.getLastName());
+		database.setMyUserData(me.getJid(), me.getFirstName(), me.getLastName());
 
 		// If the user was successfully saved into the database, directly
 		// execute a GetMyDataAsyncTask call.
