@@ -143,11 +143,12 @@ public final class RestClientImpl implements RestClient {
 		String myJid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
+		
 		for (String broadcasteeJID : broadcasteeJIDs) {
 			parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 		}
 
-		new AddMultipleBroadcastsAsyncTask(context, this, myJid, parameters);
+		new AddMultipleBroadcastsAsyncTask(context, this, myJid, parameters).execute();
 
 	}
 
@@ -165,7 +166,6 @@ public final class RestClientImpl implements RestClient {
 	public void deleteBroadcastee(String broadcasteeJID) {
 		new DeleteBroadcastAsyncTask(database, this, context,
 				database.getMyJid(), broadcasteeJID).execute();
-
 	}
 
 	@Override
