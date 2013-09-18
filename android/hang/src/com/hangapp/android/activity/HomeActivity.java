@@ -83,8 +83,7 @@ public final class HomeActivity extends BaseActivity implements
 		prefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
 		database = Database.getInstance();
-		restClient = new RestClientImpl(Database.getInstance(),
-				getApplicationContext());
+		restClient = new RestClientImpl(database, getApplicationContext());
 		xmpp = XMPP.getInstance();
 		LayoutInflater inflater = LayoutInflater.from(this);
 
@@ -157,7 +156,7 @@ public final class HomeActivity extends BaseActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_refresh:
-			restClient.getMyData();
+			restClient.getMyData(xmpp);
 
 			return true;
 		case R.id.menu_settings:
@@ -204,7 +203,7 @@ public final class HomeActivity extends BaseActivity implements
 			setContentView(mViewPager);
 			getSupportActionBar().show();
 
-			restClient.getMyData();
+			restClient.getMyData(xmpp);
 		}
 
 		// (Facebook SDK) For scenarios where the main activity is launched and
@@ -238,7 +237,7 @@ public final class HomeActivity extends BaseActivity implements
 							me.getLastName());
 
 					// Register the "me" User object into our server.
-					restClient.registerNewUser(me);
+					restClient.registerNewUser(xmpp, me);
 
 					// Attempt to connect to XMPP using the new "me" JID.
 					xmpp.connect(me.getJid(), getApplicationContext());

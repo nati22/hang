@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.hangapp.android.model.User;
+import com.hangapp.android.network.xmpp.XMPP;
 
 class AddBroadcastAsyncTask extends BasePutRequestAsyncTask<User> {
 
@@ -15,9 +16,10 @@ class AddBroadcastAsyncTask extends BasePutRequestAsyncTask<User> {
 	private static final String BROADCAST_URI_SUFFIX = "/broadcast";
 
 	private RestClient restClient;
+	private XMPP xmpp;
 
-	protected AddBroadcastAsyncTask(RestClient restClient, Context context,
-			String jid, List<NameValuePair> parameters) {
+	protected AddBroadcastAsyncTask(RestClient restClient, XMPP xmpp,
+			Context context, String jid, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + BROADCAST_URI_SUFFIX,
 				parameters);
 
@@ -37,6 +39,6 @@ class AddBroadcastAsyncTask extends BasePutRequestAsyncTask<User> {
 
 	@Override
 	protected void onSuccess(User me) throws Exception {
-		restClient.getMyData();
+		restClient.getMyData(xmpp);
 	}
 }

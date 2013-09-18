@@ -7,20 +7,23 @@ import android.content.Context;
 
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
+import com.hangapp.android.network.xmpp.XMPP;
 
 final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 	private static final String URL_SUFFIX = "/users/";
 
 	private Database database;
+	private XMPP xmpp;
 	private List<User> library;
 
-	protected GetUserDataAsyncTask(Database database, Context context,
-			String jid) {
+	protected GetUserDataAsyncTask(Database database, XMPP xmpp,
+			Context context, String jid) {
 		super(context, URL_SUFFIX + jid);
 
 		// Set dependencies.
 		this.database = database;
+		this.xmpp = xmpp;
 	}
 
 	@Override
@@ -54,7 +57,20 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 		// Use the resulting user data to construct a list of JIDs of users
 		// whose Proposals I am interested in.
-		database.setJidsImInterestedIn(getJidsImInterestedIn(me));
+		final List<String> jidsImInterestedIn = getJidsImInterestedIn(me);
+		database.setJidsImInterestedIn(jidsImInterestedIn);
+
+		// Attempt to join the MUC belonging to each of the JIDs that I am
+		// interested in.
+		//
+		// TODO: You should join your own MUC, if you have one.
+		//
+		// TODO: Making this call within Database introduces a cyclical module
+		// dependency of Database -> XMPP -> Database. Move this call into
+		// GetUserDataAsyncTask in order to remove Database's dependency on
+		// XMPP. That way, each of the individual AsyncTasks can define
+		// themselves to be dependent on XMPP.
+		xmpp.setListOfMucsToJoinAndConnect(me.getJid(), jidsImInterestedIn);
 	}
 
 	/**

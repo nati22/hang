@@ -21,6 +21,7 @@ import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 
 /**
@@ -42,6 +43,7 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	private Database database;
 	private RestClient restClient;
+	private XMPP xmpp;
 
 	// Helper interface for Facebook FriendPicker widget. It uses
 	// this interface to query whether or not the friend with that
@@ -62,6 +64,7 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 		// Instantiate dependencies.
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
+		xmpp = XMPP.getInstance();
 
 		// (lifted from Facebook tutorial above)
 		Bundle args = getIntent().getExtras();
@@ -90,7 +93,8 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			friendPickerFragment
 					.setOnDoneButtonClickedListener(new PickerFragment.OnDoneButtonClickedListener() {
 						@Override
-						public void onDoneButtonClicked(PickerFragment<?> fragment) {
+						public void onDoneButtonClicked(
+								PickerFragment<?> fragment) {
 							finishActivity();
 						}
 					});
@@ -103,8 +107,10 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 						@Override
 						public boolean includeItem(GraphUser graphObject) {
 							Boolean installed = graphObject.cast(
-									GraphUserWithInstalled.class).getInstalled();
-							return (installed != null) && installed.booleanValue();
+									GraphUserWithInstalled.class)
+									.getInstalled();
+							return (installed != null)
+									&& installed.booleanValue();
 						}
 					});
 
@@ -116,8 +122,8 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			return;
 		}
 
-		manager.beginTransaction().replace(R.id.picker_fragment, fragmentToShow)
-				.commit();
+		manager.beginTransaction()
+				.replace(R.id.picker_fragment, fragmentToShow).commit();
 	}
 
 	private void onError(Exception error) {
@@ -126,13 +132,13 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	private void onError(String error, final boolean finishActivity) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder
-				.setTitle(R.string.error_dialog_title)
+		builder.setTitle(R.string.error_dialog_title)
 				.setMessage(error)
 				.setPositiveButton(R.string.error_dialog_button_text,
 						new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(DialogInterface dialogInterface, int i) {
+							public void onClick(
+									DialogInterface dialogInterface, int i) {
 								if (finishActivity) {
 									finishActivity();
 								}
@@ -170,8 +176,8 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 	private void saveSelection() {
 		if (friendPickerFragment.getSelection().size() == 1) {
 
-			restClient.addBroadcastee(friendPickerFragment.getSelection().get(0)
-					.getId());
+			restClient.addBroadcastee(xmpp, friendPickerFragment.getSelection()
+					.get(0).getId());
 
 		} else if (friendPickerFragment.getSelection().size() > 1) {
 
@@ -184,13 +190,13 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 				parameters.add(graphUser.getId());
 			}
 
-			restClient.addBroadcastees(parameters);
+			restClient.addBroadcastees(xmpp, parameters);
 
 		} else {
 			Log.e("AddOutgoingBroadcastActivity.saveSelection",
 					"friendPickerFragment.getSelection().size() = "
 							+ friendPickerFragment.getSelection().size());
-			
+
 			Toast.makeText(getApplicationContext(), "Error...see LogCat",
 					Toast.LENGTH_SHORT).show();
 		}

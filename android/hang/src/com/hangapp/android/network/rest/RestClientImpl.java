@@ -16,6 +16,7 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Keys;
 
 public final class RestClientImpl implements RestClient {
@@ -34,19 +35,21 @@ public final class RestClientImpl implements RestClient {
 		// Set dependencies.
 		this.database = database;
 		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+		// TODO: Inject this on a method-by-method basis.
 		gcm = GoogleCloudMessaging.getInstance(context);
 	}
 
 	@Override
-	public void registerNewUser(User newUser) {
+	public void registerNewUser(XMPP xmpp, User newUser) {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.FIRST_NAME, newUser
 				.getFirstName()));
 		parameters.add(new BasicNameValuePair(Keys.LAST_NAME, newUser
 				.getLastName()));
 
-		new NewUserAsyncTask(database, gcm, prefs, context, newUser, parameters)
-				.execute();
+		new NewUserAsyncTask(database, xmpp, gcm, prefs, context, newUser,
+				parameters).execute();
 
 		// TODO: Send a tickle to my recipients.
 	}
@@ -113,8 +116,7 @@ public final class RestClientImpl implements RestClient {
 	}
 
 	@Override
-	public void getMyData() {
-
+	public void getMyData(XMPP xmpp) {
 		String jid = database.getMyJid();
 
 		if (jid == null || jid.equals("") || jid.equals("null")) {
@@ -125,30 +127,32 @@ public final class RestClientImpl implements RestClient {
 			Log.i("RestClientImpl", "Refreshing...");
 		}
 
-		new GetUserDataAsyncTask(database, context, jid).execute();
+		new GetUserDataAsyncTask(database, xmpp, context, jid).execute();
 	}
 
 	@Override
-	public void addBroadcastee(String broadcasteeJID) {
+	public void addBroadcastee(XMPP xmpp, String broadcasteeJID) {
 		String myJid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 
-		new AddBroadcastAsyncTask(this, context, myJid, parameters).execute();
+		new AddBroadcastAsyncTask(this, xmpp, context, myJid, parameters)
+				.execute();
 	}
 
 	@Override
-	public void addBroadcastees(List<String> broadcasteeJIDs) {
+	public void addBroadcastees(XMPP xmpp, List<String> broadcasteeJIDs) {
 		String myJid = database.getMyJid();
 
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		
+
 		for (String broadcasteeJID : broadcasteeJIDs) {
 			parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 		}
 
-		new AddMultipleBroadcastsAsyncTask(context, this, myJid, parameters).execute();
+		new AddMultipleBroadcastsAsyncTask(context, this, xmpp, myJid,
+				parameters).execute();
 
 	}
 
@@ -163,8 +167,8 @@ public final class RestClientImpl implements RestClient {
 	}
 
 	@Override
-	public void deleteBroadcastee(String broadcasteeJID) {
-		new DeleteBroadcastAsyncTask(database, this, context,
+	public void deleteBroadcastee(XMPP xmpp, String broadcasteeJID) {
+		new DeleteBroadcastAsyncTask(database, this, xmpp, context,
 				database.getMyJid(), broadcasteeJID).execute();
 	}
 
@@ -190,16 +194,16 @@ public final class RestClientImpl implements RestClient {
 	}
 
 	@Override
-	public void deleteInterested(String broadcasterJid) {
-		new DeleteInterestedAsyncTask(this, context, database.getMyJid(),
+	public void deleteInterested(XMPP xmpp, String broadcasterJid) {
+		new DeleteInterestedAsyncTask(this, xmpp, context, database.getMyJid(),
 				broadcasterJid).execute();
 	}
 
 	@Override
-	public void deleteConfirmed(String broadcasterJid) {
+	public void deleteConfirmed(XMPP xmpp, String broadcasterJid) {
 
-		new DeleteConfirmedAsyncTask(database, context, database.getMyJid(),
-				broadcasterJid).execute();
+		new DeleteConfirmedAsyncTask(database, this, xmpp, context,
+				database.getMyJid(), broadcasterJid).execute();
 	}
 
 	@Override

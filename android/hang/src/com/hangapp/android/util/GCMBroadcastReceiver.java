@@ -18,6 +18,7 @@ import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.network.xmpp.XMPP;
 
 // TODO: Should this class be in the "utils" package?
 public class GCMBroadcastReceiver extends BroadcastReceiver {
@@ -26,8 +27,11 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 	public static final int NUDGE_NOTIFY_ID = 1;
 	public static final int BROADCAST_NOTIFY_ID = 2;
 	private NotificationManager notifMgr;
-	private RestClient restClient;
+
+	// Dependencies.
 	private Database database;
+	private RestClient restClient;
+	private XMPP xmpp;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -37,6 +41,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, context);
+		xmpp = XMPP.getInstance();
 
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 
@@ -46,31 +51,35 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
 			Log.e(TAG, "Send error: " + intent.getExtras().toString());
-		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
+		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
+				.equals(messageType)) {
 			Log.d(TAG, "Deleted messages on server: "
 					+ intent.getExtras().toString());
 		} else {
 			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
-			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
+			String senderFn = intent.getExtras().getString(
+					Keys.FromServer.NUDGER);
 
 			if (type != null && type.equals(Keys.FromServer.TYPE_NUDGE)) {
 
 				Intent nudgeIntent = new Intent(context, HomeActivity.class);
-				
-			//	ProfilePictureView 
-				Log.i(TAG, "" + intent.getExtras().getString(Keys.FromServer.FROM));
+
+				// ProfilePictureView
+				Log.i(TAG,
+						"" + intent.getExtras().getString(Keys.FromServer.FROM));
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You got a nudge!")
 						.setContentText(
 								senderFn + " wants to know what you're up to!")
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
-								BitmapFactory.decodeResource(context.getResources(),
+								BitmapFactory.decodeResource(
+										context.getResources(),
 										R.drawable.ic_launcher))
 						.setContentIntent(
-								PendingIntent.getActivity(context, 0, nudgeIntent, 0))
-						.build();
+								PendingIntent.getActivity(context, 0,
+										nudgeIntent, 0)).build();
 
 				notif.flags = Notification.FLAG_AUTO_CANCEL;
 				notifMgr.notify(NUDGE_NOTIFY_ID, notif);
@@ -85,31 +94,33 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 			} else if (type != null && type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				Log.d("GCMBroadcastReceiver", "Received a TICKLE");
-				restClient.getMyData();
+				restClient.getMyData(xmpp);
 			} else if (type != null
 					&& type.equals(Keys.FromServer.TYPE_NEW_BROADCAST)) {
 				Log.d("GCMBroadcastReceiver", "Received a NEW BROADCAST");
 
-				Intent newBroadcastIntent = new Intent(context, HomeActivity.class);
+				Intent newBroadcastIntent = new Intent(context,
+						HomeActivity.class);
 				newBroadcastIntent.putExtra(Keys.TAB_INTENT, 0);
 
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You have a new Broadcast!")
-						.setContentText(senderFn + " is now broadcasting to you!")
+						.setContentText(
+								senderFn + " is now broadcasting to you!")
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
-								BitmapFactory.decodeResource(context.getResources(),
+								BitmapFactory.decodeResource(
+										context.getResources(),
 										R.drawable.ic_launcher))
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0,
 										newBroadcastIntent, 0))
-										
+
 						.build();
 				notif.flags = Notification.FLAG_AUTO_CANCEL;
-				
+
 				notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
 
-				
 				Vibrator v = (Vibrator) context
 						.getSystemService(Context.VIBRATOR_SERVICE);
 				v.vibrate(400);
@@ -117,7 +128,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");
 				Log.e(TAG, "intent.toString() " + intent.getExtras().toString());
-				
+
 			}
 
 		}

@@ -21,7 +21,6 @@ import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.android.model.callback.SeenProposalsListener;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseApplication;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.Utils;
@@ -46,8 +45,6 @@ public final class Database {
 	private List<MyProposalListener> myProposalListeners = new ArrayList<MyProposalListener>();
 	private List<SeenProposalsListener> seenProposalsListeners = new ArrayList<SeenProposalsListener>();
 
-	private XMPP xmpp;
-
 	/** Private constructor */
 	private Database() {
 	}
@@ -61,7 +58,6 @@ public final class Database {
 	 */
 	public void initialize(Context context) {
 		this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		this.xmpp = XMPP.getInstance();
 	}
 
 	public boolean addIncomingBroadcastsListener(
@@ -599,20 +595,6 @@ public final class Database {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.JIDS_IM_INTERESTED_IN, interestedJidsString);
 		editor.commit();
-
-		String myJid = getMyJid();
-
-		// Attempt to join the MUC belonging to each of the JIDs that I am
-		// interested in.
-		//
-		// TODO: You should join your own MUC, if you have one.
-		//
-		// TODO: Making this call within Database introduces a cyclical module
-		// dependency of Database -> XMPP -> Database. Move this call into
-		// GetUserDataAsyncTask in order to remove Database's dependency on
-		// XMPP. That way, each of the individual AsyncTasks can define
-		// themselves to be dependent on XMPP.
-		xmpp.setListOfMucsToJoinAndConnect(myJid, interestedJids);
 	}
 
 	/**

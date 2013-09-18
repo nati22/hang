@@ -12,19 +12,21 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Keys;
 
 final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 
 	private Database database;
+	private XMPP xmpp;
 	private GoogleCloudMessaging gcm;
 	private SharedPreferences prefs;
 	private String newUserJid;
 
-	protected NewUserAsyncTask(Database database, GoogleCloudMessaging gcm,
-			SharedPreferences prefs, Context context, User newUser,
-			List<NameValuePair> parameters) {
+	protected NewUserAsyncTask(Database database, XMPP xmpp,
+			GoogleCloudMessaging gcm, SharedPreferences prefs, Context context,
+			User newUser, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + newUser.getJid(), parameters);
 
 		// Reference dependencies.
@@ -78,7 +80,7 @@ final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 
 		// If the user was successfully saved into the database, directly
 		// execute a GetUserDataAsyncTask call.
-		new GetUserDataAsyncTask(database, context, newUserJid).execute();
+		new GetUserDataAsyncTask(database, xmpp, context, newUserJid).execute();
 	}
 
 	@Override

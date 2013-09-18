@@ -24,6 +24,7 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
@@ -48,8 +49,11 @@ public final class MyProposalFragment extends SherlockFragment {
 	private LinearLayout interestedLinLayout;
 
 	private Proposal myProposal;
+
+	// Dependencies.
 	private Database database;
 	private RestClient restClient;
+	private XMPP xmpp;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public final class MyProposalFragment extends SherlockFragment {
 		database = Database.getInstance();
 		restClient = new RestClientImpl(Database.getInstance(),
 				getSherlockActivity());
+		xmpp = XMPP.getInstance();
 	}
 
 	@Override
@@ -87,8 +92,9 @@ public final class MyProposalFragment extends SherlockFragment {
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
 				getActivity().getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-		Typeface champagneLimousinesFont = Typeface.createFromAsset(getActivity()
-				.getApplicationContext().getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(
+				getActivity().getApplicationContext().getAssets(),
+				Fonts.CHAMPAGNE_LIMOUSINES);
 		textViewMyProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewMyProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewMyProposalStartTime.setTypeface(champagneLimousinesFont);
@@ -100,7 +106,8 @@ public final class MyProposalFragment extends SherlockFragment {
 			@Override
 			public void onClick(View v) {
 				Intent chatActivityIntent = new Intent(MyProposalFragment.this
-						.getActivity().getApplicationContext(), ChatActivity.class);
+						.getActivity().getApplicationContext(),
+						ChatActivity.class);
 				chatActivityIntent.putExtra(Keys.HOST_JID, database.getMyJid());
 				startActivity(chatActivityIntent);
 			}
@@ -113,7 +120,8 @@ public final class MyProposalFragment extends SherlockFragment {
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 
 				DeleteProposalDialogFragment deleteProposalDialogFragment = new DeleteProposalDialogFragment();
-				deleteProposalDialogFragment.show(fm, "fragment_delete_proposal");
+				deleteProposalDialogFragment.show(fm,
+						"fragment_delete_proposal");
 			}
 		});
 
@@ -123,7 +131,7 @@ public final class MyProposalFragment extends SherlockFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		restClient.getMyData();
+		restClient.getMyData(xmpp);
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
 		// onMyProposalUpdate(myProposal);

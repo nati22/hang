@@ -32,6 +32,7 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.StatusIcon;
@@ -53,6 +54,7 @@ public final class FeedFragment extends SherlockFragment implements
 	// Dependencies.
 	private Database database;
 	private RestClient restClient;
+	private XMPP xmpp;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public final class FeedFragment extends SherlockFragment implements
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getActivity()
 				.getApplicationContext());
+		xmpp = XMPP.getInstance();
 
 		// Reload the incoming broadcasts from savedInstanceState.
 		if (savedInstanceState != null) {
@@ -93,7 +96,7 @@ public final class FeedFragment extends SherlockFragment implements
 		buttonRefresh.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				restClient.getMyData();
+				restClient.getMyData(xmpp);
 			}
 		});
 

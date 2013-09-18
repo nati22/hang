@@ -7,20 +7,26 @@ import org.apache.http.NameValuePair;
 import android.content.Context;
 import android.util.Log;
 
-public class AddMultipleBroadcastsAsyncTask extends BasePutRequestAsyncTask<String>{
+import com.hangapp.android.network.xmpp.XMPP;
+
+public class AddMultipleBroadcastsAsyncTask extends
+		BasePutRequestAsyncTask<String> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String BROADCAST_URI_SUFFIX = "/broadcasts";
 
 	// Set dependencies.
 	private RestClient restClient;
-	
-	protected AddMultipleBroadcastsAsyncTask(Context context, RestClient restClient, String uriSuffix,
+	private XMPP xmpp;
+
+	protected AddMultipleBroadcastsAsyncTask(Context context,
+			RestClient restClient, XMPP xmpp, String uriSuffix,
 			List<NameValuePair> parameters) {
-		super(context, USERS_URI_SUFFIX + uriSuffix + BROADCAST_URI_SUFFIX, parameters);
+		super(context, USERS_URI_SUFFIX + uriSuffix + BROADCAST_URI_SUFFIX,
+				parameters);
 		this.restClient = restClient;
 	}
-	
+
 	@Override
 	public String call() throws Exception {
 		// Execute the PUT request
@@ -30,10 +36,10 @@ public class AddMultipleBroadcastsAsyncTask extends BasePutRequestAsyncTask<Stri
 
 		return null;
 	}
-	
+
 	@Override
 	protected void onSuccess(String result) throws Exception {
-		restClient.getMyData();
+		restClient.getMyData(xmpp);
 	}
 
 }

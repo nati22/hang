@@ -2,8 +2,10 @@ package com.hangapp.android.network.xmpp;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.XMPPConnection;
@@ -19,7 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.hangapp.android.database.Database;
-import com.hangapp.android.database.MessagesDataSource;
+import com.hangapp.android.database.MessageDAO;
 import com.hangapp.android.model.callback.MucListener;
 import com.hangapp.android.util.BaseApplication;
 import com.hangapp.android.util.Keys;
@@ -30,7 +32,7 @@ import com.hangapp.android.util.Utils;
  * background. If you want to use XMPP from a client class, inject this class as
  * your dependency.
  */
-final public class XMPP {
+public final class XMPP {
 
 	private static XMPP instance = new XMPP();
 
@@ -55,9 +57,9 @@ final public class XMPP {
 	 * The <a href="http://en.wikipedia.org/wiki/Data_access_object">Data Access
 	 * Object</a> to our SQLite database for XMPP messages.
 	 */
-	private MessagesDataSource messagesDataSource;
+	private MessageDAO messagesDataSource;
 	private Map<String, ArrayList<MucListener>> mucMessageListeners = new HashMap<String, ArrayList<MucListener>>();
-	List<String> mucsToJoin = new ArrayList<String>();
+	Set<String> mucsToJoin = new HashSet<String>();
 
 	private XMPP() {
 	}
@@ -70,7 +72,7 @@ final public class XMPP {
 	public void initialize(Database database, Context context) {
 		this.database = database;
 		this.context = context;
-		this.messagesDataSource = new MessagesDataSource(context);
+		this.messagesDataSource = new MessageDAO(context);
 	}
 
 	public static synchronized XMPP getInstance() {
@@ -78,6 +80,20 @@ final public class XMPP {
 	}
 
 	private boolean isDoneJoiningAllChatrooms() {
+
+		// TODO: Remove MUCs that are known to have already been joined:
+		// http://www.igniterealtime.org/builds/smack/docs/latest/documentation/extensions/muc.html#discojoin
+//		Iterator<String> joinedRooms = MultiUserChat.getJoinedRooms(
+//				xmppConnection, "myPenisISLarge@amazonec2.com");
+//
+//		while (joinedRooms.hasNext()) {
+//			final String joinedRoom = joinedRooms.next();
+//
+//			if (mucsToJoin.contains(joinedRoom)) {
+//				joinedRooms.remove();
+//			}
+//		}
+
 		return xmppConnection != null && xmppConnection.isConnected()
 				&& xmppConnection.isAuthenticated() && mucsToJoin.isEmpty();
 	}

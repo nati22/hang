@@ -4,21 +4,23 @@ import android.content.Context;
 import android.util.Log;
 
 import com.hangapp.android.database.Database;
+import com.hangapp.android.network.xmpp.XMPP;
 
-public class DeleteConfirmedAsyncTask extends
-		BaseDeleteRequestAsyncTask<String> {
+class DeleteConfirmedAsyncTask extends BaseDeleteRequestAsyncTask<String> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String CONFIRMED_URI_SUFFIX = "/proposal/confirmed";
-	
+
 	private RestClient restClient;
+	private XMPP xmpp;
 
-	protected DeleteConfirmedAsyncTask(Database database, Context context,
-			String myJid, String targetJid) {
-		super(context, USERS_URI_SUFFIX + myJid + CONFIRMED_URI_SUFFIX + "?target=" + targetJid);
-		
-		this.restClient = new RestClientImpl(database, context);
+	protected DeleteConfirmedAsyncTask(Database database,
+			RestClient restClient, XMPP xmpp, Context context, String myJid,
+			String targetJid) {
+		super(context, USERS_URI_SUFFIX + myJid + CONFIRMED_URI_SUFFIX
+				+ "?target=" + targetJid);
 
+		this.restClient = restClient;
 	}
 
 	@Override
@@ -30,9 +32,9 @@ public class DeleteConfirmedAsyncTask extends
 
 		return null;
 	}
-	
+
 	protected void onSuccess(String x) throws Exception {
-		restClient.getMyData();
+		restClient.getMyData(xmpp);
 	}
-	
+
 }

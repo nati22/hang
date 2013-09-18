@@ -31,6 +31,7 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
@@ -71,6 +72,7 @@ public final class ProfileActivity extends BaseActivity implements
 	// Dependencies.
 	private Database database;
 	private RestClient restClient;
+	private XMPP xmpp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +82,7 @@ public final class ProfileActivity extends BaseActivity implements
 		// Instantiate dependencies
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
+		xmpp = XMPP.getInstance();
 
 		// Setup listener
 		database.addIncomingBroadcastsListener(this);
@@ -315,7 +318,7 @@ public final class ProfileActivity extends BaseActivity implements
 	}
 
 	private void removeMeFromHostInterestedList() {
-		restClient.deleteInterested(friend.getJid());
+		restClient.deleteInterested(xmpp, friend.getJid());
 	}
 
 	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {

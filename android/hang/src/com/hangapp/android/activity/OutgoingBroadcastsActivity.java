@@ -33,6 +33,7 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.OutgoingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 
 /**
@@ -57,6 +58,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 	// Dependencies.
 	private Database database;
 	private RestClient restClient;
+	private XMPP xmpp;
 
 	// UI stuff.
 	private ListView listViewOutgoingBroadcasts;
@@ -81,6 +83,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 		// Instantiate dependencies.
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
+		xmpp = XMPP.getInstance();
 
 		// Enable the "Up" button.
 		getSupportActionBar().setHomeButtonEnabled(true);
@@ -187,8 +190,8 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 			textViewOutgoingBroadcastName.setText(outgoingBroadcast
 					.getFullName());
 			textViewOutgoingBroadcastStatus
-					.setText((hisStatus != null && hisStatus.isActive()) ? hisStatus.getDescription()
-							: "");
+					.setText((hisStatus != null && hisStatus.isActive()) ? hisStatus
+							.getDescription() : "");
 
 			// Set OnClickListeners.
 			buttonDeleteOutgoingBroadcast
@@ -208,8 +211,8 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 									Toast.LENGTH_SHORT).show();
 
 							// Actually delete the outgoing Broadcast.
-							restClient.deleteBroadcastee(outgoingBroadcast
-									.getJid());
+							restClient.deleteBroadcastee(xmpp,
+									outgoingBroadcast.getJid());
 						}
 					});
 
@@ -249,7 +252,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 	@Override
 	public void onOutgoingBroadcastsUpdate(List<User> outgoingBroadcasts) {
 		this.outgoingBroadcasts.clear();
-		
+
 		if (outgoingBroadcasts != null) {
 			this.outgoingBroadcasts.addAll(outgoingBroadcasts);
 		}
