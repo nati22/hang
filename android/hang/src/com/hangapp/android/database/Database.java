@@ -573,8 +573,8 @@ public final class Database {
 	}
 
 	/**
-	 * <<<<<<< HEAD Returns a list of the JIDs of the users whose Proposals I'm
-	 * currently interested in.
+	 * Returns a list of the JIDs of the users whose Proposals I'm currently
+	 * interested in.
 	 * 
 	 * This is useful for knowing which JIDs I'm currently "subscribed" to in
 	 * XMPP.
@@ -604,7 +604,14 @@ public final class Database {
 
 		// Attempt to join the MUC belonging to each of the JIDs that I am
 		// interested in.
+		//
 		// TODO: You should join your own MUC, if you have one.
+		//
+		// TODO: Making this call within Database introduces a cyclical module
+		// dependency of Database -> XMPP -> Database. Move this call into
+		// GetUserDataAsyncTask in order to remove Database's dependency on
+		// XMPP. That way, each of the individual AsyncTasks can define
+		// themselves to be dependent on XMPP.
 		xmpp.setListOfMucsToJoinAndConnect(myJid, interestedJids);
 	}
 

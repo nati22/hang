@@ -58,11 +58,15 @@ public final class Keys {
 	 * I think.
 	 */
 	public static final String SPECIFIED_DATE_FORMAT = "MM/dd/yyyy hh:mm:ss aa";
+	
+	
 	public static final String SERVER_ADDRESS = "@conference.ec2-54-242-9-67.compute-1.amazonaws.com/";
 
 	/**
 	 * I'm sure this is a terrible, terrible idea but I wanted to show that
-	 * these Keys are specifically for receiving nudges from GCM
+	 * these Keys are specifically for receiving nudges from GCM.
+	 * 
+	 * TODO: I actually kind of like this idea of organizing our keys into static inner classes.
 	 */
 	public static class FromServer {
 		public static final String FROM = "from";

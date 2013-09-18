@@ -45,6 +45,7 @@
 		896D97B91792158000414244 /* feed.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D97B71792158000414244 /* feed.png */; };
 		896D97BA1792158000414244 /* you.png in Resources */ = {isa = PBXBuildFile; fileRef = 896D97B81792158000414244 /* you.png */; };
 		896D97C117921B8000414244 /* CreateProposalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 896D97C017921B8000414244 /* CreateProposalViewController.m */; };
+		897CB84417E8488C00461905 /* ProposalsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 897CB84317E8488C00461905 /* ProposalsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,8 @@
 		896D97B81792158000414244 /* you.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = you.png; sourceTree = "<group>"; };
 		896D97BF17921B8000414244 /* CreateProposalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateProposalViewController.h; sourceTree = "<group>"; };
 		896D97C017921B8000414244 /* CreateProposalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateProposalViewController.m; sourceTree = "<group>"; };
+		897CB84217E8488C00461905 /* ProposalsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProposalsViewController.h; sourceTree = "<group>"; };
+		897CB84317E8488C00461905 /* ProposalsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProposalsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,14 +184,16 @@
 				8956651B1790B93B00279947 /* AppDelegate.h */,
 				8956651C1790B93B00279947 /* AppDelegate.m */,
 				895665241790B93B00279947 /* MainStoryboard.storyboard */,
-				896D97BF17921B8000414244 /* CreateProposalViewController.h */,
-				896D97C017921B8000414244 /* CreateProposalViewController.m */,
 				895665551790BD5B00279947 /* FeedViewController.h */,
 				895665561790BD5B00279947 /* FeedViewController.m */,
-				895665581790BD6400279947 /* LoginViewController.h */,
-				895665591790BD6400279947 /* LoginViewController.m */,
+				897CB84217E8488C00461905 /* ProposalsViewController.h */,
+				897CB84317E8488C00461905 /* ProposalsViewController.m */,
 				896D97871791FA6800414244 /* SetAvailabilityViewController.h */,
 				896D97881791FA6800414244 /* SetAvailabilityViewController.m */,
+				896D97BF17921B8000414244 /* CreateProposalViewController.h */,
+				896D97C017921B8000414244 /* CreateProposalViewController.m */,
+				895665581790BD6400279947 /* LoginViewController.h */,
+				895665591790BD6400279947 /* LoginViewController.m */,
 				8956655B1790BD6C00279947 /* YouViewController.h */,
 				8956655C1790BD6C00279947 /* YouViewController.m */,
 				895665131790B93B00279947 /* Supporting Files */,
@@ -377,6 +382,7 @@
 				8956655D1790BD6C00279947 /* YouViewController.m in Sources */,
 				896D97891791FA6800414244 /* SetAvailabilityViewController.m in Sources */,
 				896D97C117921B8000414244 /* CreateProposalViewController.m in Sources */,
+				897CB84417E8488C00461905 /* ProposalsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

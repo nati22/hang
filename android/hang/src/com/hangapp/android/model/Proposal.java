@@ -1,7 +1,6 @@
 package com.hangapp.android.model;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -112,23 +111,24 @@ public final class Proposal {
 		}
 	}
 
-	public static boolean descriptionIsValid(String proposalDescription) {
-		return proposalDescription != null
-				&& !proposalDescription.trim().equals("")
-				&& proposalDescription.length() <= Proposal.DESCRIPTION_MAX_CHARS;
-	}
-
-	public static boolean locationIsValid(String proposalLocation) {
-		if (proposalLocation != null) {
-			return proposalLocation.length() <= Proposal.LOCATION_MAX_CHARS;
-		}
-
-		return true;
-	}
-
-	public static boolean timeIsValid(Calendar proposalTime) {
-		return !proposalTime.before(Calendar.getInstance());
-	}
+	// Field sanity checks should be performed in the field's setter method.
+	// public static boolean descriptionIsValid(String proposalDescription) {
+	// return proposalDescription != null
+	// && !proposalDescription.trim().equals("")
+	// && proposalDescription.length() <= Proposal.DESCRIPTION_MAX_CHARS;
+	// }
+	//
+	// public static boolean locationIsValid(String proposalLocation) {
+	// if (proposalLocation != null) {
+	// return proposalLocation.length() <= Proposal.LOCATION_MAX_CHARS;
+	// }
+	//
+	// return true;
+	// }
+	//
+	// public static boolean timeIsValid(Calendar proposalTime) {
+	// return !proposalTime.before(Calendar.getInstance());
+	// }
 
 	@Override
 	public boolean equals(Object o) {

@@ -19,6 +19,7 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 
+// TODO: Should this class be in the "utils" package?
 public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 	static final String TAG = "GCMDemo";

@@ -23,8 +23,8 @@ public class User implements Comparable<User>, Parcelable {
 	protected String jid;
 	protected String firstName;
 	protected String lastName;
-	private Availability availability;
-	private Proposal proposal;
+	protected Availability availability;
+	protected Proposal proposal;
 	private List<String> incomingBroadcasts;
 	private List<String> outgoingBroadcasts;
 	private List<String> seenProposals;
