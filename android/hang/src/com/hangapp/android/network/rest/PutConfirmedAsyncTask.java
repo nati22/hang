@@ -9,14 +9,14 @@ import android.util.Log;
 
 import com.hangapp.android.database.Database;
 
-class SetInterestedAsyncTask extends BasePutRequestAsyncTask<String> {
+class PutConfirmedAsyncTask extends BasePutRequestAsyncTask<String> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
-	private static final String INTERESTED_URI_SUFFIX = "/proposal/interested";
+	private static final String CONFIRMED_URI_SUFFIX = "/proposal/confirmed";
 
-	protected SetInterestedAsyncTask(Database database, Context context,
+	protected PutConfirmedAsyncTask(Database database, Context context,
 			String jid, List<NameValuePair> parameters) {
-		super(context, USERS_URI_SUFFIX + jid + INTERESTED_URI_SUFFIX,
+		super(context, USERS_URI_SUFFIX + jid + CONFIRMED_URI_SUFFIX,
 				parameters);
 
 	}
@@ -26,7 +26,7 @@ class SetInterestedAsyncTask extends BasePutRequestAsyncTask<String> {
 		// Execute the PUT request
 		super.call();
 
-		Log.e("SetInterestedAsyncTask", "Response string: " + responseString);
+		Log.e("PutConfirmedAsyncTask", "Response string: " + responseString);
 
 		return null;
 	}

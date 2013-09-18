@@ -9,12 +9,12 @@ import android.util.Log;
 
 import com.hangapp.android.model.Availability;
 
-class SetAvailabilityAsyncTask extends BasePutRequestAsyncTask<Availability> {
+class PutAvailabilityAsyncTask extends BasePutRequestAsyncTask<Availability> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String STATUS_URI_SUFFIX = "/status";
 
-	protected SetAvailabilityAsyncTask(Context context, String jid,
+	protected PutAvailabilityAsyncTask(Context context, String jid,
 			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + STATUS_URI_SUFFIX, parameters);
 
@@ -26,7 +26,7 @@ class SetAvailabilityAsyncTask extends BasePutRequestAsyncTask<Availability> {
 		super.call();
 
 		// TODO: Try to parse the resulting JSON
-		Log.e("SetAvailabilityAsyncTask", "Should parse " + responseString);
+		Log.e("PutAvailabilityAsyncTask", "Should parse " + responseString);
 
 		return null;
 	}

@@ -9,7 +9,7 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
 import com.hangapp.android.network.xmpp.XMPP;
 
-final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
+final class GetMyDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 
 	private static final String URL_SUFFIX = "/users/";
 
@@ -17,7 +17,7 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 	private XMPP xmpp;
 	private List<User> library;
 
-	protected GetUserDataAsyncTask(Database database, XMPP xmpp,
+	protected GetMyDataAsyncTask(Database database, XMPP xmpp,
 			Context context, String jid) {
 		super(context, URL_SUFFIX + jid);
 
@@ -67,7 +67,7 @@ final class GetUserDataAsyncTask extends BaseGetRequestAsyncTask<User> {
 		//
 		// TODO: Making this call within Database introduces a cyclical module
 		// dependency of Database -> XMPP -> Database. Move this call into
-		// GetUserDataAsyncTask in order to remove Database's dependency on
+		// GetMyDataAsyncTask in order to remove Database's dependency on
 		// XMPP. That way, each of the individual AsyncTasks can define
 		// themselves to be dependent on XMPP.
 		xmpp.setListOfMucsToJoinAndConnect(me.getJid(), jidsImInterestedIn);

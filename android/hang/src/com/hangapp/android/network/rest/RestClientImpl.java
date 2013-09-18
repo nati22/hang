@@ -48,7 +48,7 @@ public final class RestClientImpl implements RestClient {
 		parameters.add(new BasicNameValuePair(Keys.LAST_NAME, newUser
 				.getLastName()));
 
-		new NewUserAsyncTask(database, xmpp, gcm, prefs, context, newUser,
+		new PutUserAsyncTask(database, xmpp, gcm, prefs, context, newUser,
 				parameters).execute();
 
 		// TODO: Send a tickle to my recipients.
@@ -68,7 +68,7 @@ public final class RestClientImpl implements RestClient {
 							.getExpirationDate().toString()));
 			parameters.add(new BasicNameValuePair(Keys.STATUS_TEXT, status
 					.getDescription()));
-			new SetAvailabilityAsyncTask(context, jid, parameters).execute();
+			new PutAvailabilityAsyncTask(context, jid, parameters).execute();
 		} else {
 			new DeleteMyAvailabilityAsyncTask(database, context, jid).execute();
 		}
@@ -103,7 +103,7 @@ public final class RestClientImpl implements RestClient {
 			}
 		}
 
-		new SetProposalAsyncTask(context, jid, parameters).execute();
+		new PutProposalAsyncTask(context, jid, parameters).execute();
 
 		// TODO: Send a tickle to my recipients
 	}
@@ -127,7 +127,7 @@ public final class RestClientImpl implements RestClient {
 			Log.i("RestClientImpl", "Refreshing...");
 		}
 
-		new GetUserDataAsyncTask(database, xmpp, context, jid).execute();
+		new GetMyDataAsyncTask(database, xmpp, context, jid).execute();
 	}
 
 	@Override
@@ -137,7 +137,7 @@ public final class RestClientImpl implements RestClient {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 
-		new AddBroadcastAsyncTask(this, xmpp, context, myJid, parameters)
+		new PutBroadcastAsyncTask(this, xmpp, context, myJid, parameters)
 				.execute();
 	}
 
@@ -151,7 +151,7 @@ public final class RestClientImpl implements RestClient {
 			parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 		}
 
-		new AddMultipleBroadcastsAsyncTask(context, this, xmpp, myJid,
+		new PutMultipleBroadcastsAsyncTask(context, this, xmpp, myJid,
 				parameters).execute();
 
 	}
@@ -163,7 +163,7 @@ public final class RestClientImpl implements RestClient {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, targetJid));
 
-		new SendNudgeAsyncTask(context, myJid, parameters).execute();
+		new PostNudgeAsyncTask(context, myJid, parameters).execute();
 	}
 
 	@Override
@@ -178,7 +178,7 @@ public final class RestClientImpl implements RestClient {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
 
-		new SetInterestedAsyncTask(database, context, database.getMyJid(),
+		new PutInterestedAsyncTask(database, context, database.getMyJid(),
 				parameters).execute();
 	}
 
@@ -188,7 +188,7 @@ public final class RestClientImpl implements RestClient {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
 
-		new SetConfirmedAsyncTask(database, context, database.getMyJid(),
+		new PutConfirmedAsyncTask(database, context, database.getMyJid(),
 				parameters).execute();
 
 	}
@@ -211,7 +211,7 @@ public final class RestClientImpl implements RestClient {
 		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasterJid));
 
-		new SetProposalSeenAsyncTask(context, database.getMyJid(), parameters)
+		new PutProposalSeenAsyncTask(context, database.getMyJid(), parameters)
 				.execute();
 	}
 

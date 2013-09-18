@@ -15,7 +15,7 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Keys;
 
-final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
+final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 
 	private Database database;
@@ -24,7 +24,7 @@ final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 	private SharedPreferences prefs;
 	private String newUserJid;
 
-	protected NewUserAsyncTask(Database database, XMPP xmpp,
+	protected PutUserAsyncTask(Database database, XMPP xmpp,
 			GoogleCloudMessaging gcm, SharedPreferences prefs, Context context,
 			User newUser, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + newUser.getJid(), parameters);
@@ -43,7 +43,7 @@ final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 		if (prefs.getString(Keys.REGISTRATION_ID, null) == null) {
 			// Query GCM for a registration id.
 			String registrationId = gcm.register(RestClientImpl.GCM_SENDER_ID);
-			Log.i("NewUserAsyncTask", "GCM Registration ID: " + registrationId);
+			Log.i("PutUserAsyncTask", "GCM Registration ID: " + registrationId);
 
 			parameters.add(new BasicNameValuePair(Keys.REGISTRATION_ID,
 					registrationId));
@@ -65,7 +65,7 @@ final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 		super.call();
 
 		// Parse the response from the PUT request.
-		Log.d("NewUserAsyncTask.call()", responseString);
+		Log.d("PutUserAsyncTask.call()", responseString);
 		User myUserObject = User.parseUserNameData(responseString);
 
 		return myUserObject;
@@ -79,8 +79,8 @@ final class NewUserAsyncTask extends BasePutRequestAsyncTask<User> {
 				myUserObject.getFirstName(), myUserObject.getLastName());
 
 		// If the user was successfully saved into the database, directly
-		// execute a GetUserDataAsyncTask call.
-		new GetUserDataAsyncTask(database, xmpp, context, newUserJid).execute();
+		// execute a GetMyDataAsyncTask call.
+		new GetMyDataAsyncTask(database, xmpp, context, newUserJid).execute();
 	}
 
 	@Override

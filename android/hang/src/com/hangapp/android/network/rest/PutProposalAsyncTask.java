@@ -9,11 +9,11 @@ import android.util.Log;
 
 import com.hangapp.android.model.Proposal;
 
-class SetProposalAsyncTask extends BasePutRequestAsyncTask<Proposal> {
+class PutProposalAsyncTask extends BasePutRequestAsyncTask<Proposal> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 	private static final String PROPOSAL_URI_SUFFIX = "/proposal";
 
-	protected SetProposalAsyncTask(Context context, String jid,
+	protected PutProposalAsyncTask(Context context, String jid,
 			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + jid + PROPOSAL_URI_SUFFIX, parameters);
 	}
@@ -24,7 +24,7 @@ class SetProposalAsyncTask extends BasePutRequestAsyncTask<Proposal> {
 		super.call();
 
 		// TODO: Try to parse the resulting JSON
-		Log.e("SetProposalAsyncTask.call", "Should parse " + responseString);
+		Log.e("PutProposalAsyncTask.call", "Should parse " + responseString);
 
 		return null;
 	}
