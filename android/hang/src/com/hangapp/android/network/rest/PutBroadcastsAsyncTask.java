@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.hangapp.android.network.xmpp.XMPP;
 
-public class PutMultipleBroadcastsAsyncTask extends
+public class PutBroadcastsAsyncTask extends
 		BasePutRequestAsyncTask<String> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
@@ -19,7 +19,7 @@ public class PutMultipleBroadcastsAsyncTask extends
 	private RestClient restClient;
 	private XMPP xmpp;
 
-	protected PutMultipleBroadcastsAsyncTask(Context context,
+	protected PutBroadcastsAsyncTask(Context context,
 			RestClient restClient, XMPP xmpp, String uriSuffix,
 			List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + uriSuffix + BROADCAST_URI_SUFFIX,

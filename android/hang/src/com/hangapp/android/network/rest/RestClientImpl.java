@@ -151,7 +151,7 @@ public final class RestClientImpl implements RestClient {
 			parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
 		}
 
-		new PutMultipleBroadcastsAsyncTask(context, this, xmpp, myJid,
+		new PutBroadcastsAsyncTask(context, this, xmpp, myJid,
 				parameters).execute();
 
 	}
