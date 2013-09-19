@@ -20,7 +20,7 @@
 
         <LinearLayout
             android:id="@+id/linearLayoutInterestedChat"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@color/grey_dark_background"
             android:gravity="center_vertical"
@@ -35,9 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editTextChatMessage"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/horizontalScrollViewInterestedUsersChat"
-        android:stackFromBottom="true"
-        android:transcriptMode="alwaysScroll" >
+        android:layout_below="@+id/horizontalScrollViewInterestedUsersChat" >
     </ListView>
 
     <!-- Dummy item to prevent AutoCompleteTextView from receiving focus on startup. -->

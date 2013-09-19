@@ -83,16 +83,16 @@ public final class XMPP {
 
 		// TODO: Remove MUCs that are known to have already been joined:
 		// http://www.igniterealtime.org/builds/smack/docs/latest/documentation/extensions/muc.html#discojoin
-//		Iterator<String> joinedRooms = MultiUserChat.getJoinedRooms(
-//				xmppConnection, "myPenisISLarge@amazonec2.com");
-//
-//		while (joinedRooms.hasNext()) {
-//			final String joinedRoom = joinedRooms.next();
-//
-//			if (mucsToJoin.contains(joinedRoom)) {
-//				joinedRooms.remove();
-//			}
-//		}
+		// Iterator<String> joinedRooms = MultiUserChat.getJoinedRooms(
+		// xmppConnection, "myPenisISLarge@amazonec2.com");
+		//
+		// while (joinedRooms.hasNext()) {
+		// final String joinedRoom = joinedRooms.next();
+		//
+		// if (mucsToJoin.contains(joinedRoom)) {
+		// joinedRooms.remove();
+		// }
+		// }
 
 		return xmppConnection != null && xmppConnection.isConnected()
 				&& xmppConnection.isAuthenticated() && mucsToJoin.isEmpty();
@@ -177,26 +177,30 @@ public final class XMPP {
 	 * database.
 	 */
 	boolean addMucMessage(String mucName, Message message) {
-		boolean mucMessageAdded = false;
+		boolean gotNewMucMessage = false;
 
 		messagesDataSource.open();
 
 		// TODO: Move these SQLite calls into an AsyncTask of some sort
 		// (i.e: move them OFF of the UI thread).
-		mucMessageAdded = messagesDataSource.createMessage(mucName, message);
-		List<Message> messages = getAllMessages(mucName);
+		gotNewMucMessage = messagesDataSource.createMessage(mucName, message);
 
-		if (mucMessageListeners.get(mucName) != null) {
-			for (MucListener listener : mucMessageListeners.get(mucName)) {
-				Log.i("XMPP", "Added muc message: " + message.getBody()
-						+ ", notifying listener: " + listener.toString());
-				listener.onMucMessageUpdate(mucName, messages);
+		// If you got an MUC message that doesn't already exist, then notify all
+		// the observers.
+		if (gotNewMucMessage) {
+			final List<Message> messages = getAllMessages(mucName);
+			if (mucMessageListeners.get(mucName) != null) {
+				for (MucListener listener : mucMessageListeners.get(mucName)) {
+					Log.i("XMPP", "Added muc message: " + message.getBody()
+							+ ", notifying listener: " + listener.toString());
+					listener.onMucMessageUpdate(mucName, messages);
+				}
 			}
 		}
 
 		messagesDataSource.close();
 
-		return mucMessageAdded;
+		return gotNewMucMessage;
 	}
 
 	/**

@@ -105,6 +105,9 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		// Setup adapter.
 		adapter = new MessageAdapter(this, R.id.listViewChatCells);
 		listViewChatCells.setAdapter(adapter);
+		listViewChatCells
+				.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+		listViewChatCells.setStackFromBottom(true);
 	}
 
 	@Override
@@ -199,32 +202,24 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 
 	@Override
 	public void onMucMessageUpdate(String mucName, final List<Message> messages) {
-		for (Message message : messages) {
-			Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "
-					+ message.getBody());
-		}
+		// for (Message message : messages) {
+		// Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "
+		// + message.getBody());
+		// }
 
-		this.messages.clear();
-		this.messages.addAll(messages);
-		adapter.notifyDataSetChanged();
-
-		listViewChatCells.post(new Runnable() {
-			public void run() {
-				listViewChatCells.setSelection(listViewChatCells.getCount() - 1);
-			}
-		});
-
-		scrollMyListViewToBottom();
-	}
-
-	private void scrollMyListViewToBottom() {
-		listViewChatCells.post(new Runnable() {
+		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
-				// Select the last row so it will scroll into view...
-				listViewChatCells.setSelection(adapter.getCount() - 1);
+				ChatActivity.this.messages.clear();
+				ChatActivity.this.messages.addAll(messages);
+				adapter.notifyDataSetChanged();
+
+				// listViewChatCells.setSelection(adapter.getCount() - 1);
+				listViewChatCells
+						.smoothScrollToPosition(adapter.getCount() - 1);
 			}
 		});
+
 	}
 
 	@Override

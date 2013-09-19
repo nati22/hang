@@ -93,9 +93,6 @@
         </service>
 
         <receiver android:name=".network.xmpp.XMPPBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="com.hangapp" />
-            </intent-filter>
         </receiver>
     </application>
 
