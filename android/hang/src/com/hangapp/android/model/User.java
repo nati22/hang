@@ -56,9 +56,8 @@ public class User implements Comparable<User>, Parcelable {
 	public void setProposal(Proposal proposal) {
 		this.proposal = proposal;
 	}
-	
-	public static User parseUser(String userJsonString)
-			throws JSONException {
+
+	public static User parseUser(String userJsonString) throws JSONException {
 		User user = null;
 
 		JSONObject userJsonObject = new JSONObject(userJsonString);
@@ -71,8 +70,6 @@ public class User implements Comparable<User>, Parcelable {
 
 		return user;
 	}
-
-	
 
 	@Override
 	public String toString() {
@@ -118,8 +115,6 @@ public class User implements Comparable<User>, Parcelable {
 		}
 	}
 
-	
-
 	/*
 	 * Parcelable.
 	 */
@@ -134,7 +129,7 @@ public class User implements Comparable<User>, Parcelable {
 		out.writeString(lastName);
 	}
 
-	private void readFromParcel(Parcel in) {
+	protected void readFromParcel(Parcel in) {
 		jid = in.readString();
 		firstName = in.readString();
 		lastName = in.readString();

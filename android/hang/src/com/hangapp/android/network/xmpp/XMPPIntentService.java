@@ -201,7 +201,8 @@ public final class XMPPIntentService extends IntentService {
 		}
 
 		if (xmpp.xmppConnection.isAuthenticated()) {
-			Log.e("XMPPIntentService.login()", "XMPP already authenticated");
+			Log.i("XMPPIntentService.login()", "XMPP already authenticated");
+			sendJoinAllMucsBroadcast(myJid);
 			return;
 		}
 
@@ -215,31 +216,35 @@ public final class XMPPIntentService extends IntentService {
 					"XMPP: can't login: " + e.getMessage());
 			register(myJid);
 			return;
+		} catch (IllegalStateException e) {
+			Log.i("XMPPIntentService.login()",
+					"XMPP: Already logged in. Moving on silently.");
 		}
 
 		if (xmpp.xmppConnection.isAuthenticated()) {
 			Log.d("XMPPIntentService.login()", "Logged into XMPP");
 			// If login succeeded, then move onto attempting to join all of the
-			// Mucs.
-			// Send off a Broadcast to do this on the UI thread.
-			if (xmpp.mucsToJoin.isEmpty()) {
-				Log.v("XMPPIntentService.login()",
-						"Won't join MUCs: All MUCs already joined");
-				return;
-			}
-
-			Intent joinMucsBroadcastIntent = new Intent();
-			joinMucsBroadcastIntent
-					.setAction(XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER);
-			joinMucsBroadcastIntent.putExtra(Keys.JID, myJid);
-			sendBroadcast(joinMucsBroadcastIntent);
-
-			// joinMucs(myJid);
+			// Mucs. Send off a Broadcast to do this on the UI thread.
+			sendJoinAllMucsBroadcast(myJid);
 		} else {
 			// If login failed, then start over from connect().
 			Log.e("XMPPIntentService.login()", "XMPP login failed. connect");
 			xmpp.connect(myJid, getApplicationContext());
 		}
+	}
+
+	private void sendJoinAllMucsBroadcast(String myJid) {
+		if (xmpp.mucsToJoin.isEmpty()) {
+			Log.v("XMPPIntentService.login()",
+					"Won't join MUCs: All MUCs already joined");
+			return;
+		}
+
+		Intent joinMucsBroadcastIntent = new Intent();
+		joinMucsBroadcastIntent
+				.setAction(XMPPBroadcastReceiver.XMPP_BROADCAST_RECEIVER);
+		joinMucsBroadcastIntent.putExtra(Keys.JID, myJid);
+		sendBroadcast(joinMucsBroadcastIntent);
 	}
 
 	protected void logout() {

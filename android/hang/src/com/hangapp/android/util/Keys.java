@@ -60,7 +60,7 @@ public final class Keys {
 	public static final String SPECIFIED_DATE_FORMAT = "MM/dd/yyyy hh:mm:ss aa";
 	
 	
-	public static final String SERVER_ADDRESS = "@conference.ec2-54-242-9-67.compute-1.amazonaws.com/";
+	public static final String CONFERENCE_SERVER_ADDRESS = "@conference.ec2-54-242-9-67.compute-1.amazonaws.com/";
 
 	/**
 	 * I'm sure this is a terrible, terrible idea but I wanted to show that

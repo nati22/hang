@@ -202,11 +202,8 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 
 	@Override
 	public void onMucMessageUpdate(String mucName, final List<Message> messages) {
-		// for (Message message : messages) {
-		// Log.i("ChatActivity.onMucMessageUpdate", "Got muc message: "
-		// + message.getBody());
-		// }
-
+		// Must explicitly run on UI thread because the Smack packet listener
+		// runs on a daemon (background) thread.
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -219,7 +216,6 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 						.smoothScrollToPosition(adapter.getCount() - 1);
 			}
 		});
-
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.util.Log;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,8 +76,7 @@ public class ProposalsFragment extends SherlockFragment implements
 				.findViewById(R.id.listViewProposalsFragment);
 
 		// Set up the Adapter.
-		adapter = new ProposalsAdapter(getActivity(), incomingBroadcasts,
-				database);
+		adapter = new ProposalsAdapter(getActivity(), incomingBroadcasts);
 
 		listViewFriends.setAdapter(adapter);
 		listViewFriends.setEmptyView(view.findViewById(android.R.id.empty));
@@ -133,35 +132,68 @@ public class ProposalsFragment extends SherlockFragment implements
 
 	private static class UserWithSeenState extends User {
 
-		public UserWithSeenState(User user) {
+		public UserWithSeenState(User user, boolean seen) {
 			super(user.getJid(), user.getFirstName(), user.getLastName());
 			super.setAvailability(user.getAvailability());
 			super.setProposal(user.getProposal());
+			this.seen = seen;
 		}
 
-		public UserWithSeenState(String jid, String firstName, String lastName) {
+		public UserWithSeenState(String jid, String firstName, String lastName,
+				boolean seen) {
 			super(jid, firstName, lastName);
+			this.seen = seen;
 		}
 
+		public boolean seen = false;
+
+		/*
+		 * Must override all the Parcelable stuff for this extension of User.
+		 */
 		public UserWithSeenState(Parcel in) {
 			super(in);
 		}
 
-		public boolean seen = false;
+		@Override
+		public void writeToParcel(Parcel out, int flags) {
+			super.writeToParcel(out, flags);
+			out.writeString(Boolean.toString(seen));
+		}
+
+		@Override
+		protected void readFromParcel(Parcel in) {
+			super.readFromParcel(in);
+			seen = Boolean.parseBoolean(in.readString());
+		}
+
+		@SuppressWarnings("unused")
+		public static final Parcelable.Creator<UserWithSeenState> CREATOR = new Parcelable.Creator<UserWithSeenState>() {
+			@Override
+			public UserWithSeenState createFromParcel(Parcel in) {
+				return new UserWithSeenState(in);
+			}
+
+			@Override
+			public UserWithSeenState[] newArray(int size) {
+				return new UserWithSeenState[size];
+			}
+		};
+
+		@Override
+		public int describeContents() {
+			return 0;
+		}
 	}
 
 	private static class ProposalsAdapter extends BaseAdapter {
 		private List<UserWithSeenState> friends;
 		private LayoutInflater inflater;
 		private Context context;
-		private Database database;
 
-		public ProposalsAdapter(Context context,
-				List<UserWithSeenState> friends, Database database) {
+		public ProposalsAdapter(Context context, List<UserWithSeenState> friends) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
 			this.friends = friends;
-			this.database = database;
 		}
 
 		@Override
@@ -194,12 +226,8 @@ public class ProposalsFragment extends SherlockFragment implements
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			// If this user's proposal hasn't been seen, color in cell bg
+			// If this user's proposal hasn't been seen, color in cell.
 			if (!seenUser.seen) {
-				Log.d("ProposalsAdapter.getView",
-						"coloring " + seenUser.getFirstName() + "'s cell");
-				Log.i("getMySeenProposals looks like...", ""
-						+ database.getMySeenProposals().toString());
 				convertView.setBackgroundColor(context.getResources().getColor(
 						R.color.teal));
 			} else {
@@ -290,7 +318,7 @@ public class ProposalsFragment extends SherlockFragment implements
 
 			// Convert Users to SeenUsers to give them seen "state" booleans
 			for (User user : incomingBroadcasts) {
-				UserWithSeenState seenUser = new UserWithSeenState(user);
+				UserWithSeenState seenUser = new UserWithSeenState(user, false);
 				this.incomingBroadcasts.add(seenUser);
 			}
 

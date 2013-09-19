@@ -80,22 +80,41 @@ public final class XMPP {
 	}
 
 	private boolean isDoneJoiningAllChatrooms() {
+		if (xmppConnection == null) {
+			return false;
+		}
 
-		// TODO: Remove MUCs that are known to have already been joined:
-		// http://www.igniterealtime.org/builds/smack/docs/latest/documentation/extensions/muc.html#discojoin
-		// Iterator<String> joinedRooms = MultiUserChat.getJoinedRooms(
-		// xmppConnection, "myPenisISLarge@amazonec2.com");
+		// Remove MUCs that have already been joined from the list of MUCs to
+		// join.
+		// final Iterator<String> mucsToJoinIterator = mucsToJoin.iterator();
+		// while (mucsToJoinIterator.hasNext()) {
+		// final String mucToJoin = mucsToJoinIterator.next();
 		//
-		// while (joinedRooms.hasNext()) {
-		// final String joinedRoom = joinedRooms.next();
-		//
-		// if (mucsToJoin.contains(joinedRoom)) {
-		// joinedRooms.remove();
+		// final MultiUserChat muc = getMucFromMap(mucToJoin);
+		// if (muc.isJoined()) {
+		// mucsToJoinIterator.remove();
 		// }
 		// }
 
 		return xmppConnection != null && xmppConnection.isConnected()
 				&& xmppConnection.isAuthenticated() && mucsToJoin.isEmpty();
+	}
+
+	private MultiUserChat getMucFromMap(String mucName) {
+		// Pull the MultiUserChatObject from our map of Muc's Jid -> Muc Object
+		// map.
+		MultiUserChat muc = mucMap.get(mucName);
+
+		// If the MUC Object from the map hasn't been instantiated yet,
+		// instantiate one and throw it into the Map.
+		// This technique is called "lazy instantiation".
+		if (muc == null) {
+			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
+					+ XMPPIntentService.XMPP_SERVER_URL);
+			mucMap.put(mucName, muc);
+		}
+
+		return muc;
 	}
 
 	/**
@@ -242,26 +261,9 @@ public final class XMPP {
 			return false;
 		}
 
-		// Pull the MultiUserChatObject from our map of Muc's Jid -> Muc Object
-		// map.
-		MultiUserChat muc = mucMap.get(mucName);
-
-		// If the MUC Object from the map hasn't been instantiated yet,
-		// instantiate one and throw it into the Map.
-		// This technique is called "lazy instantiation".
-		if (muc == null) {
-			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
-					+ XMPPIntentService.XMPP_SERVER_URL);
-			mucMap.put(mucName, muc);
-		}
+		final MultiUserChat muc = getMucFromMap(mucName);
 
 		try {
-			// // Leave the MUC and rejoin unconditionally: this is so that we
-			// get
-			// // the server to re-send us all of the Messages in that MUC.
-			// if (muc.isJoined()) {
-			// muc.leave();
-			// }
 			muc.join(myJid);
 		} catch (XMPPException e) {
 			Log.e("XMPPPIntentService.joinMuc()",
@@ -319,16 +321,7 @@ public final class XMPP {
 	 * Leave the MUC in the UI thread.
 	 */
 	public void leaveMuc(String mucName) {
-		MultiUserChat muc = mucMap.get(mucName);
-
-		// If the MUC Object from the map hasn't been instantiated yet,
-		// instantiate one and throw it into the Map.
-		// This technique is called "lazy instantiation".
-		if (muc == null) {
-			muc = new MultiUserChat(xmppConnection, mucName + "@conference."
-					+ XMPPIntentService.XMPP_SERVER_URL);
-			mucMap.put(mucName, muc);
-		}
+		final MultiUserChat muc = getMucFromMap(mucName);
 
 		muc.leave();
 	}
