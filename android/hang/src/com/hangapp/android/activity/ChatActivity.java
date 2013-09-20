@@ -124,7 +124,7 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		messages.clear();
 
 		// Then, grab the cached messages for this MUC from SQLite.
-		List<Message> mucMessages = xmpp.getAllMessages(mucName);
+		final List<Message> mucMessages = xmpp.getAllMessages(mucName);
 		messages.addAll(mucMessages);
 
 		// Refresh list
@@ -141,9 +141,6 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		// Remove listener
 		database.removeIncomingBroadcastsListener(this);
 
-		// // Leave the MUC.
-		// xmpp.leaveMuc(mucName);
-
 		// "Unsubscribe" this activity from new MUC messages.
 		xmpp.removeMucListener(mucName, this);
 	}
@@ -152,16 +149,14 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 	 * XML OnClickListener for the "sendMessage" button.
 	 */
 	public void sendMessage(View v) {
-		String message = editTextChatMessage.getText().toString().trim();
+		final String message = editTextChatMessage.getText().toString().trim();
 
 		if (message.equals("")) {
-			Toast.makeText(this, "Can't send empty message", Toast.LENGTH_SHORT)
-					.show();
 			Log.e("ChatActivity.sendMessage", "Can't send empty message");
 			return;
 		}
 
-		String myJid = database.getMyJid();
+		final String myJid = database.getMyJid();
 
 		xmpp.sendMucMessage(myJid, mucName, message);
 		editTextChatMessage.setText("");
@@ -211,7 +206,6 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 				ChatActivity.this.messages.addAll(messages);
 				adapter.notifyDataSetChanged();
 
-				// listViewChatCells.setSelection(adapter.getCount() - 1);
 				listViewChatCells
 						.smoothScrollToPosition(adapter.getCount() - 1);
 			}
@@ -220,77 +214,50 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
-
-		// If this is the user's own chat
+		// If this is the user's own chat.
 		if (myJid.equals(mucName)) {
 
 			// Check if my interested list has been updated
 			if (!database.getMyProposal().getInterested()
 					.equals(listInterestedJids)) {
-				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
-						"this is my chat");
-				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
-						"replacing a list of "
-								+ listInterestedJids.size()
-								+ " with a list of "
-								+ database.getMyProposal().getInterested()
-										.size()
-								+ " which is \""
-								+ database.getMyProposal().getInterested()
-										.get(0) + "\"");
 				listInterestedJids.clear();
 				listInterestedJids.addAll(database.getMyProposal()
 						.getInterested());
 
-				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
-						"listInterestedJids has size "
-								+ listInterestedJids.size());
-				Log.w("ChatActivity.onIncomingBroadcastsUpdate",
-						"listInterestedJids = " + listInterestedJids.toString());
-
 				// Update horizontal list
 				updateHorizontalList(listInterestedJids, linLayoutInterested);
 			}
+		}
+		// If this is someone else's chat, and they are broadcasting to you.
+		else if (incomingBroadcasts.contains(database.getIncomingUser(mucName))) {
+			final User host = database.getIncomingUser(mucName);
 
-		} else if (incomingBroadcasts.contains(database
-				.getIncomingUser(mucName))) {
-			// Then this is one of the User's broadcasters chats
-			Log.i("ChatActivity.onIncomingBroadcastsUpdate()", "this is "
-					+ database.getIncomingUser(mucName).getFirstName()
-					+ "'s chat");
+			// If the host has a Proposal
+			if (host.getProposal() != null) {
+				// Check if their interested list has been updated
+				if (!host.getProposal().getInterested()
+						.equals(listInterestedJids)) {
+					listInterestedJids.clear();
 
-			// Check if their interested list has been updated
-			if (!database.getIncomingUser(mucName).getProposal()
-					.getInterested().equals(listInterestedJids)) {
-				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
-						"their original interested list read: "
-								+ listInterestedJids.toString());
+					listInterestedJids.addAll(host.getProposal()
+							.getInterested());
 
-				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
-						"that list is being replaced with: "
-								+ database.getIncomingUser(mucName)
-										.getProposal().getInterested()
-										.toString());
-				listInterestedJids.clear();
-				listInterestedJids.addAll(database.getIncomingUser(mucName)
-						.getProposal().getInterested());
-
-				// Update horizontal list
-				updateHorizontalList(listInterestedJids, linLayoutInterested);
-			} else {
-				Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
-						"their list hasn't changed: "
-								+ listInterestedJids.toString());
+					// Update horizontal list
+					updateHorizontalList(listInterestedJids,
+							linLayoutInterested);
+				} else {
+					Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
+							"their list hasn't changed: "
+									+ listInterestedJids.toString());
+				}
 			}
 
-		} else {
-			Log.e("ChatActivity.onIncomingBroadcastsUpdate()", "myJid = "
-					+ myJid);
-			Log.e("ChatActivity.onIncomingBroadcastsUpdate()", "mucName = "
-					+ mucName);
+		}
+		// If this is someone else's Chat, but the user isn't broadcasting to
+		// you.
+		else {
 			Log.e("ChatActivity.onIncomingBroadcastsUpdate()",
-					"incomingBroadcasts.toString() = "
-							+ incomingBroadcasts.toString());
+					"Attempted to join MUC for a user who is not broadcasting to you.");
 			Toast.makeText(getApplicationContext(),
 					"There was an error opening this chat", Toast.LENGTH_SHORT)
 					.show();
