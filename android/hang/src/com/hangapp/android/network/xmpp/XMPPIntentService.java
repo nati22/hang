@@ -155,6 +155,13 @@ public final class XMPPIntentService extends IntentService {
 	protected void register(String myJid) {
 		Log.v("XMPPIntentService", "XMPPIntentService: register()");
 
+		if (xmpp == null || xmpp.xmppConnection == null) {
+			Log.e("XMPPIntentService",
+					"XMPP can't register: xmppConnection was null");
+			xmpp.connect(myJid, getApplicationContext());
+			return;
+		}
+
 		// If you try to login without being connected, then try to connect
 		// again.
 		if (!xmpp.xmppConnection.isConnected()) {
@@ -189,6 +196,12 @@ public final class XMPPIntentService extends IntentService {
 
 	protected void login(String myJid) {
 		Log.v("XMPPIntentService", "XMPPIntentService: login()");
+		if (xmpp == null || xmpp.xmppConnection == null) {
+			Log.e("XMPPIntentService",
+					"XMPP can't login: xmppConnection was null");
+			xmpp.connect(myJid, getApplicationContext());
+			return;
+		}
 
 		// If you try to login without being connected, then try to connect
 		// again.
