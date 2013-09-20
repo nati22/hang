@@ -12,9 +12,6 @@ import org.apache.http.util.EntityUtils;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.android.util.SafeAsyncTask;
-import com.hangapp.android.util.Utils;
-
 /**
  * Never use an AsyncTask directly, in the whole codebase. Instead, extend this
  * class. This class bakes in several checks and GUI notifications related to
@@ -26,48 +23,16 @@ import com.hangapp.android.util.Utils;
  * 
  */
 abstract class BasePutRequestAsyncTask<ResultT> extends
-		SafeAsyncTask<ResultT> {
-
-	static final String BASE_URL = "http://hangapp2.appspot.com";
-
-	// @Inject
-	protected String responseString = "";
+		BaseHttpRequest<ResultT> {
 
 	protected List<NameValuePair> parameters = null;
 
-	private String uri = null;
-
-	protected Context context;
-
-	// protected BasePutRequestAsyncTask(Context context, String uriSuffix) {
-	// super(context);
-	// this.uri = BASE_URL + uriSuffix;
-	// }
-
 	protected BasePutRequestAsyncTask(Context context, String uriSuffix,
 			List<NameValuePair> parameters) {
-		super();
-		this.uri = BASE_URL + uriSuffix;
+		super(context, uriSuffix);
 		this.parameters = parameters;
-		this.context = context;
 	}
 
-	@Override
-	protected void onPreExecute() {
-		// Verify there is an Internet connection
-		if (!Utils.isNetworkAvailable(context)) {
-			// final String errorMessage = "No internet connection detected";
-			// Log.e(errorMessage);
-			// Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-			Log.e("BasePutRequestAsyncTask.onPreExecute",
-					"No internet connection detected");
-
-			// If there is no Internet connection, then don't run the AsyncTask.
-			cancel(true);
-		}
-	}
-
-	// TODO: should that be ResultT or Result<T>?
 	@Override
 	public ResultT call() throws Exception {
 
@@ -96,11 +61,5 @@ abstract class BasePutRequestAsyncTask<ResultT> extends
 		this.responseString = responseString;
 
 		return null;
-	}
-
-	@Override
-	protected void onException(Exception e) throws RuntimeException {
-		super.onException(e);
-		Log.e("BasePutRequestAsyncTask.onException", e.getMessage());
 	}
 }
