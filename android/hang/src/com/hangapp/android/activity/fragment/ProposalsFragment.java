@@ -11,8 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +39,8 @@ public class ProposalsFragment extends SherlockFragment implements
 	private ProposalsAdapter adapter;
 
 	// Member datum.
-	private ArrayList<UserWithSeenState> incomingBroadcasts = new ArrayList<UserWithSeenState>();
+	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
+	private Set<String> seenProposals = new HashSet<String>();
 
 	// Dependencies.
 	private Database database;
@@ -55,10 +54,15 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		// Reload the incoming broadcasts from savedInstanceState.
 		if (savedInstanceState != null) {
-			ArrayList<UserWithSeenState> savedIncomingBroadcasts = savedInstanceState
+			final List<User> savedIncomingBroadcasts = savedInstanceState
 					.getParcelableArrayList(Keys.FRIENDS);
-			incomingBroadcasts.clear();
-			incomingBroadcasts.addAll(savedIncomingBroadcasts);
+			this.incomingBroadcasts.clear();
+			this.incomingBroadcasts.addAll(savedIncomingBroadcasts);
+
+			final List<String> savedSeenJids = savedInstanceState
+					.getStringArrayList(Keys.PROPOSAL_SEEN);
+			this.seenProposals.clear();
+			this.seenProposals.addAll(savedSeenJids);
 		}
 	}
 
@@ -76,7 +80,8 @@ public class ProposalsFragment extends SherlockFragment implements
 				.findViewById(R.id.listViewProposalsFragment);
 
 		// Set up the Adapter.
-		adapter = new ProposalsAdapter(getActivity(), incomingBroadcasts);
+		adapter = new ProposalsAdapter(getActivity(), incomingBroadcasts,
+				seenProposals);
 
 		listViewFriends.setAdapter(adapter);
 		listViewFriends.setEmptyView(view.findViewById(android.R.id.empty));
@@ -104,6 +109,10 @@ public class ProposalsFragment extends SherlockFragment implements
 		super.onSaveInstanceState(outState);
 
 		outState.putParcelableArrayList(Keys.FRIENDS, incomingBroadcasts);
+
+		final ArrayList<String> seenProposalsList = new ArrayList<String>(
+				this.seenProposals);
+		outState.putStringArrayList(Keys.PROPOSAL_SEEN, seenProposalsList);
 	}
 
 	@Override
@@ -113,10 +122,11 @@ public class ProposalsFragment extends SherlockFragment implements
 		database.addIncomingBroadcastsListener(this);
 		database.addSeenProposalListener(this);
 
-		List<User> incomingBroadcasts = database.getMyIncomingBroadcasts();
+		final List<User> incomingBroadcasts = database
+				.getMyIncomingBroadcasts();
 		onIncomingBroadcastsUpdate(incomingBroadcasts);
 
-		List<String> seenJids = database.getMySeenProposals();
+		final List<String> seenJids = database.getMySeenProposals();
 		if (seenJids != null) {
 			onMySeenProposalsUpdate(seenJids);
 		}
@@ -130,70 +140,74 @@ public class ProposalsFragment extends SherlockFragment implements
 		database.removeSeenProposalListener(this);
 	}
 
-	private static class UserWithSeenState extends User {
-
-		public UserWithSeenState(User user, boolean seen) {
-			super(user.getJid(), user.getFirstName(), user.getLastName());
-			super.setAvailability(user.getAvailability());
-			super.setProposal(user.getProposal());
-			this.seen = seen;
-		}
-
-		public UserWithSeenState(String jid, String firstName, String lastName,
-				boolean seen) {
-			super(jid, firstName, lastName);
-			this.seen = seen;
-		}
-
-		public boolean seen = false;
-
-		/*
-		 * Must override all the Parcelable stuff for this extension of User.
-		 */
-		public UserWithSeenState(Parcel in) {
-			super(in);
-		}
-
-		@Override
-		public void writeToParcel(Parcel out, int flags) {
-			super.writeToParcel(out, flags);
-			out.writeString(Boolean.toString(seen));
-		}
-
-		@Override
-		protected void readFromParcel(Parcel in) {
-			super.readFromParcel(in);
-			seen = Boolean.parseBoolean(in.readString());
-		}
-
-		@SuppressWarnings("unused")
-		public static final Parcelable.Creator<UserWithSeenState> CREATOR = new Parcelable.Creator<UserWithSeenState>() {
-			@Override
-			public UserWithSeenState createFromParcel(Parcel in) {
-				return new UserWithSeenState(in);
-			}
-
-			@Override
-			public UserWithSeenState[] newArray(int size) {
-				return new UserWithSeenState[size];
-			}
-		};
-
-		@Override
-		public int describeContents() {
-			return 0;
-		}
-	}
+	// private static class UserWithSeenState extends User {
+	//
+	// public UserWithSeenState(User user, boolean seen) {
+	// super(user.getJid(), user.getFirstName(), user.getLastName());
+	// super.setAvailability(user.getAvailability());
+	// super.setProposal(user.getProposal());
+	// this.seen = seen;
+	// }
+	//
+	// public UserWithSeenState(String jid, String firstName, String lastName,
+	// boolean seen) {
+	// super(jid, firstName, lastName);
+	// this.seen = seen;
+	// }
+	//
+	// public boolean seen = false;
+	//
+	// /*
+	// * Must override all the Parcelable stuff for this extension of User.
+	// */
+	// public UserWithSeenState(Parcel in) {
+	// super(in);
+	// }
+	//
+	// @Override
+	// public void writeToParcel(Parcel out, int flags) {
+	// super.writeToParcel(out, flags);
+	// out.writeString(Boolean.toString(seen));
+	// }
+	//
+	// @Override
+	// protected void readFromParcel(Parcel in) {
+	// super.readFromParcel(in);
+	// seen = Boolean.parseBoolean(in.readString());
+	// }
+	//
+	// @SuppressWarnings("unused")
+	// public static final Parcelable.Creator<UserWithSeenState> CREATOR = new
+	// Parcelable.Creator<UserWithSeenState>() {
+	// @Override
+	// public UserWithSeenState createFromParcel(Parcel in) {
+	// return new UserWithSeenState(in);
+	// }
+	//
+	// @Override
+	// public UserWithSeenState[] newArray(int size) {
+	// return new UserWithSeenState[size];
+	// }
+	// };
+	//
+	// @Override
+	// public int describeContents() {
+	// return 0;
+	// }
+	// }
 
 	private static class ProposalsAdapter extends BaseAdapter {
-		private List<UserWithSeenState> friends;
+		private List<User> friends;
+		private Set<String> seenJids;
 		private LayoutInflater inflater;
 		private Context context;
 
-		public ProposalsAdapter(Context context, List<UserWithSeenState> friends) {
+		public ProposalsAdapter(Context context, List<User> friends,
+				Set<String> seenJids) {
 			inflater = LayoutInflater.from(context);
 			this.context = context;
 			this.friends = friends;
+			this.seenJids = seenJids;
 		}
 
 		@Override
@@ -215,7 +229,7 @@ public class ProposalsFragment extends SherlockFragment implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 
-			final UserWithSeenState seenUser = friends.get(position);
+			final User user = friends.get(position);
 
 			// Inflate the View if necessary.
 			if (convertView == null) {
@@ -227,7 +241,7 @@ public class ProposalsFragment extends SherlockFragment implements
 			}
 
 			// If this user's proposal hasn't been seen, color in cell.
-			if (!seenUser.seen) {
+			if (!seenJids.contains(user.getJid())) {
 				convertView.setBackgroundColor(context.getResources().getColor(
 						R.color.teal));
 			} else {
@@ -270,19 +284,19 @@ public class ProposalsFragment extends SherlockFragment implements
 			convertView.setTag(holder);
 
 			// Populate the Views with correct data.
-			holder.profilePictureView.setProfileId(seenUser.getJid());
-			holder.textViewFriendName.setText(seenUser.getFullName());
-			holder.textViewProposalDescription.setText(seenUser.getProposal()
+			holder.profilePictureView.setProfileId(user.getJid());
+			holder.textViewFriendName.setText(user.getFullName());
+			holder.textViewProposalDescription.setText(user.getProposal()
 					.getDescription());
-			holder.textViewProposalLocation.setText(seenUser.getProposal()
+			holder.textViewProposalLocation.setText(user.getProposal()
 					.getLocation());
-			holder.textViewProposalStartTime.setText(seenUser.getProposal()
+			holder.textViewProposalStartTime.setText(user.getProposal()
 					.getStartTime().toString("h:mm aa"));
 
 			// Construct the internationalized string for the number of users
 			// interested in this Proposal. Then use it to populate the
 			// TextView.
-			final int numberOfUsersInterested = seenUser.getProposal()
+			final int numberOfUsersInterested = user.getProposal()
 					.getInterested().size();
 			final String interestedString = String.format(context
 					.getResources().getString(R.string.count_interested),
@@ -316,14 +330,14 @@ public class ProposalsFragment extends SherlockFragment implements
 				}
 			}
 
-			// Convert Users to SeenUsers to give them seen "state" booleans
-			for (User user : incomingBroadcasts) {
-				UserWithSeenState seenUser = new UserWithSeenState(user, false);
-				this.incomingBroadcasts.add(seenUser);
-			}
+			// // Convert Users to SeenUsers to give them seen "state" booleans
+			// for (User user : incomingBroadcasts) {
+			// UserWithSeenState seenUser = new UserWithSeenState(user, false);
+			// this.incomingBroadcasts.add(seenUser);
+			// }
 
 			// Add the ones that are left to the internal List<User>.
-			// this.incomingBroadcasts.addAll(incomingBroadcasts);
+			this.incomingBroadcasts.addAll(incomingBroadcasts);
 			Collections.sort(this.incomingBroadcasts);
 		}
 
@@ -332,11 +346,8 @@ public class ProposalsFragment extends SherlockFragment implements
 
 	@Override
 	public void onMySeenProposalsUpdate(List<String> seenJids) {
-		Set<String> seenJidsSet = new HashSet<String>(seenJids);
-
-		for (UserWithSeenState seeableUser : this.incomingBroadcasts) {
-			seeableUser.seen = seenJidsSet.contains(seeableUser.getJid());
-		}
+		this.seenProposals.clear();
+		this.seenProposals.addAll(seenJids);
 
 		adapter.notifyDataSetChanged();
 	}
