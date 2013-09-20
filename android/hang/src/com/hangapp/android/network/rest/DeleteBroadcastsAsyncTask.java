@@ -7,19 +7,19 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
 import com.hangapp.android.network.xmpp.XMPP;
 
-class DeleteBroadcastAsyncTask extends BaseDeleteRequestAsyncTask<User> {
+class DeleteBroadcastsAsyncTask extends BaseDeleteRequestAsyncTask<User> {
 
 	private static final String USERS_URI_SUFFIX = "/users/";
-	private static final String BROADCAST_URI_SUFFIX = "/broadcast";
+	private static final String BROADCAST_URI_SUFFIX = "/broadcasts";
 
 	private RestClient restClient;
 	private XMPP xmpp;
 
-	protected DeleteBroadcastAsyncTask(Database database,
+	protected DeleteBroadcastsAsyncTask(Database database,
 			RestClient restClient, XMPP xmpp, Context context, String myJid,
-			String targetJid) {
+			String formattedTargetJids) {
 		super(context, USERS_URI_SUFFIX + myJid + BROADCAST_URI_SUFFIX
-				+ "?target=" + targetJid);
+				+ formattedTargetJids);
 
 		// Inject dependencies.
 		this.restClient = restClient;

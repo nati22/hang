@@ -174,31 +174,20 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 	}
 
 	private void saveSelection() {
-		if (friendPickerFragment.getSelection().size() == 1) {
+		List <GraphUser> selectedUsers = friendPickerFragment.getSelection();
+		if (selectedUsers == null || selectedUsers.size() == 0)
+			return;
+		
+		// Parameters for HTTP request
+		List<String> parameters = new ArrayList<String>();
 
-			restClient.addBroadcastee(xmpp, friendPickerFragment.getSelection()
-					.get(0).getId());
+		for (GraphUser graphUser : selectedUsers) {
+			Log.i("AddOutgoingBroadcastActivity.finishActivity",
+					"Adding broadcastee: " + graphUser.getName());
 
-		} else if (friendPickerFragment.getSelection().size() > 1) {
-
-			List<String> parameters = new ArrayList<String>();
-
-			for (GraphUser graphUser : friendPickerFragment.getSelection()) {
-				Log.i("AddOutgoingBroadcastActivity.finishActivity",
-						"Adding broadcastee: " + graphUser.getName());
-
-				parameters.add(graphUser.getId());
-			}
-
-			restClient.addBroadcastees(xmpp, parameters);
-
-		} else {
-			Log.e("AddOutgoingBroadcastActivity.saveSelection",
-					"friendPickerFragment.getSelection().size() = "
-							+ friendPickerFragment.getSelection().size());
-
-			Toast.makeText(getApplicationContext(), "Error...see LogCat",
-					Toast.LENGTH_SHORT).show();
+			parameters.add(graphUser.getId());
 		}
+
+		restClient.addBroadcastees(xmpp, parameters);
 	}
 }

@@ -3,11 +3,13 @@ package com.hangapp.android.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.ActionBar;
@@ -195,6 +197,17 @@ public final class HomeActivity extends BaseActivity implements
 		// If the user hasn't registered yet, then show the LoginFragment.
 		if (!userIsRegistered) {
 			setContentView(R.layout.login);
+			// Just to be funny
+			((TextView) findViewById(R.id.textViewToughLuck))
+					.setOnClickListener(new OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							Intent browserIntent = new Intent(
+									Intent.ACTION_VIEW,
+									Uri.parse("http://www.urbandictionary.com/define.php?term=tough+luck"));
+							startActivity(browserIntent);
+						}
+					});
 
 			getSupportActionBar().hide();
 		}

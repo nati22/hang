@@ -39,14 +39,14 @@
             android:textColor="@color/gray" />
 
         <TextView
-            android:id="@+id/textViewSignInNow"
+            android:id="@+id/textViewToughLuck"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="4dp"
             android:layout_toRightOf="@+id/textViewAlreadyHaveAnAccount"
-            android:text="Tough luck"
-            android:textColor="@color/grey_action_bar" />
+            android:text="@string/tough_luck"
+            android:textColor="@color/DarkBlue" />
     </RelativeLayout>
 
     <com.facebook.widget.LoginButton

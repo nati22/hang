@@ -20,15 +20,11 @@ public interface RestClient {
 
 	// TODO: Remove unnecessary dependency on XMPP (due to call of
 	// GetUserData).
-	public void addBroadcastee(XMPP xmpp, String broadcasteeJid);
-
-	// TODO: Remove unnecessary dependency on XMPP (due to call of
-	// GetUserData).
 	public void addBroadcastees(XMPP xmpp, List<String> broadcasteeJids);
 
 	// TODO: Remove unnecessary dependency on XMPP (due to call of
 	// GetUserData).
-	public void deleteBroadcastee(XMPP xmpp, String broadcasteeJid);
+	public void deleteBroadcastees(XMPP xmpp, List<String> broadcasteeJids);
 
 	public void sendNudge(String targetJid);
 

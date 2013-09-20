@@ -211,8 +211,9 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 									Toast.LENGTH_SHORT).show();
 
 							// Actually delete the outgoing Broadcast.
-							restClient.deleteBroadcastee(xmpp,
-									outgoingBroadcast.getJid());
+							List<String> broadcasts = new ArrayList<String>();
+							broadcasts.add(outgoingBroadcast.getJid());
+							restClient.deleteBroadcastees(xmpp, broadcasts);
 						}
 					});
 

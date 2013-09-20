@@ -18,7 +18,7 @@ import webapp2
 from User import UserRequestHandler, NudgeRequestHandler
 from Status import StatusRequestHandler
 from Proposal import ProposalRequestHandler, InterestedRequestHandler, ConfirmedRequestHandler, ProposalSeenHandler
-from Broadcast import MultipleBroadcastRequestHandler
+from Broadcast import BroadcastRequestHandler
 #from push import NotificationReceivedRequestHandler
             
 class HelloWorldRequestHandler(webapp2.RequestHandler):
@@ -29,7 +29,7 @@ class HelloWorldRequestHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', HelloWorldRequestHandler),
     (r'/users/(\d+)', UserRequestHandler),  # Maps /users/{jid} to the Users request handler.
-    (r'/users/(\d+)/broadcasts', MultipleBroadcastRequestHandler), 
+    (r'/users/(\d+)/broadcasts', BroadcastRequestHandler), 
     (r'/users/(\d+)/status', StatusRequestHandler),
     (r'/users/(\d+)/nudge', NudgeRequestHandler),
     (r'/users/(\d+)/proposal', ProposalRequestHandler),

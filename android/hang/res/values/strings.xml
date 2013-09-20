@@ -104,5 +104,6 @@
     <string name="availabile">available</string>
     <string name="no_proposals">No Proposals.</string>
     <string name="count_interested">%d interested</string>
+    <string name="tough_luck"><u>Tough luck</u></string>
 
 </resources>

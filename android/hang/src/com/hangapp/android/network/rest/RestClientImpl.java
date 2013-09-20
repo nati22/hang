@@ -131,17 +131,6 @@ public final class RestClientImpl implements RestClient {
 	}
 
 	@Override
-	public void addBroadcastee(XMPP xmpp, String broadcasteeJID) {
-		String myJid = database.getMyJid();
-
-		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
-		parameters.add(new BasicNameValuePair(Keys.TARGET, broadcasteeJID));
-
-		new PutBroadcastAsyncTask(this, xmpp, context, myJid, parameters)
-				.execute();
-	}
-
-	@Override
 	public void addBroadcastees(XMPP xmpp, List<String> broadcasteeJIDs) {
 		String myJid = database.getMyJid();
 
@@ -153,7 +142,6 @@ public final class RestClientImpl implements RestClient {
 
 		new PutBroadcastsAsyncTask(context, this, xmpp, myJid,
 				parameters).execute();
-
 	}
 
 	@Override
@@ -167,9 +155,16 @@ public final class RestClientImpl implements RestClient {
 	}
 
 	@Override
-	public void deleteBroadcastee(XMPP xmpp, String broadcasteeJID) {
-		new DeleteBroadcastAsyncTask(database, this, xmpp, context,
-				database.getMyJid(), broadcasteeJID).execute();
+	public void deleteBroadcastees(XMPP xmpp, List<String> broadcasteeJIDs) {
+		
+		// This StringBuilder will put all the jids into a HTTP ready format
+		StringBuilder builder = new StringBuilder();
+		for (String broadcastee : broadcasteeJIDs) {
+			builder.append("?target=" + broadcastee);
+		}
+		
+		new DeleteBroadcastsAsyncTask(database, this, xmpp, context,
+				database.getMyJid(), builder.toString()).execute();
 	}
 
 	@Override
