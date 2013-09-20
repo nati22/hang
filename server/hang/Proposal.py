@@ -58,7 +58,7 @@ class ProposalRequestHandler(webapp2.RequestHandler):
 
         user.put()
 
-        # Modify Broadcastees proposals_seen_jids fields if they were interested
+        # Modify Broadcastees proposals_seen_jids fields
         for key in user.outgoing_broadcasts:
             broadcastee = db.get(key)
             if jid in broadcastee.proposals_seen_jids:
