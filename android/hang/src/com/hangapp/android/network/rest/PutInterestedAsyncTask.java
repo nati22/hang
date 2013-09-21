@@ -16,8 +16,7 @@ class PutInterestedAsyncTask extends BasePutRequestAsyncTask<String> {
 
 	protected PutInterestedAsyncTask(Database database, Context context,
 			String jid, List<NameValuePair> parameters) {
-		super(context, USERS_URI_SUFFIX + jid + INTERESTED_URI_SUFFIX,
-				parameters);
+		super(context, USERS_URI_SUFFIX + jid + INTERESTED_URI_SUFFIX, parameters);
 
 	}
 
@@ -29,6 +28,13 @@ class PutInterestedAsyncTask extends BasePutRequestAsyncTask<String> {
 		Log.e("PutInterestedAsyncTask", "Response string: " + responseString);
 
 		return null;
+	}
+
+	protected void onSuccess(String x) throws Exception {
+		Database db = Database.getInstance();
+		Log.i("REMOVE THIS CODE", "friend interested list = "
+				+ db.getIncomingUser("592674933").getProposal().getInterested()
+						.toString());
 	}
 
 }

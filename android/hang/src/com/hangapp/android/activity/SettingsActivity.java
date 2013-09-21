@@ -1,7 +1,9 @@
 package com.hangapp.android.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,6 +17,7 @@ import com.facebook.UiLifecycleHelper;
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.util.BaseActivity;
+import com.hangapp.android.util.Keys;
 
 /**
  * Get to this Activity from {@link HomeActivity} -> menu button -> Settings. <br />
@@ -29,10 +32,13 @@ import com.hangapp.android.util.BaseActivity;
  */
 public final class SettingsActivity extends BaseActivity {
 
+	
 	// Dependencies.
 	private Database database;
+	private SharedPreferences prefs;
 
 	private Button buttonAudoboxFeedback;
+	
 
 	// Facebook SDK stuff.
 	private UiLifecycleHelper uiHelper;
@@ -48,6 +54,8 @@ public final class SettingsActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_settings);
 
+		prefs = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
 
@@ -119,6 +127,10 @@ public final class SettingsActivity extends BaseActivity {
 			Toast.makeText(getApplicationContext(),
 					"Logged out, cleared database", Toast.LENGTH_SHORT).show();
 			database.clear();
+			
+			SharedPreferences.Editor editor = prefs.edit();
+			// This stores the current User's jid.
+			editor.putString(Keys.JID, null);
 
 			// TODO: Logout of XMPP.
 			// xmpp.logout();

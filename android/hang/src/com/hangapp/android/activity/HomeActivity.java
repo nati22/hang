@@ -1,11 +1,19 @@
 package com.hangapp.android.activity;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +89,19 @@ public final class HomeActivity extends BaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		try {
+			
+		    PackageInfo info = getPackageManager().getPackageInfo(
+		          "com.hangapp.android.activity", PackageManager.GET_SIGNATURES);
+		    for (Signature signature : info.signatures){
+		           MessageDigest md = MessageDigest.getInstance("SHA");
+		           md.update(signature.toByteArray());
+		           Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+		    }
+		} catch (NameNotFoundException e) {
+		} catch (NoSuchAlgorithmException e) {
+		}
+		
 		// Initialize dependencies.
 		prefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
@@ -122,7 +143,7 @@ public final class HomeActivity extends BaseActivity implements
 		// Setup Facebook SDK.
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
-
+		
 		// Reload the tab you had selected from savedInstanceState, if it was
 		// saved.
 		if (savedInstanceState != null) {
@@ -240,7 +261,11 @@ public final class HomeActivity extends BaseActivity implements
 					// You've officially "registered."
 					SharedPreferences.Editor editor = prefs.edit();
 					editor.putBoolean(Keys.REGISTERED, true);
+					// This stores the current User's j.
+					editor.putString(Keys.JID, graphUser.getId());
 					editor.commit();
+					
+					
 
 					User me = new User(graphUser.getId(), graphUser
 							.getFirstName(), graphUser.getLastName());

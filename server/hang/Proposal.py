@@ -114,6 +114,10 @@ class InterestedRequestHandler(webapp2.RequestHandler):
             self.response.write("User " + jid + " is now Interested in " + broadcasting_user.first_name + "'s Proposal.\n")
         else:
             self.response.write("User " + jid + " was ALREADY Interested in " + broadcasting_user.first_name + "'s Proposal, idiot!!\n")
+        self.response.write("[ ")
+        for element in broadcasting_user.proposal_interested_jids:
+            self.response.write(element + " ")
+        self.response.write("]\n")
         return
 
     def delete(self, jid):

@@ -61,8 +61,6 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewProposalStartTime;
 	private CheckBox checkBoxInterested;
 	private TextView textViewProposalInterestedCount;
-	// private HorizontalScrollView horizontalScrollViewInterestedUsers;
-	// private ProfilePictureView[] profilePictureViewArrayInterestedUsers;
 	private LinearLayout linLayoutInterested;
 
 	// Member datum.
@@ -115,31 +113,30 @@ public final class ProfileActivity extends BaseActivity implements
 		textViewProposalStartTime = (TextView) findViewById(R.id.textViewMyProposalStartTime);
 		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
 		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
-		// / horizontalScrollViewInterestedUsers = (HorizontalScrollView)
-		// findViewById(R.id.horizontalScrollViewInterestedUsers);
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterested);
 
 		// Set OnClickListeners.
 		imageViewOpenChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// TODO: Temporary fix to allow user in after logging in
+				friend = database.getIncomingUser(getIntent().getStringExtra(Keys.HOST_JID));
+				
 				if (friend.getProposal().getInterested()
 						.contains(database.getMyJid())
 						|| friend.getJid().equals(database.getMyJid())) {
 					Log.i("ProfileActivity.imageViewOpenChat.onClick",
 							"interested: "
-									+ friend.getProposal().getInterested()
-											.toString());
-					Intent chatActivityIntent = new Intent(
-							ProfileActivity.this, ChatActivity.class);
+									+ friend.getProposal().getInterested().toString());
+					Intent chatActivityIntent = new Intent(ProfileActivity.this,
+							ChatActivity.class);
 					chatActivityIntent.putExtra(Keys.HOST_JID, friend.getJid());
 					startActivity(chatActivityIntent);
 				} else {
-					Toast.makeText(
-							getApplicationContext(),
+					Toast.makeText(getApplicationContext(),
 							"Sorry, you don't have permission to enter the chat.",
 							Toast.LENGTH_SHORT).show();
-					Log.w("ProfileActivity", "interested list: "
+					Log.i("ProfileActivity", "interested list: "
 							+ friend.getProposal().getInterested().toString());
 				}
 
@@ -163,12 +160,11 @@ public final class ProfileActivity extends BaseActivity implements
 							boolean isChecked) {
 						// Add yourself to the Interested list of this user.
 						if (isChecked) {
-							addMeToHostInterestedList();
+							restClient.setInterested(friend.getJid());
 						}
-						// Remove yourself from the Interested list of this
-						// user.
+						// Remove yourself from the Interested list of this user.
 						else {
-							removeMeFromHostInterestedList();
+							restClient.deleteInterested(xmpp, friend.getJid());
 						}
 					}
 				});
@@ -177,15 +173,13 @@ public final class ProfileActivity extends BaseActivity implements
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-		Typeface champagneLimousinesFont = Typeface
-				.createFromAsset(getApplicationContext().getAssets(),
-						Fonts.CHAMPAGNE_LIMOUSINES);
+		Typeface champagneLimousinesFont = Typeface.createFromAsset(
+				getApplicationContext().getAssets(), Fonts.CHAMPAGNE_LIMOUSINES);
 		textViewStatus.setTypeface(champagneLimousinesFont);
 		textViewProposalDescription.setTypeface(champagneLimousinesFontBold);
 		textViewProposalLocation.setTypeface(champagneLimousinesFontBold);
 		textViewProposalStartTime.setTypeface(champagneLimousinesFont);
-		textViewProposalInterestedCount
-				.setTypeface(champagneLimousinesFontBold);
+		textViewProposalInterestedCount.setTypeface(champagneLimousinesFontBold);
 	}
 
 	@Override
@@ -204,8 +198,7 @@ public final class ProfileActivity extends BaseActivity implements
 							.getIncomingUser(friend.getJid()).getProposal()
 							.getInterested());
 
-					updateHorizontalList(listInterestedJids,
-							linLayoutInterested);
+					updateHorizontalList(listInterestedJids, linLayoutInterested);
 				}
 			} else {
 				this.finish();
@@ -236,17 +229,16 @@ public final class ProfileActivity extends BaseActivity implements
 			relativeLayoutFriendsProposal.setVisibility(View.VISIBLE);
 			textViewProposalDescription.setText(friend.getProposal()
 					.getDescription());
-			textViewProposalLocation
-					.setText(friend.getProposal().getLocation());
-			textViewProposalStartTime.setText(friend.getProposal()
-					.getStartTime().toString("h:mm aa"));
+			textViewProposalLocation.setText(friend.getProposal().getLocation());
+			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
+					.toString("h:mm aa"));
 
 			/*
 			 * // Set "my" interested checkbox if
 			 * (friend.getProposal().getInterested() != null) { if
 			 * (friend.getProposal().getInterested()
-			 * .contains(database.getMyJid()))
-			 * checkBoxInterested.setChecked(true); }
+			 * .contains(database.getMyJid())) checkBoxInterested.setChecked(true);
+			 * }
 			 */
 
 			// Refresh list
@@ -259,8 +251,7 @@ public final class ProfileActivity extends BaseActivity implements
 				database.addSeenProposal(friend.getJid());
 				restClient.setSeenProposal(friend.getJid());
 				Log.i("ProfileActivity",
-						"first time seeing " + friend.getFirstName()
-								+ "'s prop");
+						"first time seeing " + friend.getFirstName() + "'s prop");
 			} else {
 				Log.i("ProfileActivity", friend.getFirstName()
 						+ "'s proposal already seen");
@@ -275,9 +266,8 @@ public final class ProfileActivity extends BaseActivity implements
 				|| !availability.isActive()) {
 			imageButtonFriendsAvailability.setImageDrawable(getResources()
 					.getDrawable(R.drawable.imagebutton_status_grey));
-			String remainingHours = Utils
-					.getAbbvRemainingTimeString(availability
-							.getExpirationDate());
+			String remainingHours = Utils.getAbbvRemainingTimeString(availability
+					.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
 			textViewStatus.setVisibility(View.INVISIBLE);
 		}
@@ -288,9 +278,8 @@ public final class ProfileActivity extends BaseActivity implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(availability.getDescription());
 
-			String remainingHours = Utils
-					.getAbbvRemainingTimeString(availability
-							.getExpirationDate());
+			String remainingHours = Utils.getAbbvRemainingTimeString(availability
+					.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Availability is BUSY.
@@ -300,9 +289,8 @@ public final class ProfileActivity extends BaseActivity implements
 			textViewStatus.setVisibility(View.VISIBLE);
 			textViewStatus.setText(availability.getDescription());
 
-			String remainingHours = Utils
-					.getAbbvRemainingTimeString(availability
-							.getExpirationDate());
+			String remainingHours = Utils.getAbbvRemainingTimeString(availability
+					.getExpirationDate());
 			textViewFriendsAvailabilityExpirationDate.setText(remainingHours);
 		}
 		// Error state.
@@ -311,14 +299,6 @@ public final class ProfileActivity extends BaseActivity implements
 					"Unknown availability state: " + availability);
 			return;
 		}
-	}
-
-	private void addMeToHostInterestedList() {
-		restClient.setInterested(friend.getJid());
-	}
-
-	private void removeMeFromHostInterestedList() {
-		restClient.deleteInterested(xmpp, friend.getJid());
 	}
 
 	public void updateHorizontalList(List<String> jids, LinearLayout linLayout) {
