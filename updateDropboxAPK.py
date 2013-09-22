@@ -5,7 +5,7 @@
 
 
 #!/usr/bin/python
-import os, shutil, sys
+import os, shutil, sys, smtplib
 from os.path import expanduser
 
 if os.name == "nt":
@@ -37,8 +37,42 @@ except IOError:
 		print "Unable to locate APK at '" + alt_rel_src_location + "'."
 		sys.exit("Update of Dropbox APK FAILED.")
 
+# Copy the APK to Dropbox
 try:
 	shutil.copyfile(rel_src_location, home_dir + rel_dest_location)
 except IOError:
 	sys.exit("Error writing to '" + rel_dest_location + "'")
 print "Successfully updated Dropbox APK."
+
+
+# Notify Sam
+print "Notifying Sam..."
+
+server = smtplib.SMTP( "smtp.gmail.com", 587)
+server.starttls()
+server.login( 'hangdevteam@gmail.com', 'thehardestpasswordever')
+samora_address = '9165090227@tmomail.net'
+printserver.sendmail('Girum and Nati', '9166622523@vtext.com', "Sam, there's a new hang APK on Dropbox! Go get it!" )
+print "Done!"
+
+
+# nati_address = '9166622523@vtext.com'
+# girum_address = '9162289577@messaging.sprintpcs.com'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
