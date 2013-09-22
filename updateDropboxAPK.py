@@ -52,7 +52,7 @@ server = smtplib.SMTP( "smtp.gmail.com", 587)
 server.starttls()
 server.login( 'hangdevteam@gmail.com', 'thehardestpasswordever')
 samora_address = '9165090227@tmomail.net'
-printserver.sendmail('Girum and Nati', '9166622523@vtext.com', "Sam, there's a new hang APK on Dropbox! Go get it!" )
+printserver.sendmail('Girum and Nati', samora_address, "Sam, there's a new hang APK on Dropbox! Go get it!" )
 print "Done!"
 
 
