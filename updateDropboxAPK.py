@@ -8,8 +8,8 @@
 import os, shutil, sys, smtplib
 from os.path import expanduser
 
-if os.name == "nt":
-	sys.exit("You can't do this on your PC until you solve that config issue!")
+# if os.name == "nt":
+# 	sys.exit("You can't do this on your PC until you solve that config issue!")
 
 # The relative location (from hang repo) of the recently built APK
 rel_src_location = 'android/hang/bin/hang.apk'
