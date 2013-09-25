@@ -24,6 +24,7 @@ import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.model.callback.MucListener;
@@ -206,8 +207,7 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 				ChatActivity.this.messages.addAll(messages);
 				adapter.notifyDataSetChanged();
 
-				listViewChatCells
-						.smoothScrollToPosition(adapter.getCount() - 1);
+				listViewChatCells.smoothScrollToPosition(adapter.getCount() - 1);
 			}
 		});
 	}
@@ -221,8 +221,7 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 			if (!database.getMyProposal().getInterested()
 					.equals(listInterestedJids)) {
 				listInterestedJids.clear();
-				listInterestedJids.addAll(database.getMyProposal()
-						.getInterested());
+				listInterestedJids.addAll(database.getMyProposal().getInterested());
 
 				// Update horizontal list
 				updateHorizontalList(listInterestedJids, linLayoutInterested);
@@ -232,19 +231,26 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 		else if (incomingBroadcasts.contains(database.getIncomingUser(mucName))) {
 			final User host = database.getIncomingUser(mucName);
 
-			// If the host has a Proposal
-			if (host.getProposal() != null) {
-				// Check if their interested list has been updated
-				if (!host.getProposal().getInterested()
-						.equals(listInterestedJids)) {
-					listInterestedJids.clear();
+			Proposal hostProposal = host.getProposal();
+			List<String> hostInterested = hostProposal.getInterested();
 
-					listInterestedJids.addAll(host.getProposal()
-							.getInterested());
+			// If the host has a Proposal
+			if (hostProposal != null) {
+
+				// Check if their interested list has been updated
+				if (!hostInterested.equals(listInterestedJids)) {
+
+					listInterestedJids.clear();
+					listInterestedJids.addAll(host.getProposal().getInterested());
 
 					// Update horizontal list
-					updateHorizontalList(listInterestedJids,
-							linLayoutInterested);
+					updateHorizontalList(listInterestedJids, linLayoutInterested);
+
+					// TODO: If you're not Interested, get lost
+					if (!hostInterested.contains(database.getMyJid())) {
+						onBackPressed();
+					}
+
 				} else {
 					Log.i("ChatActivity.onIncomingBroadcastsUpdate()",
 							"their list hasn't changed: "
@@ -253,8 +259,8 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 			}
 
 		}
-		// If this is someone else's Chat, but the user isn't broadcasting to
-		// you.
+		
+		// If this is someone else's Chat, but the user isn't broadcasting to you.
 		else {
 			Log.e("ChatActivity.onIncomingBroadcastsUpdate()",
 					"Attempted to join MUC for a user who is not broadcasting to you.");
@@ -288,38 +294,30 @@ public final class ChatActivity extends BaseActivity implements MucListener,
 						// TODO: This is 100% pointless and should be removed :)
 						switch (new Random().nextInt(2)) {
 						case 0:
-							Toast.makeText(getApplicationContext(),
-									"Look familiar?", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Look familiar?",
+									Toast.LENGTH_SHORT).show();
 							return;
 						default:
-							Toast.makeText(getApplicationContext(),
-									"Guess who?", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Guess who?",
+									Toast.LENGTH_SHORT).show();
 						}
 
 					} else if (database.getIncomingUser(jid) != null) {
 						// Then this is someone broadcasting to me
-						Toast.makeText(
-								getApplicationContext(),
-								"It's "
-										+ database.getIncomingUser(jid)
-												.getFirstName(),
+						Toast.makeText(getApplicationContext(),
+								"It's " + database.getIncomingUser(jid).getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else if (database.getOutgoingUser(jid) != null) {
 						// Then this is someone I'm broadcasting to
-						Toast.makeText(
-								getApplicationContext(),
-								"It's "
-										+ database.getOutgoingUser(jid)
-												.getFirstName(),
+						Toast.makeText(getApplicationContext(),
+								"It's " + database.getOutgoingUser(jid).getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else {
 						// This is a stranger to me
 						Toast.makeText(
 								getApplicationContext(),
-								database.getIncomingUser(mucName)
-										.getFirstName() + "'s friend",
-								Toast.LENGTH_SHORT).show();
+								database.getIncomingUser(mucName).getFirstName()
+										+ "'s friend", Toast.LENGTH_SHORT).show();
 					}
 
 				}

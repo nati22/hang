@@ -27,6 +27,7 @@ import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Availability.Status;
+import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
@@ -71,6 +72,8 @@ public final class ProfileActivity extends BaseActivity implements
 	private Database database;
 	private RestClient restClient;
 	private XMPP xmpp;
+
+	private boolean allowedToClickChatButton = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,12 +122,33 @@ public final class ProfileActivity extends BaseActivity implements
 		imageViewOpenChat.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				// Toast.makeText(getApplicationContext(), "clicked",
+				// Toast.LENGTH_SHORT).show();
+
 				// TODO: Temporary fix to allow user in after logging in
-				friend = database.getIncomingUser(getIntent().getStringExtra(Keys.HOST_JID));
-				
-				if (friend.getProposal().getInterested()
-						.contains(database.getMyJid())
-						|| friend.getJid().equals(database.getMyJid())) {
+				friend = database.getIncomingUser(getIntent().getStringExtra(
+						Keys.HOST_JID));
+
+				if (friend == null) {
+					Log.e("ProfileActivity.imageViewOpenChat.setOnClick",
+							"friend == null");
+					return;
+				}
+
+				Proposal proposal = friend.getProposal();
+
+				if (proposal == null) {
+					Log.i("ProfileActivity.imageViewOpenChat.setOnClick",
+							"proposal == null");
+					return;
+				}
+
+				List<String> interestedList = proposal.getInterested();
+
+				if ((interestedList.contains(database.getMyJid()) || friend
+						.getJid().equals(database.getMyJid()))
+						&& allowedToClickChatButton) {
+
 					Log.i("ProfileActivity.imageViewOpenChat.onClick",
 							"interested: "
 									+ friend.getProposal().getInterested().toString());
@@ -158,6 +182,9 @@ public final class ProfileActivity extends BaseActivity implements
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
 							boolean isChecked) {
+
+						// imageViewOpenChat.setEnabled(isChecked);
+
 						// Add yourself to the Interested list of this user.
 						if (isChecked) {
 							restClient.setInterested(friend.getJid());
@@ -165,6 +192,7 @@ public final class ProfileActivity extends BaseActivity implements
 						// Remove yourself from the Interested list of this user.
 						else {
 							restClient.deleteInterested(xmpp, friend.getJid());
+							allowedToClickChatButton = false;
 						}
 					}
 				});
@@ -184,30 +212,57 @@ public final class ProfileActivity extends BaseActivity implements
 
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
+
+		allowedToClickChatButton = true;
+
+		String TAG = "ProfileActivity.OnIncomingBroadcastsUpdate";
+		Log.e(TAG, "ONINCOMINGBROADCASTSUPDATECALLED");
+
 		// If friend is still broadcasting to you
-		if (database.getIncomingUser(friend.getJid()) != null) {
-			// If they still have a proposal
-			if (database.getIncomingUser(friend.getJid()).getProposal() != null) {
+		User broadcastingFriend = database.getIncomingUser(friend.getJid());
 
-				// Find out if User's Interested was updated
-				if (!database.getIncomingUser(friend.getJid()).getProposal()
-						.getInterested().equals(listInterestedJids)) {
+		if (broadcastingFriend == null) {
+			Log.e("ProfileActivity.onIncomingBroadcastsUpdate", "friend == null");
+		} else
+			Log.e(TAG, "friend = " + friend.getFirstName());
 
-					listInterestedJids.clear();
-					listInterestedJids.addAll(database
-							.getIncomingUser(friend.getJid()).getProposal()
-							.getInterested());
+		Proposal friendProposal = broadcastingFriend.getProposal();
 
-					updateHorizontalList(listInterestedJids, linLayoutInterested);
-				}
-			} else {
-				this.finish();
-			}
+		// Make sure they still have a proposal
+		if (friendProposal == null) {
+			Log.i("ProfileActivity.onIncomingBroadcastsUpdate", "Proposal == null");
+			this.finish();
+		} else
+			Log.e(TAG, "proposal = " + friendProposal.getDescription());
 
-			updateAvailabilityIcon(database.getIncomingUser(friend.getJid())
-					.getAvailability());
+		// Find out if User's Interested was updated
+		if (!friendProposal.getInterested().equals(listInterestedJids)) {
 
+			Log.e(TAG,
+					"Interested was updated from " + listInterestedJids.toString()
+							+ " to " + friendProposal.getInterested().toString());
+
+			listInterestedJids.clear();
+			listInterestedJids.addAll(database.getIncomingUser(friend.getJid())
+					.getProposal().getInterested());
+
+			updateHorizontalList(listInterestedJids, linLayoutInterested);
+
+			// Modify my checkbox and chat accessibility
+			Log.w("setting checkbox", " INTERESTED: "
+					+ friendProposal.getInterested().contains(database.getMyJid()));
+			checkBoxInterested.setChecked(friendProposal.getInterested().contains(
+					database.getMyJid()));
+		} else {
+			Log.e(TAG,
+					"Interested was NOTupdated from "
+							+ listInterestedJids.toString() + " to "
+							+ friendProposal.getInterested().toString());
 		}
+
+		updateAvailabilityIcon(database.getIncomingUser(friend.getJid())
+				.getAvailability());
+
 	}
 
 	@Override
@@ -232,14 +287,6 @@ public final class ProfileActivity extends BaseActivity implements
 			textViewProposalLocation.setText(friend.getProposal().getLocation());
 			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
 					.toString("h:mm aa"));
-
-			/*
-			 * // Set "my" interested checkbox if
-			 * (friend.getProposal().getInterested() != null) { if
-			 * (friend.getProposal().getInterested()
-			 * .contains(database.getMyJid())) checkBoxInterested.setChecked(true);
-			 * }
-			 */
 
 			// Refresh list
 			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
@@ -330,7 +377,6 @@ public final class ProfileActivity extends BaseActivity implements
 				public void onClick(View v) {
 					Toast.makeText(getApplicationContext(), toastName,
 							Toast.LENGTH_SHORT).show();
-
 				}
 			});
 
