@@ -8,9 +8,6 @@
 import os, shutil, sys, smtplib
 from os.path import expanduser
 
-# if os.name == "nt":
-# 	sys.exit("You can't do this on your PC until you solve that config issue!")
-
 # The relative location (from hang repo) of the recently built APK
 rel_src_location = 'android/hang/bin/hang.apk'
 # The alternate relative location (from hang repo) of the recently built APK
@@ -52,7 +49,8 @@ server = smtplib.SMTP( "smtp.gmail.com", 587)
 server.starttls()
 server.login( 'hangdevteam@gmail.com', 'thehardestpasswordever')
 samora_address = '9165090227@tmomail.net'
-server.sendmail('Girum and Nati', samora_address, "Sam, there's a new hang APK on Dropbox! Go get it!" )
+hang_url = 'dropbox.com/sh/40w6ko5qt6ao2je/Hl6lk8qxZI' # this url can't contain http or https
+server.sendmail('Girum and Nati', samora_address, "Sam, there's a new hang APK on Dropbox! Get it here: " + hang_url)
 print "Done!"
 
 
