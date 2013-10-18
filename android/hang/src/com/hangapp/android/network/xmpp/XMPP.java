@@ -130,8 +130,8 @@ public final class XMPP {
 			return;
 		}
 
-		Toast.makeText(context, "Connecting to chat...", Toast.LENGTH_SHORT)
-				.show();
+/*		Toast.makeText(context, "Connecting to chat...", Toast.LENGTH_SHORT)
+				.show();*/
 
 		Intent connectIntent = new Intent(context, XMPPIntentService.class);
 		connectIntent.putExtra(Keys.MESSAGE, Keys.XMPP_CONNECT);

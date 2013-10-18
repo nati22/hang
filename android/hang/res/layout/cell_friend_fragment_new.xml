@@ -14,7 +14,8 @@
     <TextView
         android:id="@+id/textViewFriendName"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
+        android:maxHeight="40dp"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="3dp"
@@ -24,7 +25,8 @@
         android:paddingTop="1dp"
         android:text="@string/no_user_name"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="16sp" />
+        android:textColor="@color/DarkGray"
+        android:textSize="36sp" />
 
     
     <include
@@ -32,8 +34,9 @@
         android:id="@+id/profilePictureView"
         android:layout_width="@dimen/profile_picture_width"
         android:layout_height="@dimen/profile_picture_width"
-        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:layout_alignParentTop="true"
+        android:layout_margin="3dp"
         android:contentDescription="@string/profile"
         android:src="@drawable/ic_action_profile_icon" />
 

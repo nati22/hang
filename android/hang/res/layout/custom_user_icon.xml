@@ -6,11 +6,9 @@
     android:orientation="vertical" >
 
     <com.facebook.widget.ProfilePictureView
-        android:id="@+id/profilePictureView"
-        android:layout_width="@dimen/custom_icon_height"
-        android:layout_height="@dimen/custom_icon_height"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:id="@+id/facebookView"
+        android:layout_width="@dimen/custom_icon_fb_pic"
+        android:layout_height="@dimen/custom_icon_fb_pic"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:contentDescription="@string/profile"
@@ -20,7 +18,7 @@
         android:id="@+id/green_ring"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/custom_icon_green_ring"
+        android:background="@drawable/custom_icon_green_ring_white_bg"
         android:contentDescription="@string/custom_user_icon"
         android:visibility="invisible" />
 
@@ -28,7 +26,14 @@
         android:id="@+id/red_ring"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:background="@drawable/custom_icon_red_ring"
+        android:background="@drawable/custom_icon_red_ring_white_bg"
+        android:contentDescription="@string/custom_user_icon"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/grey_ring"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/custom_icon_grey_ring_white_bg"
         android:contentDescription="@string/custom_user_icon"
         android:visibility="visible" />
 

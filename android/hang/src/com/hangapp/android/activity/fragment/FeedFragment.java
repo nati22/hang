@@ -18,6 +18,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ import com.hangapp.android.R;
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
@@ -156,15 +158,29 @@ public final class FeedFragment extends SherlockFragment implements
 
 			final User user = friends.get(position);
 
+			View customUserIcon;
+
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.cell_friend_fragment,
+				convertView = inflater.inflate(R.layout.cell_friend_fragment_new,
 						null);
 
 				// Reference views
-				holder.profilePictureView = (ProfilePictureView) convertView
+				customUserIcon = (View) convertView
 						.findViewById(R.id.profilePictureView);
+				holder.greenRing = (ImageView) customUserIcon
+						.findViewById(R.id.green_ring);
+				holder.greyRing = (ImageView) customUserIcon
+						.findViewById(R.id.grey_ring);
+				holder.redRing = (ImageView) customUserIcon
+						.findViewById(R.id.red_ring);
+				if (holder.greenRing == null) {
+					Toast.makeText(getActivity(), "you suck", Toast.LENGTH_SHORT)
+							.show();
+				}
+				holder.profilePictureView = (ProfilePictureView) customUserIcon
+						.findViewById(R.id.facebookView);
 				holder.textViewFriendName = (TextView) convertView
 						.findViewById(R.id.textViewFriendName);
 				holder.textViewAvailabilityDescription = (TextView) convertView
@@ -172,16 +188,13 @@ public final class FeedFragment extends SherlockFragment implements
 				holder.statusIcon = (StatusIcon) convertView
 						.findViewById(R.id.imageButtonAvailability);
 
-				Typeface champagneLimousinesBold = Typeface.createFromAsset(
-						getActivity().getApplicationContext().getAssets(),
-						Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
-				Typeface champagneLimousines = Typeface.createFromAsset(
-						getActivity().getApplicationContext().getAssets(),
-						Fonts.CHAMPAGNE_LIMOUSINES);
+				Typeface headlineBold = Typeface.createFromAsset(getActivity()
+						.getApplicationContext().getAssets(), Fonts.HEADLINE_BOLD);
+				Typeface headline = Typeface.createFromAsset(getActivity()
+						.getApplicationContext().getAssets(), Fonts.HEADLINE);
 
-				holder.textViewFriendName.setTypeface(champagneLimousinesBold);
-				holder.textViewAvailabilityDescription
-						.setTypeface(champagneLimousines);
+				holder.textViewFriendName.setTypeface(headline);
+				holder.textViewAvailabilityDescription.setTypeface(headline);
 
 				convertView.setTag(holder);
 				Log.i("holder", "cell for " + user.getFirstName() + " == null");
@@ -191,10 +204,15 @@ public final class FeedFragment extends SherlockFragment implements
 			}
 
 			holder.profilePictureView.setProfileId(user.getJid());
-			holder.textViewFriendName.setText(user.getFullName());
+			holder.textViewFriendName.setText(user.getFullName().toLowerCase());
 
 			// Reset the description
 			holder.textViewAvailabilityDescription.setText("");
+
+			// Set the ring to be grey initially
+			holder.redRing.setVisibility(View.INVISIBLE);
+			holder.greenRing.setVisibility(View.INVISIBLE);
+			holder.greyRing.setVisibility(View.VISIBLE);
 
 			// TODO: These sanity checks are already done in the StatusIcon...we
 			// should
@@ -202,10 +220,23 @@ public final class FeedFragment extends SherlockFragment implements
 			// StatusIcon???)
 			if (user.getAvailability() != null
 					&& user.getAvailability().isActive()) {
+
+				// Set ring color
+				if (user.getAvailability().getStatus()
+						.equals(Availability.Status.FREE)) {
+					holder.greenRing.setVisibility(View.VISIBLE);
+					holder.redRing.setVisibility(View.INVISIBLE);
+					holder.greyRing.setVisibility(View.INVISIBLE);
+				} else if (user.getAvailability().getStatus()
+						.equals(Availability.Status.BUSY)) {
+					holder.redRing.setVisibility(View.VISIBLE);
+					holder.greenRing.setVisibility(View.INVISIBLE);
+					holder.greyRing.setVisibility(View.INVISIBLE);
+				}
+
 				// Set description if it's there
 				if (user.getAvailability().getDescription() != null
-						&& !user.getAvailability().getDescription()
-								.equals("null")) {
+						&& !user.getAvailability().getDescription().equals("null")) {
 					holder.textViewAvailabilityDescription.setText(user
 							.getAvailability().getDescription());
 				}
@@ -239,8 +270,8 @@ public final class FeedFragment extends SherlockFragment implements
 						Toast.makeText(
 								context,
 								hrs + " hr" + ((hrs > 1) ? "s " : " ") + min
-										+ " min remaining", Toast.LENGTH_SHORT)
-								.show();
+										+ " min remaining", Toast.LENGTH_SHORT).show();
+
 					}
 				}
 			});
@@ -271,6 +302,9 @@ public final class FeedFragment extends SherlockFragment implements
 
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
+			ImageView greenRing;
+			ImageView redRing;
+			ImageView greyRing;
 			TextView textViewFriendName;
 			TextView textViewAvailabilityDescription;
 			// ImageView imageViewAvailability;
