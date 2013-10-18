@@ -8,7 +8,7 @@
     <dimen name="status_rem_time_font_size">12sp</dimen>
     <dimen name="proposal_cell_height">100dp</dimen>
     
-    <dimen name="custom_icon_height">100dp</dimen>
-    <dimen name="custom_icon_fb_pic">40dp</dimen>
+    <dimen name="custom_icon_height">65dp</dimen>
+    <dimen name="custom_icon_fb_pic">50dp</dimen>
     
 </resources>

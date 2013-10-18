@@ -32,8 +32,8 @@
     <include
         layout="@layout/custom_user_icon"
         android:id="@+id/profilePictureView"
-        android:layout_width="@dimen/profile_picture_width"
-        android:layout_height="@dimen/profile_picture_width"
+        android:layout_width="@dimen/custom_icon_height"
+        android:layout_height="@dimen/custom_icon_height"
         android:layout_centerVertical="true"
         android:layout_alignParentTop="true"
         android:layout_margin="3dp"
