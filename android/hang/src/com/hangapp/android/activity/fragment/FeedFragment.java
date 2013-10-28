@@ -152,7 +152,10 @@ public final class FeedFragment extends SherlockFragment implements
 			return position;
 		}
 
-		@Override
+/*			
+ * 	// This is the new cell fragment's we're working on.	
+ * 
+ * 	@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 
@@ -298,7 +301,126 @@ public final class FeedFragment extends SherlockFragment implements
 			});
 
 			return convertView;
-		}
+		}*/
+		
+		@Override
+      public View getView(int position, View convertView, ViewGroup parent) {
+              ViewHolder holder;
+
+              final User user = friends.get(position);
+
+              // Inflate the View if necessary.
+              if (convertView == null) {
+                      holder = new ViewHolder();
+                      convertView = inflater.inflate(R.layout.cell_friend_fragment,
+                                      null);
+
+                      // Reference views
+                      holder.profilePictureView = (ProfilePictureView) convertView
+                                      .findViewById(R.id.profilePictureView);
+                      holder.textViewFriendName = (TextView) convertView
+                                      .findViewById(R.id.textViewFriendName);
+                      holder.textViewAvailabilityDescription = (TextView) convertView
+                                      .findViewById(R.id.textViewAvailabilityDescription);
+                      holder.statusIcon = (StatusIcon) convertView
+                                      .findViewById(R.id.imageButtonAvailability);
+
+                      Typeface champagneLimousinesBold = Typeface.createFromAsset(
+                                      getActivity().getApplicationContext().getAssets(),
+                                      Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
+                      Typeface champagneLimousines = Typeface.createFromAsset(
+                                      getActivity().getApplicationContext().getAssets(),
+                                      Fonts.CHAMPAGNE_LIMOUSINES);
+
+                      holder.textViewFriendName.setTypeface(champagneLimousinesBold);
+                      holder.textViewAvailabilityDescription
+                                      .setTypeface(champagneLimousines);
+
+                      convertView.setTag(holder);
+                      Log.i("holder", "cell for " + user.getFirstName() + " == null");
+              } else {
+                      holder = (ViewHolder) convertView.getTag();
+                      Log.i("holder", "cell for " + user.getFirstName() + " != null");
+              }
+
+              holder.profilePictureView.setProfileId(user.getJid());
+              holder.textViewFriendName.setText(user.getFullName());
+
+              // Reset the description
+              holder.textViewAvailabilityDescription.setText("");
+
+              // TODO: These sanity checks are already done in the StatusIcon...we
+              // should
+              // find a way to consolidate the code (set the desc from the
+              // StatusIcon???)
+              if (user.getAvailability() != null
+                              && user.getAvailability().isActive()) {
+                      // Set description if it's there
+                      if (user.getAvailability().getDescription() != null
+                                      && !user.getAvailability().getDescription()
+                                                      .equals("null")) {
+                              holder.textViewAvailabilityDescription.setText(user
+                                              .getAvailability().getDescription());
+                      }
+              }
+
+              holder.statusIcon.initialize(context, user, convertView);
+              holder.statusIcon.setAvailabilityColor(user.getAvailability());
+              holder.statusIcon.setOnClickListener(new OnClickListener() {
+
+                      @Override
+                      public void onClick(View v) {
+                              if (!user.getAvailability().isActive()) {
+                                      restClient.sendNudge(user.getJid());
+                                      Toast.makeText(context,
+                                                      "Sending a nudge to " + user.getFirstName(),
+                                                      Toast.LENGTH_SHORT).show();
+                                      ((StatusIcon) v).setPressed(true);
+                              } else {
+                                      // Determine hrs and min left
+                                      int min = Minutes.minutesBetween(new DateTime(),
+                                                      user.getAvailability().getExpirationDate())
+                                                      .getMinutes();
+
+                                      int hrs = 0;
+                                      while (min >= 60) {
+                                              hrs++;
+                                              min = min - 60;
+                                      }
+
+                                      // Display remaining time to user
+                                      Toast.makeText(
+                                                      context,
+                                                      hrs + " hr" + ((hrs > 1) ? "s " : " ") + min
+                                                                      + " min remaining", Toast.LENGTH_SHORT)
+                                                      .show();
+                              }
+                      }
+              });
+
+              final int pos = position;
+              convertView.setOnClickListener(new OnClickListener() {
+
+                      @Override
+                      public void onClick(View v) {
+                              if (user.getProposal() == null) {
+                                      Toast.makeText(context, "User has no proposal",
+                                                      Toast.LENGTH_SHORT).show();
+                                      return;
+                              }
+                              Context context = FeedFragment.this.getActivity();
+                              User user = incomingBroadcasts.get(pos);
+
+                              Intent proposalLeechIntent = new Intent(context,
+                                              ProfileActivity.class);
+                              proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
+                              context.startActivity(proposalLeechIntent);
+
+                      }
+              });
+
+              return convertView;
+      }
 
 		class ViewHolder {
 			ProfilePictureView profilePictureView;

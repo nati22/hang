@@ -56,7 +56,7 @@ samora_address = '9165090227@tmomail.net'
 #hang_dropbox_url = 'dropbox.com/sh/40w6ko5qt6ao2je/Hl6lk8qxZI' # this url can't contain http or https
 hang_dropbox_direct_url = 'dropbox.com/sh/40w6ko5qt6ao2je/LWx9LXgvn9/hang.apk'
 
-server.sendmail('Girum and Nati', samora_address, "Sam, there's a new hang"
+server.sendmail('Nati', samora_address, "Yo Sam, there's a new hang"
 	+ " APK on Dropbox! Download it at " + hang_dropbox_direct_url)
 print "Done!"
 

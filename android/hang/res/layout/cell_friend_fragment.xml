@@ -85,6 +85,7 @@
         android:focusable="false"
         android:paddingBottom="1dp"
         android:paddingTop="1dp"
+        android:layout_marginLeft="5dp"
         android:text=""
         android:textSize="16sp" />
 
