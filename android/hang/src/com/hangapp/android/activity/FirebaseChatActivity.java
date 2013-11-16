@@ -8,6 +8,7 @@ import org.jivesoftware.smack.packet.Message;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Keys;
+import com.hangapp.android.util.SntpClient;
 import com.hangapp.android.util.Utils;
 
 /**
@@ -146,13 +148,15 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			// make sure chat still exists before continuing
 		}
 
-		// add yourself to members //TODO THIS SHOULD HAPPEN WHEN USER SAYS THEYRE INTERESTED
+		// add yourself to members //TODO THIS SHOULD HAPPEN WHEN USER SAYS THEYRE
+		// INTERESTED
 		chatMemberMyselfFirebase = chatMembersFirebase.child(myJid);
 		chatMemberMyselfFirebase.setValue(myJid);
 
 		// add yourself to currently present
 		chatMemberPresentMyselfFirebase = chatMembersPresentFirebase.child(myJid);
 		chatMemberPresentMyselfFirebase.setValue(myJid);
+		chatMemberPresentMyselfFirebase.onDisconnect().removeValue();
 
 	}
 
@@ -202,13 +206,36 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		if (message.equals("")) {
 			Log.e("FirebaseChatActivity.sendMessage", "Can't send empty message");
+			Toast.makeText(getApplicationContext(), "Write something first!",
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 
 		final String myJid = database.getMyJid();
 
-		xmpp.sendMucMessage(myJid, mucName, message);
+		Toast.makeText(getApplicationContext(), "" + getNTPtime(), Toast.LENGTH_LONG).show();
+		
+		chatMessagesFirebase.child("" + getNTPtime()).setValue(new ChatMessage(message, myJid));
+		
+		
+	//	xmpp.sendMucMessage(myJid, mucName, message);
 		editTextChatMessage.setText("");
+	}
+	
+	class ChatMessage {
+		
+		public ChatMessage(String text, String jid) {
+			this.text = text;
+			this.jid = jid;
+		}
+		private String text;
+		private String jid;
+		public String getText() {
+			return text;
+		}
+		public String getJid() {
+			return jid;
+		}
 	}
 
 	class MessageAdapter extends ArrayAdapter<Message> {
@@ -371,6 +398,19 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				}
 			});
 			linLayout.addView(view);
+		}
+	}
+
+	private long getNTPtime() {
+		SntpClient client = new SntpClient();
+		if (client.requestTime(Utils.someCaliNtpServers[0], 10000)) {
+
+			return client.getNtpTime() + SystemClock.elapsedRealtime()
+					- client.getNtpTimeReference();
+		} else {
+			Toast.makeText(getApplicationContext(), "NTP error",
+					Toast.LENGTH_SHORT).show();
+			return 0;
 		}
 	}
 }
