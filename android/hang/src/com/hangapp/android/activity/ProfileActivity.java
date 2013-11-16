@@ -155,6 +155,7 @@ public final class ProfileActivity extends BaseActivity implements
 					Intent chatActivityIntent = new Intent(ProfileActivity.this,
 							FirebaseChatActivity.class);
 					chatActivityIntent.putExtra(Keys.HOST_JID, friend.getJid());
+					chatActivityIntent.putExtra(Keys.IS_HOST, false);
 					startActivity(chatActivityIntent);
 				} else {
 					Toast.makeText(getApplicationContext(),

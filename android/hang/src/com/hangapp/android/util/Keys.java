@@ -23,6 +23,7 @@ public final class Keys {
 	public static final String REGISTRATION_ID = "regid";
 	public static final String FRIENDS = "friends";
 	public static final String HOST_JID = "host_jid";
+	public static final String IS_HOST = "is_host";
 	public static final String FREE = "free";
 	public static final String BUSY = "busy";
 	public static final String MUC_NAME = "muc_name";
@@ -85,6 +86,12 @@ public final class Keys {
 	public static final String MY_PROPOSAL_FRAGMENT_TAG = "myProposalFragmentTAG";
 	public static final String CREATE_PROPOSAL_FRAGMENT_TAG = "createProposalFragmentTAG";
 
+	// Firebase keys
+	public static final String FIREBASE_HOST_ID = "host_id";
+	public static final String FIREBASE_MEMBERS = "members";
+	public static final String FIREBASE_MESSAGES = "messages";
+	public static final String FIREBASE_MEMBERS_PRESENT = "present";
+	
 	/**
 	 * Flurry Keys
 	 */

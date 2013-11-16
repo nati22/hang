@@ -110,6 +110,7 @@ public final class MyProposalFragment extends SherlockFragment {
 						.getActivity().getApplicationContext(),
 						FirebaseChatActivity.class);
 				chatActivityIntent.putExtra(Keys.HOST_JID, database.getMyJid());
+				chatActivityIntent.putExtra(Keys.IS_HOST, true);
 				startActivity(chatActivityIntent);
 			}
 		});

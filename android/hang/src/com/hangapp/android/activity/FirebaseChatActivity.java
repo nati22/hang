@@ -50,8 +50,8 @@ import com.hangapp.android.util.Utils;
  * The JID of an MUC (the MUC's name) is always the JID of the user who owns
  * that Proposal.
  */
-public final class FirebaseChatActivity extends BaseActivity implements MucListener,
-		IncomingBroadcastsListener {
+public final class FirebaseChatActivity extends BaseActivity implements
+		MucListener, IncomingBroadcastsListener {
 
 	// UI widgets.
 	private EditText editTextChatMessage;
@@ -64,10 +64,17 @@ public final class FirebaseChatActivity extends BaseActivity implements MucListe
 	private String myJid;
 	private LinearLayout linLayoutInterested;
 	private List<String> listInterestedJids = new ArrayList<String>();
-	
+
+	private boolean isHost = false;
 	private static final String FIREBASE_URL = "https://hangapp.firebaseio.com/";
 	private static final String CHATS_URL = FIREBASE_URL + "chats/";
 	private Firebase chatFirebase;
+	private Firebase chatMembersFirebase;
+	private Firebase chatMemberMyselfFirebase;
+	private Firebase chatMembersPresentFirebase;
+	private Firebase chatMemberPresentMyselfFirebase;
+	private Firebase chatHostFirebase;
+	private Firebase chatMessagesFirebase;
 
 	// Dependencies.
 	private Database database;
@@ -88,6 +95,8 @@ public final class FirebaseChatActivity extends BaseActivity implements MucListe
 
 		// Pull the Muc name from the Intent.
 		mucName = getIntent().getStringExtra(Keys.HOST_JID);
+		// Find out whether the user is the host or not
+		isHost = getIntent().getBooleanExtra(Keys.IS_HOST, false);
 
 		// Sanity check on the Muc name pulled from the Intent.
 		if (mucName == null) {
@@ -101,10 +110,10 @@ public final class FirebaseChatActivity extends BaseActivity implements MucListe
 		// add this MUC to the list of MUCs to join and have XMPPIntentService
 		// do it for you.
 		myJid = database.getMyJid();
-//		xmpp.joinMuc(mucName, myJid);
+		// xmpp.joinMuc(mucName, myJid);
 
 		setupChatFirebase();
-		
+
 		// Reference Views.
 		editTextChatMessage = (EditText) findViewById(R.id.editTextChatMessage);
 		listViewChatCells = (ListView) findViewById(R.id.listViewChatCells);
@@ -119,14 +128,34 @@ public final class FirebaseChatActivity extends BaseActivity implements MucListe
 	}
 
 	private void setupChatFirebase() {
-		
 		String chatFirebaseUrl = CHATS_URL + mucName;
 		chatFirebase = new Firebase(chatFirebaseUrl);
-		chatFirebase.child("person").setValue("me");
-//		chatFirebase.push();
-		
+		chatHostFirebase = new Firebase(chatFirebaseUrl + "/"
+				+ Keys.FIREBASE_HOST_ID);
+		chatMembersFirebase = new Firebase(chatFirebaseUrl + "/"
+				+ Keys.FIREBASE_MEMBERS);
+		chatMessagesFirebase = new Firebase(chatFirebaseUrl + "/"
+				+ Keys.FIREBASE_MESSAGES);
+		chatMembersPresentFirebase = new Firebase(chatFirebaseUrl + "/"
+				+ Keys.FIREBASE_MEMBERS_PRESENT);
+
+		// If this is the host, we'll create the session on Firebase
+		if (isHost) {
+			chatFirebase.child(Keys.FIREBASE_HOST_ID).setValue(myJid);
+		} else {
+			// make sure chat still exists before continuing
+		}
+
+		// add yourself to members //TODO THIS SHOULD HAPPEN WHEN USER SAYS THEYRE INTERESTED
+		chatMemberMyselfFirebase = chatMembersFirebase.child(myJid);
+		chatMemberMyselfFirebase.setValue(myJid);
+
+		// add yourself to currently present
+		chatMemberPresentMyselfFirebase = chatMembersPresentFirebase.child(myJid);
+		chatMemberPresentMyselfFirebase.setValue(myJid);
+
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -154,6 +183,9 @@ public final class FirebaseChatActivity extends BaseActivity implements MucListe
 	@Override
 	protected void onPause() {
 		super.onPause();
+
+		// remove user from currently present members in firebase chat
+		chatMembersPresentFirebase.child(myJid).removeValue();
 
 		// Remove listener
 		database.removeIncomingBroadcastsListener(this);
@@ -275,7 +307,7 @@ public final class FirebaseChatActivity extends BaseActivity implements MucListe
 			}
 
 		}
-		
+
 		// If this is someone else's Chat, but the user isn't broadcasting to you.
 		else {
 			Log.e("FirebaseChatActivity.onIncomingBroadcastsUpdate()",
