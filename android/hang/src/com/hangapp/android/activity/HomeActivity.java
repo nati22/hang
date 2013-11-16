@@ -29,8 +29,6 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
-import com.flurry.android.FlurryAgent;
-import com.google.analytics.tracking.android.EasyTracker;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.MyProposalFragment;
@@ -154,19 +152,19 @@ public final class HomeActivity extends BaseActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-		// Start Flurry session
+/*		// Start Flurry session
 		FlurryAgent.onStartSession(this, Keys.FLURRY_KEY);
 		// Start Google Analytics session
-		EasyTracker.getInstance(this).activityStart(this);
+		EasyTracker.getInstance(this).activityStart(this);*/
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-		// Stop Flurry session
+/*		// Stop Flurry session
 		FlurryAgent.onEndSession(this);
 		// Stop Google Analytics session
-		EasyTracker.getInstance(this).activityStop(this);
+		EasyTracker.getInstance(this).activityStop(this);*/
 	}
 
 	@Override

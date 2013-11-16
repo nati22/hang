@@ -10,7 +10,6 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.audobox.Audobox;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -32,13 +31,11 @@ import com.hangapp.android.util.Keys;
  */
 public final class SettingsActivity extends BaseActivity {
 
-	
 	// Dependencies.
 	private Database database;
 	private SharedPreferences prefs;
 
 	private Button buttonAudoboxFeedback;
-	
 
 	// Facebook SDK stuff.
 	private UiLifecycleHelper uiHelper;
@@ -61,13 +58,22 @@ public final class SettingsActivity extends BaseActivity {
 
 		// Inflate XML
 		buttonAudoboxFeedback = (Button) findViewById(R.id.audoboxButton);
-		
+
 		buttonAudoboxFeedback.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				Audobox.createFeedbackDialog(SettingsActivity.this)
-						.withApiKey("7bca550e257ff1b0f42ea5f5007d7d3a").show();
+				/*
+				 * Audobox.createFeedbackDialog(SettingsActivity.this)
+				 * .withApiKey("7bca550e257ff1b0f42ea5f5007d7d3a").show();
+				 */
+				Toast.makeText(getApplicationContext(),
+						"Sike! Ain't nobody got time for that!", Toast.LENGTH_LONG)
+						.show();
+				Toast.makeText(getApplicationContext(),
+						"jk, it's broken for now. We're fixing it.", Toast.LENGTH_SHORT)
+						.show();
+
 			}
 		});
 
@@ -127,7 +133,7 @@ public final class SettingsActivity extends BaseActivity {
 			Toast.makeText(getApplicationContext(),
 					"Logged out, cleared database", Toast.LENGTH_SHORT).show();
 			database.clear();
-			
+
 			SharedPreferences.Editor editor = prefs.edit();
 			// This stores the current User's jid.
 			editor.putString(Keys.JID, null);

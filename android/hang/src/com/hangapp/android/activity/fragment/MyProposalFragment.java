@@ -20,6 +20,7 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.ChatActivity;
+import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.network.rest.RestClient;
@@ -107,7 +108,7 @@ public final class MyProposalFragment extends SherlockFragment {
 			public void onClick(View v) {
 				Intent chatActivityIntent = new Intent(MyProposalFragment.this
 						.getActivity().getApplicationContext(),
-						ChatActivity.class);
+						FirebaseChatActivity.class);
 				chatActivityIntent.putExtra(Keys.HOST_JID, database.getMyJid());
 				startActivity(chatActivityIntent);
 			}

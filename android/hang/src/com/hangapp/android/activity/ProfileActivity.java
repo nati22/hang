@@ -153,7 +153,7 @@ public final class ProfileActivity extends BaseActivity implements
 							"interested: "
 									+ friend.getProposal().getInterested().toString());
 					Intent chatActivityIntent = new Intent(ProfileActivity.this,
-							ChatActivity.class);
+							FirebaseChatActivity.class);
 					chatActivityIntent.putExtra(Keys.HOST_JID, friend.getJid());
 					startActivity(chatActivityIntent);
 				} else {
