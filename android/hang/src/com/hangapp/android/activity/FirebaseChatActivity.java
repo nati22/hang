@@ -1,10 +1,10 @@
 package com.hangapp.android.activity;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
-
-import org.jivesoftware.smack.packet.Message;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -26,14 +26,12 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.google.common.base.CharMatcher;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
-import com.hangapp.android.model.callback.MucListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
@@ -57,17 +55,15 @@ import com.hangapp.android.util.Utils;
  * that Proposal.
  */
 public final class FirebaseChatActivity extends BaseActivity implements
-/* MucListener, */IncomingBroadcastsListener {
+		IncomingBroadcastsListener {
 
 	// UI widgets.
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
-	private MessageAdapter adapter;
 
 	// Member datum.
 	private String mucName;
 
-	private List<Message> messages = new ArrayList<Message>();
 	private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
 	private ChatMessageAdapter chatAdapter;
 
@@ -90,7 +86,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 	// Dependencies.
 	private Database database;
-	private XMPP xmpp;
+
+	// private XMPP xmpp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +100,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		// Instantiate dependencies
 		database = Database.getInstance();
-		xmpp = XMPP.getInstance();
+		// xmpp = XMPP.getInstance();
 
 		// Pull the Muc name from the Intent.
 		mucName = getIntent().getStringExtra(Keys.HOST_JID);
@@ -122,7 +119,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		// add this MUC to the list of MUCs to join and have XMPPIntentService
 		// do it for you.
 		myJid = database.getMyJid();
-		xmpp.joinMuc(mucName, myJid);
+		// xmpp.joinMuc(mucName, myJid);
 
 		setupChatFirebase();
 
@@ -132,13 +129,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterestedChat);
 
 		// Setup adapter.
-		/*
-		 * adapter = new MessageAdapter(this, R.id.listViewChatCells);
-		 * listViewChatCells.setAdapter(adapter); listViewChatCells
-		 * .setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-		 * listViewChatCells.setStackFromBottom(true);
-		 */
-
 		chatAdapter = new ChatMessageAdapter(this, R.id.listViewChatCells);
 		listViewChatCells.setAdapter(chatAdapter);
 		listViewChatCells
@@ -166,8 +156,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			// make sure chat still exists before continuing
 		}
 
-		// add yourself to members //TODO THIS SHOULD HAPPEN WHEN USER SAYS THEYRE
-		// INTERESTED
+		// add yourself to members
+		// TODO THIS SHOULD HAPPEN WHEN USER SAYS THEYRE INTERESTED
 		chatMemberMyselfFirebase = chatMembersFirebase.child(myJid);
 		chatMemberMyselfFirebase.setValue(myJid);
 
@@ -182,71 +172,47 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	protected void onResume() {
 		super.onResume();
 
-		// "Subscribe" this activity to new MUC messages.
-		/* xmpp.addMucListener(mucName, this); */
-
 		// Setup listener
 		database.addIncomingBroadcastsListener(this);
 
-		// Clear out the member datum list of messages for this Activity.
-	//	messages.clear();
-
-	//	final List<Message> msgs = new ArrayList<Message>();
 		final List<ChatMessage> chatMsgs = new ArrayList<ChatMessage>();
 
 		/** Get the previous messages from Firebase */
 		chatMessagesFirebase.addChildEventListener(new ChildEventListener() {
 
 			@Override
-			public void onChildRemoved(DataSnapshot arg0) { }
+			public void onChildRemoved(DataSnapshot arg0) {
+			}
 
 			@Override
-			public void onChildMoved(DataSnapshot arg0, String arg1) { }
+			public void onChildMoved(DataSnapshot arg0, String arg1) {
+			}
 
 			@Override
-			public void onChildChanged(DataSnapshot arg0, String arg1) { }
+			public void onChildChanged(DataSnapshot arg0, String arg1) {
+			}
 
 			@Override
 			public void onChildAdded(DataSnapshot arg0, String arg1) {
 
 				String text = arg0.child("text").getValue().toString();
 				String jid = arg0.child("jid").getValue().toString();
+				String time = arg0.getName().toString();
 
-				// messages.add(new ChatMessage("", ""));
-	//			Message msg = new Message();
-	//			msg.setBody(text);
-	//			msg.setFrom(jid);
-	//			msgs.add(msg);
-
-				ChatMessage chatMsg = new ChatMessage(text, jid);
-				chatMsgs.add(chatMsg);
-	//			Log.i(TAG, "msgs size = " + msgs.size());
-				chatMessages.add(chatMsg); 
-				Log.i(TAG, "chatMsgs size = " + chatMsgs.size());
+				chatMessages.add(new ChatMessage(text, jid, time));
 				chatAdapter.notifyDataSetChanged();
 			}
 
 			@Override
-			public void onCancelled(FirebaseError arg0) { }
+			public void onCancelled(FirebaseError arg0) {
+			}
 		});
-
-		// messages.addAll(chatMsgs);
-
-		// Then, grab the cached messages for this MUC from SQLite.
-		// final List<Message> mucMessages = xmpp.getAllMessages(mucName);
-
-		// Log.d(TAG, "chatMsgs size " + msgs.size());
-
-		messages.addAll(chatMsgs);
-		Log.e(TAG, "messages size " + messages.size());
-		Log.e(TAG, "chatMsgs size " + chatMsgs.size());
 
 		// Refresh list
 		onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 
 		// Notify data set changed.
 		chatAdapter.notifyDataSetChanged();
-		Log.e(TAG, "chatAdapter.notified");
 	}
 
 	@Override
@@ -278,25 +244,25 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		final String myJid = database.getMyJid();
 
-		Toast.makeText(getApplicationContext(), "" + getNTPtime(),
-				Toast.LENGTH_LONG).show();
-
-		chatMessagesFirebase.child("" + getNTPtime()).setValue(
-				new ChatMessage(message, myJid));
+		String time = "" + getNTPtime();
+		chatMessagesFirebase.child("" + time).setValue(
+				new ChatMessage(message, myJid, time));
 
 		// xmpp.sendMucMessage(myJid, mucName, message);
 		editTextChatMessage.setText("");
 	}
 
-	class ChatMessage extends Message {
+	class ChatMessage {
 
-		public ChatMessage(String text, String jid) {
+		public ChatMessage(String text, String jid, String time) {
 			this.text = text;
 			this.jid = jid;
+			this.time = time;
 		}
 
 		private String text;
 		private String jid;
+		private String time;
 
 		public String getText() {
 			return text;
@@ -305,40 +271,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		public String getJid() {
 			return jid;
 		}
-	}
 
-	class MessageAdapter extends ArrayAdapter<Message> {
-
-		public MessageAdapter(Context context, int textViewResourceId) {
-			super(context, textViewResourceId, FirebaseChatActivity.this.messages);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			Message message = getItem(position);
-
-			String fromJid = Utils.parseJidFromMessage(message);
-			String from = Utils.convertJidToName(fromJid, database);
-
-			Log.e(TAG, "getView called for msg " + message.getBody());
-
-			// Inflate the cell if necessary.
-			if (convertView == null) {
-				convertView = LayoutInflater.from(getContext()).inflate(
-						R.layout.cell_incoming_message, null);
-			}
-
-			// Reference Views.
-			TextView textViewMessageFrom = (TextView) convertView
-					.findViewById(R.id.textViewMessageFrom2);
-			TextView textViewMessageBody = (TextView) convertView
-					.findViewById(R.id.textViewMessageBody2);
-
-			// Populate Views.
-			textViewMessageBody.setText(message.getBody());
-			textViewMessageFrom.setText(from + ":  ");
-
-			return convertView;
+		public String getTime() {
+			return time;
 		}
 	}
 
@@ -356,10 +291,19 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			ChatMessage message = getItem(position);
 
 			String fromJid = message.getJid();
-			/** This will mess up if we don't know who it is. */
-			String fromName = Database.getInstance().getIncomingUser(fromJid) != null ? Database
-					.getInstance().getIncomingUser(fromJid).getFullName()
-					: "Stranger";
+			
+			// Set the name
+			String fromName = "Stranger";
+			if (myJid.equals(fromJid)) {
+				fromName = "Me";
+			} else if (Database.getInstance().getIncomingUser(fromJid) != null) {
+				fromName = Database.getInstance().getIncomingUser(fromJid)
+						.getFullName();
+			}
+			
+			long secs = Long.parseLong(message.getTime());
+			SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
+			String time = sdf.format(new Date(secs));
 
 			// Inflate the cell if necessary.
 			if (convertView == null) {
@@ -375,7 +319,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			// Populate Views.
 			textViewMessageBody.setText(message.getText());
-			textViewMessageFrom.setText(fromName + ":  ");
+			textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
 
 			return convertView;
 		}
