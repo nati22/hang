@@ -16,13 +16,13 @@ public class BaseApplication extends Application {
 		super.onCreate();
 
 		// Enable ACRA error reporting.
-		ACRA.init(this);
+//		ACRA.init(this);
 
 		// Initialize the Database.
 		Database database = Database.getInstance();
 		database.initialize(getApplicationContext());
 
 		// Initialize the XMPP object.
-		XMPP.getInstance().initialize(database, getApplicationContext());
+//		XMPP.getInstance().initialize(database, getApplicationContext());
 	}
 }

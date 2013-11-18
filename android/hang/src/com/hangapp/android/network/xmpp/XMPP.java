@@ -72,7 +72,7 @@ public final class XMPP {
 	public void initialize(Database database, Context context) {
 		this.database = database;
 		this.context = context;
-		this.messagesDataSource = new MessageDAO(context);
+//		this.messagesDataSource = new MessageDAO(context);
 	}
 
 	public static synchronized XMPP getInstance() {
