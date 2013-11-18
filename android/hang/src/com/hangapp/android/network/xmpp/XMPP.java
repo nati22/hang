@@ -306,8 +306,8 @@ public final class XMPP {
 
 						String from = Utils.convertJidToName(fromJid, database);
 
-						Utils.showChatNotification(context, "Message from "
-								+ from, message.getBody(), fromJid);
+/*						Utils.showChatNotification(context, "Message from "
+								+ from, message.getBody(), fromJid);*/
 					}
 				}
 			}
