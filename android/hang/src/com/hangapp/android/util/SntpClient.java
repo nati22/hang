@@ -16,10 +16,12 @@ package com.hangapp.android.util;
  * limitations under the License.
  */
 
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.util.Date;
+
+import org.apache.commons.net.time.TimeTCPClient;
 
 import android.os.SystemClock;
 import android.util.Log;
@@ -148,6 +150,29 @@ public class SntpClient {
 		return true;
 	}
 
+	
+	public boolean requestTimeOtherWay(String host, int timeout) {
+		 try {
+          TimeTCPClient client = new TimeTCPClient();
+          try {
+              // Set timeout of 60 seconds
+              client.setDefaultTimeout(60000);
+              // Connecting to time server
+              // Other time servers can be found at : http://tf.nist.gov/tf-cgi/servers.cgi#
+              // Make sure that your program NEVER queries a server more frequently than once every 4 seconds
+              client.connect(host);
+              System.out.println(client.getDate());
+              Log.d("TAG", "R2D2:  " + client.getDate().toGMTString());
+          } finally {
+              client.disconnect();
+          }
+          return true;
+      } catch (IOException e) {
+          e.printStackTrace();
+          return false;
+      }
+	}
+	
 	/**
 	 * Returns the time computed from the NTP transaction.
 	 * 

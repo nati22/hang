@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -57,6 +58,8 @@ import com.hangapp.android.util.Utils;
 public final class FirebaseChatActivity extends BaseActivity implements
 		IncomingBroadcastsListener {
 
+	private static final String LOG_ID = "R2D2:  ";
+	
 	// UI widgets.
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
@@ -236,7 +239,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		final String message = editTextChatMessage.getText().toString().trim();
 
 		if (message.equals("")) {
-			Log.e("FirebaseChatActivity.sendMessage", "Can't send empty message");
+			Log.e("FirebaseChatActivity.sendMessage", LOG_ID + "Can't send empty message");
 			Toast.makeText(getApplicationContext(), "Write something first!",
 					Toast.LENGTH_SHORT).show();
 			return;
@@ -286,7 +289,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			Log.e(TAG, "getView called");
+	//		Log.e(TAG, LOG_ID + "getView called");
 
 			ChatMessage message = getItem(position);
 
@@ -379,7 +382,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 				} else {
 					Log.i("FirebaseChatActivity.onIncomingBroadcastsUpdate()",
-							"their list hasn't changed: "
+							LOG_ID + "their list hasn't changed: "
 									+ listInterestedJids.toString());
 				}
 			}
@@ -389,7 +392,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		// If this is someone else's Chat, but the user isn't broadcasting to you.
 		else {
 			Log.e("FirebaseChatActivity.onIncomingBroadcastsUpdate()",
-					"Attempted to join MUC for a user who is not broadcasting to you.");
+					LOG_ID + "Attempted to join MUC for a user who is not broadcasting to you.");
 			Toast.makeText(getApplicationContext(),
 					"There was an error opening this chat", Toast.LENGTH_SHORT)
 					.show();
@@ -464,4 +467,33 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			return 0;
 		}
 	}
+	
+	private class getNtpTimeTask extends AsyncTask<String, Void, Void> {
+
+		final String message = editTextChatMessage.getText().toString().trim();
+		
+		@Override
+		protected Void doInBackground(String... params) {
+			
+			// TODO get time from NTP server
+			Log.d(TAG, LOG_ID + " doInBackground");
+			
+			
+			return null;
+		}
+		
+		protected void onPostExecute(String result) {
+			
+			Log.d(TAG, LOG_ID + result);
+			String time = "" + getNTPtime();
+			chatMessagesFirebase.child("" + time).setValue(
+					new ChatMessage(message, myJid, time));
+
+			// xmpp.sendMucMessage(myJid, mucName, message);
+			editTextChatMessage.setText("");
+			
+		}
+		
+	}
+	
 }

@@ -71,7 +71,7 @@ final class GetMyDataAsyncTask extends BaseGetRequestAsyncTask<Me> {
 		// GetMyDataAsyncTask in order to remove Database's dependency on
 		// XMPP. That way, each of the individual AsyncTasks can define
 		// themselves to be dependent on XMPP.
-		xmpp.setListOfMucsToJoinAndConnect(me.getJid(), jidsImInterestedIn);
+//		xmpp.setListOfMucsToJoinAndConnect(me.getJid(), jidsImInterestedIn);
 	}
 
 	/**
