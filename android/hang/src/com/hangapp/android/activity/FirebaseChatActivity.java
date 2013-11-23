@@ -9,7 +9,6 @@ import java.util.Random;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +16,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -64,6 +64,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	// UI widgets.
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
+	private Button buttonSendMessage;
 
 	// Member datum.
 	private String mucName;
@@ -131,6 +132,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		editTextChatMessage = (EditText) findViewById(R.id.editTextChatMessage);
 		listViewChatCells = (ListView) findViewById(R.id.listViewChatCells);
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterestedChat);
+		buttonSendMessage = (Button) findViewById(R.id.buttonSendMessage);
 
 		// Setup adapter.
 		chatAdapter = new ChatMessageAdapter(this, R.id.listViewChatCells);
@@ -234,29 +236,18 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		/* xmpp.removeMucListener(mucName, this); */
 	}
 
-	/**
-	 * XML OnClickListener for the "sendMessage" button.
-	 */
 	public void sendMessage(View v) {
-		// final String message =
-		// editTextChatMessage.getText().toString().trim();
-		//
-		// if (message.equals("")) {
-		// Log.e("FirebaseChatActivity.sendMessage", LOG_ID
-		// + "Can't send empty message");
-		// Toast.makeText(getApplicationContext(), "Write something first!",
-		// Toast.LENGTH_SHORT).show();
-		// return;
-		// }
-		//
-		// final String myJid = database.getMyJid();
-		//
-		// String time = "" + getNTPtime();
-		// chatMessagesFirebase.child("" + time).setValue(
-		// new ChatMessage(message, myJid, time));
-		//
-		// // xmpp.sendMucMessage(myJid, mucName, message);
-		// editTextChatMessage.setText("");
+		final String message = editTextChatMessage.getText().toString().trim();
+
+		if (message.equals("")) {
+			Log.e("FirebaseChatActivity.sendMessage", LOG_ID
+					+ "Can't send empty message");
+			Toast.makeText(getApplicationContext(), "Write something first!",
+					Toast.LENGTH_SHORT).show();
+			return;
+		}
+
+		buttonSendMessage.setEnabled(false);
 
 		new GetNtpTimeTask().execute(Utils.someCaliNtpServers[0]);
 	}
@@ -268,23 +259,27 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		@Override
 		protected Void doInBackground(String... params) {
-
-			// TODO get time from NTP server
 			ntpTime = getNTPtime();
 			return null;
 		}
 
 		protected void onPostExecute(Void result) {
+			if (ntpTime != 0) {
+				String time = "" + ntpTime;
+				chatMessagesFirebase.child("" + time).setValue(
+						new ChatMessage(message, myJid, time));
 
-			String time = "" + ntpTime;
-			chatMessagesFirebase.child("" + time).setValue(
-					new ChatMessage(message, myJid, time));
+				editTextChatMessage.setText("");
 
-			editTextChatMessage.setText("");
+				Log.d(TAG, LOG_ID + "Sent message \"" + message + "\"");
+			} else {
+				Log.e(TAG, LOG_ID + "Failed to send message.");
+				Toast.makeText(getApplicationContext(),
+						"Error sending message", Toast.LENGTH_SHORT).show();
+			}
 
-			Log.d(TAG, LOG_ID + " onPostExecute");
-			Toast.makeText(getApplicationContext(), "sent message!",
-					Toast.LENGTH_SHORT).show();
+			buttonSendMessage.setEnabled(true);
+
 		}
 
 	}
