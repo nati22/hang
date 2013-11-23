@@ -41,6 +41,8 @@ import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.SntpClient;
 import com.hangapp.android.util.Utils;
 
+// TODO Need to be careful of lost conenction to the internet/Firebase
+
 /**
  * Get to this Activity via the "Chat" icon in {@link YouFragment} and
  * {@link ProfileActivity}. <br />
@@ -91,8 +93,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 	// Dependencies.
 	private Database database;
-
-	// private XMPP xmpp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -163,7 +163,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		}
 
 		// add yourself to members
-		// TODO THIS SHOULD HAPPEN WHEN USER SAYS THEYRE INTERESTED
+		// TODO THIS SHOULD HAPPEN WHEN USER SAYS THEY'RE INTERESTED
 		chatMemberMyselfFirebase = chatMembersFirebase.child(myJid);
 		chatMemberMyselfFirebase.setValue(myJid);
 
@@ -356,19 +356,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			return convertView;
 		}
 	}
-
-	/*
-	 * @Override public void onMucMessageUpdate(String mucName, final
-	 * List<Message> messages) { // Must explicitly run on UI thread because the
-	 * Smack packet listener // runs on a daemon (background) thread.
-	 * runOnUiThread(new Runnable() {
-	 * 
-	 * @Override public void run() { FirebaseChatActivity.this.messages.clear();
-	 * FirebaseChatActivity.this.messages.addAll(messages);
-	 * adapter.notifyDataSetChanged();
-	 * 
-	 * listViewChatCells.smoothScrollToPosition(adapter.getCount() - 1); } }); }
-	 */
 
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
