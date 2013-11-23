@@ -9,6 +9,7 @@ import java.util.Random;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -59,7 +60,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		IncomingBroadcastsListener {
 
 	private static final String LOG_ID = "R2D2:  ";
-	
+
 	// UI widgets.
 	private EditText editTextChatMessage;
 	private ListView listViewChatCells;
@@ -165,7 +166,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		chatMemberMyselfFirebase.setValue(myJid);
 
 		// add yourself to currently present
-		chatMemberPresentMyselfFirebase = chatMembersPresentFirebase.child(myJid);
+		chatMemberPresentMyselfFirebase = chatMembersPresentFirebase
+				.child(myJid);
 		chatMemberPresentMyselfFirebase.setValue(myJid);
 		chatMemberPresentMyselfFirebase.onDisconnect().removeValue();
 
@@ -236,23 +238,55 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	 * XML OnClickListener for the "sendMessage" button.
 	 */
 	public void sendMessage(View v) {
-		final String message = editTextChatMessage.getText().toString().trim();
+		// final String message =
+		// editTextChatMessage.getText().toString().trim();
+		//
+		// if (message.equals("")) {
+		// Log.e("FirebaseChatActivity.sendMessage", LOG_ID
+		// + "Can't send empty message");
+		// Toast.makeText(getApplicationContext(), "Write something first!",
+		// Toast.LENGTH_SHORT).show();
+		// return;
+		// }
+		//
+		// final String myJid = database.getMyJid();
+		//
+		// String time = "" + getNTPtime();
+		// chatMessagesFirebase.child("" + time).setValue(
+		// new ChatMessage(message, myJid, time));
+		//
+		// // xmpp.sendMucMessage(myJid, mucName, message);
+		// editTextChatMessage.setText("");
 
-		if (message.equals("")) {
-			Log.e("FirebaseChatActivity.sendMessage", LOG_ID + "Can't send empty message");
-			Toast.makeText(getApplicationContext(), "Write something first!",
-					Toast.LENGTH_SHORT).show();
-			return;
+		new GetNtpTimeTask().execute(Utils.someCaliNtpServers[0]);
+	}
+
+	private class GetNtpTimeTask extends AsyncTask<String, Void, Void> {
+
+		final String message = editTextChatMessage.getText().toString().trim();
+		private long ntpTime = 0;
+
+		@Override
+		protected Void doInBackground(String... params) {
+
+			// TODO get time from NTP server
+			ntpTime = getNTPtime();
+			return null;
 		}
 
-		final String myJid = database.getMyJid();
+		protected void onPostExecute(Void result) {
 
-		String time = "" + getNTPtime();
-		chatMessagesFirebase.child("" + time).setValue(
-				new ChatMessage(message, myJid, time));
+			String time = "" + ntpTime;
+			chatMessagesFirebase.child("" + time).setValue(
+					new ChatMessage(message, myJid, time));
 
-		// xmpp.sendMucMessage(myJid, mucName, message);
-		editTextChatMessage.setText("");
+			editTextChatMessage.setText("");
+
+			Log.d(TAG, LOG_ID + " onPostExecute");
+			Toast.makeText(getApplicationContext(), "sent message!",
+					Toast.LENGTH_SHORT).show();
+		}
+
 	}
 
 	class ChatMessage {
@@ -289,12 +323,12 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-	//		Log.e(TAG, LOG_ID + "getView called");
+			// Log.e(TAG, LOG_ID + "getView called");
 
 			ChatMessage message = getItem(position);
 
 			String fromJid = message.getJid();
-			
+
 			// Set the name
 			String fromName = "Stranger";
 			if (myJid.equals(fromJid)) {
@@ -303,7 +337,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				fromName = Database.getInstance().getIncomingUser(fromJid)
 						.getFullName();
 			}
-			
+
 			long secs = Long.parseLong(message.getTime());
 			SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
 			String time = sdf.format(new Date(secs));
@@ -350,7 +384,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			if (!database.getMyProposal().getInterested()
 					.equals(listInterestedJids)) {
 				listInterestedJids.clear();
-				listInterestedJids.addAll(database.getMyProposal().getInterested());
+				listInterestedJids.addAll(database.getMyProposal()
+						.getInterested());
 
 				// Update horizontal list
 				updateHorizontalList(listInterestedJids, linLayoutInterested);
@@ -370,10 +405,12 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				if (!hostInterested.equals(listInterestedJids)) {
 
 					listInterestedJids.clear();
-					listInterestedJids.addAll(host.getProposal().getInterested());
+					listInterestedJids.addAll(host.getProposal()
+							.getInterested());
 
 					// Update horizontal list
-					updateHorizontalList(listInterestedJids, linLayoutInterested);
+					updateHorizontalList(listInterestedJids,
+							linLayoutInterested);
 
 					// TODO: If you're not Interested, get lost
 					if (!hostInterested.contains(database.getMyJid())) {
@@ -389,10 +426,12 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		}
 
-		// If this is someone else's Chat, but the user isn't broadcasting to you.
+		// If this is someone else's Chat, but the user isn't broadcasting to
+		// you.
 		else {
 			Log.e("FirebaseChatActivity.onIncomingBroadcastsUpdate()",
-					LOG_ID + "Attempted to join MUC for a user who is not broadcasting to you.");
+					LOG_ID
+							+ "Attempted to join MUC for a user who is not broadcasting to you.");
 			Toast.makeText(getApplicationContext(),
 					"There was an error opening this chat", Toast.LENGTH_SHORT)
 					.show();
@@ -423,30 +462,38 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						// TODO: This is 100% pointless and should be removed :)
 						switch (new Random().nextInt(2)) {
 						case 0:
-							Toast.makeText(getApplicationContext(), "Look familiar?",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(),
+									"Look familiar?", Toast.LENGTH_SHORT)
+									.show();
 							return;
 						default:
-							Toast.makeText(getApplicationContext(), "Guess who?",
-									Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(),
+									"Guess who?", Toast.LENGTH_SHORT).show();
 						}
 
 					} else if (database.getIncomingUser(jid) != null) {
 						// Then this is someone broadcasting to me
-						Toast.makeText(getApplicationContext(),
-								"It's " + database.getIncomingUser(jid).getFirstName(),
+						Toast.makeText(
+								getApplicationContext(),
+								"It's "
+										+ database.getIncomingUser(jid)
+												.getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else if (database.getOutgoingUser(jid) != null) {
 						// Then this is someone I'm broadcasting to
-						Toast.makeText(getApplicationContext(),
-								"It's " + database.getOutgoingUser(jid).getFirstName(),
+						Toast.makeText(
+								getApplicationContext(),
+								"It's "
+										+ database.getOutgoingUser(jid)
+												.getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else {
 						// This is a stranger to me
 						Toast.makeText(
 								getApplicationContext(),
-								database.getIncomingUser(mucName).getFirstName()
-										+ "'s friend", Toast.LENGTH_SHORT).show();
+								database.getIncomingUser(mucName)
+										.getFirstName() + "'s friend",
+								Toast.LENGTH_SHORT).show();
 					}
 
 				}
@@ -467,33 +514,5 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			return 0;
 		}
 	}
-	
-	private class getNtpTimeTask extends AsyncTask<String, Void, Void> {
 
-		final String message = editTextChatMessage.getText().toString().trim();
-		
-		@Override
-		protected Void doInBackground(String... params) {
-			
-			// TODO get time from NTP server
-			Log.d(TAG, LOG_ID + " doInBackground");
-			
-			
-			return null;
-		}
-		
-		protected void onPostExecute(String result) {
-			
-			Log.d(TAG, LOG_ID + result);
-			String time = "" + getNTPtime();
-			chatMessagesFirebase.child("" + time).setValue(
-					new ChatMessage(message, myJid, time));
-
-			// xmpp.sendMucMessage(myJid, mucName, message);
-			editTextChatMessage.setText("");
-			
-		}
-		
-	}
-	
 }
