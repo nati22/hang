@@ -30,7 +30,7 @@ def push_new_chats_to_users(self, users, host, sender):
         self.response.write('successful\n')
 
 def push_new_chats_to_user(user, sender, host, type):
-    data = {'type': type, 'sender_jid': sender.key().name(), 'host_jid' : host.key().name()}
+    data = {'type': type,'target_jid' : user.key().name(), 'sender_jid': sender.key().name(), 'host_jid' : host.key().name()}
 
     gcm = GCM(API_KEY)
 
@@ -55,7 +55,7 @@ def push_new_chats_to_user(user, sender, host, type):
 
 
 def push_to_user(user, sender, type):
-    data = {'type': type, 'nudger': sender.first_name, 'toFn' : user.first_name, 'toLn' : user.last_name}
+    data = {'type': type, 'target_jid' : user.key().name(), 'nudger': sender.first_name, 'toFn' : user.first_name, 'toLn' : user.last_name}
 
     gcm = GCM(API_KEY)
 

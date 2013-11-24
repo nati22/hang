@@ -76,6 +76,7 @@ public final class Keys {
 		public static final String TYPE = "type";
 		public static final String SENDER = "sender_jid";
 		public static final String HOST = "host_jid";
+		public static final String TARGET = "target_jid";
 		
 		public static final String TYPE_NUDGE = "nudge";
 		public static final String TYPE_TICKLE = "tickle";

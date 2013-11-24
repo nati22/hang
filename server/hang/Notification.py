@@ -23,10 +23,12 @@ class ChatNotificationHandler(webapp2.RequestHandler):
 			sender = db.get(key_sender)
 
 			# Get host's User
-
 			key_host = db.Key.from_path('User', param_host)
 			host = db.get(key_host)
 
+
+			for user in targets:
+				self.response.write('sending to ' + user.first_name + '\n')
 
 			push_new_chats_to_users(self, targets, host, sender)
 			return

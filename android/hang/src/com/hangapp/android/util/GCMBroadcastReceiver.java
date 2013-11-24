@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -59,10 +60,26 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 			Log.d(TAG, "Deleted messages on server: "
 					+ intent.getExtras().toString());
 		} else {
+
+			if (messageType == null)
+				return;
+
 			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
 			String senderFn = intent.getExtras().getString(
 					Keys.FromServer.NUDGER);
+
+			// TODO: Need to make sure gcm ids are removed properly anytime
+			// a User uninstalls the app, but until then I'll use this sanity
+			// check
+			String targetJid = intent.getExtras().getString(
+					Keys.FromServer.TARGET);
+
+			if (!targetJid.equals(database.getMyJid())) {
+				Log.e(TAG, "THIS NUDGE ISN'T INTENDED FOR ME!! (JID "
+						+ targetJid + ")");
+				return;
+			}
 
 			if (type != null && type.equals(Keys.FromServer.TYPE_NUDGE)) {
 
@@ -128,37 +145,43 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 			} else if (type != null
 					&& type.equals(Keys.FromServer.TYPE_NEW_CHAT)) {
-
 				String hostJid = intent.getExtras().getString(FromServer.HOST);
-				boolean isHost = hostJid.equals(database.getMyJid()) ? true : false;
+				boolean isHost = hostJid.equals(database.getMyJid()) ? true
+						: false;
+
 				Intent newChatMessageIntent = new Intent(context,
 						FirebaseChatActivity.class);
+
 				newChatMessageIntent.putExtra(Keys.HOST_JID, hostJid);
-				newChatMessageIntent.putExtra(Keys.IS_HOST,	isHost);
-				
+				newChatMessageIntent.putExtra(Keys.IS_HOST, isHost);
+
 				String proposalDesc = "";
 				if (isHost) {
 					proposalDesc = database.getMyProposal().getDescription();
 				} else {
-					proposalDesc = database.getIncomingUser(hostJid).getProposal().getDescription();
+					proposalDesc = database.getIncomingUser(hostJid)
+							.getProposal().getDescription();
 				}
-				
-				Notification notif = new NotificationCompat.Builder(context)
-				.setContentTitle(proposalDesc)
-				.setContentText("You have a new message!")
-				.setSmallIcon(R.drawable.ic_launcher)
-				.setLargeIcon(
-						BitmapFactory.decodeResource(
-								context.getResources(),
-								R.drawable.ic_launcher))
-				.setContentIntent(
-						PendingIntent.getActivity(context, 0,
-								newChatMessageIntent, 0)).build();
-		notif.flags = Notification.FLAG_AUTO_CANCEL;
 
-		notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
+				Notification notif = new NotificationCompat.Builder(context)
+						.setContentTitle(proposalDesc)
+						.setContentText("You have a new message!")
+						.setSmallIcon(R.drawable.ic_launcher)
+						.setLargeIcon(
+								BitmapFactory.decodeResource(
+										context.getResources(),
+										R.drawable.ic_launcher))
+						.setContentIntent(
+								PendingIntent.getActivity(context, 0,
+										newChatMessageIntent, 0)).build();
+				notif.flags = Notification.FLAG_AUTO_CANCEL;
+
+				notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
 				
-				Toast.makeText(context, "new chat message!", Toast.LENGTH_SHORT).show();
+				Vibrator v = (Vibrator) context
+						.getSystemService(Context.VIBRATOR_SERVICE);
+				v.vibrate(400);
+
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");
 				Log.e(TAG, "intent.toString() " + intent.getExtras().toString());
