@@ -34,7 +34,9 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
+import com.hangapp.android.network.rest.PutChatNotificationAsyncTask;
 import com.hangapp.android.network.rest.RestClient;
+import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Keys;
@@ -74,6 +76,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
 	private ChatMessageAdapter chatAdapter;
 
+	private List<String> otherPresentUsers = new ArrayList<String>();
+
 	private String myJid;
 	private LinearLayout linLayoutInterested;
 	private List<String> listInterestedJids = new ArrayList<String>();
@@ -93,6 +97,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 	// Dependencies.
 	private Database database;
+	private RestClient restClient;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +110,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		// Instantiate dependencies
 		database = Database.getInstance();
-		// xmpp = XMPP.getInstance();
+		restClient = new RestClientImpl(database, getApplicationContext());
 
 		// Pull the Muc name from the Intent.
 		mucName = getIntent().getStringExtra(Keys.HOST_JID);
@@ -215,6 +220,48 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			}
 		});
 
+		chatMembersPresentFirebase
+				.addChildEventListener(new ChildEventListener() {
+
+					@Override
+					public void onChildRemoved(DataSnapshot arg0) {
+						String removed_jid = arg0.getValue().toString();
+						Log.d(TAG, "user " + removed_jid + " left.");
+						otherPresentUsers.remove(removed_jid);
+
+					}
+
+					@Override
+					public void onChildMoved(DataSnapshot arg0, String arg1) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onChildChanged(DataSnapshot arg0, String arg1) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onChildAdded(DataSnapshot arg0, String arg1) {
+						if (arg0 != null) {
+							String added_jid = arg0.getValue().toString();
+							if (!added_jid.equals(myJid)) {
+								Log.d(TAG, "user " + added_jid
+										+ " just entered the chat");
+								otherPresentUsers.add(added_jid);
+							}
+						}
+					}
+
+					@Override
+					public void onCancelled(FirebaseError arg0) {
+						// TODO Auto-generated method stub
+
+					}
+				});
+
 		// Refresh list
 		onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 
@@ -248,8 +295,25 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		}
 
 		buttonSendMessage.setEnabled(false);
-
+		// This AsyncTask gets the NTP server time
+		// and handles pushing data to Firebase
 		new GetNtpTimeTask().execute(Utils.someCaliNtpServers[0]);
+
+		// Get IDs of Interested users WHO ARE NOT PRESENT in the chat
+		List<String> usersToNotify = new ArrayList<String>();
+		List<String> interestedList = isHost ? database.getMyProposal()
+				.getInterested() : database.getIncomingUser(mucName)
+				.getProposal().getInterested();
+		for (String userJid : interestedList) {
+			if (!otherPresentUsers.contains(userJid) && !userJid.equals(myJid)) {
+				Log.d(TAG, "will send to " + userJid);
+				usersToNotify.add(userJid);
+			}
+		}
+		
+		restClient.sendChatNotification(usersToNotify, mucName);
+		
+
 	}
 
 	private class GetNtpTimeTask extends AsyncTask<String, Void, Void> {

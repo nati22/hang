@@ -28,6 +28,8 @@ public interface RestClient {
 
 	public void sendNudge(String targetJid);
 
+	public void sendChatNotification(List<String> targets, String hostJid);
+	
 	public void setInterested(String broadcasterJid);
 
 	public void setConfirmed(String broadcasterJid);

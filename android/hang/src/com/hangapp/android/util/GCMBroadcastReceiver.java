@@ -11,14 +11,17 @@ import android.graphics.BitmapFactory;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.android.R;
+import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.network.xmpp.XMPP;
+import com.hangapp.android.util.Keys.FromServer;
 
 // TODO: Should this class be in the "utils" package?
 public class GCMBroadcastReceiver extends BroadcastReceiver {
@@ -114,9 +117,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 										R.drawable.ic_launcher))
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0,
-										newBroadcastIntent, 0))
-
-						.build();
+										newBroadcastIntent, 0)).build();
 				notif.flags = Notification.FLAG_AUTO_CANCEL;
 
 				notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
@@ -125,6 +126,39 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 						.getSystemService(Context.VIBRATOR_SERVICE);
 				v.vibrate(400);
 
+			} else if (type != null
+					&& type.equals(Keys.FromServer.TYPE_NEW_CHAT)) {
+
+				String hostJid = intent.getExtras().getString(FromServer.HOST);
+				boolean isHost = hostJid.equals(database.getMyJid()) ? true : false;
+				Intent newChatMessageIntent = new Intent(context,
+						FirebaseChatActivity.class);
+				newChatMessageIntent.putExtra(Keys.HOST_JID, hostJid);
+				newChatMessageIntent.putExtra(Keys.IS_HOST,	isHost);
+				
+				String proposalDesc = "";
+				if (isHost) {
+					proposalDesc = database.getMyProposal().getDescription();
+				} else {
+					proposalDesc = database.getIncomingUser(hostJid).getProposal().getDescription();
+				}
+				
+				Notification notif = new NotificationCompat.Builder(context)
+				.setContentTitle(proposalDesc)
+				.setContentText("You have a new message!")
+				.setSmallIcon(R.drawable.ic_launcher)
+				.setLargeIcon(
+						BitmapFactory.decodeResource(
+								context.getResources(),
+								R.drawable.ic_launcher))
+				.setContentIntent(
+						PendingIntent.getActivity(context, 0,
+								newChatMessageIntent, 0)).build();
+		notif.flags = Notification.FLAG_AUTO_CANCEL;
+
+		notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
+				
+				Toast.makeText(context, "new chat message!", Toast.LENGTH_SHORT).show();
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");
 				Log.e(TAG, "intent.toString() " + intent.getExtras().toString());

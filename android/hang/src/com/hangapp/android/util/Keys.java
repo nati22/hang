@@ -74,9 +74,12 @@ public final class Keys {
 		public static final String COLLAPSE_KEY = "collapse_key";
 		public static final String NUDGER = "nudger";
 		public static final String TYPE = "type";
-
+		public static final String SENDER = "sender_jid";
+		public static final String HOST = "host_jid";
+		
 		public static final String TYPE_NUDGE = "nudge";
 		public static final String TYPE_TICKLE = "tickle";
+		public static final String TYPE_NEW_CHAT = "new_chat";
 		public static final String TYPE_NEW_BROADCAST = "new_broadcast";
 	}
 

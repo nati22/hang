@@ -185,7 +185,19 @@ public final class RestClientImpl implements RestClient {
 
 		new PutConfirmedAsyncTask(database, context, database.getMyJid(),
 				parameters).execute();
+	}
+	
+	@Override
+	public void sendChatNotification(List<String> targets, String hostJid) {
+		
+		List<NameValuePair> parameters = new ArrayList<NameValuePair>();
 
+		for (String target : targets) {
+			parameters.add(new BasicNameValuePair(Keys.TARGET, target));
+		}
+		parameters.add(new BasicNameValuePair(Keys.HOST_JID, hostJid));
+		
+		new PutChatNotificationAsyncTask(context, parameters).execute();
 	}
 
 	@Override

@@ -41,6 +41,8 @@ class User(db.Model):
 
     proposals_seen_jids = db.ListProperty(str)
 
+    unseen_chats = db.ListProperty(str)
+
     # This is if we want to keep simple stats per user 
     # total_proposals = db.IntegerProperty()
     # total_availabilities = db.IntegerProperty()

@@ -91,6 +91,7 @@
          <activity
             android:name=".activity.FirebaseChatActivity"
             android:label="@string/chat"
+            android:launchMode="singleTop"
             android:parentActivityName=".activity.HomeActivity"
             android:screenOrientation="portrait" >
             <meta-data
