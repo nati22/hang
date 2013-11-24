@@ -310,9 +310,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				usersToNotify.add(userJid);
 			}
 		}
-		
+
 		restClient.sendChatNotification(usersToNotify, mucName);
-		
 
 	}
 
@@ -403,8 +402,13 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			// Inflate the cell if necessary.
 			if (convertView == null) {
-				convertView = LayoutInflater.from(getContext()).inflate(
-						R.layout.cell_incoming_message, null);
+				if (fromJid.equals(myJid)) {
+					convertView = LayoutInflater.from(getContext()).inflate(
+							R.layout.cell_incoming_message_right, null);
+				} else {
+					convertView = LayoutInflater.from(getContext()).inflate(
+							R.layout.cell_incoming_message, null);
+				}
 			}
 
 			// Reference Views.
@@ -416,6 +420,10 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			// Populate Views.
 			textViewMessageBody.setText(message.getText());
 			textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
+
+//			ProfilePictureView profileIcon = (ProfilePictureView) convertView
+//					.findViewById(R.id.profilePictureViewMessageFrom);
+//			profileIcon.setProfileId(fromJid);
 
 			return convertView;
 		}

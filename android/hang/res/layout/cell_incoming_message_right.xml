@@ -5,13 +5,15 @@
     android:focusable="false"
     android:orientation="vertical" >
 
-<!--     <com.facebook.widget.ProfilePictureView
+    <!--
+         <com.facebook.widget.ProfilePictureView
         android:id="@+id/profilePictureViewMessageFrom"
         android:layout_width="30dp"
-        android:layout_height="30dp"
         android:focusable="false"
+        android:layout_height="30dp"
         android:layout_alignParentLeft="true" >
-    </com.facebook.widget.ProfilePictureView> -->
+    </com.facebook.widget.ProfilePictureView>
+    -->
 
     <TextView
         android:id="@+id/textViewMessageBody2"
@@ -20,8 +22,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginLeft="2dp"
+        android:layout_marginRight="3dp"
         android:focusable="false"
-        android:layout_toRightOf="@+id/textViewMessageFrom2"
         android:text="Message body goes here."
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textSize="12sp" />
@@ -31,7 +33,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="3dp"
+        android:layout_marginLeft="2dp"
+        android:layout_toLeftOf="@id/textViewMessageBody2"
         android:focusable="false"
         android:text="(message from)"
         android:textAppearance="?android:attr/textAppearanceSmall"
