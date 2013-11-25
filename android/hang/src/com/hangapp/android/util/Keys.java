@@ -96,6 +96,9 @@ public final class Keys {
 	public static final String FIREBASE_MESSAGES = "messages";
 	public static final String FIREBASE_MEMBERS_PRESENT = "present";
 	
+	public static final String FIREBASE_URL = "https://hangapp.firebaseio.com/";
+	public static final String CHATS_URL = FIREBASE_URL + "chats/";
+	
 	/**
 	 * Flurry Keys
 	 */

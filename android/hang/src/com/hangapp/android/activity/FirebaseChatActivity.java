@@ -28,6 +28,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
@@ -85,8 +86,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	/* Stuff added for Firebase */
 	private boolean isHost = false;
 	private static final String TAG = "FirebaseChatActivity";
-	private static final String FIREBASE_URL = "https://hangapp.firebaseio.com/";
-	private static final String CHATS_URL = FIREBASE_URL + "chats/";
+
 	private Firebase chatFirebase;
 	private Firebase chatMembersFirebase;
 	private Firebase chatMemberMyselfFirebase;
@@ -149,7 +149,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	}
 
 	private void setupChatFirebase() {
-		String chatFirebaseUrl = CHATS_URL + mucName;
+		String chatFirebaseUrl = Keys.CHATS_URL + mucName;
 		chatFirebase = new Firebase(chatFirebaseUrl);
 		chatHostFirebase = new Firebase(chatFirebaseUrl + "/"
 				+ Keys.FIREBASE_HOST_ID);
@@ -173,8 +173,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		chatMemberMyselfFirebase.setValue(myJid);
 
 		// add yourself to currently present
-		chatMemberPresentMyselfFirebase = chatMembersPresentFirebase
-				.child(myJid);
+		chatMemberPresentMyselfFirebase = chatMembersPresentFirebase.child(myJid);
 		chatMemberPresentMyselfFirebase.setValue(myJid);
 		chatMemberPresentMyselfFirebase.onDisconnect().removeValue();
 
@@ -262,6 +261,27 @@ public final class FirebaseChatActivity extends BaseActivity implements
 					}
 				});
 
+		chatFirebase.addValueEventListener(new ValueEventListener() {
+
+			@Override
+			public void onDataChange(DataSnapshot arg0) {
+				if (arg0.hasChildren() == false) {
+					Toast.makeText(
+							getApplicationContext(),
+							database.getIncomingUser(mucName).getFirstName()
+									+ " deleted his proposal!", Toast.LENGTH_SHORT)
+							.show();
+					finish();
+				}
+			}
+
+			@Override
+			public void onCancelled(FirebaseError arg0) {
+			}
+		});
+
+		// chatFirebase.onDisconnect()ChatMessage
+
 		// Refresh list
 		onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
 
@@ -302,15 +322,15 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		// Get IDs of Interested users WHO ARE NOT PRESENT in the chat
 		List<String> usersToNotify = new ArrayList<String>();
 		List<String> interestedList = isHost ? database.getMyProposal()
-				.getInterested() : database.getIncomingUser(mucName)
-				.getProposal().getInterested();
+				.getInterested() : database.getIncomingUser(mucName).getProposal()
+				.getInterested();
 		for (String userJid : interestedList) {
 			if (!otherPresentUsers.contains(userJid) && !userJid.equals(myJid)) {
 				Log.d(TAG, "will send to " + userJid);
 				usersToNotify.add(userJid);
 			}
 		}
-		if (!isHost) {
+		if (!isHost && !otherPresentUsers.contains(mucName)) {
 			usersToNotify.add(mucName);
 		}
 
@@ -339,8 +359,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				Log.d(TAG, LOG_ID + "Sent message \"" + message + "\"");
 			} else {
 				Log.e(TAG, LOG_ID + "Failed to send message.");
-				Toast.makeText(getApplicationContext(),
-						"Error sending message", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Error sending message",
+						Toast.LENGTH_SHORT).show();
 			}
 
 			buttonSendMessage.setEnabled(true);
@@ -423,9 +443,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			textViewMessageBody.setText(message.getText());
 			textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
 
-//			ProfilePictureView profileIcon = (ProfilePictureView) convertView
-//					.findViewById(R.id.profilePictureViewMessageFrom);
-//			profileIcon.setProfileId(fromJid);
+			// ProfilePictureView profileIcon = (ProfilePictureView) convertView
+			// .findViewById(R.id.profilePictureViewMessageFrom);
+			// profileIcon.setProfileId(fromJid);
 
 			return convertView;
 		}
@@ -440,8 +460,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			if (!database.getMyProposal().getInterested()
 					.equals(listInterestedJids)) {
 				listInterestedJids.clear();
-				listInterestedJids.addAll(database.getMyProposal()
-						.getInterested());
+				listInterestedJids.addAll(database.getMyProposal().getInterested());
 
 				// Update horizontal list
 				updateHorizontalList(listInterestedJids, linLayoutInterested);
@@ -461,12 +480,10 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				if (!hostInterested.equals(listInterestedJids)) {
 
 					listInterestedJids.clear();
-					listInterestedJids.addAll(host.getProposal()
-							.getInterested());
+					listInterestedJids.addAll(host.getProposal().getInterested());
 
 					// Update horizontal list
-					updateHorizontalList(listInterestedJids,
-							linLayoutInterested);
+					updateHorizontalList(listInterestedJids, linLayoutInterested);
 
 					// TODO: If you're not Interested, get lost
 					if (!hostInterested.contains(database.getMyJid())) {
@@ -518,38 +535,30 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						// TODO: This is 100% pointless and should be removed :)
 						switch (new Random().nextInt(2)) {
 						case 0:
-							Toast.makeText(getApplicationContext(),
-									"Look familiar?", Toast.LENGTH_SHORT)
-									.show();
+							Toast.makeText(getApplicationContext(), "Look familiar?",
+									Toast.LENGTH_SHORT).show();
 							return;
 						default:
-							Toast.makeText(getApplicationContext(),
-									"Guess who?", Toast.LENGTH_SHORT).show();
+							Toast.makeText(getApplicationContext(), "Guess who?",
+									Toast.LENGTH_SHORT).show();
 						}
 
 					} else if (database.getIncomingUser(jid) != null) {
 						// Then this is someone broadcasting to me
-						Toast.makeText(
-								getApplicationContext(),
-								"It's "
-										+ database.getIncomingUser(jid)
-												.getFirstName(),
+						Toast.makeText(getApplicationContext(),
+								"It's " + database.getIncomingUser(jid).getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else if (database.getOutgoingUser(jid) != null) {
 						// Then this is someone I'm broadcasting to
-						Toast.makeText(
-								getApplicationContext(),
-								"It's "
-										+ database.getOutgoingUser(jid)
-												.getFirstName(),
+						Toast.makeText(getApplicationContext(),
+								"It's " + database.getOutgoingUser(jid).getFirstName(),
 								Toast.LENGTH_SHORT).show();
 					} else {
 						// This is a stranger to me
 						Toast.makeText(
 								getApplicationContext(),
-								database.getIncomingUser(mucName)
-										.getFirstName() + "'s friend",
-								Toast.LENGTH_SHORT).show();
+								database.getIncomingUser(mucName).getFirstName()
+										+ "'s friend", Toast.LENGTH_SHORT).show();
 					}
 
 				}

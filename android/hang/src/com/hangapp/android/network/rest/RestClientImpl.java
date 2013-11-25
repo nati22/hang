@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
@@ -113,6 +114,11 @@ public final class RestClientImpl implements RestClient {
 		String jid = database.getMyJid();
 
 		new DeleteMyProposalAsyncTask(database, context, jid).execute();
+		
+		// Delete User info on Firebase
+		String chatFirebaseUrl = Keys.CHATS_URL + jid;
+		Firebase chatFirebase = new Firebase(chatFirebaseUrl);
+		chatFirebase.setValue(null);
 	}
 
 	@Override

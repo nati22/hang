@@ -83,7 +83,7 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 
 		// Send a DELETE request to the server to delete my Proposal
 		restClient.deleteMyProposal();
-
+		
 		// Dismiss the modal dialog.
 		dismiss();
 	}
