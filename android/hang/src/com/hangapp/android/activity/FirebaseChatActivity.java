@@ -310,9 +310,11 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				usersToNotify.add(userJid);
 			}
 		}
+		if (!isHost) {
+			usersToNotify.add(mucName);
+		}
 
 		restClient.sendChatNotification(usersToNotify, mucName);
-
 	}
 
 	private class GetNtpTimeTask extends AsyncTask<String, Void, Void> {
