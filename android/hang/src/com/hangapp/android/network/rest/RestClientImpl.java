@@ -102,6 +102,7 @@ public final class RestClientImpl implements RestClient {
 				parameters.add(new BasicNameValuePair(Keys.PROPOSAL_CONFIRMED,
 						confirmedUserJid));
 			}
+			
 		}
 
 		new PutProposalAsyncTask(context, jid, parameters).execute();

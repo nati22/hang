@@ -155,7 +155,7 @@ final class NativeProtocol {
     // EXTRA_PERMISSIONS
 
     // Values of EXTRA_PROTOCOL_ACTION supported by PlatformActivity:
-    static final String ACTION_LOGIN_DIALOG = "com.facebook.platform.action.request.LOGIN_DIALOG";
+    static final String ACTION_LOGIN_DIALOG = "com.facebook.platform.action.request.LOGIN_DIALOG"; 
 
     // Values of EXTRA_PROTOCOL_ACTION values returned by PlatformActivity:
     static final String ACTION_LOGIN_DIALOG_REPLY =
@@ -200,7 +200,7 @@ final class NativeProtocol {
                     .setAction(INTENT_ACTION_PLATFORM_ACTIVITY)
                     .addCategory(Intent.CATEGORY_DEFAULT)
                     .putExtra(EXTRA_PROTOCOL_VERSION, PROTOCOL_VERSION_20121101)
-                    .putExtra(EXTRA_PROTOCOL_ACTION, ACTION_LOGIN_DIALOG)
+                    .putExtra(EXTRA_PROTOCOL_ACTION, /*ACTION_LOGIN_DIALOG*/"")
                     .putExtra(EXTRA_APPLICATION_ID, applicationId)
                     .putStringArrayListExtra(EXTRA_PERMISSIONS, ensureDefaultPermissions(permissions))
                     .putExtra(EXTRA_WRITE_PRIVACY, ensureDefaultAudience(audience));
