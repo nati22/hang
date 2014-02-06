@@ -23,7 +23,7 @@ import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 
 import com.hangapp.android.R;
-import com.hangapp.android.activity.ChatActivity;
+import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.database.Database;
 
 public final class Utils {
@@ -120,13 +120,13 @@ public final class Utils {
 
 	public static void showChatNotification(Context context, String title,
 			String notificationString, String hostJid) {
-		Intent nudgeIntent = new Intent(context, ChatActivity.class);
+		Intent nudgeIntent = new Intent(context, FirebaseChatActivity.class);
 		nudgeIntent.putExtra(Keys.HOST_JID, hostJid);
 
 		// Open up ChatActivity, but put HomeActivity behind it on the
 		// Android Activity back stack.
 		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-		stackBuilder.addParentStack(ChatActivity.class);
+		stackBuilder.addParentStack(FirebaseChatActivity.class);
 		stackBuilder.addNextIntent(nudgeIntent);
 		PendingIntent pendingIntent = stackBuilder.getPendingIntent(0,
 				PendingIntent.FLAG_UPDATE_CURRENT);
