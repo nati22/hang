@@ -19,7 +19,6 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
-import com.hangapp.android.activity.ChatActivity;
 import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
