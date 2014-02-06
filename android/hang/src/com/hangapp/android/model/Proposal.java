@@ -102,12 +102,12 @@ public final class Proposal {
 		// TODO: For now, Proposals expire after 2 hours.
 
 		long diff = startTime.toDate().getTime() - new Date().getTime();
-		int min = (int) (diff / (60 * 1000));
+		int minLeft = (int) (diff / (60 * 1000));
 
-		if (min < PROPOSAL_DURATION_IN_HOURS * 60) {
-			return true;
-		} else {
+		if (minLeft < 0 - PROPOSAL_DURATION_IN_HOURS * 60) {
 			return false;
+		} else {
+			return true;
 		}
 	}
 
