@@ -8,10 +8,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.firebase.client.Firebase;
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
+import com.hangapp.android.util.Keys;
 
 /**
  * This is the dialog that comes up when you try and delete your own Proposal
@@ -62,6 +64,11 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				deleteMyProposal();
+				
+				// Need to delete Firebase Proposal chat here.
+				String chatFirebaseUrl = Keys.CHATS_URL + Database.getInstance().getMyJid();
+				Firebase chatFirebase = new Firebase(chatFirebaseUrl);
+				chatFirebase.setValue(null);
 			}
 		});
 		buttonCancelDeleteProposal.setOnClickListener(new OnClickListener() {

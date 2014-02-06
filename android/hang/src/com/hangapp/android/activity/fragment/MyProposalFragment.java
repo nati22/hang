@@ -125,10 +125,6 @@ public final class MyProposalFragment extends SherlockFragment {
 				deleteProposalDialogFragment.show(fm,
 						"fragment_delete_proposal");
 				
-				// Need to delete Firebase Proposal chat here.
-				String chatFirebaseUrl = Keys.CHATS_URL + Database.getInstance().getMyJid();
-				Firebase chatFirebase = new Firebase(chatFirebaseUrl);
-				chatFirebase.setValue(null);
 			}
 		});
 

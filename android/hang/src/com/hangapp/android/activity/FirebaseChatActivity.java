@@ -265,13 +265,21 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			@Override
 			public void onDataChange(DataSnapshot arg0) {
+
 				if (arg0.hasChildren() == false) {
-					Toast.makeText(
-							getApplicationContext(),
-							database.getIncomingUser(mucName).getFirstName()
-									+ " deleted his proposal!", Toast.LENGTH_SHORT)
-							.show();
-					finish();
+
+					if (!mucName.equals(database.getMyJid())) {
+
+						User guy = database.getIncomingUser(mucName);
+
+						if (guy != null) {
+							Toast.makeText(getApplicationContext(),
+									guy.getFirstName() + " deleted his proposal!",
+									Toast.LENGTH_SHORT).show();
+						}
+
+						finish();
+					}
 				}
 			}
 
