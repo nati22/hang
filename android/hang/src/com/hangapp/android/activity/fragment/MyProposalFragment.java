@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
+import com.firebase.client.Firebase;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.database.Database;
@@ -123,6 +124,11 @@ public final class MyProposalFragment extends SherlockFragment {
 				DeleteProposalDialogFragment deleteProposalDialogFragment = new DeleteProposalDialogFragment();
 				deleteProposalDialogFragment.show(fm,
 						"fragment_delete_proposal");
+				
+				// Need to delete Firebase Proposal chat here.
+				String chatFirebaseUrl = Keys.CHATS_URL + Database.getInstance().getMyJid();
+				Firebase chatFirebase = new Firebase(chatFirebaseUrl);
+				chatFirebase.setValue(null);
 			}
 		});
 
