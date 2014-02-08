@@ -273,7 +273,7 @@ public class ProposalsFragment extends SherlockFragment implements
 
 				//
 				if (user.getProposal() == null
-						/*|| !user.getProposal().isActive()*/) {
+						|| !user.getProposal().isActive()) {
 					Log.d("ProposalsFragment.onIncomingBroadcastsUpdate",
 							"removing user " + user.getFirstName());
 					iterator.remove();
