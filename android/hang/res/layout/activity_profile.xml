@@ -20,6 +20,13 @@
             android:background="@android:color/white"
             android:padding="2dp"
             android:src="@drawable/ic_action_profile_icon" />
+        
+        <ImageView
+            android:id="@+id/circleView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_toRightOf="@id/profilePictureViewFriendsIcon"
+            android:layout_alignBottom="@id/profilePictureViewFriendsIcon"/>
 
         <TextView
             android:id="@+id/textViewFriendsName"

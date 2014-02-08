@@ -1,10 +1,27 @@
 package com.hangapp.android.activity;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.XMLReader;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,6 +81,9 @@ public final class ProfileActivity extends BaseActivity implements
 	private TextView textViewProposalInterestedCount;
 	private LinearLayout linLayoutInterested;
 
+	/** testing circle icon **/
+	private ImageView circleView;
+
 	// Member datum.
 	private List<String> listInterestedJids = new ArrayList<String>();
 	private User friend;
@@ -117,6 +137,9 @@ public final class ProfileActivity extends BaseActivity implements
 		textViewProposalInterestedCount = (TextView) findViewById(R.id.textViewMyProposalInterestedCount);
 		checkBoxInterested = (CheckBox) findViewById(R.id.checkBoxInterested);
 		linLayoutInterested = (LinearLayout) findViewById(R.id.linearLayoutInterested);
+
+		/** testing circle icon **/
+		circleView = (ImageView) findViewById(R.id.circleView);
 
 		// Set OnClickListeners.
 		imageViewOpenChat.setOnClickListener(new OnClickListener() {
@@ -266,12 +289,98 @@ public final class ProfileActivity extends BaseActivity implements
 
 	}
 
+	public static Bitmap getFacebookProfilePicture(String userID) throws IOException{
+	    URL imageURL = new URL("http://graph.facebook.com/" + userID + "/picture?type=large");
+	    Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+
+	    return bitmap;
+	}
+	
+	public static Bitmap getCroppedBitmap(Bitmap bitmap) {
+	    Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+	            bitmap.getHeight(), Config.ARGB_8888);
+	    Canvas canvas = new Canvas(output);
+
+	    final int color = 0xff424242;
+	    final Paint paint = new Paint();
+	    final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+	    paint.setAntiAlias(true);
+	    canvas.drawARGB(0, 0, 0, 0);
+	    paint.setColor(color);
+	    // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+	    canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+	            bitmap.getWidth() / 2, paint);
+	    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+	    canvas.drawBitmap(bitmap, rect, rect, paint);
+	    //Bitmap _bmp = Bitmap.createScaledBitmap(output, 60, 60, false);
+	    //return _bmp;
+	    return output;
+	}
+	
+	class GetCroppedCircleIcon extends AsyncTask<String, Void, Bitmap> {
+
+	    private Exception exception;
+
+	    protected Bitmap doInBackground(String... urls) {
+	        try {
+	      	  URL imageURL = new URL("http://graph.facebook.com/" + friend.getJid() + "/picture?type=large");
+	    	    Bitmap bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+
+	    	    return bitmap;
+	        } catch (Exception e) {
+	            this.exception = e;
+	            return null;
+	        }
+	    }
+
+	    protected void onPostExecute(Bitmap bitmap) {
+	       
+	   	 // Code to turn bitmap into circle (not always successfully)
+	   	 
+	   	 Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+		            bitmap.getHeight(), Config.ARGB_8888);
+		    Canvas canvas = new Canvas(output);
+
+		    final int color = 0xff424242;
+		    final Paint paint = new Paint();
+		    final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+		    paint.setAntiAlias(true);
+		    canvas.drawARGB(0, 0, 0, 0);
+		    paint.setColor(color);
+		    // canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+		    canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+		            bitmap.getWidth() / 2, paint);
+		    paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+		    canvas.drawBitmap(bitmap, rect, rect, paint);
+	   	
+		    
+		    circleView.setImageBitmap(output);
+	    }
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 
 		// Populate Views.
 		profilePictureViewFriendIcon.setProfileId(friend.getJid());
+
+		new GetCroppedCircleIcon().execute();
+	/*	Bitmap theBitmap = null;
+		try {
+			theBitmap = getFacebookProfilePicture(friend.getJid());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (theBitmap != null)
+			circleView.setImageBitmap(theBitmap);
+		else
+			Toast.makeText(getApplicationContext(), "null", Toast.LENGTH_SHORT)
+					.show();*/
 		textViewFriendsName.setText(friend.getFullName());
 
 		updateAvailabilityIcon(database.getIncomingUser(friend.getJid())
@@ -305,6 +414,9 @@ public final class ProfileActivity extends BaseActivity implements
 						+ "'s proposal already seen");
 			}
 		}
+		
+		// REMOVE: let's try to get the profile picture bitmap here
+		
 	}
 
 	private void updateAvailabilityIcon(Availability availability) {
