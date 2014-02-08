@@ -5,15 +5,13 @@
     android:focusable="false"
     android:orientation="vertical" >
 
-    <!--
-         <com.facebook.widget.ProfilePictureView
+    <com.facebook.widget.ProfilePictureView
         android:id="@+id/profilePictureViewMessageFrom"
         android:layout_width="30dp"
-        android:focusable="false"
         android:layout_height="30dp"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true"
+        android:focusable="false" >
     </com.facebook.widget.ProfilePictureView>
-    -->
 
     <TextView
         android:id="@+id/textViewMessageBody2"

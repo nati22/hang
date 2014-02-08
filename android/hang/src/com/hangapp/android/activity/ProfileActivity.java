@@ -119,6 +119,9 @@ public final class ProfileActivity extends BaseActivity implements
 			Log.e("ProfileActivity.onCreate", "Host with jid: " + hostJid
 					+ " was null in the Database.");
 			finish();
+			Toast.makeText(getApplicationContext(),
+					"user " + hostJid + " is null", Toast.LENGTH_SHORT).show();
+			return;
 		}
 
 		// Enable the "Up" button.
@@ -372,6 +375,8 @@ public final class ProfileActivity extends BaseActivity implements
 		// Populate Views.
 		profilePictureViewFriendIcon.setProfileId(friend.getJid());
 
+		// new GetCroppedCircleIcon().exec
+
 		profilePictureViewFriendIcon.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -402,7 +407,8 @@ public final class ProfileActivity extends BaseActivity implements
 					paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
 					canvas.drawBitmap(bitmap, rect, rect, paint);
 
-					circleView.setBackgroundDrawable(new BitmapDrawable(getResources(), output));
+					circleView.setBackgroundDrawable(new BitmapDrawable(
+							getResources(), output));
 					Log.e("ggg", "lolz   fbImage != null");
 				} else {
 					Log.e("lolz", "lolz  bM == null");

@@ -332,17 +332,24 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		List<String> interestedList = isHost ? database.getMyProposal()
 				.getInterested() : database.getIncomingUser(mucName).getProposal()
 				.getInterested();
-		for (String userJid : interestedList) {
-			if (!otherPresentUsers.contains(userJid) && !userJid.equals(myJid)) {
-				Log.d(TAG, "will send to " + userJid);
-				usersToNotify.add(userJid);
+		
+		// Let's only send notifications if there are actually users to send them to
+		if (interestedList.size() > 0) {
+			for (String userJid : interestedList) {
+				if (!otherPresentUsers.contains(userJid) && !userJid.equals(myJid)) {
+					Log.d(TAG, "will send to " + userJid);
+					usersToNotify.add(userJid);
+				}
 			}
-		}
-		if (!isHost && !otherPresentUsers.contains(mucName)) {
-			usersToNotify.add(mucName);
-		}
+			
+			// Send a notification to the other host as well, if applicable
+			if (!isHost && !otherPresentUsers.contains(mucName)) {
+				usersToNotify.add(mucName);
+			}
 
-		restClient.sendChatNotification(usersToNotify, mucName);
+			restClient.sendChatNotification(usersToNotify, mucName);
+		}
+		
 	}
 
 	private class GetNtpTimeTask extends AsyncTask<String, Void, Void> {
@@ -417,13 +424,18 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			String fromJid = message.getJid();
 
+			User fromUser = Database.getInstance().getIncomingUser(fromJid);
+
 			// Set the name
 			String fromName = "Stranger";
 			if (myJid.equals(fromJid)) {
 				fromName = "Me";
-			} else if (Database.getInstance().getIncomingUser(fromJid) != null) {
-				fromName = Database.getInstance().getIncomingUser(fromJid)
-						.getFullName();
+			} else if (fromUser != null) {
+				fromName = fromUser.getFullName();
+			} else {
+				Log.e(TAG, "Error recognizing jid " + fromJid);
+				Toast.makeText(getApplicationContext(), "Error recognizing user",
+						Toast.LENGTH_SHORT).show();
 			}
 
 			long secs = Long.parseLong(message.getTime());
@@ -451,9 +463,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			textViewMessageBody.setText(message.getText());
 			textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
 
-			// ProfilePictureView profileIcon = (ProfilePictureView) convertView
-			// .findViewById(R.id.profilePictureViewMessageFrom);
-			// profileIcon.setProfileId(fromJid);
+			ProfilePictureView profileIcon = (ProfilePictureView) convertView
+					.findViewById(R.id.profilePictureViewMessageFrom);
+			profileIcon.setProfileId(fromJid);
 
 			return convertView;
 		}
