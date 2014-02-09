@@ -421,31 +421,43 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// Log.e(TAG, LOG_ID + "getView called");
-
+		
 			ChatMessage message = getItem(position);
-
 			String fromJid = message.getJid();
-			boolean sameAuthor = false;
+			
+			final User fromUser = Database.getInstance().getIncomingUser(fromJid);
+			
+			boolean isMyMessage = false;
 
-			// Here we check if the item in the previous position is from the user.
-			if (position % 3 == 0 && position != 0) {
+			// Inflate the cell if necessary.
+			if (convertView == null) {
+				if (fromJid.equals(myJid)) {
+					convertView = LayoutInflater.from(getContext()).inflate(
+							R.layout.cell_outgoing_message, null);
+					isMyMessage = true;
+				} else {
+					convertView = LayoutInflater.from(getContext()).inflate(
+							R.layout.cell_incoming_message, null);
+					isMyMessage = false;
+				}
+			} else {
+				// convertview already exists
+			}
+			
+			boolean sameSender = false;
+
+			// Determine if previous message is from the same sender
+			if (position != 0) {
 				ChatMessage prevMessage = getItem(position - 1);
-
-				Log.d(TAG, "message = \"" + message.text + "\"");
-				Log.d(TAG, "prev message = \"" + prevMessage.text + "\"");
-
+				
 				if (prevMessage.jid.equals(fromJid)) {
-					sameAuthor = true;
+					sameSender = true;
 					Log.d(TAG, "same author");
 				} else {
 					Log.d(TAG, "diff author");
 				}
 			}
-
-			// Here I can try to get the view
-
-			User fromUser = Database.getInstance().getIncomingUser(fromJid);
+			
 
 			// Set the name
 			String fromName = "Stranger";
@@ -463,16 +475,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
 			String time = sdf.format(new Date(secs));
 
-			// Inflate the cell if necessary.
-			if (convertView == null) {
-				if (fromJid.equals(myJid)) {
-					convertView = LayoutInflater.from(getContext()).inflate(
-							R.layout.cell_outgoing_message, null);
-				} else {
-					convertView = LayoutInflater.from(getContext()).inflate(
-							R.layout.cell_incoming_message, null);
-				}
-			}
+		
 
 			// Reference Views.
 			TextView textViewMessageFrom = (TextView) convertView
@@ -486,7 +489,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			textViewMessageFrom.setText(fromName);
 
 			//
-			if (sameAuthor) {
+			if (sameSender) {
 				((View) convertView.findViewById(R.id.bottom_divider))
 						.setVisibility(View.INVISIBLE);
 				((ProfilePictureView) convertView
@@ -501,6 +504,14 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			}
 
 			return convertView;
+		}
+		
+		class ViewHolder {
+			ProfilePictureView profilePictureView;
+			TextView textViewMsgFrom;
+			LinearLayout linLayoutMsgList;
+			TextView textViewFirstMsg;
+			View viewBottomDivider;
 		}
 	}
 
