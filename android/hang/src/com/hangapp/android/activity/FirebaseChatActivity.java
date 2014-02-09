@@ -478,76 +478,51 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				holder = (ViewHolder) convertView.getTag();
 			}
 
-			// Realign if it's from someone else
-			/*
-			 * Because of the way the adapter recycles views I can't depend on the
-			 * xml preset values, since a left aligned view that was moved to right
-			 * may be recycled and reused with different values (and vice-versa).
-			 */
-			if (!isMyMessage) {
+			// Align xml assets according to sender
+			{
+				/*
+				 * Because of the way the adapter recycles views I can't depend on
+				 * the xml preset values, since a left aligned view that was moved
+				 * to right may be recycled and reused with different values (and
+				 * vice-versa).
+				 */
+
+				int alignRight = RelativeLayout.ALIGN_PARENT_RIGHT;
+				int alignLeft = RelativeLayout.ALIGN_PARENT_LEFT;
+
 				// move profile pic to other side
 				RelativeLayout.LayoutParams paramsProfilePic = new RelativeLayout.LayoutParams(
 						(int) getResources().getDimension(
 								R.dimen.chat_profile_picture_height),
 						(int) getResources().getDimension(
 								R.dimen.chat_profile_picture_height));
-				paramsProfilePic.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				paramsProfilePic.addRule(isMyMessage ? alignRight : alignLeft);
 				holder.profilePictureView.setLayoutParams(paramsProfilePic);
 
 				// move user name to other side
 				RelativeLayout.LayoutParams paramsTextViewFrom = new RelativeLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsTextViewFrom.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				paramsTextViewFrom.addRule(isMyMessage ? alignRight : alignLeft);
 				paramsTextViewFrom.addRule(RelativeLayout.BELOW,
 						R.id.profilePictureViewMessageFrom);
-				holder.textViewMsgFrom.setLayoutParams(paramsProfilePic);
+				holder.textViewMsgFrom.setLayoutParams(paramsTextViewFrom);
 
 				// move message list to other side
 				RelativeLayout.LayoutParams paramsLinLayout = new RelativeLayout.LayoutParams(
 						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				paramsLinLayout.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-				paramsLinLayout.addRule(RelativeLayout.RIGHT_OF,
-						R.id.profilePictureViewMessageFrom);
+				paramsLinLayout.addRule(isMyMessage ? alignRight : alignLeft);
+				paramsLinLayout.addRule(isMyMessage ? RelativeLayout.LEFT_OF
+						: RelativeLayout.RIGHT_OF, holder.profilePictureView.getId());
 				holder.linLayoutMsgList.setLayoutParams(paramsLinLayout);
 
 				// move first message text to other side
 				RelativeLayout.LayoutParams paramsTextViewFirstMsg = new RelativeLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsTextViewFirstMsg.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+				paramsTextViewFirstMsg
+						.addRule(isMyMessage ? alignLeft : alignRight);
 				holder.linLayoutMsgList.setLayoutParams(paramsTextViewFirstMsg);
-			} else {
-				// move profile pic to other side
-				RelativeLayout.LayoutParams paramsProfilePic = new RelativeLayout.LayoutParams(
-						(int) getResources().getDimension(
-								R.dimen.chat_profile_picture_height),
-						(int) getResources().getDimension(
-								R.dimen.chat_profile_picture_height));
-				paramsProfilePic.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-				holder.profilePictureView.setLayoutParams(paramsProfilePic);
 
-				// move user name to other side
-				RelativeLayout.LayoutParams paramsTextViewFrom = new RelativeLayout.LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsTextViewFrom.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-				paramsTextViewFrom.addRule(RelativeLayout.BELOW,
-						holder.profilePictureView.getId());
-				holder.textViewMsgFrom.setLayoutParams(paramsProfilePic);
-
-				// move message list to other side
-				RelativeLayout.LayoutParams paramsLinLayout = new RelativeLayout.LayoutParams(
-						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				paramsLinLayout.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-				paramsLinLayout.addRule(RelativeLayout.LEFT_OF,
-						R.id.profilePictureViewMessageFrom);
-				holder.linLayoutMsgList.setLayoutParams(paramsLinLayout);
-
-				// move first message text to other side
-				RelativeLayout.LayoutParams paramsTextViewFirstMsg = new RelativeLayout.LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsTextViewFirstMsg.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-				holder.linLayoutMsgList.setLayoutParams(paramsTextViewFirstMsg);
 			}
-
 			/*
 			 * // Determine if previous message is from the same sender boolean
 			 * sameSender = false;
