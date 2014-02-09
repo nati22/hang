@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 import android.content.Context;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -20,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -424,19 +426,24 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			ChatMessage message = getItem(position);
 
 			String fromJid = message.getJid();
+			boolean sameAuthor = false;
 
 			// Here we check if the item in the previous position is from the user.
 			if (position % 3 == 0 && position != 0) {
 				ChatMessage prevMessage = getItem(position - 1);
+
 				Log.d(TAG, "message = \"" + message.text + "\"");
 				Log.d(TAG, "prev message = \"" + prevMessage.text + "\"");
 
 				if (prevMessage.jid.equals(fromJid)) {
+					sameAuthor = true;
 					Log.d(TAG, "same author");
 				} else {
 					Log.d(TAG, "diff author");
 				}
 			}
+
+			// Here I can try to get the view
 
 			User fromUser = Database.getInstance().getIncomingUser(fromJid);
 
@@ -448,7 +455,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				fromName = fromUser.getFirstName();
 			} else {
 				Log.e(TAG, "Error recognizing jid " + fromJid);
-				Toast.makeText(getApplicationContext(), "Error recognizing user",
+				Toast.makeText(getContext(), "Error recognizing user",
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -475,12 +482,23 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			// Populate Views.
 			textViewMessageBody.setText(message.getText());
-	//		textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
+			// textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
 			textViewMessageFrom.setText(fromName);
-			
-			ProfilePictureView profileIcon = (ProfilePictureView) convertView
-					.findViewById(R.id.profilePictureViewMessageFrom);
-			profileIcon.setProfileId(fromJid);
+
+			//
+			if (sameAuthor) {
+				((View) convertView.findViewById(R.id.bottom_divider))
+						.setVisibility(View.INVISIBLE);
+				((ProfilePictureView) convertView
+						.findViewById(R.id.profilePictureViewMessageFrom))
+						.setVisibility(View.GONE);
+				((TextView) convertView.findViewById(R.id.textViewMessageFrom2))
+						.setVisibility(View.GONE);
+			} else {
+				ProfilePictureView profileIcon = (ProfilePictureView) convertView
+						.findViewById(R.id.profilePictureViewMessageFrom);
+				profileIcon.setProfileId(fromJid);
+			}
 
 			return convertView;
 		}

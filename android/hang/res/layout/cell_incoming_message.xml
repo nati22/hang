@@ -38,4 +38,12 @@
         android:textColor="@color/blue_muc_chat"
         android:textSize="12sp" />
 
+    <View
+        android:id="@+id/bottom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/Gray"
+        android:visibility="visible" />
+
 </RelativeLayout>

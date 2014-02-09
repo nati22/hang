@@ -255,7 +255,11 @@ public final class ProfileActivity extends BaseActivity implements
 
 		if (database == null)
 			Log.e(TAG, "DATABASE IS NULL IN ONINCOMINGBROADCASTSUPDATE");
-
+		if (friend == null) {
+			Log.e(TAG, "friend == null");
+			Toast.makeText(getApplicationContext(), "friend == null", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		// If friend is still broadcasting to you
 		User broadcastingFriend = database.getIncomingUser(friend.getJid());
 

@@ -30,10 +30,11 @@
         android:id="@+id/linLayoutChatMessages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/profilePictureViewMessageFrom"
         android:layout_toLeftOf="@id/profilePictureViewMessageFrom"
         android:orientation="vertical"
-        android:layout_alignParentLeft="true"
-        android:paddingLeft="5dp">
+        android:paddingLeft="5dp" >
 
         <TextView
             android:id="@+id/textViewMessageBody2"
@@ -46,7 +47,15 @@
             android:focusable="false"
             android:text="Message body goes here."
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="12sp" />
+            android:textSize="14sp" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/bottom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/Gray"
+        android:visibility="visible" />
 
 </RelativeLayout>
