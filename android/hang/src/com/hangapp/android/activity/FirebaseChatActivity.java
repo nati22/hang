@@ -462,6 +462,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						.findViewById(R.id.profilePictureViewMessageFrom);
 				holder.textViewMsgFrom = (TextView) convertView
 						.findViewById(R.id.textViewMessageFrom2);
+				holder.linLayoutProfilePicHolder = (LinearLayout) convertView
+						.findViewById(R.id.profilePictureViewHolder);
 				holder.linLayoutMsgList = (LinearLayout) convertView
 						.findViewById(R.id.linLayoutChatMessages);
 				holder.textViewFirstMsg = (TextView) convertView
@@ -490,22 +492,32 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				int alignRight = RelativeLayout.ALIGN_PARENT_RIGHT;
 				int alignLeft = RelativeLayout.ALIGN_PARENT_LEFT;
 
-				// move profile pic to other side
-				RelativeLayout.LayoutParams paramsProfilePic = new RelativeLayout.LayoutParams(
+				// move profile pic holder to other side
+				RelativeLayout.LayoutParams paramsProfilePicHolder = new RelativeLayout.LayoutParams(
 						(int) getResources().getDimension(
-								R.dimen.chat_profile_picture_height),
-						(int) getResources().getDimension(
-								R.dimen.chat_profile_picture_height));
-				paramsProfilePic.addRule(isMyMessage ? alignRight : alignLeft);
-				holder.profilePictureView.setLayoutParams(paramsProfilePic);
+								R.dimen.chat_user_name_width),
+						LayoutParams.WRAP_CONTENT);
+				paramsProfilePicHolder.addRule(isMyMessage ? alignRight : alignLeft);
+				holder.linLayoutProfilePicHolder.setLayoutParams(paramsProfilePicHolder);
 
-				// move user name to other side
-				RelativeLayout.LayoutParams paramsTextViewFrom = new RelativeLayout.LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsTextViewFrom.addRule(isMyMessage ? alignRight : alignLeft);
-				paramsTextViewFrom.addRule(RelativeLayout.BELOW,
-						R.id.profilePictureViewMessageFrom);
-				holder.textViewMsgFrom.setLayoutParams(paramsTextViewFrom);
+				/*
+				 * // move profile pic to other side 
+				 * RelativeLayout.LayoutParams paramsProfilePic = new RelativeLayout.LayoutParams( (int)
+				 * getResources().getDimension(
+				 * R.dimen.chat_profile_picture_height), (int)
+				 * getResources().getDimension(
+				 * R.dimen.chat_profile_picture_height));
+				 * paramsProfilePic.addRule(isMyMessage ? alignRight : alignLeft);
+				 * holder.profilePictureView.setLayoutParams(paramsProfilePic);
+				 * 
+				 * // move user name to other side 
+				 * RelativeLayout.LayoutParams paramsTextViewFrom = new RelativeLayout.LayoutParams(
+				 * LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				 * paramsTextViewFrom.addRule(isMyMessage ? alignRight : alignLeft);
+				 * paramsTextViewFrom.addRule(RelativeLayout.BELOW,
+				 * R.id.profilePictureViewMessageFrom);
+				 * holder.textViewMsgFrom.setLayoutParams(paramsTextViewFrom);
+				 */
 
 				// move message list to other side
 				RelativeLayout.LayoutParams paramsLinLayout = new RelativeLayout.LayoutParams(
@@ -523,7 +535,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				holder.linLayoutMsgList.setLayoutParams(paramsTextViewFirstMsg);
 
 			}
-			
+
 			/*
 			 * // Determine if previous message is from the same sender boolean
 			 * sameSender = false;
@@ -564,8 +576,8 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			holder.profilePictureView.setProfileId(fromJid);
 
-			// Group msgs from same sender together
-			/*
+			/*// Group msgs from same sender together
+			
 			 * if (sameSender) { ((View)
 			 * convertView.findViewById(R.id.bottom_divider))
 			 * .setVisibility(View.INVISIBLE); ((ProfilePictureView) convertView
@@ -582,6 +594,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		}
 
 		class ViewHolder {
+			LinearLayout linLayoutProfilePicHolder;
 			ProfilePictureView profilePictureView;
 			TextView textViewMsgFrom;
 			LinearLayout linLayoutMsgList;
