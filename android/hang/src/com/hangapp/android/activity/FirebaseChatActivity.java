@@ -414,82 +414,111 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 	class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
+		Database db;
+
 		public ChatMessageAdapter(Context context, int textViewResourceId) {
 			super(context, textViewResourceId,
 					FirebaseChatActivity.this.chatMessages);
+			db = Database.getInstance();
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-		
+			ViewHolder holder;
+
 			ChatMessage message = getItem(position);
 			String fromJid = message.getJid();
-			
-			final User fromUser = Database.getInstance().getIncomingUser(fromJid);
-			
-			boolean isMyMessage = false;
+
+			Log.d(TAG, "message = " + message.text);
+			Log.d(TAG, "fromJid = " + fromJid);
+
+			// Determine if the message is from 'Me'
+			boolean isMyMessage = fromJid.equals(db.getMyJid());
+			if (isMyMessage)
+				Log.d(TAG, "message is from me!");
 
 			// Inflate the cell if necessary.
 			if (convertView == null) {
-				if (fromJid.equals(myJid)) {
+				Log.d(TAG, "creating convertView from scratch");
+
+				holder = new ViewHolder();
+
+				if (isMyMessage) {
 					convertView = LayoutInflater.from(getContext()).inflate(
 							R.layout.cell_outgoing_message, null);
-					isMyMessage = true;
+
+					Log.d(TAG, "using outgoing layout");
+
 				} else {
 					convertView = LayoutInflater.from(getContext()).inflate(
 							R.layout.cell_incoming_message, null);
-					isMyMessage = false;
+
+					Log.d(TAG, "using incoming layout");
 				}
+
+				// Reference views
+				holder.profilePictureView = (ProfilePictureView) convertView
+						.findViewById(R.id.profilePictureViewMessageFrom);
+				holder.textViewMsgFrom = (TextView) convertView
+						.findViewById(R.id.textViewMessageFrom2);
+				holder.linLayoutMsgList = (LinearLayout) convertView
+						.findViewById(R.id.linLayoutChatMessages);
+				holder.textViewFirstMsg = (TextView) convertView
+						.findViewById(R.id.textViewMessageBody2);
+				holder.viewBottomDivider = (View) convertView
+						.findViewById(R.id.bottom_divider);
+
+				convertView.setTag(holder);
+
 			} else {
 				// convertview already exists
-			}
-			
-			boolean sameSender = false;
+				Log.i(TAG, "cell for msg '" + message.text + "' is recycled");
 
-			// Determine if previous message is from the same sender
-			if (position != 0) {
-				ChatMessage prevMessage = getItem(position - 1);
-				
-				if (prevMessage.jid.equals(fromJid)) {
-					sameSender = true;
-					Log.d(TAG, "same author");
-				} else {
-					Log.d(TAG, "diff author");
-				}
+				holder = (ViewHolder) convertView.getTag();
 			}
-			
+
+			/*
+			 * // Determine if previous message is from the same sender boolean
+			 * sameSender = false;
+			 * 
+			 * if (position != 0) { ChatMessage prevMessage = getItem(position -
+			 * 1); sameSender = prevMessage.jid.equals(fromJid);
+			 * 
+			 * if (sameSender) { Log.d(TAG, "same author"); } else { Log.d(TAG,
+			 * "diff author"); } }
+			 */
+
+			// If isMyMessage, this will become null
+			User fromUser = db.getIncomingUser(fromJid);
 
 			// Set the name
 			String fromName = "Stranger";
-			if (myJid.equals(fromJid)) {
+			if (isMyMessage) {
 				fromName = "Me";
 			} else if (fromUser != null) {
 				fromName = fromUser.getFirstName();
 			} else {
-				Log.e(TAG, "Error recognizing jid " + fromJid);
-				Toast.makeText(getContext(), "Error recognizing user",
-						Toast.LENGTH_SHORT).show();
+				if (fromJid != null && !(fromJid.length() == 0)) {
+					Log.e(TAG, "Unable to recognize jid " + fromJid);
+				} else {
+					Log.e(TAG, "Empty or null message.getJid() at pos " + position);
+				}
 			}
-
-			long secs = Long.parseLong(message.getTime());
-			SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
-			String time = sdf.format(new Date(secs));
-
-		
-
-			// Reference Views.
-			TextView textViewMessageFrom = (TextView) convertView
-					.findViewById(R.id.textViewMessageFrom2);
-			TextView textViewMessageBody = (TextView) convertView
-					.findViewById(R.id.textViewMessageBody2);
+			/*
+			 * long secs = Long.parseLong(message.getTime()); SimpleDateFormat sdf
+			 * = new SimpleDateFormat("h:mm a"); String time = sdf.format(new
+			 * Date(secs));
+			 */
 
 			// Populate Views.
-			textViewMessageBody.setText(message.getText());
+			holder.textViewFirstMsg.setText(message.getText());
 			// textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
-			textViewMessageFrom.setText(fromName);
+			holder.textViewMsgFrom.setText(fromName);
+			
+			holder.profilePictureView.setProfileId(fromJid);
 
-			//
-			if (sameSender) {
+			// Group msgs from same sender together
+	/*		if (sameSender) {
 				((View) convertView.findViewById(R.id.bottom_divider))
 						.setVisibility(View.INVISIBLE);
 				((ProfilePictureView) convertView
@@ -501,11 +530,11 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				ProfilePictureView profileIcon = (ProfilePictureView) convertView
 						.findViewById(R.id.profilePictureViewMessageFrom);
 				profileIcon.setProfileId(fromJid);
-			}
+			}*/
 
 			return convertView;
 		}
-		
+
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
 			TextView textViewMsgFrom;
