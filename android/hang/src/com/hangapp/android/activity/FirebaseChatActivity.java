@@ -24,6 +24,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.facebook.widget.ProfilePictureView;
 import com.firebase.client.ChildEventListener;
@@ -443,18 +444,18 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 				holder = new ViewHolder();
 
-				if (isMyMessage) {
-					convertView = LayoutInflater.from(getContext()).inflate(
-							R.layout.cell_outgoing_message, null);
+				// if (isMyMessage) {
+				convertView = LayoutInflater.from(getContext()).inflate(
+						R.layout.cell_outgoing_message, null);
 
-					Log.d(TAG, "using outgoing layout");
+				Log.d(TAG, "using outgoing layout");
 
-				} else {
-					convertView = LayoutInflater.from(getContext()).inflate(
-							R.layout.cell_incoming_message, null);
-
-					Log.d(TAG, "using incoming layout");
-				}
+				// } else {
+				// convertView = LayoutInflater.from(getContext()).inflate(
+				// R.layout.cell_incoming_message, null);
+				//
+				// Log.d(TAG, "using incoming layout");
+				// }
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
@@ -475,6 +476,76 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				Log.i(TAG, "cell for msg '" + message.text + "' is recycled");
 
 				holder = (ViewHolder) convertView.getTag();
+			}
+
+			// Realign if it's from someone else
+			/*
+			 * Because of the way the adapter recycles views I can't depend on the
+			 * xml preset values, since a left aligned view that was moved to right
+			 * may be recycled and reused with different values (and vice-versa).
+			 */
+			if (!isMyMessage) {
+				// move profile pic to other side
+				RelativeLayout.LayoutParams paramsProfilePic = new RelativeLayout.LayoutParams(
+						(int) getResources().getDimension(
+								R.dimen.chat_profile_picture_height),
+						(int) getResources().getDimension(
+								R.dimen.chat_profile_picture_height));
+				paramsProfilePic.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				holder.profilePictureView.setLayoutParams(paramsProfilePic);
+
+				// move user name to other side
+				RelativeLayout.LayoutParams paramsTextViewFrom = new RelativeLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsTextViewFrom.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				paramsTextViewFrom.addRule(RelativeLayout.BELOW,
+						R.id.profilePictureViewMessageFrom);
+				holder.textViewMsgFrom.setLayoutParams(paramsProfilePic);
+
+				// move message list to other side
+				RelativeLayout.LayoutParams paramsLinLayout = new RelativeLayout.LayoutParams(
+						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				paramsLinLayout.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+				paramsLinLayout.addRule(RelativeLayout.RIGHT_OF,
+						R.id.profilePictureViewMessageFrom);
+				holder.linLayoutMsgList.setLayoutParams(paramsLinLayout);
+
+				// move first message text to other side
+				RelativeLayout.LayoutParams paramsTextViewFirstMsg = new RelativeLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsTextViewFirstMsg.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+				holder.linLayoutMsgList.setLayoutParams(paramsTextViewFirstMsg);
+			} else {
+				// move profile pic to other side
+				RelativeLayout.LayoutParams paramsProfilePic = new RelativeLayout.LayoutParams(
+						(int) getResources().getDimension(
+								R.dimen.chat_profile_picture_height),
+						(int) getResources().getDimension(
+								R.dimen.chat_profile_picture_height));
+				paramsProfilePic.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+				holder.profilePictureView.setLayoutParams(paramsProfilePic);
+
+				// move user name to other side
+				RelativeLayout.LayoutParams paramsTextViewFrom = new RelativeLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsTextViewFrom.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+				paramsTextViewFrom.addRule(RelativeLayout.BELOW,
+						holder.profilePictureView.getId());
+				holder.textViewMsgFrom.setLayoutParams(paramsProfilePic);
+
+				// move message list to other side
+				RelativeLayout.LayoutParams paramsLinLayout = new RelativeLayout.LayoutParams(
+						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+				paramsLinLayout.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				paramsLinLayout.addRule(RelativeLayout.LEFT_OF,
+						R.id.profilePictureViewMessageFrom);
+				holder.linLayoutMsgList.setLayoutParams(paramsLinLayout);
+
+				// move first message text to other side
+				RelativeLayout.LayoutParams paramsTextViewFirstMsg = new RelativeLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				paramsTextViewFirstMsg.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+				holder.linLayoutMsgList.setLayoutParams(paramsTextViewFirstMsg);
 			}
 
 			/*
@@ -514,23 +585,22 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			holder.textViewFirstMsg.setText(message.getText());
 			// textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
 			holder.textViewMsgFrom.setText(fromName);
-			
+
 			holder.profilePictureView.setProfileId(fromJid);
 
 			// Group msgs from same sender together
-	/*		if (sameSender) {
-				((View) convertView.findViewById(R.id.bottom_divider))
-						.setVisibility(View.INVISIBLE);
-				((ProfilePictureView) convertView
-						.findViewById(R.id.profilePictureViewMessageFrom))
-						.setVisibility(View.GONE);
-				((TextView) convertView.findViewById(R.id.textViewMessageFrom2))
-						.setVisibility(View.GONE);
-			} else {
-				ProfilePictureView profileIcon = (ProfilePictureView) convertView
-						.findViewById(R.id.profilePictureViewMessageFrom);
-				profileIcon.setProfileId(fromJid);
-			}*/
+			/*
+			 * if (sameSender) { ((View)
+			 * convertView.findViewById(R.id.bottom_divider))
+			 * .setVisibility(View.INVISIBLE); ((ProfilePictureView) convertView
+			 * .findViewById(R.id.profilePictureViewMessageFrom))
+			 * .setVisibility(View.GONE); ((TextView)
+			 * convertView.findViewById(R.id.textViewMessageFrom2))
+			 * .setVisibility(View.GONE); } else { ProfilePictureView profileIcon =
+			 * (ProfilePictureView) convertView
+			 * .findViewById(R.id.profilePictureViewMessageFrom);
+			 * profileIcon.setProfileId(fromJid); }
+			 */
 
 			return convertView;
 		}
