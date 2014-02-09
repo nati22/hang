@@ -426,7 +426,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			String fromJid = message.getJid();
 
 			// Here we check if the item in the previous position is from the user.
-			if (position % 3 == 0) {
+			if (position % 3 == 0 && position != 0) {
 				ChatMessage prevMessage = getItem(position - 1);
 				Log.d(TAG, "message = \"" + message.text + "\"");
 				Log.d(TAG, "prev message = \"" + prevMessage.text + "\"");
@@ -445,7 +445,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			if (myJid.equals(fromJid)) {
 				fromName = "Me";
 			} else if (fromUser != null) {
-				fromName = fromUser.getFullName();
+				fromName = fromUser.getFirstName();
 			} else {
 				Log.e(TAG, "Error recognizing jid " + fromJid);
 				Toast.makeText(getApplicationContext(), "Error recognizing user",
@@ -475,8 +475,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			// Populate Views.
 			textViewMessageBody.setText(message.getText());
-			textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
-
+	//		textViewMessageFrom.setText(fromName + " (" + time + ")" + ":  ");
+			textViewMessageFrom.setText(fromName);
+			
 			ProfilePictureView profileIcon = (ProfilePictureView) convertView
 					.findViewById(R.id.profilePictureViewMessageFrom);
 			profileIcon.setProfileId(fromJid);

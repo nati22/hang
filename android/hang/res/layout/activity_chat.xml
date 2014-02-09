@@ -34,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/editTextChatMessage"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/horizontalScrollViewInterestedUsersChat" >
+        android:layout_below="@+id/horizontalScrollViewInterestedUsersChat"
+        android:background="@color/AliceBlue" >
     </ListView>
 
     <!-- Dummy item to prevent AutoCompleteTextView from receiving focus on startup. -->

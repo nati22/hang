@@ -12,6 +12,6 @@
     <dimen name="custom_icon_fb_pic">50dp</dimen>
     
     <!-- chat activity dimens -->
-    <dimen name="chat_profile_picture_height">30dp</dimen>
+    <dimen name="chat_profile_picture_height">40dp</dimen>
     
 </resources>
