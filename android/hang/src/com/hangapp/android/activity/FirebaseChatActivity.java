@@ -486,7 +486,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				paramsTextViewFirstMsg
 						.addRule(isMyMessage ? alignLeft : alignRight);
 				int scale = (int)getResources().getDisplayMetrics().density;
-				paramsTextViewFirstMsg.setMargins(10 * scale, 2 * scale, 0, 0);
+				paramsTextViewFirstMsg.setMargins(10 * scale, 2 * scale, 10 * scale, 0);
 				holder.textViewFirstMsg.setLayoutParams(paramsTextViewFirstMsg);
 
 			}
