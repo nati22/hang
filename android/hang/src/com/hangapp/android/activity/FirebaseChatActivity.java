@@ -332,8 +332,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		List<String> interestedList = isHost ? database.getMyProposal()
 				.getInterested() : database.getIncomingUser(mucName).getProposal()
 				.getInterested();
-		
-		// Let's only send notifications if there are actually users to send them to
+
+		// Let's only send notifications if there are actually users to send them
+		// to
 		if (interestedList.size() > 0) {
 			for (String userJid : interestedList) {
 				if (!otherPresentUsers.contains(userJid) && !userJid.equals(myJid)) {
@@ -341,7 +342,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 					usersToNotify.add(userJid);
 				}
 			}
-			
+
 			// Send a notification to the other host as well, if applicable
 			if (!isHost && !otherPresentUsers.contains(mucName)) {
 				usersToNotify.add(mucName);
@@ -349,7 +350,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			restClient.sendChatNotification(usersToNotify, mucName);
 		}
-		
+
 	}
 
 	private class GetNtpTimeTask extends AsyncTask<String, Void, Void> {
@@ -424,6 +425,19 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			String fromJid = message.getJid();
 
+			// Here we check if the item in the previous position is from the user.
+			if (position % 3 == 0) {
+				ChatMessage prevMessage = getItem(position - 1);
+				Log.d(TAG, "message = \"" + message.text + "\"");
+				Log.d(TAG, "prev message = \"" + prevMessage.text + "\"");
+
+				if (prevMessage.jid.equals(fromJid)) {
+					Log.d(TAG, "same author");
+				} else {
+					Log.d(TAG, "diff author");
+				}
+			}
+
 			User fromUser = Database.getInstance().getIncomingUser(fromJid);
 
 			// Set the name
@@ -446,7 +460,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			if (convertView == null) {
 				if (fromJid.equals(myJid)) {
 					convertView = LayoutInflater.from(getContext()).inflate(
-							R.layout.cell_incoming_message_right, null);
+							R.layout.cell_outgoing_message, null);
 				} else {
 					convertView = LayoutInflater.from(getContext()).inflate(
 							R.layout.cell_incoming_message, null);

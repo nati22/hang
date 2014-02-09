@@ -383,7 +383,7 @@ public final class Database {
 		List<String> incomingBroadcastJids = Utils
 				.convertStringToArray(incomingBroadcastJidsStringArray);
 
-		if (!incomingBroadcastJids.contains(jid)) {
+		if (!jid.equals(getMyJid()) && !incomingBroadcastJids.contains(jid)) {
 			Log.e("Database.getIncomingUser", "Incoming user " + jid
 					+ " not found in incomingBroadcasts");
 			return null;

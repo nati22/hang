@@ -152,12 +152,13 @@ public final class ProfileActivity extends BaseActivity implements
 			public void onClick(View v) {
 
 				// TODO: Temporary fix to allow user in after logging in
-				friend = database.getIncomingUser(getIntent().getStringExtra(
-						Keys.HOST_JID));
+	/*			friend = database.getIncomingUser(getIntent().getStringExtra(
+						Keys.HOST_JID));*/
 
 				if (friend == null) {
 					Log.e("ProfileActivity.imageViewOpenChat.setOnClick",
 							"friend == null");
+					finish();
 					return;
 				}
 
@@ -166,6 +167,7 @@ public final class ProfileActivity extends BaseActivity implements
 				if (proposal == null) {
 					Log.i("ProfileActivity.imageViewOpenChat.setOnClick",
 							"proposal == null");
+					finish();
 					return;
 				}
 
@@ -245,6 +247,8 @@ public final class ProfileActivity extends BaseActivity implements
 		String TAG = "ProfileActivity.OnIncomingBroadcastsUpdate";
 		Log.e(TAG, "ONINCOMINGBROADCASTSUPDATECALLED");
 
+		if (database == null) Log.e(TAG, "DATABASE IS NULL IN ONINCOMINGBROADCASTSUPDATE");
+		
 		// If friend is still broadcasting to you
 		User broadcastingFriend = database.getIncomingUser(friend.getJid());
 
