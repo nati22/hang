@@ -444,18 +444,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 				holder = new ViewHolder();
 
-				// if (isMyMessage) {
 				convertView = LayoutInflater.from(getContext()).inflate(
 						R.layout.cell_chat_message, null);
-
-				Log.d(TAG, "using outgoing layout");
-
-				// } else {
-				// convertView = LayoutInflater.from(getContext()).inflate(
-				// R.layout.cell_incoming_message, null);
-				//
-				// Log.d(TAG, "using incoming layout");
-				// }
+				// Log.d(TAG, "using outgoing layout");
 
 				// Reference views
 				holder.profilePictureView = (ProfilePictureView) convertView
@@ -464,8 +455,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						.findViewById(R.id.textViewMessageFrom2);
 				holder.linLayoutProfilePicHolder = (LinearLayout) convertView
 						.findViewById(R.id.profilePictureViewHolder);
-				holder.linLayoutMsgList = (LinearLayout) convertView
-						.findViewById(R.id.linLayoutChatMessages);
 				holder.textViewFirstMsg = (TextView) convertView
 						.findViewById(R.id.textViewMessageBody2);
 				holder.viewBottomDivider = (View) convertView
@@ -497,56 +486,50 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						(int) getResources().getDimension(
 								R.dimen.chat_user_name_width),
 						LayoutParams.WRAP_CONTENT);
-				paramsProfilePicHolder.addRule(isMyMessage ? alignRight : alignLeft);
-				holder.linLayoutProfilePicHolder.setLayoutParams(paramsProfilePicHolder);
+				paramsProfilePicHolder
+						.addRule(isMyMessage ? alignRight : alignLeft);
+				holder.linLayoutProfilePicHolder
+						.setLayoutParams(paramsProfilePicHolder);
 
-				/*
-				 * // move profile pic to other side 
-				 * RelativeLayout.LayoutParams paramsProfilePic = new RelativeLayout.LayoutParams( (int)
-				 * getResources().getDimension(
-				 * R.dimen.chat_profile_picture_height), (int)
-				 * getResources().getDimension(
-				 * R.dimen.chat_profile_picture_height));
-				 * paramsProfilePic.addRule(isMyMessage ? alignRight : alignLeft);
-				 * holder.profilePictureView.setLayoutParams(paramsProfilePic);
-				 * 
-				 * // move user name to other side 
-				 * RelativeLayout.LayoutParams paramsTextViewFrom = new RelativeLayout.LayoutParams(
-				 * LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				 * paramsTextViewFrom.addRule(isMyMessage ? alignRight : alignLeft);
-				 * paramsTextViewFrom.addRule(RelativeLayout.BELOW,
-				 * R.id.profilePictureViewMessageFrom);
-				 * holder.textViewMsgFrom.setLayoutParams(paramsTextViewFrom);
-				 */
-
-				// move message list to other side
-				RelativeLayout.LayoutParams paramsLinLayout = new RelativeLayout.LayoutParams(
-						LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-				paramsLinLayout.addRule(isMyMessage ? alignRight : alignLeft);
-				paramsLinLayout.addRule(isMyMessage ? RelativeLayout.LEFT_OF
-						: RelativeLayout.RIGHT_OF, holder.profilePictureView.getId());
-				holder.linLayoutMsgList.setLayoutParams(paramsLinLayout);
-
-				// move first message text to other side
+				// move message text to other side
 				RelativeLayout.LayoutParams paramsTextViewFirstMsg = new RelativeLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsTextViewFirstMsg
 						.addRule(isMyMessage ? alignLeft : alignRight);
-				holder.linLayoutMsgList.setLayoutParams(paramsTextViewFirstMsg);
+				holder.textViewFirstMsg.setLayoutParams(paramsTextViewFirstMsg);
 
 			}
 
+			/** TODO: THIS IS NOT WORKING! scrolling messes this up. */
 			/*
-			 * // Determine if previous message is from the same sender boolean
-			 * sameSender = false;
-			 * 
-			 * if (position != 0) { ChatMessage prevMessage = getItem(position -
-			 * 1); sameSender = prevMessage.jid.equals(fromJid);
-			 * 
-			 * if (sameSender) { Log.d(TAG, "same author"); } else { Log.d(TAG,
-			 * "diff author"); } }
+			 * Determine if previous message is from the same sender so that we can
+			 * remove the divider
 			 */
+/*			if (position != 0) {
+				ChatMessage prevMessage = getItem(position - 1);
+				boolean sameSender = prevMessage.jid.equals(fromJid);
 
+				if (sameSender) {
+					// remove bottom divider line
+					holder.viewBottomDivider
+							.setVisibility(View.GONE);
+
+					// remove profile pic holder entirely
+					holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
+
+					// make message text realign
+					RelativeLayout.LayoutParams paramsText = new RelativeLayout.LayoutParams(
+							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					paramsText
+							.addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
+									: RelativeLayout.ALIGN_PARENT_RIGHT);
+					holder.textViewFirstMsg.setLayoutParams(paramsText);
+
+				} else {
+					Log.d(TAG, "diff author");
+				}
+			}
+*/
 			// If isMyMessage, this will become null
 			User fromUser = db.getIncomingUser(fromJid);
 
@@ -576,14 +559,13 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			holder.profilePictureView.setProfileId(fromJid);
 
-			/*// Group msgs from same sender together
-			
-			 * if (sameSender) { ((View)
-			 * convertView.findViewById(R.id.bottom_divider))
-			 * .setVisibility(View.INVISIBLE); ((ProfilePictureView) convertView
-			 * .findViewById(R.id.profilePictureViewMessageFrom))
-			 * .setVisibility(View.GONE); ((TextView)
-			 * convertView.findViewById(R.id.textViewMessageFrom2))
+			// Group msgs from same sender together
+
+			/*
+			 * if (sameSender) {
+			 * 
+			 * 
+			 * ((TextView) convertView.findViewById(R.id.textViewMessageFrom2))
 			 * .setVisibility(View.GONE); } else { ProfilePictureView profileIcon =
 			 * (ProfilePictureView) convertView
 			 * .findViewById(R.id.profilePictureViewMessageFrom);
@@ -597,7 +579,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			LinearLayout linLayoutProfilePicHolder;
 			ProfilePictureView profilePictureView;
 			TextView textViewMsgFrom;
-			LinearLayout linLayoutMsgList;
 			TextView textViewFirstMsg;
 			View viewBottomDivider;
 		}
