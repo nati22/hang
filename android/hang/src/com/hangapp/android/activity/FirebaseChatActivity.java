@@ -432,31 +432,31 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			// Determine if the message is from 'Me'
 			boolean isMyMessage = fromJid.equals(db.getMyJid());
-				// Inflate the cell if necessary.
-				if (convertView == null) {
-					holder = new ViewHolder();
+			// Inflate the cell if necessary.
+			if (convertView == null) {
+				holder = new ViewHolder();
 
-					convertView = LayoutInflater.from(getContext()).inflate(
-							R.layout.cell_chat_message, null);
+				convertView = LayoutInflater.from(getContext()).inflate(
+						R.layout.cell_chat_message, null);
 
-					// Reference views
-					holder.profilePictureView = (ProfilePictureView) convertView
-							.findViewById(R.id.profilePictureViewMessageFrom);
-					holder.textViewMsgFrom = (TextView) convertView
-							.findViewById(R.id.textViewMessageFrom2);
-					holder.linLayoutProfilePicHolder = (LinearLayout) convertView
-							.findViewById(R.id.profilePictureViewHolder);
-					holder.textViewFirstMsg = (TextView) convertView
-							.findViewById(R.id.textViewMessageBody2);
-					holder.viewBottomDivider = (View) convertView
-							.findViewById(R.id.bottom_divider);
+				// Reference views
+				holder.profilePictureView = (ProfilePictureView) convertView
+						.findViewById(R.id.profilePictureViewMessageFrom);
+				holder.textViewMsgFrom = (TextView) convertView
+						.findViewById(R.id.textViewMessageFrom2);
+				holder.linLayoutProfilePicHolder = (LinearLayout) convertView
+						.findViewById(R.id.profilePictureViewHolder);
+				holder.textViewFirstMsg = (TextView) convertView
+						.findViewById(R.id.textViewMessageBody2);
+				holder.viewBottomDivider = (View) convertView
+						.findViewById(R.id.bottom_divider);
 
-					convertView.setTag(holder);
-
-				} else {
-					// convertview already exists
-					holder = (ViewHolder) convertView.getTag();
-				}
+				convertView.setTag(holder);
+				
+			} else {
+				// convertview already exists
+				holder = (ViewHolder) convertView.getTag();
+			}
 
 			// Align xml assets according to sender
 			{
@@ -485,37 +485,76 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsTextViewFirstMsg
 						.addRule(isMyMessage ? alignLeft : alignRight);
-				int scale = (int)getResources().getDisplayMetrics().density;
-				paramsTextViewFirstMsg.setMargins(10 * scale, 2 * scale, 10 * scale, 0);
+				int scale = (int) getResources().getDisplayMetrics().density;
+				paramsTextViewFirstMsg.setMargins(10 * scale, 2 * scale,
+						10 * scale, 0);
 				holder.textViewFirstMsg.setLayoutParams(paramsTextViewFirstMsg);
 
 			}
 
 			/** TODO: THIS IS NOT WORKING! scrolling messes this up. */
+
 			/*
 			 * Determine if previous message is from the same sender so that we can
 			 * remove the divider
 			 */
-			/*
-			 * if (position != 0) { ChatMessage prevMessage = getItem(position -
-			 * 1); boolean sameSender = prevMessage.jid.equals(fromJid);
-			 * 
-			 * if (sameSender) { // remove bottom divider line
-			 * holder.viewBottomDivider .setVisibility(View.GONE);
-			 * 
-			 * // remove profile pic holder entirely
-			 * holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
-			 * 
-			 * // make message text realign RelativeLayout.LayoutParams paramsText
-			 * = new RelativeLayout.LayoutParams( LayoutParams.WRAP_CONTENT,
-			 * LayoutParams.WRAP_CONTENT); paramsText .addRule(isMyMessage ?
-			 * RelativeLayout.ALIGN_PARENT_LEFT :
-			 * RelativeLayout.ALIGN_PARENT_RIGHT);
-			 * holder.textViewFirstMsg.setLayoutParams(paramsText);
-			 * 
-			 * } else { Log.d(TAG, "diff author"); } }
-			 */
 			
+			// determine whether it's my first time seeing this cell
+//			if (holder.unrecycledCell) {
+//				
+//				// determine whether to remove icon or not
+//				if (position != 0) {
+//					ChatMessage prevMessage = getItem(position - 1);
+//					boolean sameSender = prevMessage.jid.equals(fromJid);
+//
+//					if (sameSender) {
+//						holder.shouldHaveIcon = false;
+//						
+//						// remove bottom divider line
+//						holder.viewBottomDivider.setVisibility(View.GONE);
+//
+//						// remove profile pic holder entirely
+//						holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
+//
+//						// make message text realign
+//						RelativeLayout.LayoutParams paramsText = new RelativeLayout.LayoutParams(
+//								LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//						paramsText
+//								.addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
+//										: RelativeLayout.ALIGN_PARENT_RIGHT);
+//						int scale = (int) getResources().getDisplayMetrics().density;
+//						paramsText.setMargins(10 * scale, 2 * scale,
+//								10 * scale, 0);
+//						holder.textViewFirstMsg.setLayoutParams(paramsText);
+//
+//					} else {
+//						Log.d(TAG, "diff author");
+//					}
+//				}
+//				
+//			} else {
+//				if (!holder.shouldHaveIcon) {
+//					/** TODO THIS CODE IS NOT DRY (copied from the 'if' block) */
+//				// remove bottom divider line
+//					holder.viewBottomDivider.setVisibility(View.GONE);
+//
+//					// remove profile pic holder entirely
+//					holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
+//
+//					// make message text realign
+//					RelativeLayout.LayoutParams paramsText = new RelativeLayout.LayoutParams(
+//							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+//					paramsText
+//							.addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
+//									: RelativeLayout.ALIGN_PARENT_RIGHT);
+//					int scale = (int) getResources().getDisplayMetrics().density;
+//					paramsText.setMargins(10 * scale, 2 * scale,
+//							10 * scale, 0);
+//					holder.textViewFirstMsg.setLayoutParams(paramsText);
+//				}
+//			}
+			
+
 			// If isMyMessage, this will become null
 			User fromUser = db.getIncomingUser(fromJid);
 
@@ -543,7 +582,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			holder.textViewFirstMsg.setText(message.getText());
 			holder.textViewMsgFrom.setText(fromName);
 			holder.profilePictureView.setProfileId(fromJid);
-
+//			holder.unrecycledCell = false;
 			return convertView;
 		}
 
@@ -553,9 +592,11 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			TextView textViewMsgFrom;
 			TextView textViewFirstMsg;
 			View viewBottomDivider;
+//			boolean unrecycledCell = true;
+//			boolean shouldHaveIcon = true;
 		}
 	}
-
+	
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
 		// If this is the user's own chat.
