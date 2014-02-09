@@ -4,15 +4,14 @@ import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.AudioManager;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.android.R;
@@ -55,8 +54,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 		if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
 			Log.e(TAG, "Send error: " + intent.getExtras().toString());
-		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED
-				.equals(messageType)) {
+		} else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType)) {
 			Log.d(TAG, "Deleted messages on server: "
 					+ intent.getExtras().toString());
 		} else {
@@ -66,18 +64,17 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 			// Get message type and sender
 			String type = intent.getExtras().getString(Keys.FromServer.TYPE);
-			String senderFn = intent.getExtras().getString(
-					Keys.FromServer.NUDGER);
+			String senderFn = intent.getExtras().getString(Keys.FromServer.NUDGER);
 
 			// TODO: Need to make sure gcm ids are removed properly anytime
 			// a User uninstalls the app, but until then I'll use this sanity
 			// check
-			String targetJid = intent.getExtras().getString(
-					Keys.FromServer.TARGET);
+			String targetJid = intent.getExtras()
+					.getString(Keys.FromServer.TARGET);
 
 			if (!targetJid.equals(database.getMyJid())) {
-				Log.e(TAG, "THIS NUDGE ISN'T INTENDED FOR ME!! (JID "
-						+ targetJid + ")");
+				Log.e(TAG, "THIS NUDGE ISN'T INTENDED FOR ME!! (JID " + targetJid
+						+ ")");
 				return;
 			}
 
@@ -86,27 +83,30 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				Intent nudgeIntent = new Intent(context, HomeActivity.class);
 
 				// ProfilePictureView
-				Log.i(TAG,
-						"" + intent.getExtras().getString(Keys.FromServer.FROM));
+				Log.i(TAG, "" + intent.getExtras().getString(Keys.FromServer.FROM));
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You got a nudge!")
 						.setContentText(
 								senderFn + " wants to know what you're up to!")
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
-								BitmapFactory.decodeResource(
-										context.getResources(),
+								BitmapFactory.decodeResource(context.getResources(),
 										R.drawable.ic_launcher))
 						.setContentIntent(
-								PendingIntent.getActivity(context, 0,
-										nudgeIntent, 0)).build();
+								PendingIntent.getActivity(context, 0, nudgeIntent, 0))
+						.build();
 
 				notif.flags = Notification.FLAG_AUTO_CANCEL;
 				notifMgr.notify(NUDGE_NOTIFY_ID, notif);
 
-				Vibrator v = (Vibrator) context
-						.getSystemService(Context.VIBRATOR_SERVICE);
-				v.vibrate(400);
+				AudioManager audioM = (AudioManager) context
+						.getSystemService(Context.AUDIO_SERVICE);
+				if (audioM.getRingerMode() != 0) {
+					Vibrator v = (Vibrator) context
+							.getSystemService(Context.VIBRATOR_SERVICE);
+					v.vibrate(400);
+				}
+				
 				// long[] pattern = {0, 250, 400, 200, 125, 200, 75, 100, 25,
 				// 100,
 				// 200, 100, 25, 100, 10, 100};
@@ -119,18 +119,15 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 					&& type.equals(Keys.FromServer.TYPE_NEW_BROADCAST)) {
 				Log.d("GCMBroadcastReceiver", "Received a NEW BROADCAST");
 
-				Intent newBroadcastIntent = new Intent(context,
-						HomeActivity.class);
+				Intent newBroadcastIntent = new Intent(context, HomeActivity.class);
 				newBroadcastIntent.putExtra(Keys.TAB_INTENT, 0);
 
 				Notification notif = new NotificationCompat.Builder(context)
 						.setContentTitle("You have a new Broadcast!")
-						.setContentText(
-								senderFn + " is now broadcasting to you!")
+						.setContentText(senderFn + " is now broadcasting to you!")
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
-								BitmapFactory.decodeResource(
-										context.getResources(),
+								BitmapFactory.decodeResource(context.getResources(),
 										R.drawable.ic_launcher))
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0,
@@ -143,11 +140,9 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 						.getSystemService(Context.VIBRATOR_SERVICE);
 				v.vibrate(400);
 
-			} else if (type != null
-					&& type.equals(Keys.FromServer.TYPE_NEW_CHAT)) {
+			} else if (type != null && type.equals(Keys.FromServer.TYPE_NEW_CHAT)) {
 				String hostJid = intent.getExtras().getString(FromServer.HOST);
-				boolean isHost = hostJid.equals(database.getMyJid()) ? true
-						: false;
+				boolean isHost = hostJid.equals(database.getMyJid()) ? true : false;
 
 				Intent newChatMessageIntent = new Intent(context,
 						FirebaseChatActivity.class);
@@ -159,8 +154,8 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				if (isHost) {
 					proposalDesc = database.getMyProposal().getDescription();
 				} else {
-					proposalDesc = database.getIncomingUser(hostJid)
-							.getProposal().getDescription();
+					proposalDesc = database.getIncomingUser(hostJid).getProposal()
+							.getDescription();
 				}
 
 				Notification notif = new NotificationCompat.Builder(context)
@@ -168,8 +163,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 						.setContentText("You have a new message!")
 						.setSmallIcon(R.drawable.ic_launcher)
 						.setLargeIcon(
-								BitmapFactory.decodeResource(
-										context.getResources(),
+								BitmapFactory.decodeResource(context.getResources(),
 										R.drawable.ic_launcher))
 						.setContentIntent(
 								PendingIntent.getActivity(context, 0,
@@ -177,10 +171,14 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				notif.flags = Notification.FLAG_AUTO_CANCEL;
 
 				notifMgr.notify(BROADCAST_NOTIFY_ID, notif);
-				
-				Vibrator v = (Vibrator) context
-						.getSystemService(Context.VIBRATOR_SERVICE);
-				v.vibrate(400);
+
+				AudioManager audioM = (AudioManager) context
+						.getSystemService(Context.AUDIO_SERVICE);
+				if (audioM.getRingerMode() != 0) {
+					Vibrator v = (Vibrator) context
+							.getSystemService(Context.VIBRATOR_SERVICE);
+					v.vibrate(400);
+				}
 
 			} else {
 				Log.e(TAG, "Nudge type \"" + type + "\" is unrecognizable.");
