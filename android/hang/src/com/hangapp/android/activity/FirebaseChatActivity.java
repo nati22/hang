@@ -446,7 +446,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 				// if (isMyMessage) {
 				convertView = LayoutInflater.from(getContext()).inflate(
-						R.layout.cell_outgoing_message, null);
+						R.layout.cell_chat_message, null);
 
 				Log.d(TAG, "using outgoing layout");
 
@@ -523,6 +523,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				holder.linLayoutMsgList.setLayoutParams(paramsTextViewFirstMsg);
 
 			}
+			
 			/*
 			 * // Determine if previous message is from the same sender boolean
 			 * sameSender = false;
