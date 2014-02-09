@@ -11,6 +11,7 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -74,6 +75,7 @@ public final class ProfileActivity extends BaseActivity implements
 	private ImageButton imageButtonFriendsAvailability;
 	private TextView textViewFriendsAvailabilityExpirationDate;
 	private TextView textViewStatus;
+	private RelativeLayout relativeLayoutProposalProfileBg;
 	private RelativeLayout relativeLayoutFriendsProposal;
 	private ImageView imageViewOpenChat;
 	private TextView textViewProposalDescription;
@@ -134,6 +136,7 @@ public final class ProfileActivity extends BaseActivity implements
 		imageButtonFriendsAvailability = (ImageButton) findViewById(R.id.imageButtonFriendsAvailability);
 		textViewFriendsAvailabilityExpirationDate = (TextView) findViewById(R.id.textViewFriendsAvailabilityExpirationDate);
 		textViewStatus = (TextView) findViewById(R.id.textViewStatus);
+		relativeLayoutProposalProfileBg = (RelativeLayout) findViewById(R.id.relativeLayoutFragmentYou);
 		relativeLayoutFriendsProposal = (RelativeLayout) findViewById(R.id.relativeLayoutFriendsProposal);
 		imageViewOpenChat = (ImageView) findViewById(R.id.imageViewChat);
 		textViewProposalDescription = (TextView) findViewById(R.id.textViewMyProposalDescription);
@@ -257,7 +260,8 @@ public final class ProfileActivity extends BaseActivity implements
 			Log.e(TAG, "DATABASE IS NULL IN ONINCOMINGBROADCASTSUPDATE");
 		if (friend == null) {
 			Log.e(TAG, "friend == null");
-			Toast.makeText(getApplicationContext(), "friend == null", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "friend == null",
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 		// If friend is still broadcasting to you
@@ -394,18 +398,36 @@ public final class ProfileActivity extends BaseActivity implements
 
 		profilePictureViewFriendIcon.setOnClickListener(new OnClickListener() {
 
+			/** TODO: Remove newapi suppressLint */
+			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View v) {
-				// REMOVE: let's try to get the profile picture bitmap here
+				// this gets the profilepicture
 				ImageView fbImage = (ImageView) profilePictureViewFriendIcon
 						.getChildAt(0);
+
 				if (fbImage != null) {
 
+					// Convert the fb profile pic into a bitmap
 					Bitmap bitmap = ((BitmapDrawable) fbImage.getDrawable())
 							.getBitmap();
 
+					// Create a blank bitmap
 					Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
 							bitmap.getHeight(), Config.ARGB_8888);
+
+/*					Bitmap bg = bitmap.copy(bitmap.getConfig(), true);
+					Bitmap.createScaledBitmap(bg, bg.getWidth() / 5 + bg.getWidth()
+							% 5, bg.getHeight() / 5 + bg.getWidth() % 5, true);
+					Bitmap.createScaledBitmap(bg, bg.getWidth() * 5,
+							bg.getHeight() * 5, true);
+					Bitmap.createScaledBitmap(bg, bg.getWidth() * 20,
+							bg.getHeight() * 20, true);
+					Bitmap.createScaledBitmap(bg, bg.getWidth() / 20,
+							bg.getHeight() / 20, true);
+					relativeLayoutProposalProfileBg
+							.setBackground(new BitmapDrawable(bg));*/
+
 					Canvas canvas = new Canvas(output);
 
 					final int color = 0xff424242;

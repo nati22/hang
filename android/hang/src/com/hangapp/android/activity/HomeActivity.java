@@ -114,16 +114,16 @@ public final class HomeActivity extends BaseActivity implements
 		mViewPager.setId(R.id.viewpager);
 		setContentView(mViewPager);
 
-		// Throw the two tabs into the ActionBar.
+		// Throw the three tabs into the ActionBar.
 		final ActionBar bar = getSupportActionBar();
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
-		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
+//		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), ProposalsFragment.class, null);
 
 		// Style the Action Bar tabs.
-		String[] tabNames = { "FEED", "YOU", "PROPOSALS" };
+		String[] tabNames = { "FEED", /*"YOU",*/ "PROPOSALS" };
 		Typeface champagneLimousinesFont = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
