@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.audobox.Audobox;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
@@ -63,16 +64,16 @@ public final class SettingsActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				/*
-				 * Audobox.createFeedbackDialog(SettingsActivity.this)
-				 * .withApiKey("7bca550e257ff1b0f42ea5f5007d7d3a").show();
-				 */
-				Toast.makeText(getApplicationContext(),
-						"Sike! Ain't nobody got time for that!", Toast.LENGTH_LONG)
-						.show();
-				Toast.makeText(getApplicationContext(),
-						"jk, it's broken for now. We're fixing it.", Toast.LENGTH_SHORT)
-						.show();
+
+				Audobox.createFeedbackDialog(SettingsActivity.this)
+						.withApiKey("7bca550e257ff1b0f42ea5f5007d7d3a").show();
+
+//				Toast.makeText(getApplicationContext(),
+//						"Sike! Ain't nobody got time for that!", Toast.LENGTH_LONG)
+//						.show();
+//				Toast.makeText(getApplicationContext(),
+//						"jk, it's broken for now. We're fixing it.",
+//						Toast.LENGTH_SHORT).show();
 
 			}
 		});
