@@ -34,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.widget.ProfilePictureView;
+import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.YouFragment;
@@ -239,6 +240,129 @@ public final class ProfileActivity extends BaseActivity implements
 	}
 
 	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, "YOUR_API_KEY");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// Populate Views.
+		profilePictureViewFriendIcon.setProfileId(friend.getJid());
+
+		// new GetCroppedCircleIcon().exec
+
+		profilePictureViewFriendIcon.setOnClickListener(new OnClickListener() {
+
+			/** TODO: Remove newapi suppressLint */
+			@SuppressLint("NewApi")
+			@Override
+			public void onClick(View v) {
+				// this gets the profilepicture
+				ImageView fbImage = (ImageView) profilePictureViewFriendIcon
+						.getChildAt(0);
+
+				if (fbImage != null) {
+
+					// Convert the fb profile pic into a bitmap
+					Bitmap bitmap = ((BitmapDrawable) fbImage.getDrawable())
+							.getBitmap();
+
+					// Create a blank bitmap
+					Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+							bitmap.getHeight(), Config.ARGB_8888);
+
+					/*
+					 * Bitmap bg = bitmap.copy(bitmap.getConfig(), true);
+					 * Bitmap.createScaledBitmap(bg, bg.getWidth() / 5 +
+					 * bg.getWidth() % 5, bg.getHeight() / 5 + bg.getWidth() % 5,
+					 * true); Bitmap.createScaledBitmap(bg, bg.getWidth() * 5,
+					 * bg.getHeight() * 5, true); Bitmap.createScaledBitmap(bg,
+					 * bg.getWidth() * 20, bg.getHeight() * 20, true);
+					 * Bitmap.createScaledBitmap(bg, bg.getWidth() / 20,
+					 * bg.getHeight() / 20, true); relativeLayoutProposalProfileBg
+					 * .setBackground(new BitmapDrawable(bg));
+					 */
+
+					Canvas canvas = new Canvas(output);
+
+					final int color = 0xff424242;
+					final Paint paint = new Paint();
+					final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap
+							.getHeight());
+
+					paint.setAntiAlias(true);
+					canvas.drawARGB(0, 0, 0, 0);
+					paint.setColor(color);
+					// canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
+					canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+							bitmap.getWidth() / 2, paint);
+					paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+					canvas.drawBitmap(bitmap, rect, rect, paint);
+
+					circleView.setBackgroundDrawable(new BitmapDrawable(
+							getResources(), output));
+					Log.e("ggg", "lolz   fbImage != null");
+				} else {
+					Log.e("lolz", "lolz  bM == null");
+				}
+			}
+		});
+
+		// new GetCroppedCircleIcon().execute();
+		/*
+		 * Bitmap theBitmap = null; try { theBitmap =
+		 * getFacebookProfilePicture(friend.getJid()); } catch (IOException e) {
+		 * // TODO Auto-generated catch block e.printStackTrace(); }
+		 * 
+		 * if (theBitmap != null) circleView.setImageBitmap(theBitmap); else
+		 * Toast.makeText(getApplicationContext(), "null", Toast.LENGTH_SHORT)
+		 * .show();
+		 */
+		textViewFriendsName.setText(friend.getFullName());
+
+		updateAvailabilityIcon(database.getIncomingUser(friend.getJid())
+				.getAvailability());
+
+		if (friend.getProposal() == null) {
+			Log.e("ProfileActivity.onResume", friend.getFirstName()
+					+ "'s proposal was null");
+			relativeLayoutFriendsProposal.setVisibility(View.GONE);
+		} else {
+			relativeLayoutFriendsProposal.setVisibility(View.VISIBLE);
+			textViewProposalDescription.setText(friend.getProposal()
+					.getDescription());
+			textViewProposalLocation.setText(friend.getProposal().getLocation());
+			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
+					.toString("h:mm aa"));
+
+			// Refresh list
+			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
+
+			// Add this proposal to the Users list of "seen proposals" //TODO:
+			// optimize O(n)
+			if (friend.getProposal() != null
+					&& !database.getMySeenProposals().contains(friend.getJid())) {
+				database.addSeenProposal(friend.getJid());
+				restClient.setSeenProposal(friend.getJid());
+				Log.i("ProfileActivity",
+						"first time seeing " + friend.getFirstName() + "'s prop");
+			} else {
+				Log.i("ProfileActivity", friend.getFirstName()
+						+ "'s proposal already seen");
+			}
+		}
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+
+	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
 
 		allowedToClickChatButton = true;
@@ -373,118 +497,6 @@ public final class ProfileActivity extends BaseActivity implements
 			canvas.drawBitmap(bitmap, rect, rect, paint);
 
 			circleView.setImageBitmap(output);
-		}
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		// Populate Views.
-		profilePictureViewFriendIcon.setProfileId(friend.getJid());
-
-		// new GetCroppedCircleIcon().exec
-
-		profilePictureViewFriendIcon.setOnClickListener(new OnClickListener() {
-
-			/** TODO: Remove newapi suppressLint */
-			@SuppressLint("NewApi")
-			@Override
-			public void onClick(View v) {
-				// this gets the profilepicture
-				ImageView fbImage = (ImageView) profilePictureViewFriendIcon
-						.getChildAt(0);
-
-				if (fbImage != null) {
-
-					// Convert the fb profile pic into a bitmap
-					Bitmap bitmap = ((BitmapDrawable) fbImage.getDrawable())
-							.getBitmap();
-
-					// Create a blank bitmap
-					Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-							bitmap.getHeight(), Config.ARGB_8888);
-
-/*					Bitmap bg = bitmap.copy(bitmap.getConfig(), true);
-					Bitmap.createScaledBitmap(bg, bg.getWidth() / 5 + bg.getWidth()
-							% 5, bg.getHeight() / 5 + bg.getWidth() % 5, true);
-					Bitmap.createScaledBitmap(bg, bg.getWidth() * 5,
-							bg.getHeight() * 5, true);
-					Bitmap.createScaledBitmap(bg, bg.getWidth() * 20,
-							bg.getHeight() * 20, true);
-					Bitmap.createScaledBitmap(bg, bg.getWidth() / 20,
-							bg.getHeight() / 20, true);
-					relativeLayoutProposalProfileBg
-							.setBackground(new BitmapDrawable(bg));*/
-
-					Canvas canvas = new Canvas(output);
-
-					final int color = 0xff424242;
-					final Paint paint = new Paint();
-					final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap
-							.getHeight());
-
-					paint.setAntiAlias(true);
-					canvas.drawARGB(0, 0, 0, 0);
-					paint.setColor(color);
-					// canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-					canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
-							bitmap.getWidth() / 2, paint);
-					paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-					canvas.drawBitmap(bitmap, rect, rect, paint);
-
-					circleView.setBackgroundDrawable(new BitmapDrawable(
-							getResources(), output));
-					Log.e("ggg", "lolz   fbImage != null");
-				} else {
-					Log.e("lolz", "lolz  bM == null");
-				}
-			}
-		});
-
-		// new GetCroppedCircleIcon().execute();
-		/*
-		 * Bitmap theBitmap = null; try { theBitmap =
-		 * getFacebookProfilePicture(friend.getJid()); } catch (IOException e) {
-		 * // TODO Auto-generated catch block e.printStackTrace(); }
-		 * 
-		 * if (theBitmap != null) circleView.setImageBitmap(theBitmap); else
-		 * Toast.makeText(getApplicationContext(), "null", Toast.LENGTH_SHORT)
-		 * .show();
-		 */
-		textViewFriendsName.setText(friend.getFullName());
-
-		updateAvailabilityIcon(database.getIncomingUser(friend.getJid())
-				.getAvailability());
-
-		if (friend.getProposal() == null) {
-			Log.e("ProfileActivity.onResume", friend.getFirstName()
-					+ "'s proposal was null");
-			relativeLayoutFriendsProposal.setVisibility(View.GONE);
-		} else {
-			relativeLayoutFriendsProposal.setVisibility(View.VISIBLE);
-			textViewProposalDescription.setText(friend.getProposal()
-					.getDescription());
-			textViewProposalLocation.setText(friend.getProposal().getLocation());
-			textViewProposalStartTime.setText(friend.getProposal().getStartTime()
-					.toString("h:mm aa"));
-
-			// Refresh list
-			onIncomingBroadcastsUpdate(database.getMyIncomingBroadcasts());
-
-			// Add this proposal to the Users list of "seen proposals" //TODO:
-			// optimize O(n)
-			if (friend.getProposal() != null
-					&& !database.getMySeenProposals().contains(friend.getJid())) {
-				database.addSeenProposal(friend.getJid());
-				restClient.setSeenProposal(friend.getJid());
-				Log.i("ProfileActivity",
-						"first time seeing " + friend.getFirstName() + "'s prop");
-			} else {
-				Log.i("ProfileActivity", friend.getFirstName()
-						+ "'s proposal already seen");
-			}
 		}
 	}
 

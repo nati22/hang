@@ -96,7 +96,7 @@ public final class Keys {
 		public static final String VIEW_OUTGOING_BROADCASTS = "VIEW_OUTGOING_BROADCASTS";
 		public static final String VIEW_PROPOSAL = "VIEW_PROPOSAL";
 		public static final String VIEW_CHATROOM = "VIEW_CHATROOM";
-
+		
 		public static final String MANUAL_REFRESH = "MANUAL_REFRESH";
 		public static final String NUDGE_USER = "NUDGE_USER";
 		public static final String PROPOSAL_CREATED = "PROPOSAL_CREATED";

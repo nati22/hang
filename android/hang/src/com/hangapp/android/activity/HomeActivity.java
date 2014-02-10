@@ -29,6 +29,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
+import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.MyProposalFragment;
@@ -75,8 +76,7 @@ public final class HomeActivity extends BaseActivity implements
 	private UiLifecycleHelper uiHelper;
 	private Session.StatusCallback callback = new Session.StatusCallback() {
 		@Override
-		public void call(Session session, SessionState state,
-				Exception exception) {
+		public void call(Session session, SessionState state, Exception exception) {
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -86,18 +86,20 @@ public final class HomeActivity extends BaseActivity implements
 		super.onCreate(savedInstanceState);
 
 		try {
-			
-		    PackageInfo info = getPackageManager().getPackageInfo(
-		          "com.hangapp.android.activity", PackageManager.GET_SIGNATURES);
-		    for (Signature signature : info.signatures){
-		           MessageDigest md = MessageDigest.getInstance("SHA");
-		           md.update(signature.toByteArray());
-		           Log.d("KeyHash:", "Keyhash: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
-		    }
+
+			PackageInfo info = getPackageManager().getPackageInfo(
+					"com.hangapp.android.activity", PackageManager.GET_SIGNATURES);
+			for (Signature signature : info.signatures) {
+				MessageDigest md = MessageDigest.getInstance("SHA");
+				md.update(signature.toByteArray());
+				Log.d("KeyHash:",
+						"Keyhash: "
+								+ Base64.encodeToString(md.digest(), Base64.DEFAULT));
+			}
 		} catch (NameNotFoundException e) {
 		} catch (NoSuchAlgorithmException e) {
 		}
-		
+
 		// Initialize dependencies.
 		prefs = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
@@ -138,7 +140,7 @@ public final class HomeActivity extends BaseActivity implements
 		// Setup Facebook SDK.
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
-		
+
 		// Reload the tab you had selected from savedInstanceState, if it was
 		// saved.
 		if (savedInstanceState != null) {
@@ -149,19 +151,13 @@ public final class HomeActivity extends BaseActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-/*		// Start Flurry session
 		FlurryAgent.onStartSession(this, Keys.FLURRY_KEY);
-		// Start Google Analytics session
-		EasyTracker.getInstance(this).activityStart(this);*/
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
-/*		// Stop Flurry session
 		FlurryAgent.onEndSession(this);
-		// Stop Google Analytics session
-		EasyTracker.getInstance(this).activityStop(this);*/
 	}
 
 	@Override
@@ -181,8 +177,8 @@ public final class HomeActivity extends BaseActivity implements
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:
-			Log.e("HomeActivity.onOptionsItemSelected",
-					"Unknown item selected: " + item.getAlphabeticShortcut());
+			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
+					+ item.getAlphabeticShortcut());
 			return true;
 		}
 	}
@@ -192,8 +188,8 @@ public final class HomeActivity extends BaseActivity implements
 		super.onSaveInstanceState(outState);
 
 		// Save which tab we had selected into savedInstanceState.
-		outState.putInt("tab", getSupportActionBar()
-				.getSelectedNavigationIndex());
+		outState
+				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
 		uiHelper.onSaveInstanceState(outState);
 	}
 
@@ -250,8 +246,7 @@ public final class HomeActivity extends BaseActivity implements
 				if (graphUser != null) {
 					Log.v("HomeActivity.onResume",
 							"Retrieved Facebook MeRequest, saving data internally"
-									+ " for Facebook user "
-									+ graphUser.getName());
+									+ " for Facebook user " + graphUser.getName());
 
 					// You've officially "registered."
 					SharedPreferences.Editor editor = prefs.edit();
@@ -259,9 +254,9 @@ public final class HomeActivity extends BaseActivity implements
 					// This stores the current User's j.
 					editor.putString(Keys.JID, graphUser.getId());
 					editor.commit();
-					
-					User me = new User(graphUser.getId(), graphUser
-							.getFirstName(), graphUser.getLastName());
+
+					User me = new User(graphUser.getId(), graphUser.getFirstName(),
+							graphUser.getLastName());
 
 					// Save the "me" User object into the database.
 					database.setMyUserData(me.getJid(), me.getFirstName(),
@@ -328,8 +323,7 @@ public final class HomeActivity extends BaseActivity implements
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		if (state.isOpened()) {
-			Log.i("HomeActivity.onSessionStateChange",
-					"Logged in to Facebook...");
+			Log.i("HomeActivity.onSessionStateChange", "Logged in to Facebook...");
 			// Since Facebook successfully logged in, show the regular tabbed
 			// ActionBar.
 			// TODO: Use real fragment transactions instead of this ghetto
@@ -337,15 +331,14 @@ public final class HomeActivity extends BaseActivity implements
 			setContentView(mViewPager);
 			getSupportActionBar().show();
 		} else if (state.isClosed()) {
-			Log.i("HomeActivity.onSessionStateChange",
-					"Logged out of Facebook...");
+			Log.i("HomeActivity.onSessionStateChange", "Logged out of Facebook...");
 			// Since Facebook isn't logged in, show the LoginFragment.
 			setContentView(R.layout.login);
 			getSupportActionBar().hide();
 
 			if (exception != null) {
-				Log.e("HomeActivity.onSessionStateChange",
-						"Facebook exception: " + exception.getMessage());
+				Log.e("HomeActivity.onSessionStateChange", "Facebook exception: "
+						+ exception.getMessage());
 			} else {
 				Log.i("HomeActivity.onSessionStateChange",
 						"Facebook logged out without exception");

@@ -6,3 +6,5 @@
 	- Notification vibration adheres to device settings
 1.3: aNF9cPP0pfSSvcvMvH3MbLigsj8= (same as previous. curious...)
 	- Added audio feedback in Settings
+1.4:
+	- Added notifications for chat messages

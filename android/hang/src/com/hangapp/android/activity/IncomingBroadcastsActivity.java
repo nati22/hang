@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
+import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
@@ -66,6 +67,13 @@ public final class IncomingBroadcastsActivity extends BaseActivity implements
 	}
 
 	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		FlurryAgent.onStartSession(this, "YOUR_API_KEY");
+	}
+	
+	@Override
 	protected void onResume() {
 		super.onResume();
 
@@ -84,6 +92,14 @@ public final class IncomingBroadcastsActivity extends BaseActivity implements
 		database.removeIncomingBroadcastsListener(this);
 	}
 
+	@Override
+	protected void onStop()
+	{
+		super.onStop();		
+		FlurryAgent.onEndSession(this);
+	}
+
+	
 	static class IncomingBroadcastsArrayAdapter extends ArrayAdapter<User> {
 
 		public IncomingBroadcastsArrayAdapter(Context context,

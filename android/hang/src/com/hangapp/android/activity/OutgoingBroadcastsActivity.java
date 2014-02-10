@@ -25,6 +25,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.widget.ProfilePictureView;
+import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
@@ -93,12 +94,17 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 		adapter = new OutgoingBroadcastsArrayAdapter(this,
 				R.id.listViewOutgoingBroadcasts, outgoingBroadcasts);
 		listViewOutgoingBroadcasts.setAdapter(adapter);
-		listViewOutgoingBroadcasts
-				.setEmptyView(findViewById(android.R.id.empty));
+		listViewOutgoingBroadcasts.setEmptyView(findViewById(android.R.id.empty));
 
 		// Facebook SDK stuff (lifted from Facebook SDK Android tutorial).
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, "YOUR_API_KEY");
 	}
 
 	@Override
@@ -110,10 +116,9 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.activity_outgoing_broadcasts,
-				menu);
-		return true;
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
 	}
 
 	@Override
@@ -121,22 +126,6 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 		super.onDestroy();
 
 		database.removeOutgoingBroadcastsListener(this);
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_edit_outgoing_broadcasts:
-			// TODO
-			return true;
-		case R.id.menu_add_outgoing_broadcast:
-			// TODO
-			return true;
-		default:
-			Log.e("OutgoingBroadcastsActivity.onOptionsItemSelected",
-					"Unknown MenuItem " + item.getTitle());
-			return super.onOptionsItemSelected(item);
-		}
 	}
 
 	public boolean toggleDeleteButtons(MenuItem item) {
@@ -184,8 +173,7 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 
 			// Set Views to have correct data for this User.
 			profilePictureView.setProfileId(outgoingBroadcast.getJid());
-			textViewOutgoingBroadcastName.setText(outgoingBroadcast
-					.getFullName());
+			textViewOutgoingBroadcastName.setText(outgoingBroadcast.getFullName());
 			textViewOutgoingBroadcastStatus
 					.setText((hisStatus != null && hisStatus.isActive()) ? hisStatus
 							.getDescription() : "");
@@ -197,13 +185,11 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 						public void onClick(View v) {
 							// Tell the user that you're deleting a broadcast.
 							Log.i("OutgoingBroadcastsActivity.deleteOutgoingBroadcast",
-									"Deleting "
-											+ outgoingBroadcast.getFirstName()
+									"Deleting " + outgoingBroadcast.getFirstName()
 											+ " from my Outgoing Broadcasts");
 							Toast.makeText(
 									getApplicationContext(),
-									"Deleting "
-											+ outgoingBroadcast.getFirstName()
+									"Deleting " + outgoingBroadcast.getFirstName()
 											+ " from my Outgoing Broadcasts",
 									Toast.LENGTH_SHORT).show();
 
@@ -245,6 +231,29 @@ public final class OutgoingBroadcastsActivity extends BaseActivity implements
 	private void onSessionStateChange(Session session, SessionState state,
 			Exception exception) {
 		// Do nothing.
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_edit_outgoing_broadcasts:
+			// TODO
+			return true;
+		case R.id.menu_add_outgoing_broadcast:
+			// TODO
+			return true;
+		default:
+			Log.e("OutgoingBroadcastsActivity.onOptionsItemSelected",
+					"Unknown MenuItem " + item.getTitle());
+			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.activity_outgoing_broadcasts,
+				menu);
+		return true;
 	}
 
 	@Override

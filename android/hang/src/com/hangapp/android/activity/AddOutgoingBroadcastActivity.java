@@ -11,12 +11,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.facebook.FacebookException;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.FriendPickerFragment;
 import com.facebook.widget.PickerFragment;
+import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
@@ -90,8 +90,7 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			friendPickerFragment
 					.setOnDoneButtonClickedListener(new PickerFragment.OnDoneButtonClickedListener() {
 						@Override
-						public void onDoneButtonClicked(
-								PickerFragment<?> fragment) {
+						public void onDoneButtonClicked(PickerFragment<?> fragment) {
 							finishActivity();
 						}
 					});
@@ -104,10 +103,8 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 						@Override
 						public boolean includeItem(GraphUser graphObject) {
 							Boolean installed = graphObject.cast(
-									GraphUserWithInstalled.class)
-									.getInstalled();
-							return (installed != null)
-									&& installed.booleanValue();
+									GraphUserWithInstalled.class).getInstalled();
+							return (installed != null) && installed.booleanValue();
 						}
 					});
 
@@ -119,8 +116,8 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			return;
 		}
 
-		manager.beginTransaction()
-				.replace(R.id.picker_fragment, fragmentToShow).commit();
+		manager.beginTransaction().replace(R.id.picker_fragment, fragmentToShow)
+				.commit();
 	}
 
 	private void onError(Exception error) {
@@ -129,13 +126,13 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	private void onError(String error, final boolean finishActivity) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(R.string.error_dialog_title)
+		builder
+				.setTitle(R.string.error_dialog_title)
 				.setMessage(error)
 				.setPositiveButton(R.string.error_dialog_button_text,
 						new DialogInterface.OnClickListener() {
 							@Override
-							public void onClick(
-									DialogInterface dialogInterface, int i) {
+							public void onClick(DialogInterface dialogInterface, int i) {
 								if (finishActivity) {
 									finishActivity();
 								}
@@ -161,6 +158,9 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+
+		FlurryAgent.onStartSession(this, "YOUR_API_KEY");
+
 		if (FRIEND_PICKER.equals(getIntent().getData())) {
 			try {
 				friendPickerFragment.loadData(false);
@@ -169,12 +169,19 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			}
 		}
 	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();		
+		FlurryAgent.onEndSession(this);
+	}
 
 	private void saveSelection() {
-		List <GraphUser> selectedUsers = friendPickerFragment.getSelection();
+		List<GraphUser> selectedUsers = friendPickerFragment.getSelection();
 		if (selectedUsers == null || selectedUsers.size() == 0)
 			return;
-		
+
 		// Parameters for HTTP request
 		List<String> parameters = new ArrayList<String>();
 

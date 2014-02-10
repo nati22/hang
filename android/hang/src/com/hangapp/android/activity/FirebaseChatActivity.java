@@ -35,6 +35,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.database.Database;
@@ -175,7 +176,14 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		chatMemberPresentMyselfFirebase.onDisconnect().removeValue();
 
 	}
-
+	
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		FlurryAgent.onStartSession(this, "YOUR_API_KEY");
+	}
+	 
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -328,6 +336,14 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 	}
 
+	@Override
+	protected void onStop()
+	{
+		super.onStop();		
+		FlurryAgent.onEndSession(this);
+	}
+
+	
 	public void sendMessage(View v) {
 		final String message = editTextChatMessage.getText().toString().trim();
 

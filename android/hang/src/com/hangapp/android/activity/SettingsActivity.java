@@ -14,6 +14,7 @@ import com.audobox.Audobox;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.util.BaseActivity;
@@ -87,6 +88,13 @@ public final class SettingsActivity extends BaseActivity {
 	};
 
 	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		FlurryAgent.onStartSession(this, Keys.FLURRY_KEY);
+	}
+	
+	@Override
 	public void onResume() {
 		super.onResume();
 		uiHelper.onResume();
@@ -112,6 +120,14 @@ public final class SettingsActivity extends BaseActivity {
 		uiHelper.onPause();
 	}
 
+	@Override
+	protected void onStop()
+	{
+		super.onStop();		
+		FlurryAgent.onEndSession(this);
+	}
+
+	
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
