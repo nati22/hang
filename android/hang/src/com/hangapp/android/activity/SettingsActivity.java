@@ -139,8 +139,6 @@ public final class SettingsActivity extends BaseActivity {
 			// This stores the current User's jid.
 			editor.putString(Keys.JID, null);
 
-			// TODO: Logout of XMPP.
-			// xmpp.logout();
 			finish();
 		}
 	}

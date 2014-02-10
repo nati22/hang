@@ -12,19 +12,17 @@ import android.util.Log;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Keys;
 
 final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 	private static final String USERS_URI_SUFFIX = "/users/";
 
 	private Database database;
-	private XMPP xmpp;
 	private GoogleCloudMessaging gcm;
 	private SharedPreferences prefs;
 	private String newUserJid;
 
-	protected PutUserAsyncTask(Database database, XMPP xmpp,
+	protected PutUserAsyncTask(Database database,
 			GoogleCloudMessaging gcm, SharedPreferences prefs, Context context,
 			User newUser, List<NameValuePair> parameters) {
 		super(context, USERS_URI_SUFFIX + newUser.getJid(), parameters);
@@ -34,7 +32,6 @@ final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 		this.gcm = gcm;
 		this.prefs = prefs;
 
-		// Save this "new" user's Jid to start the XMPP service later.
 		this.newUserJid = newUser.getJid();
 	}
 
@@ -48,18 +45,6 @@ final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 			parameters.add(new BasicNameValuePair(Keys.REGISTRATION_ID,
 					registrationId));
 		}
-
-		// TODO: Start the XMPP service, regardless of whether or not you
-		// already
-		// exist on our App Engine server.
-		// TODO: This is an "unbound service". That is to say, the service that
-		// is created this way exists forever, until the application is stopped.
-		// If a user logs out and then logs back in, there will be two XMPP
-		// services in existence. Fix this.
-		// XMPP.getInstance().attemptToConnectAndLogin(newUserJid);
-		// Intent xmppServiceIntent = new Intent(context, XMPP.class);
-		// xmppServiceIntent.putExtra(Keys.JID, newUserJid);
-		// context.startService(xmppServiceIntent);
 
 		// Execute the PUT request
 		super.call();
@@ -79,7 +64,7 @@ final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 
 		// If the user was successfully saved into the database, directly
 		// execute a GetMyDataAsyncTask call.
-		new GetMyDataAsyncTask(database, xmpp, context, newUserJid).execute();
+		new GetMyDataAsyncTask(database, context, newUserJid).execute();
 	}
 
 	@Override

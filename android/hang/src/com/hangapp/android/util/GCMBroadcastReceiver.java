@@ -20,7 +20,6 @@ import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Keys.FromServer;
 
 // TODO: Should this class be in the "utils" package?
@@ -34,7 +33,6 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 	// Dependencies.
 	private Database database;
 	private RestClient restClient;
-	private XMPP xmpp;
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -44,7 +42,6 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, context);
-		xmpp = XMPP.getInstance();
 
 		GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(context);
 
@@ -114,7 +111,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 			} else if (type != null && type.equals(Keys.FromServer.TYPE_TICKLE)) {
 				Log.d("GCMBroadcastReceiver", "Received a TICKLE");
-				restClient.getMyData(xmpp);
+				restClient.getMyData();
 			} else if (type != null
 					&& type.equals(Keys.FromServer.TYPE_NEW_BROADCAST)) {
 				Log.d("GCMBroadcastReceiver", "Received a NEW BROADCAST");

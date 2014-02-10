@@ -43,7 +43,6 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.SntpClient;
@@ -55,13 +54,10 @@ import com.hangapp.android.util.Utils;
  * Get to this Activity via the "Chat" icon in {@link YouFragment} and
  * {@link ProfileActivity}. <br />
  * <br />
- * All XMPP messages are sent and received in this Activity. Most of our client
+ * Most of our client
  * classes (where a "client class" is either an Activity or a Fragment)
  * instantiate and inject two dependencies: {@link Database} and
- * {@link RestClient}. This class instantiates and injects a third: {@link XMPP}
- * . {@code XMPP} is the client-facing interface to *all* of our XMPP logic.
- * Don't use any other XMPP classes directly. <br />
- * <br />
+ * {@link RestClient}. <br />
  * This activity requires that a String MUC name was passed into it at creation.
  * The JID of an MUC (the MUC's name) is always the JID of the user who owns
  * that Proposal.
@@ -130,12 +126,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			return;
 		}
 
-		// Join the Muc.
-		// TODO: Remove me. Don't directly join the MUC from here; instead just
-		// add this MUC to the list of MUCs to join and have XMPPIntentService
-		// do it for you.
 		myJid = database.getMyJid();
-		// xmpp.joinMuc(mucName, myJid);
 
 		setupChatFirebase();
 
@@ -335,8 +326,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		// Remove listener
 		database.removeIncomingBroadcastsListener(this);
 
-		// "Unsubscribe" this activity from new MUC messages.
-		/* xmpp.removeMucListener(mucName, this); */
 	}
 
 	public void sendMessage(View v) {

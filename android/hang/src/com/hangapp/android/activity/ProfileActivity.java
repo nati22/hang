@@ -5,12 +5,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -19,11 +13,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.PorterDuff.Mode;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -52,7 +45,6 @@ import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
@@ -95,7 +87,6 @@ public final class ProfileActivity extends BaseActivity implements
 	// Dependencies.
 	private Database database;
 	private RestClient restClient;
-	private XMPP xmpp;
 
 	private boolean allowedToClickChatButton = true;
 
@@ -107,7 +98,6 @@ public final class ProfileActivity extends BaseActivity implements
 		// Instantiate dependencies
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
-		xmpp = XMPP.getInstance();
 
 		// Setup listener
 		database.addIncomingBroadcastsListener(this);
@@ -229,7 +219,7 @@ public final class ProfileActivity extends BaseActivity implements
 						}
 						// Remove yourself from the Interested list of this user.
 						else {
-							restClient.deleteInterested(xmpp, friend.getJid());
+							restClient.deleteInterested(friend.getJid());
 							allowedToClickChatButton = false;
 						}
 					}

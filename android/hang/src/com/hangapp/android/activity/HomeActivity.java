@@ -40,7 +40,6 @@ import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
@@ -71,7 +70,6 @@ public final class HomeActivity extends BaseActivity implements
 	private SharedPreferences prefs;
 	private Database database;
 	private RestClient restClient;
-	private XMPP xmpp;
 
 	// Facebook SDK member variables.
 	private UiLifecycleHelper uiHelper;
@@ -105,7 +103,6 @@ public final class HomeActivity extends BaseActivity implements
 				.getDefaultSharedPreferences(getApplicationContext());
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
-		xmpp = XMPP.getInstance();
 		LayoutInflater inflater = LayoutInflater.from(this);
 
 		// Initialize the ViewPager and set it to be the ContentView of this
@@ -177,7 +174,7 @@ public final class HomeActivity extends BaseActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_refresh:
-			restClient.getMyData(xmpp);
+			restClient.getMyData();
 
 			return true;
 		case R.id.menu_settings:
@@ -235,7 +232,7 @@ public final class HomeActivity extends BaseActivity implements
 			setContentView(mViewPager);
 			getSupportActionBar().show();
 
-			restClient.getMyData(xmpp);
+			restClient.getMyData();
 		}
 
 		// (Facebook SDK) For scenarios where the main activity is launched and
@@ -263,8 +260,6 @@ public final class HomeActivity extends BaseActivity implements
 					editor.putString(Keys.JID, graphUser.getId());
 					editor.commit();
 					
-					
-
 					User me = new User(graphUser.getId(), graphUser
 							.getFirstName(), graphUser.getLastName());
 
@@ -273,10 +268,7 @@ public final class HomeActivity extends BaseActivity implements
 							me.getLastName());
 
 					// Register the "me" User object into our server.
-					restClient.registerNewUser(xmpp, me);
-
-					// Attempt to connect to XMPP using the new "me" JID.
-					xmpp.connect(me.getJid(), getApplicationContext());
+					restClient.registerNewUser(me);
 				}
 			}
 		});

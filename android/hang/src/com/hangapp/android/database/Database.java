@@ -572,9 +572,6 @@ public final class Database {
 	 * Returns a list of the JIDs of the users whose Proposals I'm currently
 	 * interested in.
 	 * 
-	 * This is useful for knowing which JIDs I'm currently "subscribed" to in
-	 * XMPP.
-	 * 
 	 * @return
 	 */
 	public List<String> getJidsImInterestedIn() {
@@ -633,8 +630,6 @@ public final class Database {
 		// usersDataSource.close();
 
 		library.clear();
-
-		// FIXME: Clear out XMPP messages here as well.
 	}
 
 }

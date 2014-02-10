@@ -1,4 +1,4 @@
-package com.hangapp.android.model.callback;
+/*package com.hangapp.android.model.callback;
 
 import java.util.List;
 
@@ -8,3 +8,4 @@ public interface MucListener {
 
 	public void onMucMessageUpdate(String mucName, List<Message> messages);
 }
+*/

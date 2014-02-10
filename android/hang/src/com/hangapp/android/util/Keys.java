@@ -32,25 +32,6 @@ public final class Keys {
 	public static final String MESSAGE_FROM = "message_from";
 	public static final String MESSAGE_BODY = "message_body";
 
-	/*
-	 * IntentService message codes.
-	 */
-	public static final String MESSAGE = "msg";
-	public static final int XMPP_CONNECT = 100;
-	public static final int XMPP_REGISTER = 101;
-	public static final int XMPP_LOGIN = 102;
-	public static final int XMPP_LOGOUT = 103;
-	public static final int XMPP_JOIN_MUC = 104;
-	public static final int XMPP_LEAVE_MUC = 105;
-	public static final int XMPP_SEND_MUC_MESSAGE = 106;
-	public static final int XMPP_JOIN_ALL_MUCS = 107;
-
-	/*
-	 * BroadcastReceiver message codes.
-	 */
-	public static final int MUC_JOIN_ROOM = 200;
-	public static final int MUC_SEND_MESSAGE = 201;
-
 	/**
 	 * Instead of converting directly from Date objects to Strings and vice
 	 * versa, Android wants us to use DateFormat objects which require a
@@ -102,7 +83,7 @@ public final class Keys {
 	/**
 	 * Flurry Keys
 	 */
-	public static final String FLURRY_KEY = "NKR88TW7NKXYS5XDZ2DC";
+	public static final String FLURRY_KEY = "M439JMSVHG876ZX7WV5M";
 
 	public static class FlurryEvent {
 
@@ -133,6 +114,6 @@ public final class Keys {
 	/**
 	 * Google Analytics Keys
 	 */
-	public static final String GOOGLE_ANALYTICS_TRACKING_ID = "UA-43852319-1";
-
+/*	public static final String GOOGLE_ANALYTICS_TRACKING_ID = "UA-43852319-1";
+*/
 }

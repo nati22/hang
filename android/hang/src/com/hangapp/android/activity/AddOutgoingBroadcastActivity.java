@@ -21,7 +21,6 @@ import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.BaseActivity;
 
 /**
@@ -43,7 +42,6 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 
 	private Database database;
 	private RestClient restClient;
-	private XMPP xmpp;
 
 	// Helper interface for Facebook FriendPicker widget. It uses
 	// this interface to query whether or not the friend with that
@@ -64,7 +62,6 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 		// Instantiate dependencies.
 		database = Database.getInstance();
 		restClient = new RestClientImpl(database, getApplicationContext());
-		xmpp = XMPP.getInstance();
 
 		// (lifted from Facebook tutorial above)
 		Bundle args = getIntent().getExtras();
@@ -188,6 +185,6 @@ public final class AddOutgoingBroadcastActivity extends BaseActivity {
 			parameters.add(graphUser.getId());
 		}
 
-		restClient.addBroadcastees(xmpp, parameters);
+		restClient.addBroadcastees(parameters);
 	}
 }

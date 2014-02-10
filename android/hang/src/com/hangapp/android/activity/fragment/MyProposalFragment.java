@@ -25,7 +25,6 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
-import com.hangapp.android.network.xmpp.XMPP;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
 
@@ -54,7 +53,6 @@ public final class MyProposalFragment extends SherlockFragment {
 	// Dependencies.
 	private Database database;
 	private RestClient restClient;
-	private XMPP xmpp;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +62,6 @@ public final class MyProposalFragment extends SherlockFragment {
 		database = Database.getInstance();
 		restClient = new RestClientImpl(Database.getInstance(),
 				getSherlockActivity());
-		xmpp = XMPP.getInstance();
 	}
 
 	@Override
@@ -134,7 +131,7 @@ public final class MyProposalFragment extends SherlockFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		restClient.getMyData(xmpp);
+		restClient.getMyData();
 		// Load up my Proposal from the database.
 		myProposal = database.getMyProposal();
 		// onMyProposalUpdate(myProposal);

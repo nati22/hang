@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jivesoftware.smack.packet.Message;
 import org.joda.time.DateTime;
 import org.joda.time.Hours;
 import org.joda.time.Minutes;
@@ -17,6 +16,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Message;
 import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
@@ -151,10 +151,10 @@ public final class Utils {
 		v.vibrate(400);
 	}
 
-	public static String parseJidFromMessage(Message message) {
+/*	public static String parseJidFromMessage(Message message) {
 		return message.getFrom().substring(
 				message.getFrom().indexOf(".com/") + 5);
-	}
+	}*/
 
 	/**
 	 * Takes a JID and converts it to the person's name. Will return the string

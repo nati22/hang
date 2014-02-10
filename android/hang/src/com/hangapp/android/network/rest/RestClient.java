@@ -5,27 +5,22 @@ import java.util.List;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
-import com.hangapp.android.network.xmpp.XMPP;
 
 public interface RestClient {
-	public void registerNewUser(XMPP xmpp, User newUser);
-
-	public void getMyData(XMPP xmpp);
-
+	public void registerNewUser(User newUser);
+	
+	public void getMyData();
+	
 	public void updateMyAvailability(Availability status);
 
 	public void updateMyProposal(Proposal proposal);
 
 	public void deleteMyProposal();
 
-	// TODO: Remove unnecessary dependency on XMPP (due to call of
-	// GetUserData).
-	public void addBroadcastees(XMPP xmpp, List<String> broadcasteeJids);
-
-	// TODO: Remove unnecessary dependency on XMPP (due to call of
-	// GetUserData).
-	public void deleteBroadcastees(XMPP xmpp, List<String> broadcasteeJids);
-
+	public void addBroadcastees(List<String> broadcasteeJids);
+	
+	public void deleteBroadcastees(List<String> broadcasteeJids);
+	
 	public void sendNudge(String targetJid);
 
 	public void sendChatNotification(List<String> targets, String hostJid);
@@ -34,13 +29,9 @@ public interface RestClient {
 
 	public void setConfirmed(String broadcasterJid);
 
-	// TODO: Remove unnecessary dependency on XMPP (due to call of
-	// GetUserData).
-	public void deleteInterested(XMPP xmpp, String broadcasterJid);
+	public void deleteInterested(String broadcasterJid);
 
-	// TODO: Remove unnecessary dependency on XMPP (due to call of
-	// GetUserData).
-	public void deleteConfirmed(XMPP xmpp, String broadcasterJid);
+	public void deleteConfirmed(String broadcasterJid);
 
 	public void setSeenProposal(String broadcasterJid);
 
