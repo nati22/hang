@@ -7,7 +7,6 @@ import org.apache.http.NameValuePair;
 import android.content.Context;
 import android.util.Log;
 
-import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 
 class PutAvailabilityAsyncTask extends BasePutRequestAsyncTask<Availability> {

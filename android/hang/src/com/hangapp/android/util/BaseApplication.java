@@ -4,6 +4,11 @@ import android.app.Application;
 
 import com.hangapp.android.database.Database;
 
+/**
+ * This is the very root of the whole app.
+ * @author NATI
+ *
+ */
 public class BaseApplication extends Application {
 
 	@Override

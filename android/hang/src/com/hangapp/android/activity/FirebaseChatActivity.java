@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.joda.time.DateTime;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -94,8 +95,11 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	private Firebase chatMemberMyselfFirebase;
 	private Firebase chatMembersPresentFirebase;
 	private Firebase chatMemberPresentMyselfFirebase;
+	@SuppressWarnings("unused")
 	private Firebase chatHostFirebase;
 	private Firebase chatMessagesFirebase;
+	
+	List<ChatMessage> chatMsgs;
 
 	// Dependencies.
 	private Database database;
@@ -191,7 +195,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		// Setup listener
 		database.addIncomingBroadcastsListener(this);
 
-		final List<ChatMessage> chatMsgs = new ArrayList<ChatMessage>();
+		chatMsgs = new ArrayList<ChatMessage>();
 
 		/** Get the previous messages from Firebase */
 		chatMessagesFirebase.addChildEventListener(new ChildEventListener() {
@@ -216,8 +220,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				String time = arg0.getName().toString();
 
 				receiveNewMessage(new ChatMessage(text, jid, time));
+				
 				chatAdapter.notifyDataSetChanged();
-				Log.d(TAG, "added msg " + text);
+//				Log.d(TAG, "added msg " + text);
 			}
 
 			@Override
@@ -267,6 +272,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 					}
 				});
 
+		// Make sure that the proposal firebase doesn't get destroyed by the host
 		chatFirebase.addValueEventListener(new ValueEventListener() {
 
 			@Override
@@ -505,6 +511,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			db = Database.getInstance();
 		}
 
+		@SuppressLint("SimpleDateFormat")
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;

@@ -10,10 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.hangapp.android.util.Keys;
-
 import android.os.Parcel;
 import android.util.Log;
+
+import com.hangapp.android.util.Keys;
 
 final public class Me extends User {
 
@@ -220,8 +220,12 @@ final public class Me extends User {
 				// TODO: Use new Availability model.
 				user.setAvailability(availability);
 			} catch (JSONException e) {
+//				Crashlytics.logException("User.parseLibrary", "User " + user.firstName
+//						+ " had no proposal: " + e.getMessage());
+				
 				Log.e("User.parseLibrary", "User " + user.firstName
 						+ " had no proposal: " + e.getMessage());
+				
 			}
 
 			// Try to parse this user's Proposal.

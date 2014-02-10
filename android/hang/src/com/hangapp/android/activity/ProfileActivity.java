@@ -68,6 +68,7 @@ public final class ProfileActivity extends BaseActivity implements
 	private ImageButton imageButtonFriendsAvailability;
 	private TextView textViewFriendsAvailabilityExpirationDate;
 	private TextView textViewStatus;
+	@SuppressWarnings("unused")
 	private RelativeLayout relativeLayoutProposalProfileBg;
 	private RelativeLayout relativeLayoutFriendsProposal;
 	private ImageView imageViewOpenChat;
@@ -257,6 +258,7 @@ public final class ProfileActivity extends BaseActivity implements
 		profilePictureViewFriendIcon.setOnClickListener(new OnClickListener() {
 
 			/** TODO: Remove newapi suppressLint */
+			@SuppressWarnings("deprecation")
 			@SuppressLint("NewApi")
 			@Override
 			public void onClick(View v) {
@@ -459,8 +461,6 @@ public final class ProfileActivity extends BaseActivity implements
 
 	class GetCroppedCircleIcon extends AsyncTask<String, Void, Bitmap> {
 
-		private Exception exception;
-
 		protected Bitmap doInBackground(String... urls) {
 			try {
 				URL imageURL = new URL("http://graph.facebook.com/"
@@ -470,7 +470,6 @@ public final class ProfileActivity extends BaseActivity implements
 
 				return bitmap;
 			} catch (Exception e) {
-				this.exception = e;
 				return null;
 			}
 		}

@@ -18,7 +18,6 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
-import com.firebase.client.Firebase;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.database.Database;

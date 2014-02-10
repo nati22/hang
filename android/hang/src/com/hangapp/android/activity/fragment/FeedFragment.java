@@ -18,7 +18,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +28,6 @@ import com.hangapp.android.R;
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
-import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.network.rest.RestClient;
@@ -421,9 +419,9 @@ public final class FeedFragment extends SherlockFragment implements
 
 		class ViewHolder {
 			ProfilePictureView profilePictureView;
-			ImageView greenRing;
-			ImageView redRing;
-			ImageView greyRing;
+//			ImageView greenRing;
+//			ImageView redRing;
+//			ImageView greyRing;
 			TextView textViewFriendName;
 			TextView textViewAvailabilityDescription;
 			// ImageView imageViewAvailability;

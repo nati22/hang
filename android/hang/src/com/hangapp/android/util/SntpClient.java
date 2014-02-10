@@ -52,7 +52,7 @@ import android.util.Log;
 public class SntpClient {
 	private static final String TAG = "SntpClient";
 
-	private static final int REFERENCE_TIME_OFFSET = 16;
+	// private static final int REFERENCE_TIME_OFFSET = 16;
 	private static final int ORIGINATE_TIME_OFFSET = 24;
 	private static final int RECEIVE_TIME_OFFSET = 32;
 	private static final int TRANSMIT_TIME_OFFSET = 40;
@@ -138,8 +138,7 @@ public class SntpClient {
 			mNtpTimeReference = responseTicks;
 			mRoundTripTime = roundTripTime;
 		} catch (Exception e) {
-			if (false)
-				Log.d(TAG, "request time failed: " + e);
+			Log.d(TAG, "request time failed: " + e);
 			return false;
 		} finally {
 			if (socket != null) {
@@ -150,29 +149,31 @@ public class SntpClient {
 		return true;
 	}
 
-	
+	@SuppressWarnings("deprecation")
 	public boolean requestTimeOtherWay(String host, int timeout) {
-		 try {
-          TimeTCPClient client = new TimeTCPClient();
-          try {
-              // Set timeout of 60 seconds
-              client.setDefaultTimeout(60000);
-              // Connecting to time server
-              // Other time servers can be found at : http://tf.nist.gov/tf-cgi/servers.cgi#
-              // Make sure that your program NEVER queries a server more frequently than once every 4 seconds
-              client.connect(host);
-              System.out.println(client.getDate());
-              Log.d("TAG", "R2D2:  " + client.getDate().toGMTString());
-          } finally {
-              client.disconnect();
-          }
-          return true;
-      } catch (IOException e) {
-          e.printStackTrace();
-          return false;
-      }
+		try {
+			TimeTCPClient client = new TimeTCPClient();
+			try {
+				// Set timeout of 60 seconds
+				client.setDefaultTimeout(60000);
+				// Connecting to time server
+				// Other time servers can be found at :
+				// http://tf.nist.gov/tf-cgi/servers.cgi#
+				// Make sure that your program NEVER queries a server more
+				// frequently than once every 4 seconds
+				client.connect(host);
+				System.out.println(client.getDate());
+				Log.d("TAG", "R2D2:  " + client.getDate().toGMTString());
+			} finally {
+				client.disconnect();
+			}
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
-	
+
 	/**
 	 * Returns the time computed from the NTP transaction.
 	 * 

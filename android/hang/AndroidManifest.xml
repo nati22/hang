@@ -98,12 +98,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.HomeActivity" />
         </activity>
-
-        <service android:name=".network.xmpp.XMPPIntentService" >
-        </service>
-
-        <receiver android:name=".network.xmpp.XMPPBroadcastReceiver" >
-        </receiver>
     </application>
 
 </manifest>
