@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_alignParentBottom="true"
-        android:background="@color/LightGrey"
-        android:visibility="invisible" />
+        android:background="@color/LighterGray"
+        android:visibility="visible" />
 
 </RelativeLayout>

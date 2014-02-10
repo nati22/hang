@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -487,17 +488,12 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		}
 	}
 
-	/* class ChatMessageAdapter extends ArrayAdapter<ChatMessage> { */
 	class ChatMessageAdapter extends ArrayAdapter<ChatMessageGroup> {
 
 		Database db;
 		Context context;
 
 		public ChatMessageAdapter(Context context, int textViewResourceId) {
-			/*
-			 * super(context, textViewResourceId,
-			 * FirebaseChatActivity.this.chatMessages);
-			 */
 			super(context, textViewResourceId,
 					FirebaseChatActivity.this.chatMessageGroups);
 			this.context = context;
@@ -508,12 +504,12 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 
-			// ChatMessage message = getItem(position);
 			ChatMessageGroup messageGroup = getItem(position);
 			String fromJid = messageGroup.getSenderJid();
 
 			// Determine if the message is from 'Me'
 			boolean isMyMessage = fromJid.equals(db.getMyJid());
+
 			// Inflate the cell if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
@@ -522,8 +518,10 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						R.layout.cell_chat_message, null);
 
 				// Reference views
-/*				holder.relLayoutBg = (RelativeLayout) convertView
-						.findViewById(R.id.chat_message_background);*/
+				/*
+				 * holder.relLayoutBg = (RelativeLayout) convertView
+				 * .findViewById(R.id.chat_message_background);
+				 */
 				holder.profilePictureView = (ProfilePictureView) convertView
 						.findViewById(R.id.profilePictureViewMessageFrom);
 				holder.textViewMsgFrom = (TextView) convertView
@@ -555,15 +553,18 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				SimpleDateFormat sdf = new SimpleDateFormat("M/d h:mm:ss a");
 
 				// if same day, don't show day (just time)
-				/* need extra logic because joda DateTime week goes 
-				 * from M-Su while Calendar goes from Su-Sat */
-				int day_of_week = (new DateTime(new Date(secs)).getDayOfWeek() + 1) % 7;
-				int msg_day_of_week = Calendar.getInstance().get(
-						Calendar.DAY_OF_WEEK);
+				/*
+				 * need extra logic because joda DateTime week goes from M-Su while
+				 * Calendar goes from Su-Sat
+				 */
+				int current_day_of_year = (new DateTime(new Date(secs))
+						.getDayOfYear());
+				int msg_day_of_year = Calendar.getInstance().get(
+						Calendar.DAY_OF_YEAR);
 
-				if (day_of_week == msg_day_of_week)
+				if (current_day_of_year == msg_day_of_year)
 					sdf = new SimpleDateFormat("h:mm:ss a");
-
+				
 				String time = sdf.format(new Date(secs));
 
 				// create TextView
@@ -572,6 +573,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				tView.setTextSize(getResources().getDimensionPixelSize(
 						R.dimen.chat_text_size));
 				tView.setFocusable(false);
+				tView.setGravity(isMyMessage ? Gravity.LEFT : Gravity.RIGHT);
 
 				LinearLayout.LayoutParams tParams = new LinearLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -607,10 +609,14 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsLinLayoutMsgList
 						.addRule(isMyMessage ? alignLeft : alignRight);
+				paramsLinLayoutMsgList.addRule(isMyMessage ? RelativeLayout.LEFT_OF
+						: RelativeLayout.RIGHT_OF, R.id.profilePictureViewHolder);
 				int scale = (int) getResources().getDisplayMetrics().density;
 				paramsLinLayoutMsgList.setMargins(10 * scale, 2 * scale,
 						10 * scale, 0);
 				holder.linLayoutMessageList.setPadding(0, 2, 0, 2);
+				holder.linLayoutMessageList.setGravity(isMyMessage ? Gravity.LEFT
+						: Gravity.RIGHT);
 				holder.linLayoutMessageList.setLayoutParams(paramsLinLayoutMsgList);
 
 			}
@@ -639,7 +645,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		}
 
 		class ViewHolder {
-//			RelativeLayout relLayoutBg;
+			// RelativeLayout relLayoutBg;
 			LinearLayout linLayoutProfilePicHolder;
 			ProfilePictureView profilePictureView;
 			TextView textViewMsgFrom;
