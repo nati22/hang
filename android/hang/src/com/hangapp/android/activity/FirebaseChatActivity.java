@@ -78,6 +78,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	private String mucName;
 
 	private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
+	private List<ChatMessageGroup> chatMessageGroups = new ArrayList<ChatMessageGroup>();
 	private ChatMessageAdapter chatAdapter;
 
 	private List<String> otherPresentUsers = new ArrayList<String>();
@@ -125,6 +126,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			Toast.makeText(getApplicationContext(), "Muc name was null",
 					Toast.LENGTH_SHORT).show();
 			finish();
+			return;
 		}
 
 		// Join the Muc.
@@ -213,8 +215,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				String jid = arg0.child("jid").getValue().toString();
 				String time = arg0.getName().toString();
 
-				chatMessages.add(new ChatMessage(text, jid, time));
+				receiveNewMessage(new ChatMessage(text, jid, time));
 				chatAdapter.notifyDataSetChanged();
+				Log.d(TAG, "added msg " + text);
 			}
 
 			@Override
@@ -298,6 +301,31 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 		// Notify data set changed.
 		chatAdapter.notifyDataSetChanged();
+	}
+
+	private void receiveNewMessage(ChatMessage newMsg) {
+		// add to list of ChatMessages
+		// TODO: this is probably useless if chat message groups works
+		chatMessages.add(newMsg);
+
+		// add to ChatMessage groups
+		if (!chatMessageGroups.isEmpty()) {
+			// get last message group
+			ChatMessageGroup lastGroup = chatMessageGroups.get(chatMessageGroups
+					.size() - 1);
+			// if it's same sender, add to last group
+			if (lastGroup.getSenderJid().equals(newMsg.jid)) {
+				lastGroup.addChatMessage(newMsg);
+			} else {
+				
+				// else create new message group
+				chatMessageGroups.add(new ChatMessageGroup(newMsg));
+			}
+		} else {
+
+			// add new msg to first group
+			chatMessageGroups.add(new ChatMessageGroup(newMsg));
+		}
 	}
 
 	@Override
@@ -413,6 +441,52 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		}
 	}
 
+	class ChatMessageGroup {
+		
+		public ChatMessageGroup(ArrayList<ChatMessage> msgs) {
+			messages = msgs;
+		}
+		
+		public ChatMessageGroup(ChatMessage msg) {
+			messages = new ArrayList<ChatMessage>();
+			addChatMessage(msg);
+		}
+		
+		private String sender = "";
+		private ArrayList<ChatMessage> messages;
+
+		public ArrayList<ChatMessage> getChatMessages() {
+			return messages;
+		}
+
+		public ChatMessage getChatMessageAt(int pos) {
+			return messages.get(pos);
+		}
+
+		public boolean addChatMessage(ChatMessage msg) {
+			if (sender.equals("")) {
+				sender = msg.jid;
+			}
+			return messages.add(msg);
+		}
+
+		public ChatMessage getLastChatMessage() {
+			if (!messages.isEmpty()) {
+				return messages.get(messages.size() - 1);
+			} else {
+				return null;
+			}
+		}
+
+		public String getSenderJid() {
+			if (!sender.equals("")) {
+				return sender;
+			} else {
+				return null;
+			}
+		}
+	}
+
 	class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
 
 		Database db;
@@ -452,7 +526,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						.findViewById(R.id.bottom_divider);
 
 				convertView.setTag(holder);
-				
+
 			} else {
 				// convertview already exists
 				holder = (ViewHolder) convertView.getTag();
@@ -498,62 +572,63 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			 * Determine if previous message is from the same sender so that we can
 			 * remove the divider
 			 */
-			
+
 			// determine whether it's my first time seeing this cell
-//			if (holder.unrecycledCell) {
-//				
-//				// determine whether to remove icon or not
-//				if (position != 0) {
-//					ChatMessage prevMessage = getItem(position - 1);
-//					boolean sameSender = prevMessage.jid.equals(fromJid);
-//
-//					if (sameSender) {
-//						holder.shouldHaveIcon = false;
-//						
-//						// remove bottom divider line
-//						holder.viewBottomDivider.setVisibility(View.GONE);
-//
-//						// remove profile pic holder entirely
-//						holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
-//
-//						// make message text realign
-//						RelativeLayout.LayoutParams paramsText = new RelativeLayout.LayoutParams(
-//								LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//						paramsText
-//								.addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
-//										: RelativeLayout.ALIGN_PARENT_RIGHT);
-//						int scale = (int) getResources().getDisplayMetrics().density;
-//						paramsText.setMargins(10 * scale, 2 * scale,
-//								10 * scale, 0);
-//						holder.textViewFirstMsg.setLayoutParams(paramsText);
-//
-//					} else {
-//						Log.d(TAG, "diff author");
-//					}
-//				}
-//				
-//			} else {
-//				if (!holder.shouldHaveIcon) {
-//					/** TODO THIS CODE IS NOT DRY (copied from the 'if' block) */
-//				// remove bottom divider line
-//					holder.viewBottomDivider.setVisibility(View.GONE);
-//
-//					// remove profile pic holder entirely
-//					holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
-//
-//					// make message text realign
-//					RelativeLayout.LayoutParams paramsText = new RelativeLayout.LayoutParams(
-//							LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//					paramsText
-//							.addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
-//									: RelativeLayout.ALIGN_PARENT_RIGHT);
-//					int scale = (int) getResources().getDisplayMetrics().density;
-//					paramsText.setMargins(10 * scale, 2 * scale,
-//							10 * scale, 0);
-//					holder.textViewFirstMsg.setLayoutParams(paramsText);
-//				}
-//			}
-			
+			// if (holder.unrecycledCell) {
+			//
+			// // determine whether to remove icon or not
+			// if (position != 0) {
+			// ChatMessage prevMessage = getItem(position - 1);
+			// boolean sameSender = prevMessage.jid.equals(fromJid);
+			//
+			// if (sameSender) {
+			// holder.shouldHaveIcon = false;
+			//
+			// // remove bottom divider line
+			// holder.viewBottomDivider.setVisibility(View.GONE);
+			//
+			// // remove profile pic holder entirely
+			// holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
+			//
+			// // make message text realign
+			// RelativeLayout.LayoutParams paramsText = new
+			// RelativeLayout.LayoutParams(
+			// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			// paramsText
+			// .addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
+			// : RelativeLayout.ALIGN_PARENT_RIGHT);
+			// int scale = (int) getResources().getDisplayMetrics().density;
+			// paramsText.setMargins(10 * scale, 2 * scale,
+			// 10 * scale, 0);
+			// holder.textViewFirstMsg.setLayoutParams(paramsText);
+			//
+			// } else {
+			// Log.d(TAG, "diff author");
+			// }
+			// }
+			//
+			// } else {
+			// if (!holder.shouldHaveIcon) {
+			// /** TODO THIS CODE IS NOT DRY (copied from the 'if' block) */
+			// // remove bottom divider line
+			// holder.viewBottomDivider.setVisibility(View.GONE);
+			//
+			// // remove profile pic holder entirely
+			// holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
+			//
+			// // make message text realign
+			// RelativeLayout.LayoutParams paramsText = new
+			// RelativeLayout.LayoutParams(
+			// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+			// paramsText
+			// .addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
+			// : RelativeLayout.ALIGN_PARENT_RIGHT);
+			// int scale = (int) getResources().getDisplayMetrics().density;
+			// paramsText.setMargins(10 * scale, 2 * scale,
+			// 10 * scale, 0);
+			// holder.textViewFirstMsg.setLayoutParams(paramsText);
+			// }
+			// }
 
 			// If isMyMessage, this will become null
 			User fromUser = db.getIncomingUser(fromJid);
@@ -582,7 +657,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			holder.textViewFirstMsg.setText(message.getText());
 			holder.textViewMsgFrom.setText(fromName);
 			holder.profilePictureView.setProfileId(fromJid);
-//			holder.unrecycledCell = false;
+			// holder.unrecycledCell = false;
 			return convertView;
 		}
 
@@ -592,11 +667,11 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			TextView textViewMsgFrom;
 			TextView textViewFirstMsg;
 			View viewBottomDivider;
-//			boolean unrecycledCell = true;
-//			boolean shouldHaveIcon = true;
+			// boolean unrecycledCell = true;
+			// boolean shouldHaveIcon = true;
 		}
 	}
-	
+
 	@Override
 	public void onIncomingBroadcastsUpdate(List<User> incomingBroadcasts) {
 		// If this is the user's own chat.
