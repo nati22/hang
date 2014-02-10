@@ -2,12 +2,14 @@ package com.hangapp.android.activity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.joda.time.DateTime;
+
 import android.content.Context;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -22,9 +24,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.RelativeLayout.LayoutParams;
 
 import com.facebook.widget.ProfilePictureView;
 import com.firebase.client.ChildEventListener;
@@ -38,7 +40,6 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
-import com.hangapp.android.network.rest.PutChatNotificationAsyncTask;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.network.xmpp.XMPP;
@@ -77,7 +78,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	// Member datum.
 	private String mucName;
 
-	private List<ChatMessage> chatMessages = new ArrayList<ChatMessage>();
 	private List<ChatMessageGroup> chatMessageGroups = new ArrayList<ChatMessageGroup>();
 	private ChatMessageAdapter chatAdapter;
 
@@ -304,10 +304,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	}
 
 	private void receiveNewMessage(ChatMessage newMsg) {
-		// add to list of ChatMessages
-		// TODO: this is probably useless if chat message groups works
-		chatMessages.add(newMsg);
-
 		// add to ChatMessage groups
 		if (!chatMessageGroups.isEmpty()) {
 			// get last message group
@@ -356,7 +352,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		buttonSendMessage.setEnabled(false);
 		// This AsyncTask gets the NTP server time
 		// and handles pushing data to Firebase
-		new GetNtpTimeTask().execute(Utils.someCaliNtpServers[0]);
+		new SendMessageAsyncTask().execute(Utils.someCaliNtpServers[0]);
 
 		// Get IDs of Interested users WHO ARE NOT PRESENT in the chat
 		List<String> usersToNotify = new ArrayList<String>();
@@ -384,7 +380,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 	}
 
-	private class GetNtpTimeTask extends AsyncTask<String, Void, Void> {
+	private class SendMessageAsyncTask extends AsyncTask<String, Void, Void> {
 
 		final String message = editTextChatMessage.getText().toString().trim();
 		private long ntpTime = 0;
@@ -526,16 +522,14 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						R.layout.cell_chat_message, null);
 
 				// Reference views
+/*				holder.relLayoutBg = (RelativeLayout) convertView
+						.findViewById(R.id.chat_message_background);*/
 				holder.profilePictureView = (ProfilePictureView) convertView
 						.findViewById(R.id.profilePictureViewMessageFrom);
 				holder.textViewMsgFrom = (TextView) convertView
 						.findViewById(R.id.textViewMessageFrom2);
 				holder.linLayoutProfilePicHolder = (LinearLayout) convertView
 						.findViewById(R.id.profilePictureViewHolder);
-				/*
-				 * holder.textViewFirstMsg = (TextView) convertView
-				 * .findViewById(R.id.textViewMessageBody2);
-				 */
 				holder.linLayoutMessageList = (LinearLayout) convertView
 						.findViewById(R.id.linLayoutMsgList);
 				holder.viewBottomDivider = (View) convertView
@@ -550,15 +544,35 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			// clear linLayout
 			holder.linLayoutMessageList.removeAllViews();
-			
+
 			// add messages to linlayout
 			for (int i = 0; i < messageGroup.size(); i++) {
 				// get msg
 				ChatMessage msg = messageGroup.getChatMessageAt(i);
 
+				// get time
+				long secs = Long.parseLong(msg.getTime());
+				SimpleDateFormat sdf = new SimpleDateFormat("M/d h:mm:ss a");
+
+				// if same day, don't show day (just time)
+				/* need extra logic because joda DateTime week goes 
+				 * from M-Su while Calendar goes from Su-Sat */
+				int day_of_week = (new DateTime(new Date(secs)).getDayOfWeek() + 1) % 7;
+				int msg_day_of_week = Calendar.getInstance().get(
+						Calendar.DAY_OF_WEEK);
+
+				if (day_of_week == msg_day_of_week)
+					sdf = new SimpleDateFormat("h:mm:ss a");
+
+				String time = sdf.format(new Date(secs));
+
 				// create TextView
 				TextView tView = new TextView(context);
-				tView.setText(msg.text);
+				tView.setText(msg.text + "  (" + time + ")");
+				tView.setTextSize(getResources().getDimensionPixelSize(
+						R.dimen.chat_text_size));
+				tView.setFocusable(false);
+
 				LinearLayout.LayoutParams tParams = new LinearLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				int scale = (int) getResources().getDisplayMetrics().density;
@@ -575,13 +589,6 @@ public final class FirebaseChatActivity extends BaseActivity implements
 
 			// Align xml assets according to sender
 			{
-				/*
-				 * Because of the way the adapter recycles views I can't depend on
-				 * the xml preset values, since a left aligned view that was moved
-				 * to right may be recycled and reused with different values (and
-				 * vice-versa).
-				 */
-
 				int alignRight = RelativeLayout.ALIGN_PARENT_RIGHT;
 				int alignLeft = RelativeLayout.ALIGN_PARENT_LEFT;
 
@@ -595,7 +602,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				holder.linLayoutProfilePicHolder
 						.setLayoutParams(paramsProfilePicHolder);
 
-				// move message text to other side
+				// move message list to other side
 				RelativeLayout.LayoutParams paramsLinLayoutMsgList = new RelativeLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 				paramsLinLayoutMsgList
@@ -603,73 +610,10 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				int scale = (int) getResources().getDisplayMetrics().density;
 				paramsLinLayoutMsgList.setMargins(10 * scale, 2 * scale,
 						10 * scale, 0);
+				holder.linLayoutMessageList.setPadding(0, 2, 0, 2);
 				holder.linLayoutMessageList.setLayoutParams(paramsLinLayoutMsgList);
 
 			}
-
-			/** TODO: THIS IS NOT WORKING! scrolling messes this up. */
-
-			/*
-			 * Determine if previous message is from the same sender so that we can
-			 * remove the divider
-			 */
-
-			// determine whether it's my first time seeing this cell
-			// if (holder.unrecycledCell) {
-			//
-			// // determine whether to remove icon or not
-			// if (position != 0) {
-			// ChatMessage prevMessage = getItem(position - 1);
-			// boolean sameSender = prevMessage.jid.equals(fromJid);
-			//
-			// if (sameSender) {
-			// holder.shouldHaveIcon = false;
-			//
-			// // remove bottom divider line
-			// holder.viewBottomDivider.setVisibility(View.GONE);
-			//
-			// // remove profile pic holder entirely
-			// holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
-			//
-			// // make message text realign
-			// RelativeLayout.LayoutParams paramsText = new
-			// RelativeLayout.LayoutParams(
-			// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			// paramsText
-			// .addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
-			// : RelativeLayout.ALIGN_PARENT_RIGHT);
-			// int scale = (int) getResources().getDisplayMetrics().density;
-			// paramsText.setMargins(10 * scale, 2 * scale,
-			// 10 * scale, 0);
-			// holder.textViewFirstMsg.setLayoutParams(paramsText);
-			//
-			// } else {
-			// Log.d(TAG, "diff author");
-			// }
-			// }
-			//
-			// } else {
-			// if (!holder.shouldHaveIcon) {
-			// /** TODO THIS CODE IS NOT DRY (copied from the 'if' block) */
-			// // remove bottom divider line
-			// holder.viewBottomDivider.setVisibility(View.GONE);
-			//
-			// // remove profile pic holder entirely
-			// holder.linLayoutProfilePicHolder.setVisibility(View.GONE);
-			//
-			// // make message text realign
-			// RelativeLayout.LayoutParams paramsText = new
-			// RelativeLayout.LayoutParams(
-			// LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-			// paramsText
-			// .addRule(isMyMessage ? RelativeLayout.ALIGN_PARENT_LEFT
-			// : RelativeLayout.ALIGN_PARENT_RIGHT);
-			// int scale = (int) getResources().getDisplayMetrics().density;
-			// paramsText.setMargins(10 * scale, 2 * scale,
-			// 10 * scale, 0);
-			// holder.textViewFirstMsg.setLayoutParams(paramsText);
-			// }
-			// }
 
 			// If isMyMessage, this will become null
 			User fromUser = db.getIncomingUser(fromJid);
@@ -688,29 +632,19 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				}
 			}
 
-			/*
-			 * long secs = Long.parseLong(message.getTime()); SimpleDateFormat sdf
-			 * = new SimpleDateFormat("h:mm a"); String time = sdf.format(new
-			 * Date(secs));
-			 */
-
 			// Populate Views.
-//			holder.textViewFirstMsg.setText(message.getText());
 			holder.textViewMsgFrom.setText(fromName);
 			holder.profilePictureView.setProfileId(fromJid);
-			// holder.unrecycledCell = false;
 			return convertView;
 		}
 
 		class ViewHolder {
+//			RelativeLayout relLayoutBg;
 			LinearLayout linLayoutProfilePicHolder;
 			ProfilePictureView profilePictureView;
 			TextView textViewMsgFrom;
 			LinearLayout linLayoutMessageList;
-			TextView textViewFirstMsg;
 			View viewBottomDivider;
-			// boolean unrecycledCell = true;
-			// boolean shouldHaveIcon = true;
 		}
 	}
 
