@@ -1,5 +1,6 @@
 package com.hangapp.android.activity;
 
+import com.crashlytics.android.Crashlytics;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -85,6 +86,7 @@ public final class HomeActivity extends BaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Crashlytics.start(this);
 		try {
 
 			PackageInfo info = getPackageManager().getPackageInfo(
@@ -155,52 +157,13 @@ public final class HomeActivity extends BaseActivity implements
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
-		FlurryAgent.onEndSession(this);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.activity_home, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_refresh:
-			restClient.getMyData();
-
-			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
-		default:
-			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
-					+ item.getAlphabeticShortcut());
-			return true;
-		}
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		// Save which tab we had selected into savedInstanceState.
-		outState
-				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
-		uiHelper.onSaveInstanceState(outState);
-	}
-
-	@Override
 	public void onResume() {
 		super.onResume();
 		uiHelper.onResume();
 
 		// First thing's first: check to see if the user has Google Play
 		// services installed. If he doesn't, let the Google SDK show
-		// the Dialog that redirects him to the Google Play store to install
+		// the Dialog that redirects hito install
 		// it.
 		checkPlayServices();
 
@@ -273,6 +236,46 @@ public final class HomeActivity extends BaseActivity implements
 		int initialTab = getIntent().getIntExtra(Keys.TAB_INTENT, -1);
 		if (initialTab != -1)
 			getSupportActionBar().setSelectedNavigationItem(initialTab);
+	
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.activity_home, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_refresh:
+			restClient.getMyData();
+
+			return true;
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		default:
+			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
+					+ item.getAlphabeticShortcut());
+			return true;
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		// Save which tab we had selected into savedInstanceState.
+		outState
+				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
+		uiHelper.onSaveInstanceState(outState);
 	}
 
 	/**

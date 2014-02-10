@@ -104,6 +104,7 @@
 
         <receiver android:name=".network.xmpp.XMPPBroadcastReceiver" >
         </receiver>
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="f8de2a85a2d82b400a6d6827cd8ee1ea2c27240e"/>
     </application>
 
 </manifest>
