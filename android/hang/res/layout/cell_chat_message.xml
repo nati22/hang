@@ -7,7 +7,7 @@
     android:orientation="vertical" >
 
     <!--
-    This one is the same as the one at the bottom but is 
+     This one is the same as the one at the bottom but is 
     here for the scenario when I want to add a divider to the 
     cell above. This is muuuch easier.
     -->
@@ -25,8 +25,11 @@
         android:layout_width="@dimen/chat_user_name_width"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="3dp"
+        android:padding="2dp"
         android:focusable="false"
-        android:gravity="center_horizontal"
+        android:gravity="center"
         android:orientation="vertical" >
 
         <com.facebook.widget.ProfilePictureView
@@ -52,19 +55,19 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/textViewMessageBody2"
+    <LinearLayout
+        android:id="@+id/linLayoutMsgList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignTop="@id/profilePictureViewHolder"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="3dp"
         android:layout_toLeftOf="@id/profilePictureViewHolder"
-        android:focusable="false"
-        android:text="Message body goes here."
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textSize="14sp" />
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="15dp"
+        android:focusable="false" >
+
+    </LinearLayout>
 
     <View
         android:id="@+id/bottom_divider"

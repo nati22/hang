@@ -317,7 +317,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			if (lastGroup.getSenderJid().equals(newMsg.jid)) {
 				lastGroup.addChatMessage(newMsg);
 			} else {
-				
+
 				// else create new message group
 				chatMessageGroups.add(new ChatMessageGroup(newMsg));
 			}
@@ -442,16 +442,16 @@ public final class FirebaseChatActivity extends BaseActivity implements
 	}
 
 	class ChatMessageGroup {
-		
+
 		public ChatMessageGroup(ArrayList<ChatMessage> msgs) {
 			messages = msgs;
 		}
-		
+
 		public ChatMessageGroup(ChatMessage msg) {
 			messages = new ArrayList<ChatMessage>();
 			addChatMessage(msg);
 		}
-		
+
 		private String sender = "";
 		private ArrayList<ChatMessage> messages;
 
@@ -485,15 +485,26 @@ public final class FirebaseChatActivity extends BaseActivity implements
 				return null;
 			}
 		}
+
+		public int size() {
+			return messages.size();
+		}
 	}
 
-	class ChatMessageAdapter extends ArrayAdapter<ChatMessage> {
+	/* class ChatMessageAdapter extends ArrayAdapter<ChatMessage> { */
+	class ChatMessageAdapter extends ArrayAdapter<ChatMessageGroup> {
 
 		Database db;
+		Context context;
 
 		public ChatMessageAdapter(Context context, int textViewResourceId) {
+			/*
+			 * super(context, textViewResourceId,
+			 * FirebaseChatActivity.this.chatMessages);
+			 */
 			super(context, textViewResourceId,
-					FirebaseChatActivity.this.chatMessages);
+					FirebaseChatActivity.this.chatMessageGroups);
+			this.context = context;
 			db = Database.getInstance();
 		}
 
@@ -501,8 +512,9 @@ public final class FirebaseChatActivity extends BaseActivity implements
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder holder;
 
-			ChatMessage message = getItem(position);
-			String fromJid = message.getJid();
+			// ChatMessage message = getItem(position);
+			ChatMessageGroup messageGroup = getItem(position);
+			String fromJid = messageGroup.getSenderJid();
 
 			// Determine if the message is from 'Me'
 			boolean isMyMessage = fromJid.equals(db.getMyJid());
@@ -520,8 +532,12 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						.findViewById(R.id.textViewMessageFrom2);
 				holder.linLayoutProfilePicHolder = (LinearLayout) convertView
 						.findViewById(R.id.profilePictureViewHolder);
-				holder.textViewFirstMsg = (TextView) convertView
-						.findViewById(R.id.textViewMessageBody2);
+				/*
+				 * holder.textViewFirstMsg = (TextView) convertView
+				 * .findViewById(R.id.textViewMessageBody2);
+				 */
+				holder.linLayoutMessageList = (LinearLayout) convertView
+						.findViewById(R.id.linLayoutMsgList);
 				holder.viewBottomDivider = (View) convertView
 						.findViewById(R.id.bottom_divider);
 
@@ -530,6 +546,31 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			} else {
 				// convertview already exists
 				holder = (ViewHolder) convertView.getTag();
+			}
+
+			// clear linLayout
+			holder.linLayoutMessageList.removeAllViews();
+			
+			// add messages to linlayout
+			for (int i = 0; i < messageGroup.size(); i++) {
+				// get msg
+				ChatMessage msg = messageGroup.getChatMessageAt(i);
+
+				// create TextView
+				TextView tView = new TextView(context);
+				tView.setText(msg.text);
+				LinearLayout.LayoutParams tParams = new LinearLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+				int scale = (int) getResources().getDisplayMetrics().density;
+				if (isMyMessage) {
+					tParams.setMargins(10 * scale, 2 * scale, 0, 0);
+				} else {
+					tParams.setMargins(0, 2 * scale, 10 * scale, 0);
+				}
+				tView.setLayoutParams(tParams);
+
+				// add TextView to LinearLayout
+				holder.linLayoutMessageList.addView(tView);
 			}
 
 			// Align xml assets according to sender
@@ -555,14 +596,14 @@ public final class FirebaseChatActivity extends BaseActivity implements
 						.setLayoutParams(paramsProfilePicHolder);
 
 				// move message text to other side
-				RelativeLayout.LayoutParams paramsTextViewFirstMsg = new RelativeLayout.LayoutParams(
+				RelativeLayout.LayoutParams paramsLinLayoutMsgList = new RelativeLayout.LayoutParams(
 						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				paramsTextViewFirstMsg
+				paramsLinLayoutMsgList
 						.addRule(isMyMessage ? alignLeft : alignRight);
 				int scale = (int) getResources().getDisplayMetrics().density;
-				paramsTextViewFirstMsg.setMargins(10 * scale, 2 * scale,
+				paramsLinLayoutMsgList.setMargins(10 * scale, 2 * scale,
 						10 * scale, 0);
-				holder.textViewFirstMsg.setLayoutParams(paramsTextViewFirstMsg);
+				holder.linLayoutMessageList.setLayoutParams(paramsLinLayoutMsgList);
 
 			}
 
@@ -654,7 +695,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			 */
 
 			// Populate Views.
-			holder.textViewFirstMsg.setText(message.getText());
+//			holder.textViewFirstMsg.setText(message.getText());
 			holder.textViewMsgFrom.setText(fromName);
 			holder.profilePictureView.setProfileId(fromJid);
 			// holder.unrecycledCell = false;
@@ -665,6 +706,7 @@ public final class FirebaseChatActivity extends BaseActivity implements
 			LinearLayout linLayoutProfilePicHolder;
 			ProfilePictureView profilePictureView;
 			TextView textViewMsgFrom;
+			LinearLayout linLayoutMessageList;
 			TextView textViewFirstMsg;
 			View viewBottomDivider;
 			// boolean unrecycledCell = true;
