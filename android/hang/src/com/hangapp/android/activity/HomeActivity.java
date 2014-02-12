@@ -32,10 +32,7 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.flurry.android.FlurryAgent;
 import com.hangapp.android.R;
-import com.hangapp.android.activity.fragment.FeedFragment;
-import com.hangapp.android.activity.fragment.MyProposalFragment;
-import com.hangapp.android.activity.fragment.ProposalsFragment;
-import com.hangapp.android.activity.fragment.YouFragment;
+import com.hangapp.android.activity.fragment.*;
 import com.hangapp.android.activity.fragment.YouFragment.ProposalChangedListener;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
@@ -122,9 +119,10 @@ public final class HomeActivity extends BaseActivity implements
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), ProposalsFragment.class, null);
+		mTabsAdapter.addTab(bar.newTab(), FeedFragment2.class, null);
 
 		// Style the Action Bar tabs.
-		String[] tabNames = { "FEED", "YOU", "PROPOSALS" };
+		String[] tabNames = { "FEED", "YOU", "PROPOSALS", "FEED2" };
 		Typeface champagneLimousinesFont = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
