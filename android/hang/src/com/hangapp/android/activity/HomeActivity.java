@@ -2,6 +2,8 @@ package com.hangapp.android.activity;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,6 +32,8 @@ import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.flurry.android.FlurryAgent;
+import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.MapBuilder;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.fragment.FeedFragment;
 import com.hangapp.android.activity.fragment.MyProposalFragment;
@@ -152,12 +156,15 @@ public final class HomeActivity extends BaseActivity implements
 	protected void onStart() {
 		super.onStart();
 		FlurryAgent.onStartSession(this, Keys.FLURRY_KEY);
+		EasyTracker.getInstance(this).activityStart(this);
 	}
 
 	@Override
 	protected void onStop() {
 		super.onStop();
 		FlurryAgent.onEndSession(this);
+		EasyTracker.getInstance(this).activityStop(this);
+
 	}
 
 	@Override
@@ -174,6 +181,12 @@ public final class HomeActivity extends BaseActivity implements
 
 			return true;
 		case R.id.menu_settings:
+			Map<String, String> params = new HashMap<String, String>();
+			params.put("click", "Settings Activity");
+			
+			EasyTracker easyTracker = EasyTracker.getInstance(this);
+			
+			easyTracker.send(MapBuilder.createEvent("ui_action", "button_press", "settings_button", null).build());
 			startActivity(new Intent(this, SettingsActivity.class));
 			return true;
 		default:

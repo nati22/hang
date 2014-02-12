@@ -147,157 +147,6 @@ public final class FeedFragment extends SherlockFragment implements
 			return position;
 		}
 
-/*			
- * 	// This is the new cell fragment's we're working on.	
- * 
- * 	@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder holder;
-
-			final User user = friends.get(position);
-
-			View customUserIcon;
-
-			// Inflate the View if necessary.
-			if (convertView == null) {
-				holder = new ViewHolder();
-				convertView = inflater.inflate(R.layout.cell_friend_fragment_new,
-						null);
-
-				// Reference views
-				customUserIcon = (View) convertView
-						.findViewById(R.id.profilePictureView);
-				holder.greenRing = (ImageView) customUserIcon
-						.findViewById(R.id.green_ring);
-				holder.greyRing = (ImageView) customUserIcon
-						.findViewById(R.id.grey_ring);
-				holder.redRing = (ImageView) customUserIcon
-						.findViewById(R.id.red_ring);
-				if (holder.greenRing == null) {
-					Toast.makeText(getActivity(), "you suck", Toast.LENGTH_SHORT)
-							.show();
-				}
-				holder.profilePictureView = (ProfilePictureView) customUserIcon
-						.findViewById(R.id.facebookView);
-				holder.textViewFriendName = (TextView) convertView
-						.findViewById(R.id.textViewFriendName);
-				holder.textViewAvailabilityDescription = (TextView) convertView
-						.findViewById(R.id.textViewAvailabilityDescription);
-				holder.statusIcon = (StatusIcon) convertView
-						.findViewById(R.id.imageButtonAvailability);
-
-				Typeface headlineBold = Typeface.createFromAsset(getActivity()
-						.getApplicationContext().getAssets(), Fonts.HEADLINE_BOLD);
-				Typeface headline = Typeface.createFromAsset(getActivity()
-						.getApplicationContext().getAssets(), Fonts.HEADLINE);
-
-				holder.textViewFriendName.setTypeface(headline);
-				holder.textViewAvailabilityDescription.setTypeface(headline);
-
-				convertView.setTag(holder);
-				Log.i("holder", "cell for " + user.getFirstName() + " == null");
-			} else {
-				holder = (ViewHolder) convertView.getTag();
-				Log.i("holder", "cell for " + user.getFirstName() + " != null");
-			}
-
-			holder.profilePictureView.setProfileId(user.getJid());
-			holder.textViewFriendName.setText(user.getFullName().toLowerCase());
-
-			// Reset the description
-			holder.textViewAvailabilityDescription.setText("");
-
-			// Set the ring to be grey initially
-			holder.redRing.setVisibility(View.INVISIBLE);
-			holder.greenRing.setVisibility(View.INVISIBLE);
-			holder.greyRing.setVisibility(View.VISIBLE);
-
-			// TODO: These sanity checks are already done in the StatusIcon...we
-			// should
-			// find a way to consolidate the code (set the desc from the
-			// StatusIcon???)
-			if (user.getAvailability() != null
-					&& user.getAvailability().isActive()) {
-
-				// Set ring color
-				if (user.getAvailability().getStatus()
-						.equals(Availability.Status.FREE)) {
-					holder.greenRing.setVisibility(View.VISIBLE);
-					holder.redRing.setVisibility(View.INVISIBLE);
-					holder.greyRing.setVisibility(View.INVISIBLE);
-				} else if (user.getAvailability().getStatus()
-						.equals(Availability.Status.BUSY)) {
-					holder.redRing.setVisibility(View.VISIBLE);
-					holder.greenRing.setVisibility(View.INVISIBLE);
-					holder.greyRing.setVisibility(View.INVISIBLE);
-				}
-
-				// Set description if it's there
-				if (user.getAvailability().getDescription() != null
-						&& !user.getAvailability().getDescription().equals("null")) {
-					holder.textViewAvailabilityDescription.setText(user
-							.getAvailability().getDescription());
-				}
-			}
-
-			holder.statusIcon.initialize(context, user, convertView);
-			holder.statusIcon.setAvailabilityColor(user.getAvailability());
-			holder.statusIcon.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (!user.getAvailability().isActive()) {
-						restClient.sendNudge(user.getJid());
-						Toast.makeText(context,
-								"Sending a nudge to " + user.getFirstName(),
-								Toast.LENGTH_SHORT).show();
-						((StatusIcon) v).setPressed(true);
-					} else {
-						// Determine hrs and min left
-						int min = Minutes.minutesBetween(new DateTime(),
-								user.getAvailability().getExpirationDate())
-								.getMinutes();
-
-						int hrs = 0;
-						while (min >= 60) {
-							hrs++;
-							min = min - 60;
-						}
-
-						// Display remaining time to user
-						Toast.makeText(
-								context,
-								hrs + " hr" + ((hrs > 1) ? "s " : " ") + min
-										+ " min remaining", Toast.LENGTH_SHORT).show();
-
-					}
-				}
-			});
-
-			final int pos = position;
-			convertView.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (user.getProposal() == null) {
-						Toast.makeText(context, "User has no proposal",
-								Toast.LENGTH_SHORT).show();
-						return;
-					}
-					Context context = FeedFragment.this.getActivity();
-					User user = incomingBroadcasts.get(pos);
-
-					Intent proposalLeechIntent = new Intent(context,
-							ProfileActivity.class);
-					proposalLeechIntent.putExtra(Keys.HOST_JID, user.getJid());
-					context.startActivity(proposalLeechIntent);
-
-				}
-			});
-
-			return convertView;
-		}*/
-		
 		@Override
       public View getView(int position, View convertView, ViewGroup parent) {
               ViewHolder holder;
@@ -332,10 +181,10 @@ public final class FeedFragment extends SherlockFragment implements
                                       .setTypeface(champagneLimousines);
 
                       convertView.setTag(holder);
-                      Log.i("holder", "cell for " + user.getFirstName() + " == null");
+            //          Log.i("holder", "cell for " + user.getFirstName() + " == null");
               } else {
                       holder = (ViewHolder) convertView.getTag();
-                      Log.i("holder", "cell for " + user.getFirstName() + " != null");
+           //           Log.i("holder", "cell for " + user.getFirstName() + " != null");
               }
 
               holder.profilePictureView.setProfileId(user.getJid());

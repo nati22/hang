@@ -49,6 +49,7 @@ import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
+import com.hangapp.android.util.Keys.FlurryEvent;
 import com.hangapp.android.util.Utils;
 
 /**
@@ -356,6 +357,9 @@ public final class ProfileActivity extends BaseActivity implements
 						+ "'s proposal already seen");
 			}
 		}
+		
+		FlurryAgent.logEvent(Keys.FlurryEvent.VIEW_PROPOSAL);
+		
 	}
 
 	@Override
