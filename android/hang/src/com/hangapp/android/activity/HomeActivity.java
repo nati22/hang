@@ -1,6 +1,6 @@
 package com.hangapp.android.activity;
 
-import com.crashlytics.android.Crashlytics;
+//import com.crashlytics.android.Crashlytics;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -87,7 +87,7 @@ public final class HomeActivity extends BaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Crashlytics.start(this);
+//		Crashlytics.start(this);
 		try {
 
 			PackageInfo info = getPackageManager().getPackageInfo(
@@ -123,7 +123,6 @@ public final class HomeActivity extends BaseActivity implements
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), ProposalsFragment.class, null);
-		mTabsAdapter.addTab(bar.newTab(), FeedFragment2.class, null);
 
 		// Style the Action Bar tabs.
 		String[] tabNames = { "FEED", "YOU", "PROPOSALS", "FEED2" };
@@ -243,34 +242,7 @@ public final class HomeActivity extends BaseActivity implements
 	
 	}
 	
-	@Override
-	protected void onStop() {
-		super.onStop();
-		FlurryAgent.onEndSession(this);
-	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.activity_home, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_refresh:
-			restClient.getMyData();
-
-			return true;
-		case R.id.menu_settings:
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
-		default:
-			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
-					+ item.getAlphabeticShortcut());
-			return true;
-		}
-	}
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
@@ -315,6 +287,35 @@ public final class HomeActivity extends BaseActivity implements
 	public void onPause() {
 		super.onPause();
 		uiHelper.onPause();
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.activity_home, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_refresh:
+			restClient.getMyData();
+
+			return true;
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		default:
+			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
+					+ item.getAlphabeticShortcut());
+			return true;
+		}
 	}
 
 	@Override
