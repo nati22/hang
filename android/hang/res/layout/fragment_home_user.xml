@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userHomeFragmentBg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/Turquoise" >
@@ -9,8 +10,7 @@
         android:layout_width="120dip"
         android:layout_height="120dip"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:background="@color/Yellow" />
+        android:layout_marginTop="25dp" />
 
     <LinearLayout
         android:id="@+id/linLayoutFreeFor"
@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="75dp"
         android:layout_toLeftOf="@id/userProfileIcon"
         android:orientation="horizontal"
         android:padding="2dp" >
@@ -62,7 +62,7 @@
         android:orientation="horizontal"
         android:layout_below="@id/userName"
         android:layout_marginTop="10dp"
-        android:padding="1dp"
+        android:padding="2dp"
         android:weightSum="1.0" >
 
         <TextView
