@@ -1,5 +1,6 @@
 package com.hangapp.android.activity;
 
+import com.crashlytics.android.Crashlytics;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -35,10 +36,7 @@ import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.MapBuilder;
 import com.hangapp.android.R;
-import com.hangapp.android.activity.fragment.FeedFragment;
-import com.hangapp.android.activity.fragment.MyProposalFragment;
-import com.hangapp.android.activity.fragment.ProposalsFragment;
-import com.hangapp.android.activity.fragment.YouFragment;
+import com.hangapp.android.activity.fragment.*;
 import com.hangapp.android.activity.fragment.YouFragment.ProposalChangedListener;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
@@ -89,6 +87,7 @@ public final class HomeActivity extends BaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		Crashlytics.start(this);
 		try {
 
 			PackageInfo info = getPackageManager().getPackageInfo(
@@ -124,9 +123,10 @@ public final class HomeActivity extends BaseActivity implements
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), ProposalsFragment.class, null);
+		mTabsAdapter.addTab(bar.newTab(), FeedFragment2.class, null);
 
 		// Style the Action Bar tabs.
-		String[] tabNames = { "FEED", "YOU", "PROPOSALS" };
+		String[] tabNames = { "FEED", "YOU", "PROPOSALS", "FEED2" };
 		Typeface champagneLimousinesFont = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
@@ -160,60 +160,14 @@ public final class HomeActivity extends BaseActivity implements
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
-		FlurryAgent.onEndSession(this);
-		EasyTracker.getInstance(this).activityStop(this);
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getSupportMenuInflater().inflate(R.menu.activity_home, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_refresh:
-			restClient.getMyData();
-
-			return true;
-		case R.id.menu_settings:
-			Map<String, String> params = new HashMap<String, String>();
-			params.put("click", "Settings Activity");
-			
-			EasyTracker easyTracker = EasyTracker.getInstance(this);
-			
-			easyTracker.send(MapBuilder.createEvent("ui_action", "button_press", "settings_button", null).build());
-			startActivity(new Intent(this, SettingsActivity.class));
-			return true;
-		default:
-			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
-					+ item.getAlphabeticShortcut());
-			return true;
-		}
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-
-		// Save which tab we had selected into savedInstanceState.
-		outState
-				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
-		uiHelper.onSaveInstanceState(outState);
-	}
-
-	@Override
 	public void onResume() {
 		super.onResume();
 		uiHelper.onResume();
 
 		// First thing's first: check to see if the user has Google Play
 		// services installed. If he doesn't, let the Google SDK show
-		// the Dialog that redirects him to the Google Play store to install
+		// the Dialog that redirects hito install
 		// it.
 		checkPlayServices();
 
@@ -286,6 +240,46 @@ public final class HomeActivity extends BaseActivity implements
 		int initialTab = getIntent().getIntExtra(Keys.TAB_INTENT, -1);
 		if (initialTab != -1)
 			getSupportActionBar().setSelectedNavigationItem(initialTab);
+	
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.activity_home, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_refresh:
+			restClient.getMyData();
+
+			return true;
+		case R.id.menu_settings:
+			startActivity(new Intent(this, SettingsActivity.class));
+			return true;
+		default:
+			Log.e("HomeActivity.onOptionsItemSelected", "Unknown item selected: "
+					+ item.getAlphabeticShortcut());
+			return true;
+		}
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+
+		// Save which tab we had selected into savedInstanceState.
+		outState
+				.putInt("tab", getSupportActionBar().getSelectedNavigationIndex());
+		uiHelper.onSaveInstanceState(outState);
 	}
 
 	/**
