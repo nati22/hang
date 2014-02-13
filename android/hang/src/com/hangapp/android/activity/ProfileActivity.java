@@ -49,7 +49,6 @@ import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.BaseActivity;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
-import com.hangapp.android.util.Keys.FlurryEvent;
 import com.hangapp.android.util.Utils;
 
 /**
