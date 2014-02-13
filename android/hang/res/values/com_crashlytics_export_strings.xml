@@ -6,5 +6,7 @@
 
   Do NOT modify, delete, or commit to source control!
 -->
-<string name="com.crashlytics.android.build_id">7d4e5a15-e3a8-42c1-95ce-7407a8d1b8b8</string>
+
+<string name="com.crashlytics.android.build_id">579c3ea8-79a0-436f-830d-459c1ee90b3a</string>
+
 </resources>
