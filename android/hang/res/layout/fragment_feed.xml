@@ -5,11 +5,19 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+    <include
+        layout="@layout/fragment_home_user"
+        android:id="@+id/homeUserFragment"
+        android:layout_width="match_parent"
+        android:layout_height="275dip"
+        android:layout_alignParentTop="true"
+        android:visibility="visible" />
+
     <ListView
         android:id="@+id/listViewFriendsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/homeUserFragment"
         android:layout_centerHorizontal="true"
         android:background="@android:color/white" />
 
@@ -17,6 +25,7 @@
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/homeUserFragment"
         android:background="@android:color/white" >
 
         <TextView

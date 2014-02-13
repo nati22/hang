@@ -2,7 +2,7 @@
 
 <resources>
   <!--Your tracking ID-->
-  <string name="ga_trackingId">UA-43852319-1</string>
+  <string name="ga_trackingId">UA-43852319-2</string>
 
   <!--Enable automatic activity tracking-->
   <bool name="ga_autoActivityTracking">true</bool>

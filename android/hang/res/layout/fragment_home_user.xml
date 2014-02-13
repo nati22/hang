@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/userHomeFragmentBg"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Turquoise" >
+
+    <View
+        android:id="@+id/userProfileIcon"
+        android:layout_width="120dip"
+        android:layout_height="120dip"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <LinearLayout
+        android:id="@+id/linLayoutFreeFor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="75dp"
+        android:layout_toLeftOf="@id/userProfileIcon"
+        android:orientation="horizontal"
+        android:padding="2dp" >
+
+        <TextView
+            android:id="@+id/textViewFreeForPrompt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="1dp"
+            android:text="Free for: "
+            android:textColor="@color/White"
+            android:textSize="14dp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/textViewFreeForHrs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="4h"
+            android:textColor="@color/White"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/userProfileIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Nati Tessema"
+        android:textColor="@color/White"
+        android:textSize="18dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/linLayoutBroadcastButtonHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/userName"
+        android:layout_marginTop="10dp"
+        android:padding="2dp"
+        android:weightSum="1.0" >
+
+        <TextView
+            android:id="@+id/textViewIncomingButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="25 \nOutgoing"
+            android:textColor="@color/White"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textViewOutgingButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="13 \nIncoming"
+            android:textColor="@color/White"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/DarkGray" />
+
+</RelativeLayout>

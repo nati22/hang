@@ -3,6 +3,8 @@ bin/
 .classpath
 .pyc
 
+# crashlytics
+*com_crashlytics_export_strings.xml
 
 # built application files
 *.apk
