@@ -1,10 +1,8 @@
 package com.hangapp.android.activity;
 
-//import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.Crashlytics;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,9 +32,11 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
 import com.flurry.android.FlurryAgent;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.MapBuilder;
 import com.hangapp.android.R;
-import com.hangapp.android.activity.fragment.*;
+import com.hangapp.android.activity.fragment.FeedFragment;
+import com.hangapp.android.activity.fragment.MyProposalFragment;
+import com.hangapp.android.activity.fragment.ProposalsFragment;
+import com.hangapp.android.activity.fragment.YouFragment;
 import com.hangapp.android.activity.fragment.YouFragment.ProposalChangedListener;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
@@ -87,7 +87,7 @@ public final class HomeActivity extends BaseActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-//		Crashlytics.start(this);
+		Crashlytics.start(this);
 		try {
 
 			PackageInfo info = getPackageManager().getPackageInfo(
