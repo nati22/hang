@@ -48,7 +48,6 @@ public final class FeedFragment extends SherlockFragment implements
 	private Button buttonRefresh;
 
 	// TODO: Turn this into an actual custom icon
-	private View myPicture;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();

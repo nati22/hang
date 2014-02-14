@@ -158,6 +158,7 @@ public final class HomeActivity extends BaseActivity implements
 		EasyTracker.getInstance(this).activityStart(this);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 
 	public void onResume() {
