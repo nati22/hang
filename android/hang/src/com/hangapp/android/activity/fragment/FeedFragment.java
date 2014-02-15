@@ -11,13 +11,13 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.graphics.Bitmap.Config;
-import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -104,6 +104,9 @@ public final class FeedFragment extends SherlockFragment implements
 				.findViewById(R.id.user_invis_fb_icon);
 		visibleFBpic = (View) view.findViewById(R.id.user_real_fb_icon);
 
+		// TODO should be pulling image and text out of cache
+		textViewUserName.setText(database.getMyFullName());
+
 		// Set up the Adapter.
 		adapter = new FriendsAdapter(getActivity(), incomingBroadcasts);
 		listViewFriends.setAdapter(adapter);
@@ -133,6 +136,10 @@ public final class FeedFragment extends SherlockFragment implements
 		database.addIncomingBroadcastsListener(this);
 		database.addMyUserDataListener(this);
 
+		if (invisFBpic != null)
+			if (invisFBpic.getChildAt(0) != null)
+				setupFacebookIcon();
+
 	}
 
 	@SuppressWarnings("deprecation")
@@ -144,7 +151,12 @@ public final class FeedFragment extends SherlockFragment implements
 		if (fbImage != null) {
 
 			// Convert the fb profile pic into a bitmap
-			Bitmap bitmap = ((BitmapDrawable) fbImage.getDrawable()).getBitmap();
+			BitmapDrawable fbDrawable = (BitmapDrawable) fbImage.getDrawable();
+			if (fbDrawable == null) {
+				Log.d("setupFacebookIcon", "Failed to get a drawable from the invis fbpic");
+				return;
+			}
+			Bitmap bitmap = fbDrawable.getBitmap();
 
 			// Create a blank bitmap
 			Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
