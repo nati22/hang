@@ -136,15 +136,16 @@ public final class FeedFragment extends SherlockFragment implements
 		database.addIncomingBroadcastsListener(this);
 		database.addMyUserDataListener(this);
 
+		// TODO instead of reconstructing this image each time it should be cached
 		if (invisFBpic != null)
 			if (invisFBpic.getChildAt(0) != null)
-				setupFacebookIcon();
+				setupCircularFacebookIcon();
 
 	}
 
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-	public void setupFacebookIcon() {
+	public void setupCircularFacebookIcon() {
 		// this gets the profilepicture
 		ImageView fbImage = (ImageView) invisFBpic.getChildAt(0);
 
@@ -153,7 +154,8 @@ public final class FeedFragment extends SherlockFragment implements
 			// Convert the fb profile pic into a bitmap
 			BitmapDrawable fbDrawable = (BitmapDrawable) fbImage.getDrawable();
 			if (fbDrawable == null) {
-				Log.d("setupFacebookIcon", "Failed to get a drawable from the invis fbpic");
+				Log.d("setupFacebookIcon",
+						"Failed to get a drawable from the invis fbpic");
 				return;
 			}
 			Bitmap bitmap = fbDrawable.getBitmap();
@@ -362,7 +364,7 @@ public final class FeedFragment extends SherlockFragment implements
 	public void onMyUserDataUpdate(User me) {
 		// TODO Setup caching
 		invisFBpic.setProfileId(database.getMyJid());
-		setupFacebookIcon();
+		setupCircularFacebookIcon();
 		textViewUserName.setText(me.getFullName());
 	}
 
