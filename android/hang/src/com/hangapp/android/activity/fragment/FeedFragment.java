@@ -30,6 +30,7 @@ import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
+import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
@@ -40,7 +41,7 @@ import com.hangapp.android.util.StatusIcon;
  * The leftmost tab inside {@link HomeActivity}.
  */
 public final class FeedFragment extends SherlockFragment implements
-		IncomingBroadcastsListener {
+		IncomingBroadcastsListener, MyUserDataListener {
 
 	// UI stuff
 	private ListView listViewFriends;
@@ -48,6 +49,7 @@ public final class FeedFragment extends SherlockFragment implements
 	private Button buttonRefresh;
 
 	// TODO: Turn this into an actual custom icon
+	private ProfilePictureView invisFBpic;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -96,10 +98,10 @@ public final class FeedFragment extends SherlockFragment implements
 		View user_icon = (View) home_fragment.findViewById(R.id.userProfileIcon);
 		// user_icon.setBackgroundColor(getResources().getColor(R.color.Black));
 
-		ProfilePictureView invisFBpic = (ProfilePictureView) user_icon
+		invisFBpic = (ProfilePictureView) user_icon
 				.findViewById(R.id.user_invis_fb_icon);
 		// invisFBpic.setVisibility(View.INVISIBLE);
-		invisFBpic.setProfileId(database.getMyJid());
+//		invisFBpic.setProfileId(database.getMyJid());
 
 		Log.d(TAG, "xxxxx i set profile id to " + invisFBpic.getProfileId());
 
@@ -130,6 +132,8 @@ public final class FeedFragment extends SherlockFragment implements
 		super.onResume();
 
 		database.addIncomingBroadcastsListener(this);
+		database.addMyUserDataListener(this);
+
 	}
 
 	@Override
@@ -137,6 +141,7 @@ public final class FeedFragment extends SherlockFragment implements
 		super.onPause();
 
 		database.removeIncomingBroadcastsListener(this);
+		database.removeMyUserDataListener(this);
 	}
 
 	private class FriendsAdapter extends BaseAdapter {
@@ -300,6 +305,12 @@ public final class FeedFragment extends SherlockFragment implements
 		this.incomingBroadcasts.addAll(incomingBroadcasts);
 		Collections.sort(this.incomingBroadcasts);
 		adapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void onMyUserDataUpdate(User me) {
+		// TODO Auto-generated method stub
+		invisFBpic.setProfileId(database.getMyJid());
 	}
 
 }

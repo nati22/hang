@@ -187,7 +187,7 @@ public final class HomeActivity extends BaseActivity implements
 							startActivity(browserIntent);
 						}
 					});
-
+			
 			getSupportActionBar().hide();
 		}
 		// Otherwise, show the regular tabbed ActionBar.
@@ -243,8 +243,6 @@ public final class HomeActivity extends BaseActivity implements
 	
 	}
 	
-
-
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
