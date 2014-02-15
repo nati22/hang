@@ -237,8 +237,8 @@ public final class Database {
 		String proposalInterestedString = prefs.getString(
 				Keys.PROPOSAL_INTERESTED, null);
 
-		String proposalConfirmedString = prefs.getString(
-				Keys.PROPOSAL_CONFIRMED, null);
+		String proposalConfirmedString = prefs.getString(Keys.PROPOSAL_CONFIRMED,
+				null);
 
 		if (proposalDescription == null) {
 			Log.e("Database.getMyProposal", "proposalDescription was null");
@@ -303,8 +303,8 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyIncomingBroadcasts() {
-		String incomingBroadcastJidsStringArray = prefs.getString(
-				Keys.INCOMING, null);
+		String incomingBroadcastJidsStringArray = prefs.getString(Keys.INCOMING,
+				null);
 
 		if (incomingBroadcastJidsStringArray == null) {
 			return null;
@@ -312,11 +312,6 @@ public final class Database {
 
 		List<String> incomingBroadcastJids = Utils
 				.convertStringToArray(incomingBroadcastJidsStringArray);
-
-		// usersDataSource.open();
-		// List<User> myIncomingBroadcasts = usersDataSource
-		// .getMyIncomingBroadcastsFromSQLite(incomingBroadcastJids);
-		// usersDataSource.close();
 
 		List<User> myIncomingBroadcasts = new ArrayList<User>(
 				incomingBroadcastJids.size());
@@ -328,8 +323,7 @@ public final class Database {
 				myIncomingBroadcasts.add(incomingBroadcast);
 			} else {
 				Log.e("Database.getMyIncomingBroadcasts",
-						"No incoming broadcast for jid: "
-								+ incomingBroadcastJid);
+						"No incoming broadcast for jid: " + incomingBroadcastJid);
 			}
 		}
 
@@ -342,8 +336,8 @@ public final class Database {
 	 * @return
 	 */
 	public List<User> getMyOutgoingBroadcasts() {
-		String outgoingBroadcastJidsStringArray = prefs.getString(
-				Keys.OUTGOING, null);
+		String outgoingBroadcastJidsStringArray = prefs.getString(Keys.OUTGOING,
+				null);
 
 		if (outgoingBroadcastJidsStringArray == null) {
 			return null;
@@ -362,8 +356,7 @@ public final class Database {
 				myOutgoingBroadcasts.add(outgoingBroadcast);
 			} else {
 				Log.e("Database.getMyOutgoingBroadcasts",
-						"No outgoing broadcast for jid: "
-								+ outgoingBroadcastJid);
+						"No outgoing broadcast for jid: " + outgoingBroadcastJid);
 			}
 		}
 
@@ -371,8 +364,8 @@ public final class Database {
 	}
 
 	public User getIncomingUser(String jid) {
-		String incomingBroadcastJidsStringArray = prefs.getString(
-				Keys.INCOMING, null);
+		String incomingBroadcastJidsStringArray = prefs.getString(Keys.INCOMING,
+				null);
 
 		if (incomingBroadcastJidsStringArray == null) {
 			Log.e("Database.getIncomingUser",
@@ -393,8 +386,8 @@ public final class Database {
 	}
 
 	public User getOutgoingUser(String jid) {
-		String outgoingBroadcastJidsStringArray = prefs.getString(
-				Keys.OUTGOING, null);
+		String outgoingBroadcastJidsStringArray = prefs.getString(Keys.OUTGOING,
+				null);
 
 		if (outgoingBroadcastJidsStringArray == null) {
 			return null;
@@ -494,8 +487,8 @@ public final class Database {
 	}
 
 	public void addSeenProposal(String broadcasterJid) {
-		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
-				null);
+		String seenProposalsListString = prefs
+				.getString(Keys.PROPOSAL_SEEN, null);
 
 		List<String> seenProposals = Utils
 				.convertStringToArray(seenProposalsListString);
@@ -518,8 +511,8 @@ public final class Database {
 	}
 
 	public List<String> getMySeenProposals() {
-		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
-				null);
+		String seenProposalsListString = prefs
+				.getString(Keys.PROPOSAL_SEEN, null);
 
 		if (seenProposalsListString == null)
 			return null;
@@ -528,8 +521,8 @@ public final class Database {
 	}
 
 	public void deleteMySeenProposal(String proposalJid) {
-		String seenProposalsListString = prefs.getString(Keys.PROPOSAL_SEEN,
-				null);
+		String seenProposalsListString = prefs
+				.getString(Keys.PROPOSAL_SEEN, null);
 
 		List<String> seenProposals = Utils
 				.convertStringToArray(seenProposalsListString);
@@ -575,8 +568,8 @@ public final class Database {
 	 * @return
 	 */
 	public List<String> getJidsImInterestedIn() {
-		String interestedJidsString = prefs.getString(
-				Keys.JIDS_IM_INTERESTED_IN, null);
+		String interestedJidsString = prefs.getString(Keys.JIDS_IM_INTERESTED_IN,
+				null);
 
 		if (interestedJidsString != null) {
 			return Utils.convertStringToArray(interestedJidsString);
@@ -586,8 +579,7 @@ public final class Database {
 	}
 
 	public void setJidsImInterestedIn(List<String> interestedJids) {
-		String interestedJidsString = Utils
-				.convertArrayToString(interestedJids);
+		String interestedJidsString = Utils.convertArrayToString(interestedJids);
 
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.putString(Keys.JIDS_IM_INTERESTED_IN, interestedJidsString);
@@ -595,23 +587,12 @@ public final class Database {
 	}
 
 	/**
-	 * Helper method only to be used by the REST calls, as they finish parsing
-	 * in the JSON for the library. ======= Helper method only to be used by the
+	 * Helper method only to be used by the REST calls, as they finish parsing in
+	 * the JSON for the library. ======= Helper method only to be used by the
 	 * REST calls, as they finish parsing in the JSON for the library. >>>>>>>
 	 * 177b45476535132f4f2c242136f66e89d3e2680b
 	 */
 	public void saveLibrary(List<User> newLibrary) {
-		// usersDataSource.open();
-		//
-		// // Clear out the existing Users table from SQLite.
-		// usersDataSource.clearUsersTable();
-		//
-		// for (User userToSave : library) {
-		// usersDataSource.saveUserInDatabase(userToSave);
-		// }
-		//
-		// usersDataSource.close();
-
 		this.library.clear();
 
 		for (User user : newLibrary) {
@@ -624,11 +605,6 @@ public final class Database {
 		SharedPreferences.Editor editor = prefs.edit();
 		editor.clear();
 		editor.commit();
-
-		// usersDataSource.open();
-		// usersDataSource.clearUsersTable();
-		// usersDataSource.close();
-
 		library.clear();
 	}
 
