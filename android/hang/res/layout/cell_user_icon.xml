@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/cell_user_icon"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <!--
+    Need an invisible ProfilePictureView where we can 
+    get the picture from for the visible View
+    -->
+
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/user_invis_fb_icon"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/HotPink"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_centerInParent="true"
-        android:visibility="invisible" />
-    
+        android:contentDescription="@string/profile"
+        android:src="@drawable/ic_action_profile_icon"
+        android:visibility="visible" />
+
     <View
         android:id="@+id/user_real_fb_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/green"
-        android:layout_margin="15dp" />
+        android:layout_margin="15dp"
+        android:background="@color/yellow"
+        android:visibility="invisible" />
 
 </RelativeLayout>

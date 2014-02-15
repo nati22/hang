@@ -7,11 +7,11 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -74,7 +74,6 @@ public final class FeedFragment extends SherlockFragment implements
 		}
 	}
 
-	@SuppressLint("NewApi")
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -89,10 +88,20 @@ public final class FeedFragment extends SherlockFragment implements
 		buttonRefresh = (Button) view.findViewById(R.id.buttonRefresh);
 
 		// TODO remove
-		View disView = (View) view.findViewById(R.id.homeUserFragment);
-		disView.setBackground(getResources().getDrawable(R.drawable.login_image));
-	//	myPicture = (View) disView.findViewById(R.id.userProfileIcon);
-	//	myPicture.setBackground(getResources().getDrawable(R.drawable.login_image));
+
+		String TAG = this.getClass().getSimpleName();
+
+		// Set up user's pic
+		View home_fragment = (View) view.findViewById(R.id.homeUserFragment);
+		View user_icon = (View) home_fragment.findViewById(R.id.userProfileIcon);
+		// user_icon.setBackgroundColor(getResources().getColor(R.color.Black));
+
+		ProfilePictureView invisFBpic = (ProfilePictureView) user_icon
+				.findViewById(R.id.user_invis_fb_icon);
+		// invisFBpic.setVisibility(View.INVISIBLE);
+		invisFBpic.setProfileId(database.getMyJid());
+
+		Log.d(TAG, "xxxxx i set profile id to " + invisFBpic.getProfileId());
 
 		// Set up the Adapter.
 		adapter = new FriendsAdapter(getActivity(), incomingBroadcasts);

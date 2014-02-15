@@ -5,12 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/Turquoise" >
 
-    <View
+    <include
         android:id="@+id/userProfileIcon"
         android:layout_width="120dip"
         android:layout_height="120dip"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp" />
+        android:layout_marginTop="25dp"
+        layout="@layout/cell_user_icon" />
 
     <LinearLayout
         android:id="@+id/linLayoutFreeFor"
@@ -59,9 +60,9 @@
         android:id="@+id/linLayoutBroadcastButtonHolder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_below="@id/userName"
         android:layout_marginTop="10dp"
+        android:orientation="horizontal"
         android:padding="2dp"
         android:weightSum="1.0" >
 
