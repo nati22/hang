@@ -7,9 +7,18 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.Bitmap.Config;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +27,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,8 +58,9 @@ public final class FeedFragment extends SherlockFragment implements
 	private FriendsAdapter adapter;
 	private Button buttonRefresh;
 
-	// TODO: Turn this into an actual custom icon
 	private ProfilePictureView invisFBpic;
+	private View visibleFBpic;
+	private TextView textViewUserName;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -88,22 +99,10 @@ public final class FeedFragment extends SherlockFragment implements
 		listViewFriends = (ListView) view
 				.findViewById(R.id.listViewFriendsFragment);
 		buttonRefresh = (Button) view.findViewById(R.id.buttonRefresh);
-
-		// TODO remove
-
-		String TAG = this.getClass().getSimpleName();
-
-		// Set up user's pic
-		View home_fragment = (View) view.findViewById(R.id.homeUserFragment);
-		View user_icon = (View) home_fragment.findViewById(R.id.userProfileIcon);
-		// user_icon.setBackgroundColor(getResources().getColor(R.color.Black));
-
-		invisFBpic = (ProfilePictureView) user_icon
+		textViewUserName = (TextView) view.findViewById(R.id.userName);
+		invisFBpic = (ProfilePictureView) view
 				.findViewById(R.id.user_invis_fb_icon);
-		// invisFBpic.setVisibility(View.INVISIBLE);
-//		invisFBpic.setProfileId(database.getMyJid());
-
-		Log.d(TAG, "xxxxx i set profile id to " + invisFBpic.getProfileId());
+		visibleFBpic = (View) view.findViewById(R.id.user_real_fb_icon);
 
 		// Set up the Adapter.
 		adapter = new FriendsAdapter(getActivity(), incomingBroadcasts);
@@ -134,6 +133,46 @@ public final class FeedFragment extends SherlockFragment implements
 		database.addIncomingBroadcastsListener(this);
 		database.addMyUserDataListener(this);
 
+	}
+
+	@SuppressWarnings("deprecation")
+	@SuppressLint("NewApi")
+	public void setupFacebookIcon() {
+		// this gets the profilepicture
+		ImageView fbImage = (ImageView) invisFBpic.getChildAt(0);
+
+		if (fbImage != null) {
+
+			// Convert the fb profile pic into a bitmap
+			Bitmap bitmap = ((BitmapDrawable) fbImage.getDrawable()).getBitmap();
+
+			// Create a blank bitmap
+			Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
+					bitmap.getHeight(), Config.ARGB_8888);
+
+			Canvas canvas = new Canvas(output);
+
+			final int color = 0xff424242;
+			final Paint paint = new Paint();
+			final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+
+			paint.setAntiAlias(true);
+			canvas.drawARGB(0, 0, 0, 0);
+			paint.setColor(color);
+			canvas.drawCircle(bitmap.getWidth() / 2, bitmap.getHeight() / 2,
+					bitmap.getWidth() / 2, paint);
+			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
+			canvas.drawBitmap(bitmap, rect, rect, paint);
+
+			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+				visibleFBpic.setBackgroundDrawable(new BitmapDrawable(
+						getResources(), output));
+			} else {
+				visibleFBpic.setBackground(new BitmapDrawable(getResources(),
+						output));
+			}
+		} else {
+		}
 	}
 
 	@Override
@@ -309,8 +348,10 @@ public final class FeedFragment extends SherlockFragment implements
 
 	@Override
 	public void onMyUserDataUpdate(User me) {
-		// TODO Auto-generated method stub
+		// TODO Setup caching
 		invisFBpic.setProfileId(database.getMyJid());
+		setupFacebookIcon();
+		textViewUserName.setText(me.getFullName());
 	}
 
 }

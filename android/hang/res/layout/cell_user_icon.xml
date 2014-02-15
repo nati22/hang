@@ -15,14 +15,13 @@
         android:layout_centerInParent="true"
         android:contentDescription="@string/profile"
         android:src="@drawable/ic_action_profile_icon"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
     <View
         android:id="@+id/user_real_fb_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp"
-        android:background="@color/yellow"
-        android:visibility="invisible" />
+        android:visibility="visible" />
 
 </RelativeLayout>
