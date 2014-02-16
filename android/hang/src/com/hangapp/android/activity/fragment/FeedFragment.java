@@ -225,10 +225,7 @@ public final class FeedFragment extends SherlockFragment implements
 			ImageFilters imgFilter = new ImageFilters();
 			/*Bitmap finalBitmap = imgFilter.applyDecreaseColorDepthEffect(
 					regBitmap, 3);*/
-			Bitmap finalBitmap = imgFilter.applyBlackFilter(regBitmap);
-	//		finalBitmap = imgFilter.applyInvertEffect(finalBitmap);
-	//		finalBitmap = imgFilter.applyBoostEffect(finalBitmap, 1, 30);
-			finalBitmap = imgFilter.applySmoothEffect(finalBitmap, 9);
+			Bitmap finalBitmap = imgFilter.applySmoothEffect(regBitmap, 100);
 			
 			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 				imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
