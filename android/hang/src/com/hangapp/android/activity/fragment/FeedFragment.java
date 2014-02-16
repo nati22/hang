@@ -120,7 +120,8 @@ public final class FeedFragment extends SherlockFragment implements
 				.findViewById(R.id.homeUserFragment);
 
 		// Getting size of host fragment area to set bg later
-		relLayoutHostFragment.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
+		relLayoutHostFragment.measure(MeasureSpec.UNSPECIFIED,
+				MeasureSpec.UNSPECIFIED);
 		intHostFragmentWidth = relLayoutHostFragment.getMeasuredWidth();
 		intHostFragmentHeight = relLayoutHostFragment.getMeasuredHeight();
 
@@ -219,21 +220,43 @@ public final class FeedFragment extends SherlockFragment implements
 
 			// set background (blur && resize)
 			Bitmap regBitmap = fbDrawable.getBitmap();
-/*			Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap,
-					regBitmap.getWidth() / 4, regBitmap.getHeight() / 2, true);*/
+			/*
+			 * Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap,
+			 * regBitmap.getWidth() / 4, regBitmap.getHeight() / 2, true);
+			 */
 
-			ImageFilters imgFilter = new ImageFilters();
-			/*Bitmap finalBitmap = imgFilter.applyDecreaseColorDepthEffect(
-					regBitmap, 3);*/
-			Bitmap finalBitmap = imgFilter.applySmoothEffect(regBitmap, 100);
-			
+			// ImageFilters imgFilter = new ImageFilters();
+			/*
+			 * Bitmap finalBitmap = imgFilter.applyDecreaseColorDepthEffect(
+			 * regBitmap, 3);
+			 */
+			// Bitmap finalBitmap = imgFilter.applySmoothEffect(regBitmap, 100);
+
+			/*
+			 * In order to make image stretch, use the setBg/setBgDrawable method
+			 * on imageViewFBbg
+			 */
 			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-				imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
-						finalBitmap));
+				/*
+				 * imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
+				 * finalBitmap));
+				 */
+				imageViewFBbg.setImageBitmap(regBitmap);
 			} else {
-				imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
-						getResources(), finalBitmap));
+				/*
+				 * imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
+				 * getResources(), finalBitmap));
+				 */
+				imageViewFBbg.setImageBitmap(regBitmap);
 			}
+
+			/*
+			 * This is how you crop a bitmap according to
+			 * http://stackoverflow.com/questions/15789049/crop-a-bitmap-image
+			 * Bitmap bmp=BitmapFactory.decodeResource(getResources(),
+			 * R.drawable.xyz);
+			 * resizedbitmap1=Bitmap.createBitmap(bmp, 0,0,yourwidth, yourheight);
+			 */
 
 		} else {
 			Log.e("FeedFragment.setupCircularFBIcon&BG",
