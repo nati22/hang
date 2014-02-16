@@ -206,12 +206,12 @@ public final class FeedFragment extends SherlockFragment implements
 				Availability.Status myStatus = database.getMyAvailability()
 						.getStatus();
 				if (myStatus.equals(Availability.Status.FREE))
-					userFBiconBg.setBackgroundResource(R.drawable.status_free_ring);
+					userFBiconBg.setBackgroundResource(R.drawable.status_free_ring_plain);
 				else if (myStatus.equals(Availability.Status.BUSY))
-					userFBiconBg.setBackgroundResource(R.drawable.status_busy_ring);
+					userFBiconBg.setBackgroundResource(R.drawable.status_busy_ring_plain);
 			} else {
 				Log.e("FeedFragment.setCircularFBIcon", "getMyAvailability == null");
-				userFBiconBg.setBackgroundResource(R.drawable.status_null_ring);
+				userFBiconBg.setBackgroundResource(R.drawable.status_null_ring_plain);
 			}
 
 		} else {
