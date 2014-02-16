@@ -20,6 +20,10 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,7 +53,6 @@ import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
-import com.hangapp.android.util.ImageFilters;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.StatusIcon;
 
@@ -236,6 +239,19 @@ public final class FeedFragment extends SherlockFragment implements
 			 * In order to make image stretch, use the setBg/setBgDrawable method
 			 * on imageViewFBbg
 			 */
+
+			final RenderScript rs = RenderScript.create(getActivity());
+			final Allocation inputIMG = Allocation.createFromBitmap(rs, regBitmap,
+					Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+			final Allocation outputIMG = Allocation.createTyped(rs,
+					inputIMG.getType());
+			final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
+					Element.U8_4(rs));
+			script.setRadius(6.f /* e.g. 3.f */);
+			script.setInput(inputIMG);
+			script.forEach(outputIMG);
+			outputIMG.copyTo(regBitmap);
+
 			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 				/*
 				 * imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
@@ -254,8 +270,8 @@ public final class FeedFragment extends SherlockFragment implements
 			 * This is how you crop a bitmap according to
 			 * http://stackoverflow.com/questions/15789049/crop-a-bitmap-image
 			 * Bitmap bmp=BitmapFactory.decodeResource(getResources(),
-			 * R.drawable.xyz);
-			 * resizedbitmap1=Bitmap.createBitmap(bmp, 0,0,yourwidth, yourheight);
+			 * R.drawable.xyz); resizedbitmap1=Bitmap.createBitmap(bmp,
+			 * 0,0,yourwidth, yourheight);
 			 */
 
 		} else {
