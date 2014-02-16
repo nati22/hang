@@ -17,7 +17,7 @@
         android:id="@+id/user_real_fb_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="15dp"
+        android:layout_margin="13dp"
         android:visibility="visible" />
 
 </RelativeLayout>

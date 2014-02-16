@@ -64,9 +64,10 @@ public final class FeedFragment extends SherlockFragment implements
 	private View visibleFBpic;
 	private TextView textViewUserName;
 	private ImageView imageViewFBbg;
+	private RelativeLayout relLayoutHostFragment;
 	private RelativeLayout userFBiconBg;
-	
-	private int intUserFragmentWidth, intUserFragmentHeight;
+
+	private int intHostFragmentWidth, intHostFragmentHeight;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -196,24 +197,21 @@ public final class FeedFragment extends SherlockFragment implements
 
 			// set background
 			Bitmap regBitmap = fbDrawable.getBitmap();
-			Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap, 30, 20, true);
+			Bitmap smallBitmap = Bitmap
+					.createScaledBitmap(regBitmap, 30, 20, true);
 			imageViewFBbg.setImageBitmap(smallBitmap);
 
 			// set status ring
 			if (database.getMyAvailability() != null) {
 				Availability.Status myStatus = database.getMyAvailability()
 						.getStatus();
-				if (myStatus.equals(Availability.Status.FREE)) {
-					userFBiconBg.setBackgroundColor(getResources().getColor(
-							R.color.green));
-				} else if (myStatus.equals(Availability.Status.BUSY)) {
-					userFBiconBg.setBackgroundColor(getResources().getColor(
-							R.color.red));
-				}
+				if (myStatus.equals(Availability.Status.FREE))
+					userFBiconBg.setBackgroundResource(R.drawable.status_free_ring);
+				else if (myStatus.equals(Availability.Status.BUSY))
+					userFBiconBg.setBackgroundResource(R.drawable.status_busy_ring);
 			} else {
 				Log.e("FeedFragment.setCircularFBIcon", "getMyAvailability == null");
-				userFBiconBg.setBackgroundColor(getResources().getColor(
-						R.color.gray));
+				userFBiconBg.setBackgroundResource(R.drawable.status_null_ring);
 			}
 
 		} else {
