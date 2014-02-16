@@ -136,7 +136,7 @@ public final class YouFragment extends SherlockFragment implements
 		imageButtonMyAvailability.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// Open the Delete Proposal dialog.
+				// Open the set status dialog.
 				FragmentManager fm = getActivity().getSupportFragmentManager();
 
 				SetStatusDialogFragment setStatusDialogFragment = new SetStatusDialogFragment();

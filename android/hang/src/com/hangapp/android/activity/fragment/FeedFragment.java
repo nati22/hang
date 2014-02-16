@@ -20,6 +20,7 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,6 +117,16 @@ public final class FeedFragment extends SherlockFragment implements
 
 		// TODO should be pulling image and text out of cache
 		textViewUserName.setText(database.getMyFullName());
+		visibleFBpic.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				FragmentManager fm = getActivity().getSupportFragmentManager();
+
+				SetStatusDialogFragment setStatusDialogFragment = new SetStatusDialogFragment();
+				setStatusDialogFragment.show(fm, "fragment_set_status");
+			}
+		});
 
 		// Set up the Adapter.
 		adapter = new FriendsAdapter(getActivity(), incomingBroadcasts);
