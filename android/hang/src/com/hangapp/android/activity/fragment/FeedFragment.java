@@ -42,6 +42,7 @@ import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
+import com.hangapp.android.model.callback.MyAvailabilityListener;
 import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
@@ -53,7 +54,7 @@ import com.hangapp.android.util.StatusIcon;
  * The leftmost tab inside {@link HomeActivity}.
  */
 public final class FeedFragment extends SherlockFragment implements
-		IncomingBroadcastsListener, MyUserDataListener {
+		IncomingBroadcastsListener, MyUserDataListener, MyAvailabilityListener {
 
 	// UI stuff
 	private ListView listViewFriends;
@@ -144,6 +145,7 @@ public final class FeedFragment extends SherlockFragment implements
 
 		database.addIncomingBroadcastsListener(this);
 		database.addMyUserDataListener(this);
+		database.addMyAvailabilityListener(this);
 
 		// TODO instead of reconstructing this image each time it should be cached
 		if (invisFBpic != null)
@@ -201,19 +203,6 @@ public final class FeedFragment extends SherlockFragment implements
 					.createScaledBitmap(regBitmap, 30, 20, true);
 			imageViewFBbg.setImageBitmap(smallBitmap);
 
-			// set status ring
-			if (database.getMyAvailability() != null) {
-				Availability.Status myStatus = database.getMyAvailability()
-						.getStatus();
-				if (myStatus.equals(Availability.Status.FREE))
-					userFBiconBg.setBackgroundResource(R.drawable.status_free_ring_plain);
-				else if (myStatus.equals(Availability.Status.BUSY))
-					userFBiconBg.setBackgroundResource(R.drawable.status_busy_ring_plain);
-			} else {
-				Log.e("FeedFragment.setCircularFBIcon", "getMyAvailability == null");
-				userFBiconBg.setBackgroundResource(R.drawable.status_null_ring_plain);
-			}
-
 		} else {
 			Log.e("FeedFragment.setupCircularFBIcon&BG",
 					"invisFBpic.getChildAt(0) == null");
@@ -222,12 +211,28 @@ public final class FeedFragment extends SherlockFragment implements
 
 	}
 
+	public void updateStatusRing(Availability avail) {
+		if (avail != null) {
+			Availability.Status myStatus = avail.getStatus();
+			if (myStatus.equals(Availability.Status.FREE))
+				userFBiconBg
+						.setBackgroundResource(R.drawable.status_free_ring_plain);
+			else if (myStatus.equals(Availability.Status.BUSY))
+				userFBiconBg
+						.setBackgroundResource(R.drawable.status_busy_ring_plain);
+		} else {
+			Log.e("FeedFragment.setCircularFBIcon", "getMyAvailability == null");
+			userFBiconBg.setBackgroundResource(R.drawable.status_null_ring_plain);
+		}
+	}
+
 	@Override
 	public void onPause() {
 		super.onPause();
 
 		database.removeIncomingBroadcastsListener(this);
 		database.removeMyUserDataListener(this);
+		database.removeMyAvailabilityListener(this);
 	}
 
 	private class FriendsAdapter extends BaseAdapter {
@@ -397,8 +402,15 @@ public final class FeedFragment extends SherlockFragment implements
 	public void onMyUserDataUpdate(User me) {
 		// TODO Setup caching
 		invisFBpic.setProfileId(database.getMyJid());
+		// TODO I shouldn't have to create the fb icon EVERY time
 		setupCircularFacebookIconAndBg();
 		textViewUserName.setText(me.getFullName());
+	}
+
+	@Override
+	public void onMyAvailabilityUpdate(Availability newAvailability) {
+		// TODO Auto-generated method stub
+		updateStatusRing(newAvailability);
 	}
 
 }
