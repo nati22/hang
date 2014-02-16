@@ -9,6 +9,8 @@
         layout="@layout/fragment_home_user"
         android:id="@+id/homeUserFragment"
         android:layout_width="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_height="275dip"
         android:layout_alignParentTop="true"
         android:visibility="visible" />

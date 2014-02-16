@@ -65,6 +65,8 @@ public final class FeedFragment extends SherlockFragment implements
 	private TextView textViewUserName;
 	private ImageView imageViewFBbg;
 	private RelativeLayout userFBiconBg;
+	
+	private int intUserFragmentWidth, intUserFragmentHeight;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -193,25 +195,30 @@ public final class FeedFragment extends SherlockFragment implements
 			}
 
 			// set background
-			imageViewFBbg.setImageBitmap(fbDrawable.getBitmap());
-			
+			Bitmap regBitmap = fbDrawable.getBitmap();
+			Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap, 30, 20, true);
+			imageViewFBbg.setImageBitmap(smallBitmap);
+
 			// set status ring
 			if (database.getMyAvailability() != null) {
-				Availability.Status myStatus = database.getMyAvailability().getStatus();
+				Availability.Status myStatus = database.getMyAvailability()
+						.getStatus();
 				if (myStatus.equals(Availability.Status.FREE)) {
-					userFBiconBg.setBackgroundColor(getResources().getColor(R.color.green));
+					userFBiconBg.setBackgroundColor(getResources().getColor(
+							R.color.green));
 				} else if (myStatus.equals(Availability.Status.BUSY)) {
-					userFBiconBg.setBackgroundColor(getResources().getColor(R.color.red));
-				} else {
-					userFBiconBg.setBackgroundColor(getResources().getColor(R.color.gray));
+					userFBiconBg.setBackgroundColor(getResources().getColor(
+							R.color.red));
 				}
 			} else {
 				Log.e("FeedFragment.setCircularFBIcon", "getMyAvailability == null");
+				userFBiconBg.setBackgroundColor(getResources().getColor(
+						R.color.gray));
 			}
-			
 
 		} else {
-			Log.e("FeedFragment.setupCircularFBIcon&BG", "invisFBpic.getChildAt(0) == null");
+			Log.e("FeedFragment.setupCircularFBIcon&BG",
+					"invisFBpic.getChildAt(0) == null");
 			return;
 		}
 
