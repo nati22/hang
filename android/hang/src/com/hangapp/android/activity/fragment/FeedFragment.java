@@ -24,6 +24,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -66,7 +67,7 @@ public final class FeedFragment extends SherlockFragment implements
 	private ProfilePictureView invisFBpic;
 	private View visibleFBpic;
 	private TextView textViewUserName;
-	private View imageViewFBbg;
+	private ImageView imageViewFBbg;
 	private RelativeLayout relLayoutHostFragment;
 	private RelativeLayout userFBiconBg;
 
@@ -113,16 +114,15 @@ public final class FeedFragment extends SherlockFragment implements
 		invisFBpic = (ProfilePictureView) view
 				.findViewById(R.id.user_invis_fb_icon);
 		visibleFBpic = (View) view.findViewById(R.id.user_real_fb_icon);
-		imageViewFBbg = (View) view.findViewById(R.id.facebook_background);
+		imageViewFBbg = (ImageView) view.findViewById(R.id.facebook_background);
 		userFBiconBg = (RelativeLayout) view.findViewById(R.id.userProfileIcon);
 		relLayoutHostFragment = (RelativeLayout) view
 				.findViewById(R.id.homeUserFragment);
 
 		// Getting size of host fragment area to set bg later
-		if (intHostFragmentHeight == 0 || intHostFragmentWidth == 0) {
-			intHostFragmentWidth = relLayoutHostFragment.getWidth();
-			intHostFragmentHeight = relLayoutHostFragment.getHeight();
-		}
+		relLayoutHostFragment.measure(MeasureSpec.UNSPECIFIED,MeasureSpec.UNSPECIFIED);
+		intHostFragmentWidth = relLayoutHostFragment.getMeasuredWidth();
+		intHostFragmentHeight = relLayoutHostFragment.getMeasuredHeight();
 
 		// TODO should be pulling image and text out of cache
 		textViewUserName.setText(database.getMyFullName());
@@ -217,18 +217,18 @@ public final class FeedFragment extends SherlockFragment implements
 						output));
 			}
 
-			int bitmapWidth = ((RelativeLayout) imageViewFBbg.getParent())
-					.getWidth();
-			int bitmapHeight = ((RelativeLayout) imageViewFBbg.getParent())
-					.getHeight();
-
 			// set background (blur && resize)
 			Bitmap regBitmap = fbDrawable.getBitmap();
-			Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap,
-					regBitmap.getWidth() / 4, regBitmap.getHeight() / 2, true);
-			
+/*			Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap,
+					regBitmap.getWidth() / 4, regBitmap.getHeight() / 2, true);*/
+
 			ImageFilters imgFilter = new ImageFilters();
-			Bitmap finalBitmap = imgFilter.applyDecreaseColorDepthEffect(smallBitmap, 3);
+			/*Bitmap finalBitmap = imgFilter.applyDecreaseColorDepthEffect(
+					regBitmap, 3);*/
+			Bitmap finalBitmap = imgFilter.applyBlackFilter(regBitmap);
+	//		finalBitmap = imgFilter.applyInvertEffect(finalBitmap);
+	//		finalBitmap = imgFilter.applyBoostEffect(finalBitmap, 1, 30);
+			finalBitmap = imgFilter.applySmoothEffect(finalBitmap, 9);
 			
 			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 				imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
