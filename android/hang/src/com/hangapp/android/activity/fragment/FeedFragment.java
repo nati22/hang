@@ -48,6 +48,7 @@ import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
+import com.hangapp.android.util.ImageFilters;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.StatusIcon;
 
@@ -65,11 +66,11 @@ public final class FeedFragment extends SherlockFragment implements
 	private ProfilePictureView invisFBpic;
 	private View visibleFBpic;
 	private TextView textViewUserName;
-	private ImageView imageViewFBbg;
+	private View imageViewFBbg;
 	private RelativeLayout relLayoutHostFragment;
 	private RelativeLayout userFBiconBg;
 
-	private int intHostFragmentWidth, intHostFragmentHeight;
+	private int intHostFragmentWidth, intHostFragmentHeight = 0;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -112,13 +113,21 @@ public final class FeedFragment extends SherlockFragment implements
 		invisFBpic = (ProfilePictureView) view
 				.findViewById(R.id.user_invis_fb_icon);
 		visibleFBpic = (View) view.findViewById(R.id.user_real_fb_icon);
-		imageViewFBbg = (ImageView) view.findViewById(R.id.facebook_background);
+		imageViewFBbg = (View) view.findViewById(R.id.facebook_background);
 		userFBiconBg = (RelativeLayout) view.findViewById(R.id.userProfileIcon);
+		relLayoutHostFragment = (RelativeLayout) view
+				.findViewById(R.id.homeUserFragment);
+
+		// Getting size of host fragment area to set bg later
+		if (intHostFragmentHeight == 0 || intHostFragmentWidth == 0) {
+			intHostFragmentWidth = relLayoutHostFragment.getWidth();
+			intHostFragmentHeight = relLayoutHostFragment.getHeight();
+		}
 
 		// TODO should be pulling image and text out of cache
 		textViewUserName.setText(database.getMyFullName());
 		visibleFBpic.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -208,11 +217,26 @@ public final class FeedFragment extends SherlockFragment implements
 						output));
 			}
 
-			// set background
+			int bitmapWidth = ((RelativeLayout) imageViewFBbg.getParent())
+					.getWidth();
+			int bitmapHeight = ((RelativeLayout) imageViewFBbg.getParent())
+					.getHeight();
+
+			// set background (blur && resize)
 			Bitmap regBitmap = fbDrawable.getBitmap();
-			Bitmap smallBitmap = Bitmap
-					.createScaledBitmap(regBitmap, 30, 20, true);
-			imageViewFBbg.setImageBitmap(smallBitmap);
+			Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap,
+					regBitmap.getWidth() / 4, regBitmap.getHeight() / 2, true);
+			
+			ImageFilters imgFilter = new ImageFilters();
+			Bitmap finalBitmap = imgFilter.applyDecreaseColorDepthEffect(smallBitmap, 3);
+			
+			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+				imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
+						finalBitmap));
+			} else {
+				imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
+						getResources(), finalBitmap));
+			}
 
 		} else {
 			Log.e("FeedFragment.setupCircularFBIcon&BG",

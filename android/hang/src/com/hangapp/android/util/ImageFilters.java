@@ -197,7 +197,6 @@ public class ImageFilters {
         return bmOut;
     }
 
-
     public  Bitmap applySepiaToningEffect(Bitmap src, int depth, double red, double green, double blue) {
         // image size
         int width = src.getWidth();
