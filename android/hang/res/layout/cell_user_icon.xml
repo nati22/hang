@@ -3,10 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!--
-    Need an invisible ProfilePictureView where we can 
-    get the picture from for the visible View
-    -->
 
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/user_invis_fb_icon"

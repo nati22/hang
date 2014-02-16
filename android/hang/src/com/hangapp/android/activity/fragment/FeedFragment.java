@@ -29,6 +29,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +39,7 @@ import com.hangapp.android.R;
 import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.model.callback.MyUserDataListener;
@@ -61,6 +63,8 @@ public final class FeedFragment extends SherlockFragment implements
 	private ProfilePictureView invisFBpic;
 	private View visibleFBpic;
 	private TextView textViewUserName;
+	private ImageView imageViewFBbg;
+	private RelativeLayout userFBiconBg;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -103,6 +107,8 @@ public final class FeedFragment extends SherlockFragment implements
 		invisFBpic = (ProfilePictureView) view
 				.findViewById(R.id.user_invis_fb_icon);
 		visibleFBpic = (View) view.findViewById(R.id.user_real_fb_icon);
+		imageViewFBbg = (ImageView) view.findViewById(R.id.facebook_background);
+		userFBiconBg = (RelativeLayout) view.findViewById(R.id.userProfileIcon);
 
 		// TODO should be pulling image and text out of cache
 		textViewUserName.setText(database.getMyFullName());
@@ -139,13 +145,13 @@ public final class FeedFragment extends SherlockFragment implements
 		// TODO instead of reconstructing this image each time it should be cached
 		if (invisFBpic != null)
 			if (invisFBpic.getChildAt(0) != null)
-				setupCircularFacebookIcon();
+				setupCircularFacebookIconAndBg();
 
 	}
 
 	@SuppressWarnings("deprecation")
 	@SuppressLint("NewApi")
-	public void setupCircularFacebookIcon() {
+	public void setupCircularFacebookIconAndBg() {
 		// this gets the profilepicture
 		ImageView fbImage = (ImageView) invisFBpic.getChildAt(0);
 
@@ -185,8 +191,30 @@ public final class FeedFragment extends SherlockFragment implements
 				visibleFBpic.setBackground(new BitmapDrawable(getResources(),
 						output));
 			}
+
+			// set background
+			imageViewFBbg.setImageBitmap(fbDrawable.getBitmap());
+			
+			// set status ring
+			if (database.getMyAvailability() != null) {
+				Availability.Status myStatus = database.getMyAvailability().getStatus();
+				if (myStatus.equals(Availability.Status.FREE)) {
+					userFBiconBg.setBackgroundColor(getResources().getColor(R.color.green));
+				} else if (myStatus.equals(Availability.Status.BUSY)) {
+					userFBiconBg.setBackgroundColor(getResources().getColor(R.color.red));
+				} else {
+					userFBiconBg.setBackgroundColor(getResources().getColor(R.color.gray));
+				}
+			} else {
+				Log.e("FeedFragment.setCircularFBIcon", "getMyAvailability == null");
+			}
+			
+
 		} else {
+			Log.e("FeedFragment.setupCircularFBIcon&BG", "invisFBpic.getChildAt(0) == null");
+			return;
 		}
+
 	}
 
 	@Override
@@ -364,7 +392,7 @@ public final class FeedFragment extends SherlockFragment implements
 	public void onMyUserDataUpdate(User me) {
 		// TODO Setup caching
 		invisFBpic.setProfileId(database.getMyJid());
-		setupCircularFacebookIcon();
+		setupCircularFacebookIconAndBg();
 		textViewUserName.setText(me.getFullName());
 	}
 
