@@ -21,7 +21,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v8.renderscript.*;
+import android.support.v8.renderscript.Allocation;
+import android.support.v8.renderscript.Element;
+import android.support.v8.renderscript.RenderScript;
+import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,6 +53,7 @@ import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
+import com.hangapp.android.util.ImageFilters;
 import com.hangapp.android.util.ImageViewFbBg;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.StatusIcon;
@@ -59,6 +63,8 @@ import com.hangapp.android.util.StatusIcon;
  */
 public final class FeedFragment extends SherlockFragment implements
 		IncomingBroadcastsListener, MyUserDataListener, MyAvailabilityListener {
+
+	public static final String TAG = "Feeed";
 
 	// UI stuff
 	private ListView listViewFriends;
@@ -224,39 +230,56 @@ public final class FeedFragment extends SherlockFragment implements
 			}
 
 			// set background (blur && resize)
-	//		if (!imageViewFBbg.isBackgroundSet()) {
-				Bitmap regBitmap = fbDrawable.getBitmap().copy(
-						fbDrawable.getBitmap().getConfig(), true);
+			// if (!imageViewFBbg.isBackgroundSet()) {
+			Bitmap regBitmap = fbDrawable.getBitmap().copy(
+					fbDrawable.getBitmap().getConfig(), true);
 
-				final RenderScript rs = RenderScript.create(getActivity());
-				final Allocation inputIMG = Allocation.createFromBitmap(rs,
-						regBitmap, Allocation.MipmapControl.MIPMAP_NONE,
-						Allocation.USAGE_SCRIPT);
-				final Allocation outputIMG = Allocation.createTyped(rs,
-						inputIMG.getType());
-				final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
-						Element.U8_4(rs));
-				script.setRadius(12.f /* e.g. 3.f */);
-				script.setInput(inputIMG);
-				script.forEach(outputIMG);
-				outputIMG.copyTo(regBitmap);
+			final RenderScript rs = RenderScript.create(getActivity());
+			final Allocation inputIMG = Allocation.createFromBitmap(rs, regBitmap,
+					Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+			final Allocation outputIMG = Allocation.createTyped(rs,
+					inputIMG.getType());
+			final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
+					Element.U8_4(rs));
+			script.setRadius(12.f /* e.g. 3.f */);
+			script.setInput(inputIMG);
+			script.forEach(outputIMG);
+			outputIMG.copyTo(regBitmap);
 
-				if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-					/*
-					 * imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
-					 * finalBitmap));
-					 */
-					imageViewFBbg.setImageBitmap(regBitmap);
-					imageViewFBbg.backgroundIsSet(true);
-				} else {
-					/*
-					 * imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
-					 * getResources(), finalBitmap));
-					 */
-					imageViewFBbg.setImageBitmap(regBitmap);
-					imageViewFBbg.backgroundIsSet(true);
-				}
-//			}
+			// add tint TODO: have preset setting for stale status bg brightness
+			ImageFilters imgFilter = new ImageFilters();
+			regBitmap = imgFilter.applyBrightnessEffect(regBitmap, -55);
+			
+			// Figure out dimensions to crop
+			{
+				int picWidth = regBitmap.getWidth();
+				int picHeight = regBitmap.getHeight();
+
+
+				Log.d("", TAG + " screen dimens = " + intHostFragmentWidth + ", " + intHostFragmentHeight);
+				Log.d("", TAG + " pic dimens = " + picWidth + ", " + picHeight);
+			
+				// crop
+				regBitmap = Bitmap.createBitmap(regBitmap, picWidth / 4, picHeight / 4,
+						picWidth / 2, picHeight / 2);
+
+			}
+			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+
+				imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
+						regBitmap));
+
+				// imageViewFBbg.setImageBitmap(regBitmap);
+				imageViewFBbg.backgroundIsSet(true);
+			} else {
+
+				imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
+						getResources(), regBitmap));
+
+				// imageViewFBbg.setImageBitmap(regBitmap);
+				imageViewFBbg.backgroundIsSet(true);
+			}
+			// }
 
 			/*
 			 * This is how you crop a bitmap according to
