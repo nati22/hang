@@ -50,6 +50,7 @@ import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
+import com.hangapp.android.util.ImageViewFbBg;
 import com.hangapp.android.util.Keys;
 import com.hangapp.android.util.StatusIcon;
 
@@ -67,7 +68,7 @@ public final class FeedFragment extends SherlockFragment implements
 	private ProfilePictureView invisFBpic;
 	private View visibleFBpic;
 	private TextView textViewUserName;
-	private ImageView imageViewFBbg;
+	private ImageViewFbBg imageViewFBbg;
 	private RelativeLayout relLayoutHostFragment;
 	private RelativeLayout userFBiconBg;
 
@@ -103,6 +104,9 @@ public final class FeedFragment extends SherlockFragment implements
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
+		Toast.makeText(getActivity(), "onCreateView called", Toast.LENGTH_SHORT)
+				.show();
+
 		// Inflate the View for this Fragment.
 		View view = inflater.inflate(R.layout.fragment_feed, container, false);
 
@@ -114,7 +118,8 @@ public final class FeedFragment extends SherlockFragment implements
 		invisFBpic = (ProfilePictureView) view
 				.findViewById(R.id.user_invis_fb_icon);
 		visibleFBpic = (View) view.findViewById(R.id.user_real_fb_icon);
-		imageViewFBbg = (ImageView) view.findViewById(R.id.facebook_background);
+		imageViewFBbg = (ImageViewFbBg) view
+				.findViewById(R.id.facebook_background);
 		userFBiconBg = (RelativeLayout) view.findViewById(R.id.userProfileIcon);
 		relLayoutHostFragment = (RelativeLayout) view
 				.findViewById(R.id.homeUserFragment);
@@ -219,49 +224,39 @@ public final class FeedFragment extends SherlockFragment implements
 			}
 
 			// set background (blur && resize)
-			Bitmap regBitmap = fbDrawable.getBitmap();
-			/*
-			 * Bitmap smallBitmap = Bitmap.createScaledBitmap(regBitmap,
-			 * regBitmap.getWidth() / 4, regBitmap.getHeight() / 2, true);
-			 */
+	//		if (!imageViewFBbg.isBackgroundSet()) {
+				Bitmap regBitmap = fbDrawable.getBitmap().copy(
+						fbDrawable.getBitmap().getConfig(), true);
 
-			// ImageFilters imgFilter = new ImageFilters();
-			/*
-			 * Bitmap finalBitmap = imgFilter.applyDecreaseColorDepthEffect(
-			 * regBitmap, 3);
-			 */
-			// Bitmap finalBitmap = imgFilter.applySmoothEffect(regBitmap, 100);
+				final RenderScript rs = RenderScript.create(getActivity());
+				final Allocation inputIMG = Allocation.createFromBitmap(rs,
+						regBitmap, Allocation.MipmapControl.MIPMAP_NONE,
+						Allocation.USAGE_SCRIPT);
+				final Allocation outputIMG = Allocation.createTyped(rs,
+						inputIMG.getType());
+				final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
+						Element.U8_4(rs));
+				script.setRadius(12.f /* e.g. 3.f */);
+				script.setInput(inputIMG);
+				script.forEach(outputIMG);
+				outputIMG.copyTo(regBitmap);
 
-			/*
-			 * In order to make image stretch, use the setBg/setBgDrawable method
-			 * on imageViewFBbg
-			 */
-
-			final RenderScript rs = RenderScript.create(getActivity());
-			final Allocation inputIMG = Allocation.createFromBitmap(rs, regBitmap,
-					Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
-			final Allocation outputIMG = Allocation.createTyped(rs,
-					inputIMG.getType());
-			final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
-					Element.U8_4(rs));
-			script.setRadius(6.f /* e.g. 3.f */);
-			script.setInput(inputIMG);
-			script.forEach(outputIMG);
-			outputIMG.copyTo(regBitmap);
-
-			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-				/*
-				 * imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
-				 * finalBitmap));
-				 */
-				imageViewFBbg.setImageBitmap(regBitmap);
-			} else {
-				/*
-				 * imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
-				 * getResources(), finalBitmap));
-				 */
-				imageViewFBbg.setImageBitmap(regBitmap);
-			}
+				if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+					/*
+					 * imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
+					 * finalBitmap));
+					 */
+					imageViewFBbg.setImageBitmap(regBitmap);
+					imageViewFBbg.backgroundIsSet(true);
+				} else {
+					/*
+					 * imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
+					 * getResources(), finalBitmap));
+					 */
+					imageViewFBbg.setImageBitmap(regBitmap);
+					imageViewFBbg.backgroundIsSet(true);
+				}
+//			}
 
 			/*
 			 * This is how you crop a bitmap according to
