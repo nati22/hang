@@ -7,8 +7,6 @@ import java.util.List;
 import org.joda.time.DateTime;
 import org.joda.time.Minutes;
 
-import android.support.v8.renderscript.*;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -22,11 +20,8 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.v4.app.FragmentManager;
+import android.support.v8.renderscript.*;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
