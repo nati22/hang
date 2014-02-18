@@ -54,8 +54,8 @@ import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.ImageFilters;
-import com.hangapp.android.util.ImageViewFbBg;
 import com.hangapp.android.util.Keys;
+import com.hangapp.android.util.LinLayoutFbBg;
 import com.hangapp.android.util.StatusIcon;
 
 /**
@@ -74,8 +74,7 @@ public final class FeedFragment extends SherlockFragment implements
 	private ProfilePictureView invisFBpic;
 	private View visibleFBpic;
 	private TextView textViewUserName;
-	private ImageViewFbBg imageViewFBbg;
-	private RelativeLayout relLayoutHostFragment;
+	private LinLayoutFbBg linLayoutHostFragment;
 	private RelativeLayout userFBiconBg;
 
 	private int intHostFragmentWidth, intHostFragmentHeight = 0;
@@ -124,17 +123,15 @@ public final class FeedFragment extends SherlockFragment implements
 		invisFBpic = (ProfilePictureView) view
 				.findViewById(R.id.user_invis_fb_icon);
 		visibleFBpic = (View) view.findViewById(R.id.user_real_fb_icon);
-		imageViewFBbg = (ImageViewFbBg) view
-				.findViewById(R.id.facebook_background);
 		userFBiconBg = (RelativeLayout) view.findViewById(R.id.userProfileIcon);
-		relLayoutHostFragment = (RelativeLayout) view
+		linLayoutHostFragment = (LinLayoutFbBg) view
 				.findViewById(R.id.homeUserFragment);
 
 		// Getting size of host fragment area to set bg later
-		relLayoutHostFragment.measure(MeasureSpec.UNSPECIFIED,
+		linLayoutHostFragment.measure(MeasureSpec.UNSPECIFIED,
 				MeasureSpec.UNSPECIFIED);
-		intHostFragmentWidth = relLayoutHostFragment.getMeasuredWidth();
-		intHostFragmentHeight = relLayoutHostFragment.getMeasuredHeight();
+		intHostFragmentWidth = linLayoutHostFragment.getMeasuredWidth();
+		intHostFragmentHeight = linLayoutHostFragment.getMeasuredHeight();
 
 		// TODO should be pulling image and text out of cache
 		textViewUserName.setText(database.getMyFullName());
@@ -266,18 +263,18 @@ public final class FeedFragment extends SherlockFragment implements
 			}
 			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 
-				imageViewFBbg.setBackground(new BitmapDrawable(getResources(),
+				linLayoutHostFragment.setBackground(new BitmapDrawable(getResources(),
 						regBitmap));
 
 				// imageViewFBbg.setImageBitmap(regBitmap);
-				imageViewFBbg.backgroundIsSet(true);
+				linLayoutHostFragment.backgroundIsSet(true);
 			} else {
 
-				imageViewFBbg.setBackgroundDrawable(new BitmapDrawable(
+				linLayoutHostFragment.setBackgroundDrawable(new BitmapDrawable(
 						getResources(), regBitmap));
 
 				// imageViewFBbg.setImageBitmap(regBitmap);
-				imageViewFBbg.backgroundIsSet(true);
+				linLayoutHostFragment.backgroundIsSet(true);
 			}
 			// }
 
