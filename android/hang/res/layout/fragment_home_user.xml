@@ -10,21 +10,22 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.7"
         android:orientation="horizontal" >
 
         <include
             android:id="@+id/userProfileIcon"
             android:layout_width="120dip"
             android:layout_height="120dip"
-            android:layout_gravity="center"
             android:layout_centerInParent="true"
+            android:layout_gravity="center"
             layout="@layout/cell_user_icon" />
 
         <LinearLayout
             android:id="@+id/linLayoutFreeFor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="75dp"
@@ -67,10 +68,9 @@
     <LinearLayout
         android:id="@+id/linLayoutBroadcastButtonHolder"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/userName"
         android:layout_marginTop="10dp"
-        android:layout_weight="0.2"
         android:orientation="horizontal"
         android:padding="2dp"
         android:weightSum="1.0" >
@@ -86,7 +86,7 @@
             android:textSize="16dp" />
 
         <TextView
-            android:id="@+id/textViewOutgingButton"
+            android:id="@+id/textViewOutgoingButton"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0.5"

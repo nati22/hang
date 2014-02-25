@@ -10,6 +10,7 @@ import org.joda.time.Minutes;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -43,6 +44,8 @@ import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.HomeActivity;
+import com.hangapp.android.activity.IncomingBroadcastsActivity;
+import com.hangapp.android.activity.OutgoingBroadcastsActivity;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
@@ -77,6 +80,8 @@ public final class FeedFragment extends SherlockFragment implements
 	private LinLayoutFbBg linLayoutHostFragment;
 	private RelativeLayout userFBiconBg;
 
+	private TextView textViewIncoming, textViewOutgoing;
+
 	private int intHostFragmentWidth, intHostFragmentHeight = 0;
 
 	// Member datum.
@@ -109,8 +114,23 @@ public final class FeedFragment extends SherlockFragment implements
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
 
-		Toast.makeText(getActivity(), "onCreateView called", Toast.LENGTH_SHORT)
-				.show();
+		if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_LARGE) {
+			// on a large screen device ...
+			Toast.makeText(getActivity(), "Large screen", Toast.LENGTH_SHORT)
+					.show();
+		} else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_NORMAL) {
+			// on a large screen device ...
+			Toast.makeText(getActivity(), "Normal screen", Toast.LENGTH_SHORT)
+					.show();
+		} else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_SMALL) {
+			// on a large screen device ...
+			Toast.makeText(getActivity(), "Small screen", Toast.LENGTH_SHORT)
+					.show();
+		} else if ((getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK) == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+			// on a large screen device ...
+			Toast.makeText(getActivity(), "xlarge screen", Toast.LENGTH_SHORT)
+					.show();
+		}
 
 		// Inflate the View for this Fragment.
 		View view = inflater.inflate(R.layout.fragment_feed, container, false);
@@ -126,6 +146,28 @@ public final class FeedFragment extends SherlockFragment implements
 		userFBiconBg = (RelativeLayout) view.findViewById(R.id.userProfileIcon);
 		linLayoutHostFragment = (LinLayoutFbBg) view
 				.findViewById(R.id.homeUserFragment);
+		textViewIncoming = (TextView) linLayoutHostFragment
+				.findViewById(R.id.textViewIncomingButton);
+		textViewOutgoing = (TextView) linLayoutHostFragment
+				.findViewById(R.id.textViewOutgoingButton);
+
+		// broadcast button click listeners
+		textViewIncoming.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(getActivity(),
+						IncomingBroadcastsActivity.class));
+			}
+		});
+		textViewOutgoing.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(getActivity(),
+						OutgoingBroadcastsActivity.class));
+			}
+		});
 
 		// Getting size of host fragment area to set bg later
 		linLayoutHostFragment.measure(MeasureSpec.UNSPECIFIED,
@@ -246,25 +288,25 @@ public final class FeedFragment extends SherlockFragment implements
 			// add tint TODO: have preset setting for stale status bg brightness
 			ImageFilters imgFilter = new ImageFilters();
 			regBitmap = imgFilter.applyBrightnessEffect(regBitmap, -55);
-			
+
 			// Figure out dimensions to crop
 			{
 				int picWidth = regBitmap.getWidth();
 				int picHeight = regBitmap.getHeight();
 
-
-				Log.d("", TAG + " screen dimens = " + intHostFragmentWidth + ", " + intHostFragmentHeight);
+				Log.d("", TAG + " screen dimens = " + intHostFragmentWidth + ", "
+						+ intHostFragmentHeight);
 				Log.d("", TAG + " pic dimens = " + picWidth + ", " + picHeight);
-			
+
 				// crop
-				regBitmap = Bitmap.createBitmap(regBitmap, picWidth / 4, picHeight / 4,
-						picWidth / 2, picHeight / 2);
+				regBitmap = Bitmap.createBitmap(regBitmap, picWidth / 4,
+						picHeight / 4, picWidth / 2, picHeight / 2);
 
 			}
 			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 
-				linLayoutHostFragment.setBackground(new BitmapDrawable(getResources(),
-						regBitmap));
+				linLayoutHostFragment.setBackground(new BitmapDrawable(
+						getResources(), regBitmap));
 
 				// imageViewFBbg.setImageBitmap(regBitmap);
 				linLayoutHostFragment.backgroundIsSet(true);
