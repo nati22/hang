@@ -272,12 +272,17 @@ public class ProposalsFragment extends SherlockFragment implements
 				User user = iterator.next();
 
 				//
-				if (user.getProposal() == null
-						|| !user.getProposal().isActive()) {
+				if (user.getProposal() == null) {
 					Log.d("ProposalsFragment.onIncomingBroadcastsUpdate",
-							"removing user " + user.getFirstName());
+							"removing user " + user.getFirstName()
+									+ " for null proposal");
 					iterator.remove();
-				}
+				} /*else if (!(user.getProposal().isActive())) {
+					Log.d("ProposalsFragment.onIncomingBroadcastsUpdate",
+							"removing user " + user.getFirstName()
+									+ " for expired proposal");
+					iterator.remove();
+				}*/
 			}
 
 			// // Convert Users to SeenUsers to give them seen "state" booleans

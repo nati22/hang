@@ -339,6 +339,10 @@ public final class FeedFragment extends SherlockFragment implements
 	public void updateStatusRing(Availability avail) {
 		if (avail != null) {
 			Availability.Status myStatus = avail.getStatus();
+			if (myStatus == null) {
+				Log.e("FeedFragment.updateStatusRing", "myStatus == null");
+				return;
+			}
 			if (myStatus.equals(Availability.Status.FREE))
 				userFBiconBg
 						.setBackgroundResource(R.drawable.status_free_ring_plain);
