@@ -29,6 +29,9 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 	public static final int NUDGE_NOTIFY_ID = 1;
 	public static final int BROADCAST_NOTIFY_ID = 2;
 	private NotificationManager notifMgr;
+	
+	public static final int VIBRATE_LENGTH_SHORT = 100;
+	public static final long[] VIBRATE_PATTERN_DOUBLE = new long[] {0, 70, 100, 75};
 
 	// Dependencies.
 	private Database database;
@@ -101,7 +104,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				if (audioM.getRingerMode() != 0) {
 					Vibrator v = (Vibrator) context
 							.getSystemService(Context.VIBRATOR_SERVICE);
-					v.vibrate(400);
+					v.vibrate(VIBRATE_LENGTH_SHORT);
 				}
 				
 				// long[] pattern = {0, 250, 400, 200, 125, 200, 75, 100, 25,
@@ -135,7 +138,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 
 				Vibrator v = (Vibrator) context
 						.getSystemService(Context.VIBRATOR_SERVICE);
-				v.vibrate(400);
+				v.vibrate(VIBRATE_LENGTH_SHORT);
 
 			} else if (type != null && type.equals(Keys.FromServer.TYPE_NEW_CHAT)) {
 				String hostJid = intent.getExtras().getString(FromServer.HOST);
@@ -174,7 +177,7 @@ public class GCMBroadcastReceiver extends BroadcastReceiver {
 				if (audioM.getRingerMode() != 0) {
 					Vibrator v = (Vibrator) context
 							.getSystemService(Context.VIBRATOR_SERVICE);
-					v.vibrate(400);
+					v.vibrate(VIBRATE_LENGTH_SHORT);
 				}
 
 			} else {
