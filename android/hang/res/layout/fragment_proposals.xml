@@ -5,19 +5,44 @@
     android:background="@android:color/white"
     android:orientation="vertical" >
 
+    <com.hangapp.android.util.MyExpandableViewGroup
+        android:id="@+id/expandingLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="50dip"
+        android:layout_alignParentTop="true"
+        android:background="@color/Teal"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/blue_box"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@color/Blue"
+            android:padding="2dp"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/red_box"
+            android:layout_width="20dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:layout_toRightOf="@id/blue_box"
+            android:background="@color/Red"
+            android:visibility="invisible" />
+    </com.hangapp.android.util.MyExpandableViewGroup>
+
     <ListView
         android:id="@+id/listViewProposalsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:background="@android:color/white" />
 
     <RelativeLayout
         android:id="@android:id/empty"
         android:layout_width="match_parent"
-        android:background="@android:color/white"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:background="@android:color/white" >
 
         <TextView
             android:id="@android:id/empty"
