@@ -7,10 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.*;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +70,7 @@ public class ProposalsFragment extends SherlockFragment implements
 			this.seenProposals.clear();
 			this.seenProposals.addAll(savedSeenJids);
 		}
+
 	}
 
 	@Override
@@ -78,6 +81,14 @@ public class ProposalsFragment extends SherlockFragment implements
 		// Inflate the View for this Fragment.
 		View view = inflater.inflate(R.layout.fragment_proposals, container,
 				false);
+
+		// Inflate create proposal fragment
+		Fragment fragment = new CreateProposalFragment();
+		android.support.v4.app.FragmentManager fm = ProposalsFragment.this
+				.getSherlockActivity().getSupportFragmentManager();
+		FragmentTransaction ft = fm.beginTransaction();
+		ft.replace(R.id.fragment_create_proposal, fragment);
+		ft.commit();
 
 		// Reference Views.
 		listViewFriends = (ListView) view
@@ -311,15 +322,15 @@ public class ProposalsFragment extends SherlockFragment implements
 	}
 
 	public static void collapseView() {
-		
+
 		expandableView.collapse(expandableView);
 		viewIsExpanded = false;
 	}
-	
+
 	public static void expandView() {
-		
+
 		expandableView.expand(expandableView);
 		viewIsExpanded = true;
 	}
-	
+
 }
