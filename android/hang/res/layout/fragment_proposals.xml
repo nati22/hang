@@ -35,6 +35,7 @@
         android:id="@+id/listViewProposalsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/expandingLayout"
         android:layout_centerHorizontal="true"
         android:background="@android:color/white" />
 
@@ -42,6 +43,7 @@
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignTop="@id/listViewProposalsFragment"
         android:background="@android:color/white" >
 
         <TextView

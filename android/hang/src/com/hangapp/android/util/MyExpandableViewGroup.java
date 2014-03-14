@@ -33,7 +33,7 @@ public class MyExpandableViewGroup extends RelativeLayout {
 				.show();
 
 		anim = new ResizeAnimation(this, this.getWidth(), this.getHeight(),
-				this.getWidth(), this.getHeight(), 750);
+				this.getWidth(), this.getHeight(), 500);
 
 		onClick = new OnClickListener() {
 
