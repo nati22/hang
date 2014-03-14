@@ -31,6 +31,7 @@ import com.hangapp.android.model.callback.IncomingBroadcastsListener;
 import com.hangapp.android.model.callback.SeenProposalsListener;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
+import com.hangapp.android.util.MyExpandableViewGroup;
 
 public class ProposalsFragment extends SherlockFragment implements
 		IncomingBroadcastsListener, SeenProposalsListener {
@@ -38,6 +39,8 @@ public class ProposalsFragment extends SherlockFragment implements
 	// UI stuff
 	private ListView listViewFriends;
 	private ProposalsAdapter adapter;
+	private static MyExpandableViewGroup expandableView;
+	private static boolean viewIsExpanded = false;
 
 	// Member datum.
 	private ArrayList<User> incomingBroadcasts = new ArrayList<User>();
@@ -102,6 +105,10 @@ public class ProposalsFragment extends SherlockFragment implements
 			}
 		});
 
+		expandableView = (MyExpandableViewGroup) view
+				.findViewById(R.id.expandingLayout);
+		expandableView.initialize(getActivity());
+
 		return view;
 	}
 
@@ -123,8 +130,7 @@ public class ProposalsFragment extends SherlockFragment implements
 		database.addIncomingBroadcastsListener(this);
 		database.addSeenProposalListener(this);
 
-		final List<User> incomingBroadcasts = database
-				.getMyIncomingBroadcasts();
+		final List<User> incomingBroadcasts = database.getMyIncomingBroadcasts();
 		onIncomingBroadcastsUpdate(incomingBroadcasts);
 
 		final List<String> seenJids = database.getMySeenProposals();
@@ -179,8 +185,8 @@ public class ProposalsFragment extends SherlockFragment implements
 			// Inflate the View if necessary.
 			if (convertView == null) {
 				holder = new ViewHolder();
-				convertView = inflater.inflate(
-						R.layout.cell_proposals_fragment, null);
+				convertView = inflater.inflate(R.layout.cell_proposals_fragment,
+						null);
 			} else {
 				holder = (ViewHolder) convertView.getTag();
 			}
@@ -218,11 +224,9 @@ public class ProposalsFragment extends SherlockFragment implements
 			holder.textViewFriendName.setTypeface(champagneLimousinesBold);
 			holder.textViewProposalDescription
 					.setTypeface(champagneLimousinesBold);
-			holder.textViewProposalLocation
-					.setTypeface(champagneLimousinesBold);
+			holder.textViewProposalLocation.setTypeface(champagneLimousinesBold);
 			holder.textViewProposalStartTime.setTypeface(champagneLimousines);
-			holder.textViewProposalInterested
-					.setTypeface(champagneLimousinesBold);
+			holder.textViewProposalInterested.setTypeface(champagneLimousinesBold);
 
 			// Save the newly generated convertView into the "holder"
 			// object.
@@ -241,11 +245,10 @@ public class ProposalsFragment extends SherlockFragment implements
 			// Construct the internationalized string for the number of users
 			// interested in this Proposal. Then use it to populate the
 			// TextView.
-			final int numberOfUsersInterested = user.getProposal()
-					.getInterested().size();
-			final String interestedString = String.format(context
-					.getResources().getString(R.string.count_interested),
-					numberOfUsersInterested);
+			final int numberOfUsersInterested = user.getProposal().getInterested()
+					.size();
+			final String interestedString = String.format(context.getResources()
+					.getString(R.string.count_interested), numberOfUsersInterested);
 			holder.textViewProposalInterested.setText(interestedString);
 
 			return convertView;
@@ -277,12 +280,12 @@ public class ProposalsFragment extends SherlockFragment implements
 							"removing user " + user.getFirstName()
 									+ " for null proposal");
 					iterator.remove();
-				} /*else if (!(user.getProposal().isActive())) {
-					Log.d("ProposalsFragment.onIncomingBroadcastsUpdate",
-							"removing user " + user.getFirstName()
-									+ " for expired proposal");
-					iterator.remove();
-				}*/
+				} /*
+					 * else if (!(user.getProposal().isActive())) {
+					 * Log.d("ProposalsFragment.onIncomingBroadcastsUpdate",
+					 * "removing user " + user.getFirstName() +
+					 * " for expired proposal"); iterator.remove(); }
+					 */
 			}
 
 			// // Convert Users to SeenUsers to give them seen "state" booleans
@@ -307,4 +310,16 @@ public class ProposalsFragment extends SherlockFragment implements
 		adapter.notifyDataSetChanged();
 	}
 
+	public static void collapseView() {
+		
+		expandableView.collapse(expandableView);
+		viewIsExpanded = false;
+	}
+	
+	public static void expandView() {
+		
+		expandableView.expand(expandableView);
+		viewIsExpanded = true;
+	}
+	
 }

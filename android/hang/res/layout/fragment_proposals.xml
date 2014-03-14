@@ -29,6 +29,13 @@
             android:layout_toRightOf="@id/blue_box"
             android:background="@color/Red"
             android:visibility="invisible" />
+
+        <fragment
+            android:id="@+id/fragment_create_proposal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            class="com.hangapp.android.activity.fragment.CreateProposalFragment" />
+        
     </com.hangapp.android.util.MyExpandableViewGroup>
 
     <ListView

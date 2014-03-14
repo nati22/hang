@@ -51,6 +51,7 @@ public class CreateProposalFragment extends SherlockFragment {
 	private RadioButton radioButtonHowSoon30mins;
 	private RadioButton radioButtonHowSoon1hr;
 	private Button buttonCreateProposal;
+	private Button buttonCancelCreateProposal;
 
 	// Dependencies.
 	private Database database;
@@ -78,8 +79,7 @@ public class CreateProposalFragment extends SherlockFragment {
 		textViewCreateProposal = (TextView) view
 				.findViewById(R.id.textViewCreateProposal);
 		radioButtonNow = (RadioButton) view.findViewById(R.id.radioButtonNow);
-		radioButtonLater = (RadioButton) view
-				.findViewById(R.id.radioButtonLater);
+		radioButtonLater = (RadioButton) view.findViewById(R.id.radioButtonLater);
 		textViewProposalDescription = (TextView) view
 				.findViewById(R.id.textViewProposalDescription1);
 		editTextProposalDescription = (EditText) view
@@ -102,6 +102,8 @@ public class CreateProposalFragment extends SherlockFragment {
 				.findViewById(R.id.radioButton1Hr1);
 		buttonCreateProposal = (Button) view
 				.findViewById(R.id.buttonCreateProposal);
+		buttonCancelCreateProposal = (Button) view
+				.findViewById(R.id.buttonCancelCreateProposal);
 
 		// Set fonts.
 		Typeface tf = Typeface.createFromAsset(getActivity()
@@ -118,12 +120,22 @@ public class CreateProposalFragment extends SherlockFragment {
 		radioButtonHowSoon30mins.setTypeface(tf);
 		radioButtonHowSoon1hr.setTypeface(tf);
 		buttonCreateProposal.setTypeface(tf);
+		buttonCancelCreateProposal.setTypeface(tf);
 
 		// Set OnClickListeners.
 		buttonCreateProposal.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				createProposal();
+			}
+		});
+
+		buttonCancelCreateProposal.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// notify the expandableview to collapse
+				ProposalsFragment.collapseView();
 			}
 		});
 
@@ -168,12 +180,11 @@ public class CreateProposalFragment extends SherlockFragment {
 			editTextProposalLocation.setText("");
 
 			Toast.makeText(getActivity(),
-					"Created Proposal: " + proposalDescription,
-					Toast.LENGTH_SHORT).show();
-		} catch (Exception e) {
-			Toast.makeText(getActivity(),
-					"Invalid proposal: " + e.getMessage(), Toast.LENGTH_SHORT)
+					"Created Proposal: " + proposalDescription, Toast.LENGTH_SHORT)
 					.show();
+		} catch (Exception e) {
+			Toast.makeText(getActivity(), "Invalid proposal: " + e.getMessage(),
+					Toast.LENGTH_SHORT).show();
 			return;
 		}
 	}

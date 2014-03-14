@@ -6,6 +6,18 @@
     android:orientation="vertical"
     android:paddingBottom="10dp" >
 
+        <TextView
+        android:id="@+id/textViewMyProposal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="@string/champagne_limousines"
+        android:text="MY PROPOSAL"
+        android:textSize="18sp" />
+    
     <TextView
         android:id="@+id/myTextViewMyProposalLocation"
         android:layout_width="wrap_content"
@@ -54,9 +66,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/textViewMyProposal"
         android:layout_marginLeft="24dp"
-        android:layout_marginTop="20dp"
         android:text="@string/proposal_description"
         android:textSize="16sp" />
 
