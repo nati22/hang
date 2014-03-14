@@ -18,6 +18,8 @@ public class MyExpandableViewGroup extends RelativeLayout {
 	private static boolean isExpanded = false;
 	private int originalWidth;
 	private int originalHeight;
+	
+	private final static int DURATION_OF_ANIMATION = 500; 
 
 	public MyExpandableViewGroup(Context context) {
 		super(context);
@@ -33,7 +35,7 @@ public class MyExpandableViewGroup extends RelativeLayout {
 				.show();
 
 		anim = new ResizeAnimation(this, this.getWidth(), this.getHeight(),
-				this.getWidth(), this.getHeight(), 500);
+				this.getWidth(), this.getHeight(), DURATION_OF_ANIMATION);
 
 		onClick = new OnClickListener() {
 
@@ -73,7 +75,7 @@ public class MyExpandableViewGroup extends RelativeLayout {
 		originalHeight = this.getHeight();
 
 		anim = new ResizeAnimation(this, this.getWidth(), this.getHeight(),
-				this.getWidth(), this.getHeight(), 750);
+				this.getWidth(), this.getHeight(), DURATION_OF_ANIMATION);
 
 		onClick = new OnClickListener() {
 
@@ -102,7 +104,7 @@ public class MyExpandableViewGroup extends RelativeLayout {
 					findViewById(R.id.blue_box).startAnimation(animOut);
 					findViewById(R.id.blue_box).setVisibility(INVISIBLE);
 					view.setResizeAnimation(new ResizeAnimation(v, v.getWidth(), v
-							.getHeight(), v.getWidth(), v.getHeight() * 2, 600));
+							.getHeight(), v.getWidth(), v.getHeight() * 6, 600));
 					expand();
 				}
 
