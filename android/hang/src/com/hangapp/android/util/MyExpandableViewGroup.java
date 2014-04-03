@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hangapp.android.R;
+import com.hangapp.android.database.Database;
 
 public class MyExpandableViewGroup extends RelativeLayout {
 
@@ -37,28 +38,28 @@ public class MyExpandableViewGroup extends RelativeLayout {
 
 	public MyExpandableViewGroup(Context context) {
 		super(context);
-		Toast.makeText(context, "one param constructor called",
-				Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "one param constructor called",
+//				Toast.LENGTH_SHORT).show();
 		// initialize(context);
 	}
 
 	public MyExpandableViewGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		Toast.makeText(context, "two param constructor called",
-				Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "two param constructor called",
+//				Toast.LENGTH_SHORT).show();
 		// initialize(context);
 	}
 
 	public MyExpandableViewGroup(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
-		Toast.makeText(context, "three param constructor called",
-				Toast.LENGTH_SHORT).show();
+//		Toast.makeText(context, "three param constructor called",
+//				Toast.LENGTH_SHORT).show();
 		// initialize(context);
 	}
 
 	@SuppressWarnings("deprecation")
-	public void initialize(Context context) {
+	public void initialize(Context context, Database database) {
 
 		// Set initial values.
 		WindowManager wm = (WindowManager) context
@@ -71,7 +72,7 @@ public class MyExpandableViewGroup extends RelativeLayout {
 		originalHeight = display.getHeight() / 7;
 		Log.d(TAG, "originalWidth = " + originalWidth);
 		Log.d(TAG, "originalHeight = " + originalHeight);
-
+	
 		// Get Views
 		onClick = new OnClickListener() {
 

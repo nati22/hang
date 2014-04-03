@@ -63,8 +63,8 @@ public class StatusIcon extends ImageButton /* implements OnClickListener */{
 					!isPressed ? R.drawable.status_grey
 							: R.drawable.status_grey_pushed));
 			textViewTimeRemaining.setText("0h");
-			Log.e("StatusIcon.setAvailabilityColor",
-					"either availability, its Status, its ExpDate or all are null");
+//			Log.i("StatusIcon.setAvailabilityColor",
+//					"either availability, its Status, its ExpDate or all are null");
 			return;
 		}
 

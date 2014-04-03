@@ -41,7 +41,7 @@ import com.hangapp.android.util.MyExpandableViewGroup;
 
 public class ProposalsFragment extends SherlockFragment implements
 		IncomingBroadcastsListener, SeenProposalsListener {
-	
+
 	private static final String TAG = ProposalsFragment.class.getSimpleName();
 
 	// UI stuff
@@ -76,11 +76,10 @@ public class ProposalsFragment extends SherlockFragment implements
 			this.seenProposals.clear();
 			this.seenProposals.addAll(savedSeenJids);
 		}
-		
+
 		// Set up TabsHost change listener
 
 	}
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,9 +93,8 @@ public class ProposalsFragment extends SherlockFragment implements
 		// Inflate create proposal fragment
 
 		// //
-//		setupMyFragment();
+		// setupMyFragment();
 		// TODO: fragment should be dependent on whether the user has a proposal
-	
 
 		// Reference Views.
 		listViewFriends = (ListView) view
@@ -126,35 +124,45 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		expandableView = (MyExpandableViewGroup) view
 				.findViewById(R.id.expandingLayout);
-		expandableView.initialize(getActivity());
-
+		expandableView.initialize(getActivity(), database);
+		expandableView.expand(expandableView);
+		
+/*		if (database.getMyProposal() != null) {
+			Toast.makeText(getActivity(), "i should probably expand the view", Toast.LENGTH_SHORT).show();
+			expandableView.expand(expandableView);
+			setupMyFragment(database, getActivity().getSupportFragmentManager());
+		} else {
+			
+			Toast.makeText(getActivity(), "i'm not expanding the view", Toast.LENGTH_SHORT).show();
+		}
+		*/
 		return view;
 	}
-	
-	public static void setupMyFragment(Database database, android.support.v4.app.FragmentManager fm) {
+
+	public static void setupMyFragment(Database database,
+			android.support.v4.app.FragmentManager fm) {
 		Log.d(TAG, "setupMyFragment called");
-		
+
 		// Get a new Fragment for my proposal
 		Fragment fragment = null;
-		if (database.getMyProposal() != null && database.getMyProposal().isActive()) {
+		if (database.getMyProposal() != null
+				&& database.getMyProposal().isActive()) {
 			Log.d(TAG, "isActive");
 			fragment = new MyProposalFragment();
-			database.addMyProposalListener((MyProposalListener)fragment);
+			database.addMyProposalListener((MyProposalListener) fragment);
 		} else {
 			Log.d(TAG, "is NOT active");
 			fragment = new CreateProposalFragment();
 		}
-		
+
 		// Update my proposal area on the Proposals tab
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.fragment_myy_proposal, fragment);
 		ft.commit();
 	}
-	
-	
 
 	@Override
- 	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
 		outState.putParcelableArrayList(Keys.FRIENDS, incomingBroadcasts);
@@ -178,11 +186,13 @@ public class ProposalsFragment extends SherlockFragment implements
 		if (seenJids != null) {
 			onMySeenProposalsUpdate(seenJids);
 		}
-		
+
 		// TODO make sure this is being called in the right place
-		Toast.makeText(getActivity(), "ProposalsFragment.onResume", Toast.LENGTH_SHORT).show();
-		setupMyFragment(database, ProposalsFragment.this.getSherlockActivity().getSupportFragmentManager());
-		
+		Toast.makeText(getActivity(), "ProposalsFragment.onResume",
+				Toast.LENGTH_SHORT).show();
+		setupMyFragment(database, ProposalsFragment.this.getSherlockActivity()
+				.getSupportFragmentManager());
+
 	}
 
 	@Override

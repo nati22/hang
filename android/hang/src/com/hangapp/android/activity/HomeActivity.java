@@ -155,8 +155,8 @@ public final class HomeActivity extends BaseActivity implements
 
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				Toast.makeText(getApplicationContext(), "tab selected",
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(getApplicationContext(), "tab selected",
+//						Toast.LENGTH_SHORT).show();
 
 				// Check if the tab is this one
 				Object tag = tab.getTag();
