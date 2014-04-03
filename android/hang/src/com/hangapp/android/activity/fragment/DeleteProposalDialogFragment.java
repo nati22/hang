@@ -91,6 +91,10 @@ public class DeleteProposalDialogFragment extends DialogFragment {
 		// Send a DELETE request to the server to delete my Proposal
 		restClient.deleteMyProposal();
 		
+		// Tell the ProposalsFragment to update
+		ProposalsFragment.setupMyFragment(database, getActivity().getSupportFragmentManager());
+
+		
 		// Dismiss the modal dialog.
 		dismiss();
 	}
