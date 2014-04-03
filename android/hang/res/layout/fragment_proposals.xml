@@ -39,7 +39,7 @@
         -->
 
         <FrameLayout
-            android:id="@+id/fragment_create_proposal"
+            android:id="@+id/fragment_myy_proposal"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </com.hangapp.android.util.MyExpandableViewGroup>

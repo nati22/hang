@@ -37,6 +37,8 @@ import com.hangapp.android.util.MyExpandableViewGroup;
 
 public class ProposalsFragment extends SherlockFragment implements
 		IncomingBroadcastsListener, SeenProposalsListener {
+	
+	private static final String TAG = ProposalsFragment.class.getSimpleName();
 
 	// UI stuff
 	private ListView listViewFriends;
@@ -83,11 +85,25 @@ public class ProposalsFragment extends SherlockFragment implements
 				false);
 
 		// Inflate create proposal fragment
-		Fragment fragment = new CreateProposalFragment();
+
+		// //
+
+		// TODO: fragment should be dependent on whether the user has a proposal
+		Fragment fragment = null;
+		if (database.getMyProposal() != null && database.getMyProposal().isActive()) {
+			Log.d(TAG, "isActive");
+			fragment = new MyProposalFragment();
+		} else {
+			Log.d(TAG, "is NOT active");
+			fragment = new CreateProposalFragment();
+		}
+	
+		
+		// //
 		android.support.v4.app.FragmentManager fm = ProposalsFragment.this
 				.getSherlockActivity().getSupportFragmentManager();
 		FragmentTransaction ft = fm.beginTransaction();
-		ft.replace(R.id.fragment_create_proposal, fragment);
+		ft.replace(R.id.fragment_myy_proposal, fragment);
 		ft.commit();
 
 		// Reference Views.

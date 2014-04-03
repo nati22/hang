@@ -121,11 +121,11 @@ public final class HomeActivity extends BaseActivity implements
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
-		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
+//		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), ProposalsFragment.class, null);
 
 		// Style the Action Bar tabs.
-		String[] tabNames = { "FEED", "YOU", "PROPOSALS", "FEED2" };
+		String[] tabNames = { "FEED", /*"YOU",*/ "PROPOSALS"/*, "FEED2" */};
 		Typeface champagneLimousinesFont = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);

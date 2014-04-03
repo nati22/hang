@@ -89,13 +89,11 @@ public class MyExpandableViewGroup extends RelativeLayout {
 							+ ")\nto (" + originalWidth + ", " + expandedHeight + ")");
 					expand(view);
 				} else {
-					
-					MyExpandableViewGroup view = (MyExpandableViewGroup) v;
-					
-					Log.d(TAG, "from (" + originalWidth + ", " + expandedHeight
-							+ ")\nto (" + originalWidth + ", " + originalHeight + ")");
-					collapse(view);
 
+					/*
+					 * We don't want to do anything if the view is clicked when it's
+					 * expanded
+					 */
 				}
 
 			}
@@ -120,10 +118,12 @@ public class MyExpandableViewGroup extends RelativeLayout {
 		anim.setAnimationListener(new AnimationListener() {
 
 			@Override
-			public void onAnimationStart(Animation animation) { }
+			public void onAnimationStart(Animation animation) {
+			}
 
 			@Override
-			public void onAnimationRepeat(Animation animation) { }
+			public void onAnimationRepeat(Animation animation) {
+			}
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
