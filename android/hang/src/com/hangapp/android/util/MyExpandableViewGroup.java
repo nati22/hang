@@ -25,7 +25,6 @@ public class MyExpandableViewGroup extends RelativeLayout {
 	private int originalWidth;
 	private int originalHeight;
 
-	private TextView redBox, blueBox;
 	private int shrunkHeight;
 	private int expandedHeight;
 
@@ -74,8 +73,6 @@ public class MyExpandableViewGroup extends RelativeLayout {
 		Log.d(TAG, "originalHeight = " + originalHeight);
 
 		// Get Views
-		redBox = (TextView) findViewById(R.id.red_box);
-
 		onClick = new OnClickListener() {
 
 			@Override
@@ -91,6 +88,14 @@ public class MyExpandableViewGroup extends RelativeLayout {
 					Log.d(TAG, "from (" + originalWidth + ", " + originalHeight
 							+ ")\nto (" + originalWidth + ", " + expandedHeight + ")");
 					expand(view);
+				} else {
+					
+					MyExpandableViewGroup view = (MyExpandableViewGroup) v;
+					
+					Log.d(TAG, "from (" + originalWidth + ", " + expandedHeight
+							+ ")\nto (" + originalWidth + ", " + originalHeight + ")");
+					collapse(view);
+
 				}
 
 			}
