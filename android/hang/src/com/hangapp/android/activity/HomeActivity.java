@@ -149,52 +149,36 @@ public final class HomeActivity extends BaseActivity implements
 			bar.getTabAt(i).setCustomView(customView);
 		}
 
-		// Capture tab button clicks
+		// Here are the tab listeners
 		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 
 			@Override
 			public void onTabSelected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
 				Toast.makeText(getApplicationContext(), "tab selected",
 						Toast.LENGTH_SHORT).show();
 
-				Log.d("TABLISTENER", "bar.getTabCount = " + bar.getTabCount());
-				Log.d("TABLISTENER",
-						"mTabsAdapter.getCount = " + mTabsAdapter.getCount());
-
-				Log.d("TABLISTENER", "tab.getTag() = " + tab.getTag());
-				Log.d("TABLISTENER", "tab.getTag() = "
-						+ TabsAdapter.getTabInfo().get(0));
-
-				mTabsAdapter.getItem(0);
-
+				// Check if the tab is this one
 				Object tag = tab.getTag();
-				for (int i = 0; i < bar.getTabCount(); i++) {
-					if (TabsAdapter.getTabInfo().get(i) == tag) {
+				for (int i = 0; i < bar.getTabCount(); i++)
+					if (TabsAdapter.getTabInfo().get(i) == tag)
 						mViewPager.setCurrentItem(i);
-
-						// adjust MyProposal Fragment
-						Toast.makeText(getApplicationContext(),
-								"tag = " + tag.toString(), Toast.LENGTH_SHORT).show();
-					}
-				}
 			}
 
 			@Override
 			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
+				// TODO I can potentially conserve resources
 
 			}
 
 			@Override
 			public void onTabReselected(Tab tab, FragmentTransaction ft) {
-				// TODO Auto-generated method stub
-
 			}
-
 		};
 
-		bar.getSelectedTab().setTabListener(tabListener);
+		for (int i = 0; i < bar.getTabCount(); i++) {
+			bar.getTabAt(i).setTabListener(tabListener);
+		}
+		// bar.getSelectedTab().setTabListener(tabListener);
 
 		// Setup Facebook SDK.
 		uiHelper = new UiLifecycleHelper(this, callback);
