@@ -18,10 +18,13 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
+import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
+import com.hangapp.android.model.callback.MyProposalListener;
+import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
@@ -32,7 +35,7 @@ import com.hangapp.android.util.Keys;
  * {@code YouFragment} will dynamically display either this or
  * {@link CreateProposalFragment} based on whether or not you have a Proposal.
  */
-public final class MyProposalFragment extends SherlockFragment {
+public final class MyProposalFragment extends SherlockFragment implements MyProposalListener {
 
 	private final String TAG = MyProposalFragment.class.getSimpleName();
 
@@ -140,6 +143,14 @@ public final class MyProposalFragment extends SherlockFragment {
 	public void onPause() {
 		super.onPause();
 	}
+	
+	
+
+	@Override
+	public void onDestroy() {
+		database.removeMyProposalListener(this);
+		super.onDestroy();
+	}
 
 	public void updateProposal(Proposal proposal) {
 
@@ -216,5 +227,13 @@ public final class MyProposalFragment extends SherlockFragment {
 
 			linLayout.addView(view);
 		}
+	}
+
+	@Override
+	public void onMyProposalUpdate(Proposal proposal) {
+		// TODO Auto-generated method stub
+		Log.d(TAG , "onMyProposalUpdate called!!!");
+		updateProposal(proposal);
+		
 	}
 }

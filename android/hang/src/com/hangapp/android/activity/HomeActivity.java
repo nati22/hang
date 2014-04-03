@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -159,9 +160,12 @@ public final class HomeActivity extends BaseActivity implements
 
 				// Check if the tab is this one
 				Object tag = tab.getTag();
-				for (int i = 0; i < bar.getTabCount(); i++)
-					if (TabsAdapter.getTabInfo().get(i) == tag)
+				for (int i = 0; i < bar.getTabCount(); i++) {
+					if (TabsAdapter.getTabInfo().get(i) == tag) {
 						mViewPager.setCurrentItem(i);
+						ProposalsFragment.setupMyFragment(database, getSupportFragmentManager());
+					}
+				}
 			}
 
 			@Override
@@ -175,11 +179,11 @@ public final class HomeActivity extends BaseActivity implements
 			}
 		};
 
+		// Add TabListeners to tabs
 		for (int i = 0; i < bar.getTabCount(); i++) {
 			bar.getTabAt(i).setTabListener(tabListener);
 		}
-		// bar.getSelectedTab().setTabListener(tabListener);
-
+		
 		// Setup Facebook SDK.
 		uiHelper = new UiLifecycleHelper(this, callback);
 		uiHelper.onCreate(savedInstanceState);

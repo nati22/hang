@@ -24,13 +24,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.ProfileActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.User;
 import com.hangapp.android.model.callback.IncomingBroadcastsListener;
+import com.hangapp.android.model.callback.MyProposalListener;
 import com.hangapp.android.model.callback.SeenProposalsListener;
 import com.hangapp.android.util.Fonts;
 import com.hangapp.android.util.Keys;
@@ -77,10 +80,7 @@ public class ProposalsFragment extends SherlockFragment implements
 		// Set up TabsHost change listener
 
 	}
-	
-	public static void adjustMyProposalArea(Context context, Database database) {
-		Toast.makeText(context, "Time to adjust my proposal", Toast.LENGTH_SHORT).show();
-	}
+
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,25 +131,30 @@ public class ProposalsFragment extends SherlockFragment implements
 		return view;
 	}
 	
-	private void setupMyFragment() {
+	public static void setupMyFragment(Database database, android.support.v4.app.FragmentManager fm) {
+		Log.d(TAG, "setupMyFragment called");
+		
+		// Get a new Fragment for my proposal
 		Fragment fragment = null;
 		if (database.getMyProposal() != null && database.getMyProposal().isActive()) {
 			Log.d(TAG, "isActive");
 			fragment = new MyProposalFragment();
+			database.addMyProposalListener((MyProposalListener)fragment);
 		} else {
 			Log.d(TAG, "is NOT active");
 			fragment = new CreateProposalFragment();
 		}
-	
-		android.support.v4.app.FragmentManager fm = ProposalsFragment.this
-				.getSherlockActivity().getSupportFragmentManager();
+		
+		// Update my proposal area on the Proposals tab
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.fragment_myy_proposal, fragment);
 		ft.commit();
 	}
+	
+	
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+ 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 
 		outState.putParcelableArrayList(Keys.FRIENDS, incomingBroadcasts);
@@ -162,7 +167,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		
+
 		database.addIncomingBroadcastsListener(this);
 		database.addSeenProposalListener(this);
 
@@ -176,7 +181,7 @@ public class ProposalsFragment extends SherlockFragment implements
 		
 		// TODO make sure this is being called in the right place
 		Toast.makeText(getActivity(), "ProposalsFragment.onResume", Toast.LENGTH_SHORT).show();
-		setupMyFragment();
+		setupMyFragment(database, ProposalsFragment.this.getSherlockActivity().getSupportFragmentManager());
 		
 	}
 

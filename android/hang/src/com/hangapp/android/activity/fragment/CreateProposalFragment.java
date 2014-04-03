@@ -127,6 +127,7 @@ public class CreateProposalFragment extends SherlockFragment {
 			@Override
 			public void onClick(View v) {
 				createProposal();
+				ProposalsFragment.setupMyFragment(database, getActivity().getSupportFragmentManager());
 			}
 		});
 
@@ -188,4 +189,7 @@ public class CreateProposalFragment extends SherlockFragment {
 			return;
 		}
 	}
+	
+	
+	
 }

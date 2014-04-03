@@ -68,6 +68,7 @@ public final class FeedFragment extends SherlockFragment implements
 		IncomingBroadcastsListener, MyUserDataListener, MyAvailabilityListener {
 
 	public static final String TAG = "Feeed";
+	private boolean bgIsSetup = false;
 
 	// UI stuff
 	private ListView listViewFriends;
@@ -327,6 +328,9 @@ public final class FeedFragment extends SherlockFragment implements
 			 * R.drawable.xyz); resizedbitmap1=Bitmap.createBitmap(bmp,
 			 * 0,0,yourwidth, yourheight);
 			 */
+			
+			// Crossing my fingers that it went through...
+			bgIsSetup = true;
 
 		} else {
 			Log.e("FeedFragment.setupCircularFBIcon&BG",
@@ -532,7 +536,8 @@ public final class FeedFragment extends SherlockFragment implements
 		// TODO Setup caching
 		invisFBpic.setProfileId(database.getMyJid());
 		// TODO I shouldn't have to create the fb icon EVERY time
-		setupCircularFacebookIconAndBg();
+		if (!bgIsSetup)
+			setupCircularFacebookIconAndBg();
 		textViewUserName.setText(me.getFullName());
 	}
 
