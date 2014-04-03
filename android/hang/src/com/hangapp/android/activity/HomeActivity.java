@@ -14,14 +14,17 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.facebook.Request;
@@ -67,7 +70,7 @@ public final class HomeActivity extends BaseActivity implements
 
 	// UI stuff.
 	private NoSlideViewPager mViewPager;
-	private TabsAdapter mTabsAdapter;
+	private static TabsAdapter mTabsAdapter;
 
 	// Dependencies.
 	private SharedPreferences prefs;
@@ -82,6 +85,10 @@ public final class HomeActivity extends BaseActivity implements
 			onSessionStateChange(session, state, exception);
 		}
 	};
+
+	public static TabsAdapter getTabsAdapter() {
+		return mTabsAdapter;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +107,9 @@ public final class HomeActivity extends BaseActivity implements
 								+ Base64.encodeToString(md.digest(), Base64.DEFAULT));
 			}
 		} catch (NameNotFoundException e) {
+
 		} catch (NoSuchAlgorithmException e) {
+
 		}
 
 		// Initialize dependencies.
@@ -121,11 +130,11 @@ public final class HomeActivity extends BaseActivity implements
 		bar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 		mTabsAdapter = new TabsAdapter(this, mViewPager);
 		mTabsAdapter.addTab(bar.newTab(), FeedFragment.class, null);
-//		mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
+		// mTabsAdapter.addTab(bar.newTab(), YouFragment.class, null);
 		mTabsAdapter.addTab(bar.newTab(), ProposalsFragment.class, null);
 
 		// Style the Action Bar tabs.
-		String[] tabNames = { "FEED", /*"YOU",*/ "PROPOSALS"/*, "FEED2" */};
+		String[] tabNames = { "FEED", /* "YOU", */"PROPOSALS"/* , "FEED2" */};
 		Typeface champagneLimousinesFont = Typeface.createFromAsset(
 				getApplicationContext().getAssets(),
 				Fonts.CHAMPAGNE_LIMOUSINES_BOLD);
@@ -139,6 +148,53 @@ public final class HomeActivity extends BaseActivity implements
 
 			bar.getTabAt(i).setCustomView(customView);
 		}
+
+		// Capture tab button clicks
+		ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+
+			@Override
+			public void onTabSelected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "tab selected",
+						Toast.LENGTH_SHORT).show();
+
+				Log.d("TABLISTENER", "bar.getTabCount = " + bar.getTabCount());
+				Log.d("TABLISTENER",
+						"mTabsAdapter.getCount = " + mTabsAdapter.getCount());
+
+				Log.d("TABLISTENER", "tab.getTag() = " + tab.getTag());
+				Log.d("TABLISTENER", "tab.getTag() = "
+						+ TabsAdapter.getTabInfo().get(0));
+
+				mTabsAdapter.getItem(0);
+
+				Object tag = tab.getTag();
+				for (int i = 0; i < bar.getTabCount(); i++) {
+					if (TabsAdapter.getTabInfo().get(i) == tag) {
+						mViewPager.setCurrentItem(i);
+
+						// adjust MyProposal Fragment
+						Toast.makeText(getApplicationContext(),
+								"tag = " + tag.toString(), Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+
+			@Override
+			public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTabReselected(Tab tab, FragmentTransaction ft) {
+				// TODO Auto-generated method stub
+
+			}
+
+		};
+
+		bar.getSelectedTab().setTabListener(tabListener);
 
 		// Setup Facebook SDK.
 		uiHelper = new UiLifecycleHelper(this, callback);
@@ -160,7 +216,6 @@ public final class HomeActivity extends BaseActivity implements
 
 	@SuppressWarnings("deprecation")
 	@Override
-
 	public void onResume() {
 		super.onResume();
 		uiHelper.onResume();
@@ -187,7 +242,7 @@ public final class HomeActivity extends BaseActivity implements
 							startActivity(browserIntent);
 						}
 					});
-			
+
 			getSupportActionBar().hide();
 		}
 		// Otherwise, show the regular tabbed ActionBar.
@@ -240,9 +295,9 @@ public final class HomeActivity extends BaseActivity implements
 		int initialTab = getIntent().getIntExtra(Keys.TAB_INTENT, -1);
 		if (initialTab != -1)
 			getSupportActionBar().setSelectedNavigationItem(initialTab);
-	
+
 	}
-	
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -287,7 +342,7 @@ public final class HomeActivity extends BaseActivity implements
 		super.onPause();
 		uiHelper.onPause();
 	}
-	
+
 	@Override
 	protected void onStop() {
 		super.onStop();

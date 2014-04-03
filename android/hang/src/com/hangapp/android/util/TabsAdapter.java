@@ -34,7 +34,7 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 	private final Context mContext;
 	private final ActionBar mActionBar;
 	private final ViewPager mViewPager;
-	private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
+	private static final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
 
 	static final class TabInfo {
 		private final Class<?> clss;
@@ -44,6 +44,10 @@ public class TabsAdapter extends FragmentStatePagerAdapter implements
 			clss = _class;
 			args = _args;
 		}
+	}
+	
+	public static ArrayList<TabInfo> getTabInfo() {
+		return mTabs;
 	}
 
 	public TabsAdapter(SherlockFragmentActivity activity, ViewPager pager) {
