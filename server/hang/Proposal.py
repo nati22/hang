@@ -21,6 +21,19 @@ class ProposalRequestHandler(webapp2.RequestHandler):
             user.proposal_description = param_description
             user.proposal_location = param_location
             user.proposal_time = param_time
+            user.proposal_interested = []
+            user.proposal_confirmed = []
+            user.proposal_interested_jids = []
+            user.proposal_confirmed_jids = []
+
+            # Modify Broadcastees proposals_seen_jids fields
+            for key in user.outgoing_broadcasts:
+                broadcastee = db.get(key)
+            if jid in broadcastee.proposals_seen_jids:
+                broadcastee.proposals_seen_jids.remove(jid)
+                broadcastee.put()
+            else:
+                self.response.write(key.name() + " not in " + broadcastee.first_name + "'s seen proposals\n")
             
             # Save it back into the datastore.
             user.put()
