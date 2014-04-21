@@ -82,9 +82,11 @@ public final class Database {
 
 	public boolean addMyProposalListener(MyProposalListener listener) {
 		if (!myProposalListeners.contains(listener)) {
+			Log.e("Database.java", ">>>>>>> Adding a proposal listener. Already exists.");
+
 			return myProposalListeners.add(listener);
 		} else {
-			Log.e("Database.java", "Couldn't add proposal listener. Already exists.");
+			Log.e("Database.java", ">>>>> Couldn't add proposal listener. Already exists.");
 			return false;
 		}
 	}
