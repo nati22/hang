@@ -108,9 +108,9 @@ public class MyExpandableViewGroup extends RelativeLayout {
 	}
 
 	public void expand(MyExpandableViewGroup view) {
-		findViewById(R.id.red_box).startAnimation(animIn);
+/*		findViewById(R.id.red_box).startAnimation(animIn);
 		findViewById(R.id.blue_box).startAnimation(animOut);
-		findViewById(R.id.blue_box).setVisibility(INVISIBLE);
+		findViewById(R.id.blue_box).setVisibility(INVISIBLE);*/
 
 		view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
 				originalHeight, originalWidth, expandedHeight,
@@ -139,9 +139,9 @@ public class MyExpandableViewGroup extends RelativeLayout {
 	}
 
 	public void collapse(MyExpandableViewGroup view) {
-		findViewById(R.id.red_box).startAnimation(animOut);
+/*		findViewById(R.id.red_box).startAnimation(animOut);
 		findViewById(R.id.red_box).setVisibility(INVISIBLE);
-		findViewById(R.id.blue_box).startAnimation(animIn);
+		findViewById(R.id.blue_box).startAnimation(animIn);*/
 
 		view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
 				expandedHeight, originalWidth, originalHeight,

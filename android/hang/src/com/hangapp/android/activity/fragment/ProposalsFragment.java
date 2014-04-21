@@ -188,8 +188,6 @@ public class ProposalsFragment extends SherlockFragment implements
 		}
 
 		// TODO make sure this is being called in the right place
-		Toast.makeText(getActivity(), "ProposalsFragment.onResume",
-				Toast.LENGTH_SHORT).show();
 		setupMyFragment(database, ProposalsFragment.this.getSherlockActivity()
 				.getSupportFragmentManager());
 

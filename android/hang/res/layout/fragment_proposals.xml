@@ -13,7 +13,7 @@
         android:background="@color/Teal"
         android:orientation="vertical" >
 
-        <TextView
+<!--         <TextView
             android:id="@+id/blue_box"
             android:layout_width="20dp"
             android:layout_height="20dp"
@@ -30,8 +30,7 @@
             android:background="@color/Red"
             android:visibility="invisible" />
 
-        <!--
-            <fragment
+        <fragment
             android:id="@+id/fragment_create_proposal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

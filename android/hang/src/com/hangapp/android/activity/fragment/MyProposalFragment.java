@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
@@ -14,17 +15,17 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
-import com.google.android.gms.maps.GoogleMap.OnMyLocationChangeListener;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.FirebaseChatActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.callback.MyProposalListener;
-import com.hangapp.android.model.callback.MyUserDataListener;
 import com.hangapp.android.network.rest.RestClient;
 import com.hangapp.android.network.rest.RestClientImpl;
 import com.hangapp.android.util.Fonts;
@@ -46,6 +47,8 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 	private TextView textViewMyProposalStartTime;
 	private TextView textViewMyProposalInterestedCount;
 	private ImageView imageViewDeleteMyProposal;
+	private RelativeLayout relativeLayoutHolder;
+	private ProgressBar progressBar;
 
 	private List<String> listInterestedJids = new ArrayList<String>();
 	private LinearLayout interestedLinLayout;
@@ -87,6 +90,8 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 				.findViewById(R.id.imageViewDeleteMyProposal);
 		interestedLinLayout = (LinearLayout) view
 				.findViewById(R.id.myLinLayoutInterested);
+		relativeLayoutHolder = (RelativeLayout) view.findViewById(R.id.proposalHolder);
+		progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
 		// Set fonts
 		Typeface champagneLimousinesFontBold = Typeface.createFromAsset(
@@ -144,8 +149,16 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 		super.onPause();
 	}
 	
+	private void showProgressBar() {
+		progressBar.setVisibility(View.VISIBLE);
+		relativeLayoutHolder.setVisibility(View.INVISIBLE);
+	}
 	
-
+	private void hideProgressBar() {
+		progressBar.setVisibility(View.INVISIBLE);
+		relativeLayoutHolder.setVisibility(View.VISIBLE);
+	}
+	
 	@Override
 	public void onDestroy() {
 		database.removeMyProposalListener(this);
@@ -164,6 +177,7 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 			myProposal = proposal;
 		} else {
 			Log.d(TAG, "Same Proposal");
+			hideProgressBar();
 			return;
 		}
 
@@ -201,6 +215,7 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 				listInterestedJids.addAll(myProposal.getInterested());
 			}
 			updateHorizontalList(listInterestedJids, interestedLinLayout);
+			hideProgressBar();
 		}
 	}
 
