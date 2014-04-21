@@ -56,6 +56,9 @@ public class ProposalsFragment extends SherlockFragment implements
 
 	// Dependencies.
 	private Database database;
+	
+	private static MyProposalFragment myProposalFragment;
+	private static CreateProposalFragment createProposalFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,7 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
+		
 
 		// Reload the incoming broadcasts from savedInstanceState.
 		if (savedInstanceState != null) {
@@ -78,6 +82,12 @@ public class ProposalsFragment extends SherlockFragment implements
 		}
 
 		// Set up TabsHost change listener
+		
+		
+		// Set up the fragments
+		myProposalFragment = new MyProposalFragment();
+//		database.addMyProposalListener((MyProposalListener) myProposalFragment);
+		createProposalFragment = new CreateProposalFragment();
 
 	}
 
@@ -148,11 +158,13 @@ public class ProposalsFragment extends SherlockFragment implements
 		if (database.getMyProposal() != null
 				&& database.getMyProposal().isActive()) {
 			Log.d(TAG, "isActive");
-			fragment = new MyProposalFragment();
+//			fragment = new MyProposalFragment();
+			fragment = myProposalFragment;
 			database.addMyProposalListener((MyProposalListener) fragment);
 		} else {
 			Log.d(TAG, "is NOT active");
-			fragment = new CreateProposalFragment();
+//			fragment = new CreateProposalFragment();
+			fragment = createProposalFragment;
 		}
 
 		// Update my proposal area on the Proposals tab

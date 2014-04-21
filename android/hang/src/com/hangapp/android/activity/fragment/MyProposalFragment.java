@@ -155,6 +155,7 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 	}
 	
 	private void hideProgressBar() {
+		Log.d(TAG, ">>>> hide progress bar called.");
 		progressBar.setVisibility(View.INVISIBLE);
 		relativeLayoutHolder.setVisibility(View.VISIBLE);
 	}
@@ -171,6 +172,8 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 			Log.d(TAG, ">>>>>>updateProposal was passed a null proposal");
 			return;
 		}
+		
+		Log.d(TAG, ">>>> updateProposal was called without a null proposal.");
 
 		// Make sure Proposal has changed
 		if (!myProposal.equals(proposal)) {
@@ -181,6 +184,9 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 			return;
 		}
 
+		Log.d(TAG, ">>>> updateProposal was different from the old proposal.");
+
+		
 		// Set Proposal text
 		textViewMyProposalDescription.setText(myProposal.getDescription());
 
