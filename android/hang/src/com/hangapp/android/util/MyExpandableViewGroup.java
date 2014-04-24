@@ -19,7 +19,7 @@ import com.hangapp.android.database.Database;
 public class MyExpandableViewGroup extends RelativeLayout {
 
 	private static final String TAG = MyExpandableViewGroup.class
-			.getSimpleName();
+			.getSimpleName() + "yello";
 	private ResizeAnimation anim;
 	private OnClickListener onClick;
 	private static boolean isExpanded = false;
@@ -28,6 +28,9 @@ public class MyExpandableViewGroup extends RelativeLayout {
 
 	private int shrunkHeight;
 	private int expandedHeight;
+	
+	private double createProposalHeightRatio = 0.55;
+	private double existingProposalHeightRatio = 0.45;
 
 	private Animation animOut = AnimationUtils.loadAnimation(getContext(),
 			R.anim.fade_out);
@@ -36,26 +39,18 @@ public class MyExpandableViewGroup extends RelativeLayout {
 
 	private final static int DURATION_OF_ANIMATION = 500;
 
-	public MyExpandableViewGroup(Context context) {
-		super(context);
-//		Toast.makeText(context, "one param constructor called",
-//				Toast.LENGTH_SHORT).show();
-		// initialize(context);
-	}
 
 	public MyExpandableViewGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
-//		Toast.makeText(context, "two param constructor called",
-//				Toast.LENGTH_SHORT).show();
-		// initialize(context);
+		Log.d(TAG, "one param constructor called");
+		initialize(context, Database.getInstance());
 	}
 
 	public MyExpandableViewGroup(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
-//		Toast.makeText(context, "three param constructor called",
-//				Toast.LENGTH_SHORT).show();
-		// initialize(context);
+		Log.d(TAG, "two param constructor called");
+		initialize(context, Database.getInstance());
 	}
 
 	@SuppressWarnings("deprecation")
@@ -66,7 +61,15 @@ public class MyExpandableViewGroup extends RelativeLayout {
 				.getSystemService(Context.WINDOW_SERVICE);
 		Display display = wm.getDefaultDisplay();
 
-		expandedHeight = (int) (display.getHeight() * 0.55);
+		if (database.getMyProposal() == null) {
+			Log.d(TAG, "Setting expanded height to be for one with NEW proposal.");
+			expandedHeight = (int) (display.getHeight() * createProposalHeightRatio);
+		} else {
+			Log.d(TAG, "Setting expanded height to be for one with EXISTING proposal.");
+			expandedHeight = (int) (display.getHeight() * existingProposalHeightRatio);
+		}
+		expand(this);
+		
 
 		originalWidth = display.getWidth();
 		originalHeight = display.getHeight() / 7;

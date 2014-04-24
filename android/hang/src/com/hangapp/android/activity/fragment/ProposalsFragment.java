@@ -63,6 +63,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
@@ -202,6 +203,8 @@ public class ProposalsFragment extends SherlockFragment implements
 		// TODO make sure this is being called in the right place
 		setupMyFragment(database, ProposalsFragment.this.getSherlockActivity()
 				.getSupportFragmentManager());
+		
+		expandView();
 
 	}
 
