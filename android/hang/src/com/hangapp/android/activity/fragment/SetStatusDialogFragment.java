@@ -2,6 +2,7 @@ package com.hangapp.android.activity.fragment;
 
 import org.joda.time.DateTime;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -89,7 +90,10 @@ public class SetStatusDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				setStatus();
-				HomeActivity.closeSoftKeyboard(getActivity(), editTextStatus);
+				// close soft keyboard
+				((InputMethodManager) getActivity().getSystemService(
+						Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
+						editTextStatus.getWindowToken(), 0);
 			}
 		});
 
@@ -107,8 +111,8 @@ public class SetStatusDialogFragment extends DialogFragment {
 					}
 
 					@Override
-					public void onProgressChanged(SeekBar seekBar, int progress,
-							boolean fromUser) {
+					public void onProgressChanged(SeekBar seekBar,
+							int progress, boolean fromUser) {
 						DateTime expirationDate = getExpirationDate();
 
 						textViewAvailabilityDuration.setText("until: "
@@ -145,12 +149,13 @@ public class SetStatusDialogFragment extends DialogFragment {
 
 		DateTime expirationDate = getExpirationDate();
 
-		Availability newAvailability = new Availability(status, expirationDate, editTextStatus.getText().toString());
+		Availability newAvailability = new Availability(status, expirationDate,
+				editTextStatus.getText().toString());
 		database.setMyAvailability(newAvailability);
 		Log.i("*******", "avail status = " + newAvailability.getStatus());
-		Log.i("(((((((", "avail status tostring" + newAvailability.getStatus().toString());
+		Log.i("(((((((", "avail status tostring"
+				+ newAvailability.getStatus().toString());
 		restClient.updateMyAvailability(newAvailability);
-
 
 		dismiss();
 	}

@@ -396,11 +396,6 @@ public final class HomeActivity extends BaseActivity implements
 			}
 		}
 	}
-	
-	public static void closeSoftKeyboard(Context context, EditText view) {
-		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-	}
 
 	/**
 	 * XML onClickListener for the Empty View "Add Outgoing Broadcasts" button.
