@@ -1,9 +1,9 @@
 package com.hangapp.android.activity;
 
-import com.crashlytics.android.Crashlytics;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -20,14 +20,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageView;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.crashlytics.android.Crashlytics;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -394,6 +395,11 @@ public final class HomeActivity extends BaseActivity implements
 						"Facebook logged out without exception");
 			}
 		}
+	}
+	
+	public static void closeSoftKeyboard(Context context, EditText view) {
+		InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 
 	/**

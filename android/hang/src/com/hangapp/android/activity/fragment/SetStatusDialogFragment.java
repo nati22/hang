@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hangapp.android.R;
+import com.hangapp.android.activity.HomeActivity;
 import com.hangapp.android.database.Database;
 import com.hangapp.android.model.Availability;
 import com.hangapp.android.model.Availability.Status;
@@ -87,6 +89,7 @@ public class SetStatusDialogFragment extends DialogFragment {
 			@Override
 			public void onClick(View v) {
 				setStatus();
+				HomeActivity.closeSoftKeyboard(getActivity(), editTextStatus);
 			}
 		});
 
