@@ -44,14 +44,14 @@ abstract class BasePutRequestAsyncTask<ResultT> extends
 			putRequest.setEntity(new UrlEncodedFormEntity(parameters));
 		}
 
-		Log.v("BasePutRequestAsyncTask.call", "Sending PUT request with URI: "
-				+ uri);
+/*		Log.v("BasePutRequestAsyncTask.call", "Sending PUT request with URI: "
+				+ uri);*/
 		String responseString = EntityUtils.toString(client.execute(putRequest)
 				.getEntity());
 
 		if (responseString != null) {
-			Log.v("BasePutRequestAsyncTask.call", "Got HTTP result: "
-					+ responseString);
+/*			Log.v("BasePutRequestAsyncTask.call", "Got HTTP result: "
+					+ responseString);*/
 		} else {
 			throw new Exception("PUT request receieved null response string.");
 		}

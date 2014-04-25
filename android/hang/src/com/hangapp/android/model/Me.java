@@ -11,7 +11,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Parcel;
-import android.util.Log;
 
 import com.hangapp.android.util.Keys;
 
@@ -72,12 +71,12 @@ final public class Me extends User {
 				.getString(Keys.AVAILABILITY_EXPIRATION_DATE);
 		String statusText = userJsonObject.getString(Keys.STATUS_TEXT);
 		if (statusText == null || statusText.equals("null")) {
-			Log.i("User.parseMyUserData", "No status text received for "
-					+ firstName);
+/*			Log.i("User.parseMyUserData", "No status text received for "
+					+ firstName);*/
 			statusText = "";
 		} else {
-			Log.i("User.parseMyUserData",
-					"statusText != null && statusText != \"null\"");
+/*			Log.i("User.parseMyUserData",
+					"statusText != null && statusText != \"null\"");*/
 		}
 
 		DateTime date;
@@ -117,16 +116,16 @@ final public class Me extends User {
 		}
 
 		if (proposalLocation.equals("null")) {
-			Log.e("User.parseUser", "Proposal location was \"null\"");
+		/*	Log.e("User.parseUser", "Proposal location was \"null\"");*/
 			proposalLocation = null;
 		}
 
 		// Sanity checks on string fields.
 		if (proposalDescription.equals("null")) {
-			Log.e("User.parseUser", "Proposal description was \"null\"");
-		} else if (proposalStartTimeString.equals("null")) {
-			Log.e("User.parseUser", "Proposal start time was \"null\"");
-		} else {
+/*			Log.e("User.parseUser", "Proposal description was \"null\"");
+*/		} else if (proposalStartTimeString.equals("null")) {
+/*			Log.e("User.parseUser", "Proposal start time was \"null\"");
+*/		} else {
 			// If all the sanity checks passed, then parse and create the
 			// Proposal object.
 			DateTime proposalStartTime = DateTime.parse(userJsonObject
@@ -189,9 +188,9 @@ final public class Me extends User {
 			JSONObject userJsonObject = library.getJSONObject((String) keys
 					.next());
 
-			Log.i(User.class.getSimpleName(),
+		/*	Log.i(User.class.getSimpleName(),
 					"Parsing user JSON object from library: "
-							+ userJsonObject.toString());
+							+ userJsonObject.toString());*/
 
 			String jid = userJsonObject.getString(Keys.JID);
 			String firstName = userJsonObject.getString(Keys.FIRST_NAME);
@@ -223,8 +222,8 @@ final public class Me extends User {
 //				Crashlytics.logException("User.parseLibrary", "User " + user.firstName
 //						+ " had no proposal: " + e.getMessage());
 				
-				Log.e("User.parseLibrary", "User " + user.firstName
-						+ " had no proposal: " + e.getMessage());
+		/*		Log.e("User.parseLibrary", "User " + user.firstName
+						+ " had no proposal: " + e.getMessage());*/
 				
 			}
 
@@ -271,8 +270,8 @@ final public class Me extends User {
 				user.setProposal(proposal);
 
 			} catch (JSONException e) {
-				Log.e("User.parseLibrary", "User " + user.firstName
-						+ " had no proposal: " + e.getMessage());
+			/*	Log.e("User.parseLibrary", "User " + user.firstName
+						+ " had no proposal: " + e.getMessage());*/
 			}
 
 			users.add(user);

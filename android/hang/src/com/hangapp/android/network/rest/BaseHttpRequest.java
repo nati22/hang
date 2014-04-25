@@ -37,8 +37,8 @@ abstract class BaseHttpRequest<ResultT> extends SafeAsyncTask<ResultT> {
 			// final String errorMessage = "No internet connection detected";
 			// Log.e(errorMessage);
 			// Toast.makeText(context, errorMessage, Toast.LENGTH_LONG).show();
-			Log.e("BaseHttpRequestAsyncTask.onPreExecute",
-					"No internet connection detected");
+		/*	Log.e("BaseHttpRequestAsyncTask.onPreExecute",
+					"No internet connection detected");*/
 
 			// If there is no Internet connection, then don't run the AsyncTask.
 			cancel(true);
@@ -48,6 +48,6 @@ abstract class BaseHttpRequest<ResultT> extends SafeAsyncTask<ResultT> {
 	@Override
 	protected void onException(Exception e) throws RuntimeException {
 		super.onException(e);
-		Log.e("BaseHttpRequestAsyncTask.onException", e.getMessage());
-	}
+/*		Log.e("BaseHttpRequestAsyncTask.onException", e.getMessage());
+*/	}
 }

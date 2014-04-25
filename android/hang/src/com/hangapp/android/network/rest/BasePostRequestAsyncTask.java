@@ -44,14 +44,14 @@ abstract class BasePostRequestAsyncTask<ResultT> extends
 			postRequest.setEntity(new UrlEncodedFormEntity(parameters));
 		}
 
-		Log.v("BasePostRequestAsyncTask.call",
-				"Sending POST request with URI: " + uri);
+/*		Log.v("BasePostRequestAsyncTask.call",
+				"Sending POST request with URI: " + uri);*/
 		String responseString = EntityUtils.toString(client
 				.execute(postRequest).getEntity());
 
 		if (responseString != null) {
-			Log.v("BasePostRequestAsyncTask.call", "Got HTTP result: "
-					+ responseString);
+/*			Log.v("BasePostRequestAsyncTask.call", "Got HTTP result: "
+					+ responseString);*/
 		} else {
 			throw new Exception("POST request receieved null response string.");
 		}

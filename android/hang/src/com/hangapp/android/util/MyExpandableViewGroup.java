@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import com.hangapp.android.R;
 import com.hangapp.android.database.Database;
+import com.hangapp.android.model.Proposal;
+import com.hangapp.android.model.callback.MyProposalListener;
 
-public class MyExpandableViewGroup extends RelativeLayout {
+public class MyExpandableViewGroup extends RelativeLayout implements MyProposalListener {
 
 	private static final String TAG = MyExpandableViewGroup.class
 			.getSimpleName() + "yello";
@@ -39,18 +41,21 @@ public class MyExpandableViewGroup extends RelativeLayout {
 
 	private final static int DURATION_OF_ANIMATION = 500;
 
+	private Database database;
 
 	public MyExpandableViewGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		Log.d(TAG, "one param constructor called");
-		initialize(context, Database.getInstance());
+		database = Database.getInstance();
+		initialize(context, database);
 	}
 
 	public MyExpandableViewGroup(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
 		Log.d(TAG, "two param constructor called");
-		initialize(context, Database.getInstance());
+		database = Database.getInstance();
+		initialize(context, database);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -158,6 +163,12 @@ public class MyExpandableViewGroup extends RelativeLayout {
 
 	public boolean isExpanded() {
 		return isExpanded;
+	}
+
+	@Override
+	public void onMyProposalUpdate(Proposal proposal) {
+		// TODO Auto-generated method stub
+		Toast.makeText(getContext(), "I should expand", Toast.LENGTH_SHORT).show();
 	}
 
 }

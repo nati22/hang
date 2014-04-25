@@ -329,9 +329,9 @@ public final class Database {
 			if (incomingBroadcast != null) {
 				myIncomingBroadcasts.add(incomingBroadcast);
 			} else {
-				Log.e("Database.getMyIncomingBroadcasts",
+/*				Log.e("Database.getMyIncomingBroadcasts",
 						"No incoming broadcast for jid: " + incomingBroadcastJid);
-			}
+*/			}
 		}
 
 		return myIncomingBroadcasts;

@@ -32,16 +32,16 @@ abstract class BaseGetRequestAsyncTask<ResultT> extends
 		HttpClient client = new DefaultHttpClient();
 		HttpUriRequest getRequest = new HttpGet(uri);
 
-		Log.v("BaseGetRequestAsyncTask.call", "Sending GET request with URI: "
+	/*	Log.v("BaseGetRequestAsyncTask.call", "Sending GET request with URI: "
 				+ uri);
-
+*/
 		// The actual network call
 		String responseString = EntityUtils.toString(client.execute(getRequest)
 				.getEntity());
 
 		if (responseString != null) {
-			Log.v("BaseGetRequestAsyncTask.call", "Got HTTP result: "
-					+ responseString);
+	/*		Log.v("BaseGetRequestAsyncTask.call", "Got HTTP result: "
+					+ responseString);*/
 		} else {
 			throw new Exception("GET request receieved null response string.");
 		}

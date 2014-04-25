@@ -21,14 +21,14 @@ class BaseDeleteRequestAsyncTask<ResultT> extends BaseHttpRequest<ResultT> {
 		HttpClient client = new DefaultHttpClient();
 		HttpUriRequest deleteRequest = new HttpDelete(uri);
 
-		Log.v("BaseDeleteRequestAsyncTask", "Sending DELETE request with URI: "
-				+ uri);
+/*		Log.v("BaseDeleteRequestAsyncTask", "Sending DELETE request with URI: "
+				+ uri);*/
 		String responseString = EntityUtils.toString(client.execute(
 				deleteRequest).getEntity());
 
 		if (responseString != null) {
-			Log.v("BaseDeleteRequestAsyncTask", "Got HTTP result: "
-					+ responseString);
+/*			Log.v("BaseDeleteRequestAsyncTask", "Got HTTP result: "
+					+ responseString);*/
 		} else {
 			throw new Exception(
 					"DELETE request receieved null response string.");
