@@ -201,7 +201,7 @@ public class ProposalsFragment extends SherlockFragment implements
 				.getSupportFragmentManager());
 		
 		expandableView.initialize(getActivity(), database);
-//		expandableView.expand(expandableView);
+		expandableView.expand(expandableView);
 		
 //		expandView();
 
