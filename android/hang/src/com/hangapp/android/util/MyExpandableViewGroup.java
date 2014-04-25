@@ -92,6 +92,7 @@ public class MyExpandableViewGroup extends RelativeLayout implements
 		if (database.getMyProposal() != null) {
 			toast("expanding to CREATE height");
 			expand(this);
+			
 		} else {
 			toast("NOT expanding");
 		}
