@@ -7,12 +7,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.v4.app.*;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,11 +22,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockActivity;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
 import com.hangapp.android.activity.ProfileActivity;
@@ -56,18 +53,16 @@ public class ProposalsFragment extends SherlockFragment implements
 
 	// Dependencies.
 	private Database database;
-	
+
 	private static MyProposalFragment myProposalFragment;
 	private static CreateProposalFragment createProposalFragment;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
-		
 
 		// Reload the incoming broadcasts from savedInstanceState.
 		if (savedInstanceState != null) {
@@ -103,7 +98,6 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		// Inflate create proposal fragment
 
-		// //
 		// setupMyFragment();
 		// TODO: fragment should be dependent on whether the user has a proposal
 
@@ -135,8 +129,8 @@ public class ProposalsFragment extends SherlockFragment implements
 
 		expandableView = (MyExpandableViewGroup) view
 				.findViewById(R.id.expandingLayout);
-		expandableView.initialize(getActivity(), database);
-		expandableView.expand(expandableView);
+//		expandableView.initialize(getActivity(), database);
+//		expandableView.expand(expandableView);
 		
 /*		if (database.getMyProposal() != null) {
 			Toast.makeText(getActivity(), "i should probably expand the view", Toast.LENGTH_SHORT).show();
@@ -158,12 +152,12 @@ public class ProposalsFragment extends SherlockFragment implements
 		Fragment fragment = null;
 		if (database.getMyProposal() != null
 				&& database.getMyProposal().isActive()) {
-			Log.d(TAG, "isActive");
+			Log.d(TAG, "proposal isActive");
 //			fragment = new MyProposalFragment();
 			fragment = myProposalFragment;
 			database.addMyProposalListener((MyProposalListener) fragment);
 		} else {
-			Log.d(TAG, "is NOT active");
+			Log.d(TAG, "proposal is NOT active");
 //			fragment = new CreateProposalFragment();
 			fragment = createProposalFragment;
 		}
@@ -200,11 +194,16 @@ public class ProposalsFragment extends SherlockFragment implements
 			onMySeenProposalsUpdate(seenJids);
 		}
 
+		Log.d(TAG, "about to call setupMyFragment from onResume()");
 		// TODO make sure this is being called in the right place
+		// TODO I should only call setupMyFragment if this is the prop tab
 		setupMyFragment(database, ProposalsFragment.this.getSherlockActivity()
 				.getSupportFragmentManager());
 		
-		expandView();
+		expandableView.initialize(getActivity(), database);
+//		expandableView.expand(expandableView);
+		
+//		expandView();
 
 	}
 
@@ -380,15 +379,11 @@ public class ProposalsFragment extends SherlockFragment implements
 	}
 
 	public static void collapseView() {
-
-		expandableView.collapse(expandableView);
-		viewIsExpanded = false;
+		viewIsExpanded = expandableView.collapse(expandableView);
 	}
 
 	public static void expandView() {
-
-		expandableView.expand(expandableView);
-		viewIsExpanded = true;
+		viewIsExpanded = expandableView.expand(expandableView);
 	}
 
 }

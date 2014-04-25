@@ -128,10 +128,9 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 				DeleteProposalDialogFragment deleteProposalDialogFragment = new DeleteProposalDialogFragment();
 				deleteProposalDialogFragment.show(fm,
 						"fragment_delete_proposal");
-				
 			}
 		});
-
+		
 		return view;
 	}
 
@@ -155,7 +154,7 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 	}
 	
 	private void hideProgressBar() {
-		Log.d(TAG, ">>>> hide progress bar called.");
+//		Log.d(TAG, ">>>> hide progress bar called.");
 		progressBar.setVisibility(View.INVISIBLE);
 		relativeLayoutHolder.setVisibility(View.VISIBLE);
 	}
@@ -176,7 +175,7 @@ public final class MyProposalFragment extends SherlockFragment implements MyProp
 		Log.d(TAG, ">>>> updateProposal was called without a null proposal.");
 
 		// Make sure Proposal has changed
-		if (!myProposal.equals(proposal)) {
+		if (myProposal != null && !myProposal.equals(proposal)) {
 			myProposal = proposal;
 		} else {
 			Log.d(TAG, "Same Proposal");

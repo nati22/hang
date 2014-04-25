@@ -40,8 +40,8 @@ final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 		if (prefs.getString(Keys.REGISTRATION_ID, null) == null) {
 			// Query GCM for a registration id.
 			String registrationId = gcm.register(RestClientImpl.GCM_SENDER_ID);
-			Log.i("PutUserAsyncTask", "GCM Registration ID: " + registrationId);
-
+/*			Log.i("PutUserAsyncTask", "GCM Registration ID: " + registrationId);
+*/
 			parameters.add(new BasicNameValuePair(Keys.REGISTRATION_ID,
 					registrationId));
 		}
@@ -50,8 +50,8 @@ final class PutUserAsyncTask extends BasePutRequestAsyncTask<User> {
 		super.call();
 
 		// Parse the response from the PUT request.
-		Log.d("PutUserAsyncTask.call()", responseString);
-		User me = User.parseUser(responseString);
+/*		Log.d("PutUserAsyncTask.call()", responseString);
+*/		User me = User.parseUser(responseString);
 
 		return me;
 	}
