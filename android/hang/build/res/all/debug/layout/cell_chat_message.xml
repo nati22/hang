@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/chat_message_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@null"
+    android:focusable="false"
+    android:orientation="vertical" >
+
+    <!--
+     This one is the same as the one at the bottom but is 
+    here for the scenario when I want to add a divider to the 
+    cell above. This is muuuch easier.
+    -->
+
+    <View
+        android:id="@+id/top_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/Gray"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/profilePictureViewHolder"
+        android:layout_width="@dimen/chat_user_name_width"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="8dp"
+        android:padding="2dp"
+        android:focusable="false"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <com.facebook.widget.ProfilePictureView
+            android:id="@+id/profilePictureViewMessageFrom"
+            android:layout_width="@dimen/chat_profile_picture_height"
+            android:layout_height="@dimen/chat_profile_picture_height"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="2dp"
+            android:focusable="false" >
+        </com.facebook.widget.ProfilePictureView>
+
+        <TextView
+            android:id="@+id/textViewMessageFrom2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/profilePictureViewMessageFrom"
+            android:background="@null"
+            android:focusable="false"
+            android:text="(message from)"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/Black"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linLayoutMsgList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@id/profilePictureViewHolder"
+        android:layout_toLeftOf="@id/profilePictureViewHolder"
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical"
+        android:layout_marginBottom="15dp"
+        android:focusable="false" >
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/bottom_divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/LighterGray"
+        android:visibility="visible" />
+
+</RelativeLayout><!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/res/layout/cell_chat_message.xml -->

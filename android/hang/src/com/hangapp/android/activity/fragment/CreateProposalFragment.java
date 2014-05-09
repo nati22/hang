@@ -31,6 +31,8 @@ import com.hangapp.android.util.Fonts;
  */
 public class CreateProposalFragment extends SherlockFragment {
 
+    private static final String TAG = CreateProposalFragment.class.getSimpleName();
+
 	// Constants.
 	private static final int FIFTEEN = 15;
 	private static final int THIRTY = 30;
@@ -71,6 +73,7 @@ public class CreateProposalFragment extends SherlockFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
+        Log.d(TAG, "onCreateView called");
 
 		View view = inflater.inflate(R.layout.fragment_create_proposal,
 				container, false);

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/custom_user_icon"
+    android:layout_width="@dimen/custom_icon_height"
+    android:layout_height="@dimen/custom_icon_height"
+    android:orientation="vertical" >
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/facebookView"
+        android:layout_width="@dimen/custom_icon_fb_pic"
+        android:layout_height="@dimen/custom_icon_fb_pic"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/profile"
+        android:src="@drawable/ic_action_profile_icon" />
+
+    <ImageView
+        android:id="@+id/green_ring"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/custom_icon_green_ring_white_bg"
+        android:contentDescription="@string/custom_user_icon"
+        android:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/red_ring"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/custom_icon_red_ring_white_bg"
+        android:contentDescription="@string/custom_user_icon"
+        android:visibility="invisible" />
+    <ImageView
+        android:id="@+id/grey_ring"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/custom_icon_grey_ring_white_bg"
+        android:contentDescription="@string/custom_user_icon"
+        android:visibility="visible" />
+
+</RelativeLayout><!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/res/layout/custom_user_icon.xml -->

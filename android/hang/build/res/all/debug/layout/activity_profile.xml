@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_dark_background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutFragmentYou"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_dark_background" >
+
+        <com.facebook.widget.ProfilePictureView
+            android:id="@+id/profilePictureViewFriendsIcon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:background="@android:color/white"
+            android:padding="2dp"
+            android:src="@drawable/ic_action_profile_icon" />
+        
+        <ImageView
+            android:id="@+id/circleView"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_toRightOf="@id/profilePictureViewFriendsIcon"
+            android:layout_alignBottom="@id/profilePictureViewFriendsIcon"/>
+
+        <TextView
+            android:id="@+id/textViewFriendsName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profilePictureViewFriendsIcon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@string/champagne_limousines_bold"
+            android:text="friend&apos;s name goes here"
+            android:textColor="@android:color/white" />
+
+        <ImageButton
+            android:id="@+id/imageButtonFriendsAvailability"
+            android:layout_width="@dimen/status_icon_width"
+            android:layout_height="@dimen/status_icon_width"
+            android:layout_below="@+id/textViewFriendsName"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/my_availability"
+            android:scaleType="fitCenter"
+            android:src="@drawable/status_green" />
+
+        <TextView
+            android:id="@+id/textViewFriendsAvailabilityExpirationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/imageButtonFriendsAvailability"
+            android:layout_alignLeft="@+id/imageButtonFriendsAvailability"
+            android:layout_alignRight="@+id/imageButtonFriendsAvailability"
+            android:layout_alignTop="@+id/imageButtonFriendsAvailability"
+            android:gravity="center"
+            android:text="0h"
+            android:textColor="@android:color/white"
+           android:textStyle="bold"
+            android:textSize="@dimen/status_rem_time_font_size" />
+
+        <TextView
+            android:id="@+id/textViewStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageButtonFriendsAvailability"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@string/champagne_limousines"
+            android:text="Status"
+            android:textColor="@android:color/white"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@android:color/darker_gray" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutFriendsProposal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textViewStatus"
+            android:background="@color/grey_action_bar"
+            android:orientation="vertical"
+            android:paddingBottom="10dp" >
+
+            <TextView
+                android:id="@+id/textViewMyProposalLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textViewMyProposalDescription"
+                android:layout_below="@+id/textViewMyProposalDescription"
+                android:text="@string/proposal_location"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewMyProposalStartTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textViewMyProposalLocation"
+                android:layout_below="@+id/textViewMyProposalLocation"
+                android:text="@string/start_time"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/textViewMyProposalInterestedCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textViewMyProposalStartTime"
+                android:layout_alignBottom="@+id/textViewMyProposalStartTime"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:text="0 interested"
+                android:textSize="16sp" />
+
+            <HorizontalScrollView
+                android:id="@+id/horizontalScrollViewInterestedUsers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textViewMyProposalStartTime"
+                android:layout_marginTop="5dp" >
+
+                <LinearLayout
+                    android:id="@+id/linearLayoutInterested"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <CheckBox
+                android:id="@+id/checkBoxInterested"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/textViewMyProposalInterestedCount"
+                android:layout_alignTop="@+id/textViewMyProposalDescription"
+                android:button="@drawable/checkbox_interested"
+                android:text="" />
+
+            <TextView
+                android:id="@+id/textViewMyProposalDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="14dp"
+                android:text="@string/proposal_description"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/imageViewChat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/textViewMyProposalInterestedCount"
+                android:layout_alignTop="@+id/horizontalScrollViewInterestedUsers"
+                android:layout_marginTop="55dp"
+                android:src="@drawable/button_chat" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</ScrollView><!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/res/layout/activity_profile.xml -->

@@ -77,7 +77,7 @@ public class ProposalsFragment extends SherlockFragment implements
 			this.seenProposals.addAll(savedSeenJids);
 		}
 
-		// Set up TabsHost change listener
+		// Set up TabsHost change listener?
 		
 		
 		// Set up the fragments
@@ -91,6 +91,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		super.onCreateView(inflater, container, savedInstanceState);
+        Log.d(TAG, "onCreateView called");
 
 		// Inflate the View for this Fragment.
 		View view = inflater.inflate(R.layout.fragment_proposals, container,
@@ -199,9 +200,11 @@ public class ProposalsFragment extends SherlockFragment implements
 		// TODO I should only call setupMyFragment if this is the prop tab
 		setupMyFragment(database, ProposalsFragment.this.getSherlockActivity()
 				.getSupportFragmentManager());
-		
+
+        Log.d(TAG, "about to call expandableView.initialize");
 		expandableView.initialize(getActivity(), database);
-		expandableView.expand(expandableView);
+        Log.d(TAG, "about to call expandableView.expand");
+    //    expandableView.expand(expandableView);
 		
 //		expandView();
 

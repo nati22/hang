@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="unspecified" >
+        <source path="/Users/ntessema/Documents/workspace/hang/android/hang/build/exploded-aar/android.facebook-android-sdk-3.6.0/facebook/unspecified/assets" />
+    </dataSet>
+    <dataSet config="unspecified" >
+        <source path="/Users/ntessema/Documents/workspace/hang/android/hang/build/exploded-aar/android/actionbarsherlock/unspecified/assets" />
+    </dataSet>
+    <dataSet config="unspecified" >
+        <source path="/Users/ntessema/Documents/workspace/hang/android/hang/build/exploded-aar/android/google-play-services/unspecified/assets" />
+    </dataSet>
+    <dataSet config="main" >
+        <source path="/Users/ntessema/Documents/workspace/hang/android/hang/assets" >
+            <file
+                name="fonts/AveriaSans-Bold.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/AveriaSans-Bold.ttf" />
+            <file
+                name="fonts/AveriaSans-BoldItalic.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/AveriaSans-BoldItalic.ttf" />
+            <file
+                name="fonts/AveriaSans-Italic.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/AveriaSans-Italic.ttf" />
+            <file
+                name="fonts/AveriaSans-Light.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/AveriaSans-Light.ttf" />
+            <file
+                name="fonts/AveriaSans-LightItalic.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/AveriaSans-LightItalic.ttf" />
+            <file
+                name="fonts/AveriaSans-Regular.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/AveriaSans-Regular.ttf" />
+            <file
+                name="fonts/BDP_FOX.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/BDP_FOX.ttf" />
+            <file
+                name="fonts/champagne_limousines.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/champagne_limousines.ttf" />
+            <file
+                name="fonts/champagne_limousines_bold.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/champagne_limousines_bold.ttf" />
+            <file
+                name="fonts/champagne_limousines_bold_italic.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/champagne_limousines_bold_italic.ttf" />
+            <file
+                name="fonts/champagne_limousines_italic.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/champagne_limousines_italic.ttf" />
+            <file
+                name="fonts/coolvetica.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/coolvetica.ttf" />
+            <file
+                name="fonts/Designosaur-Italic.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/Designosaur-Italic.ttf" />
+            <file
+                name="fonts/Designosaur-Regular.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/Designosaur-Regular.ttf" />
+            <file
+                name="fonts/DoradoHeadline.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/DoradoHeadline.ttf" />
+            <file
+                name="fonts/Goodwill.otf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/Goodwill.otf" />
+            <file
+                name="fonts/headline.TTF"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/headline.TTF" />
+            <file
+                name="fonts/headline_bold.TTF"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/headline_bold.TTF" />
+            <file
+                name="fonts/headthinker.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/headthinker.ttf" />
+            <file
+                name="fonts/milocha.otf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/milocha.otf" />
+            <file
+                name="fonts/steelfish outline.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/steelfish outline.ttf" />
+            <file
+                name="fonts/steelfish rg it.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/steelfish rg it.ttf" />
+            <file
+                name="fonts/steelfish rg.ttf"
+                path="/Users/ntessema/Documents/workspace/hang/android/hang/assets/fonts/steelfish rg.ttf" />
+        </source>
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="/Users/ntessema/Documents/workspace/hang/android/hang/build-types/debug/assets" />
+    </dataSet>
+
+</merger>

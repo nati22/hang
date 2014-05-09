@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="/Users/ntessema/Documents/workspace/hang/android/google-play-services/assets" />
+    </dataSet>
+    <dataSet config="release" >
+        <source path="/Users/ntessema/Documents/workspace/hang/android/google-play-services/build-types/release/assets" />
+    </dataSet>
+
+</merger>

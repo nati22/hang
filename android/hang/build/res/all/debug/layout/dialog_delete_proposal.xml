@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/textViewConfirmDeletion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="Confirm Deletion"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewConfirmDeletionSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewConfirmDeletion"
+        android:text="Delete this Proposal?" />
+
+    <Button
+        android:id="@+id/buttonConfirmDeleteProposal"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewConfirmDeletionSubtitle"
+        android:text="@string/delete"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/buttonCancelDeleteProposal"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_alignBaseline="@+id/buttonConfirmDeleteProposal"
+        android:layout_alignBottom="@+id/buttonConfirmDeleteProposal"
+        android:layout_toRightOf="@+id/buttonConfirmDeleteProposal"
+        android:text="Don&apos;t delete"
+        android:textSize="14sp" />
+
+</RelativeLayout><!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/res/layout/dialog_delete_proposal.xml -->

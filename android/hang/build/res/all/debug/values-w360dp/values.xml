@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/build/exploded-aar/android/actionbarsherlock/unspecified/res/values-w360dp/values.xml -->
+    <eat-comment />
+
+    <integer name="abs__max_action_buttons">3</integer>
+
+</resources>

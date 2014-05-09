@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/status_null_ring_plain" >
+
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/user_invis_fb_icon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:contentDescription="@string/profile"
+        android:src="@drawable/ic_action_profile_icon"
+        android:visibility="invisible" />
+
+    <View
+        android:id="@+id/user_real_fb_icon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="12dp"
+        android:visibility="visible" />
+
+</RelativeLayout><!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/res/layout/cell_user_icon.xml -->

@@ -1,0 +1,4 @@
+include ':facebook-android-sdk-3.6.0:facebook'
+include ':google-play-services'
+include ':actionbarsherlock'
+include ':hang'

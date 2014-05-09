@@ -55,49 +55,54 @@ public class MyExpandableViewGroup extends RelativeLayout implements
 
 	public MyExpandableViewGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		database = Database.getInstance();
-		initialize(context, database);
+        if (!isInEditMode()) {
+            database = Database.getInstance();
+            initialize(context, database);
+        }
 	}
 
 	@SuppressWarnings("deprecation")
 	public void initialize(Context context, Database database) {
 
-		// Set initial values.
-		WindowManager wm = (WindowManager) context
-				.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
+        if (!isInEditMode()) {
 
-		// programmatically get the expanded height
-		expandedCreateHeight = (int) (display.getHeight() * createProposalHeightRatio);
-		expandedExistingHeight = (int) (display.getHeight() * existingProposalHeightRatio);
+            // Set initial values.
+            WindowManager wm = (WindowManager) context
+                    .getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
 
-		originalWidth = display.getWidth();
-		originalHeight = display.getHeight();
+            // programmatically get the expanded height
+            expandedCreateHeight = (int) (display.getHeight() * createProposalHeightRatio);
+            expandedExistingHeight = (int) (display.getHeight() * existingProposalHeightRatio);
 
-		// Handle clicks
-		onClick = new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (!isExpanded) {
-					MyExpandableViewGroup view = (MyExpandableViewGroup) v;
-					// expand(view);
-					resize(view, Resize.CREATE);
-				}
-			}
-		};
+            originalWidth = display.getWidth();
+            originalHeight = display.getHeight();
 
-		this.setOnClickListener(onClick);
+            // Handle clicks
+            onClick = new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isExpanded) {
+                        MyExpandableViewGroup view = (MyExpandableViewGroup) v;
+                        // expand(view);
+                        resize(view, Resize.CREATE);
+                    }
+                }
+            };
 
-		// check if needs to be expanded
-		if (database.getMyProposal() != null) {
-			toast("expanding to CREATE height");
-			expand(this);
-			
-		} else {
-			toast("NOT expanding");
-		}
+            this.setOnClickListener(onClick);
 
-		isInitialized = true;
+            // check if needs to be expanded
+            if (database != null && database.getMyProposal() != null) {
+                toast("expanding to CREATE height");
+                expand(this);
+
+            } else {
+                toast("NOT expanding");
+            }
+
+            isInitialized = true;
+        }
 	}
 
 	public void setResizeAnimation(ResizeAnimation anim) {

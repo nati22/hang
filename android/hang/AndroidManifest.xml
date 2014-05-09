@@ -80,7 +80,7 @@
             android:label="@string/profile"
             android:screenOrientation="portrait" >
         </activity>
-        <activity
+    <!--    <activity
             android:name=".activity.ChatActivity"
             android:label="@string/chat"
             android:parentActivityName=".activity.HomeActivity"
@@ -88,7 +88,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.HomeActivity" />
-        </activity>
+        </activity> -->
         <activity
             android:name=".activity.FirebaseChatActivity"
             android:label="@string/chat"
@@ -100,15 +100,32 @@
                 android:value=".activity.HomeActivity" />
         </activity>
 
-        <service android:name=".network.xmpp.XMPPIntentService" >
-        </service>
-
-        <receiver android:name=".network.xmpp.XMPPBroadcastReceiver" >
-        </receiver>
-
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="f8de2a85a2d82b400a6d6827cd8ee1ea2c27240e" />
     </application>
+
+    <compatible-screens>
+        <!-- all small size screens -->
+        <screen android:screenSize="small" android:screenDensity="ldpi" />
+        <screen android:screenSize="small" android:screenDensity="mdpi" />
+        <screen android:screenSize="small" android:screenDensity="hdpi" />
+        <screen android:screenSize="small" android:screenDensity="xhdpi" />
+        <!-- all normal size screens -->
+        <screen android:screenSize="normal" android:screenDensity="ldpi" />
+        <screen android:screenSize="normal" android:screenDensity="mdpi" />
+        <screen android:screenSize="normal" android:screenDensity="hdpi" />
+        <screen android:screenSize="normal" android:screenDensity="xhdpi" />
+        <!-- all large size screens -->
+        <screen android:screenSize="large" android:screenDensity="ldpi" />
+        <screen android:screenSize="large" android:screenDensity="mdpi" />
+        <screen android:screenSize="large" android:screenDensity="hdpi" />
+        <screen android:screenSize="large" android:screenDensity="xhdpi" />
+    <!--    all xlarge size screens
+        <screen android:screenSize="xlarge" android:screenDensity="ldpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="mdpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="hdpi" />
+        <screen android:screenSize="xlarge" android:screenDensity="xhdpi" /> -->
+    </compatible-screens>
 
 </manifest>

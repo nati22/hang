@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey_dark_background"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/relativeLayoutFragmentYou"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_dark_background" >
+
+            <com.facebook.widget.ProfilePictureView
+                android:id="@+id/profilePictureViewMyIcon"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/white"
+                android:padding="2dp"
+                android:src="@drawable/ic_action_profile_icon" />
+
+            <TextView
+                android:id="@+id/textViewMyName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profilePictureViewMyIcon"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@string/champagne_limousines_bold"
+                android:text="my name goes here"
+                android:textColor="@android:color/white" />
+
+            <ImageButton
+                android:id="@+id/imageButtonMyAvailability"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_below="@+id/textViewMyName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/transparent"
+                android:contentDescription="@string/my_availability"
+                android:scaleType="fitCenter"
+                android:src="@drawable/imagebutton_status_green" />
+
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageButtonMyAvailability"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@string/champagne_limousines"
+                android:text="Status"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/buttonOutgoingBroadcasts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignRight="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+                android:layout_below="@+id/textViewStatus"
+                android:background="@android:color/transparent"
+                android:fontFamily="@string/champagne_limousines"
+                android:onClick="startOutgoingBroadcastsActivity"
+                android:text="@string/outgoing"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <View
+                android:id="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
+                android:layout_alignTop="@+id/buttonIncomingBroadcasts"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/darker_gray" />
+
+            <Button
+                android:id="@+id/buttonIncomingBroadcasts"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/buttonOutgoingBroadcasts"
+                android:layout_alignLeft="@+id/separatorIncomingOutgoingButtonsFromEachOther"
+                android:layout_alignParentRight="true"
+                android:background="@android:color/transparent"
+                android:fontFamily="@string/champagne_limousines"
+                android:onClick="startIncomingBroadcastsActivity"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:text="@string/incoming"
+                android:textColor="@android:color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/textViewMyAvailabilityExpirationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageButtonMyAvailability"
+                android:layout_alignLeft="@+id/imageButtonMyAvailability"
+                android:layout_alignRight="@+id/imageButtonMyAvailability"
+                android:layout_alignTop="@+id/imageButtonMyAvailability"
+                android:gravity="center"
+                android:text="0h"
+                android:textColor="@android:color/white"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/frameLayoutYouFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/relativeLayoutFragmentYou" />
+    </RelativeLayout>
+
+</ScrollView><!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/res/layout/fragment_you.xml -->
