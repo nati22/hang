@@ -81,7 +81,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="25 \nOutgoing"
+            android:text="## \nIncoming"
             android:textColor="@color/White"
             android:textSize="16dp" />
 
@@ -91,7 +91,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="13 \nIncoming"
+            android:text="## \nOutgoing"
             android:textColor="@color/White"
             android:textSize="16dp" />
     </LinearLayout>
