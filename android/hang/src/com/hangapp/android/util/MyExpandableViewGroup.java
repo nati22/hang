@@ -20,49 +20,54 @@ import com.hangapp.android.model.Proposal;
 import com.hangapp.android.model.callback.MyProposalListener;
 
 public class MyExpandableViewGroup extends RelativeLayout implements
-		MyProposalListener {
+        MyProposalListener {
 
-	private static final String TAG = MyExpandableViewGroup.class
-			.getSimpleName() + " yello";
-	private ResizeAnimation anim;
-	private OnClickListener onClick;
-	private static boolean isExpanded = false;
-	private int originalWidth;
-	private int originalHeight;
+    private static final String TAG = MyExpandableViewGroup.class
+            .getSimpleName() + " yello";
+    private ResizeAnimation anim;
+    private OnClickListener onClick;
+    private static boolean isExpanded = false;
+    private int originalWidth;
+    private int originalHeight;
 
-	private int lastHeight;
+    private int lastHeight;
 
-	private int shrunkHeight;
-	private int expandedCreateHeight;
-	private int expandedExistingHeight;
-	private boolean isInitialized = false;
+    private int shrunkHeight;
+    private int expandedCreateHeight;
+    private int expandedExistingHeight;
+    private int collapsedCreateHeight;
+    private boolean isInitialized = false;
 
-	private double createProposalHeightRatio = 0.55;
-	private double existingProposalHeightRatio = 0.25;
+    private double createProposalHeightRatio = 0.56;
+    private double existingProposalHeightRatio = 0.25;
+    private double noProposalHeightRatio = 0.13;
 
-	private Animation animOut = AnimationUtils.loadAnimation(getContext(),
-			R.anim.fade_out);
-	private Animation animIn = AnimationUtils.loadAnimation(getContext(),
-			R.anim.fade_in);
+    private Animation animOut = AnimationUtils.loadAnimation(getContext(),
+            R.anim.fade_out);
+    private Animation animIn = AnimationUtils.loadAnimation(getContext(),
+            R.anim.fade_in);
 
-	private final static int DURATION_OF_ANIMATION = 500;
+    private final static int DURATION_OF_ANIMATION = 500;
 
-	private Database database;
+    private Database database;
 
-	public enum Resize {
-		CREATE, EXISTING, DEFAULT
-	}
+    public enum Resize {
+        CREATE, EXISTING, DEFAULT
+    }
 
-	public MyExpandableViewGroup(Context context, AttributeSet attrs) {
-		super(context, attrs);
+    public MyExpandableViewGroup(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        Log.w(TAG, "MYEXPANDABLEVIEWGROUP CONSTRUCTOR CALLED");
         if (!isInEditMode()) {
             database = Database.getInstance();
             initialize(context, database);
         }
-	}
+    }
 
-	@SuppressWarnings("deprecation")
-	public void initialize(Context context, Database database) {
+    @SuppressWarnings("deprecation")
+    public void initialize(Context context, Database database) {
+
+        Log.d(TAG, "expandableView.initialize called");
 
         if (!isInEditMode()) {
 
@@ -71,9 +76,10 @@ public class MyExpandableViewGroup extends RelativeLayout implements
                     .getSystemService(Context.WINDOW_SERVICE);
             Display display = wm.getDefaultDisplay();
 
-            // programmatically get the expanded height
+            // programmatically compute the expanded height
             expandedCreateHeight = (int) (display.getHeight() * createProposalHeightRatio);
             expandedExistingHeight = (int) (display.getHeight() * existingProposalHeightRatio);
+            collapsedCreateHeight = (int) (display.getHeight() * noProposalHeightRatio);
 
             originalWidth = display.getWidth();
             originalHeight = display.getHeight();
@@ -82,170 +88,214 @@ public class MyExpandableViewGroup extends RelativeLayout implements
             onClick = new OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    toast("clicked");
                     if (!isExpanded) {
+
                         MyExpandableViewGroup view = (MyExpandableViewGroup) v;
                         // expand(view);
                         resize(view, Resize.CREATE);
+                    } else {
+                        toast("expanded already");
                     }
                 }
             };
 
             this.setOnClickListener(onClick);
 
+            Log.d(TAG, "Determining whether to resize expandableView");
             // check if needs to be expanded
-            if (database != null && database.getMyProposal() != null) {
-                toast("expanding to CREATE height");
-                expand(this);
+            if (database != null && database.getMyProposal().isActive()) {
+                Log.d(TAG, "expanding to EXISTING height");
+                resize(this, Resize.EXISTING);
 
             } else {
                 toast("NOT expanding");
             }
 
             isInitialized = true;
+            Log.d(TAG, "expandableView is initialized.");
         }
-	}
+    }
 
-	public void setResizeAnimation(ResizeAnimation anim) {
-		this.anim = anim;
-	}
+    public void setResizeAnimation(ResizeAnimation anim) {
+        this.anim = anim;
+    }
 
-	public boolean resize(MyExpandableViewGroup view, Resize expansionType) {
+    public boolean resize(MyExpandableViewGroup view, Resize expansionType) {
 
-		if (isInitialized) {
-			Log.e(TAG, "resize failed. view not initialized.");
-			return false;
-		}
+        if (!isInitialized) {
+            Log.e(TAG, "resize failed. view not initialized.");
+            return false;
+        }
 
-		// initialize to default height
-		int newHeight = originalHeight;
+        // initialize to default height
+        int newHeight = collapsedCreateHeight;
 
-		if (expansionType == Resize.EXISTING) {
-			newHeight = expandedExistingHeight;
-		}
-		if (expansionType == Resize.CREATE) {
-			newHeight = expandedCreateHeight;
-		}
+        if (expansionType == Resize.EXISTING) {
+            newHeight = expandedExistingHeight;
+        }
+        if (expansionType == Resize.CREATE) {
+            newHeight = expandedCreateHeight;
+        }
 
-		// resize the view
-		view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
-				view.getHeight(), originalWidth, newHeight,
-				DURATION_OF_ANIMATION));
+        // resize the view
+        view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
+                view.getHeight(), originalWidth, newHeight,
+                DURATION_OF_ANIMATION));
 
-		// set the expansion boolean
-		if (expansionType == Resize.EXISTING || expansionType == Resize.CREATE)
-			isExpanded = true;
-		else isExpanded = false;
-		
-		return true;
-	}
+        if (expansionType == Resize.EXISTING || expansionType == Resize.CREATE) {
+            anim.setAnimationListener(new AnimationListener() {
 
-	public boolean expand(MyExpandableViewGroup view) {
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
 
-		if (!isInitialized) {
-			Log.e(TAG, "expand failed. expandable_view is not initialized");
-			return false;
-		}
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
 
-		// store the last height
-		lastHeight = view.getHeight();
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    // TODO Auto-generated method stub
+                    isExpanded = true;
+                    Log.d(TAG, "isExpanded set to true");
+                }
+            });
+        } else {
+            anim.setAnimationListener(new AnimationListener() {
 
-		// resize the view
-		view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
-				lastHeight, originalWidth, expandedCreateHeight,
-				DURATION_OF_ANIMATION));
+                @Override
+                public void onAnimationStart(Animation animation) {
+                }
 
-		anim.setAnimationListener(new AnimationListener() {
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                }
 
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    // TODO Auto-generated method stub
+                    isExpanded = false;
+                    Log.d(TAG, "isExpanded set to false");
+                }
+            });
+        }
 
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-			}
+        this.startAnimation(anim);
 
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				// TODO Auto-generated method stub
-				isExpanded = true;
+        Log.d(TAG, "resizing from " + view.getHeight() + " to " + newHeight);
 
-			}
-		});
-		this.startAnimation(anim);
+        return true;
+    }
 
-		return true;
-	}
+    public boolean expand() {
+        Log.d(TAG, "expand called");
 
-	public boolean expandCreate(MyExpandableViewGroup view) {
+        if (!isInitialized) {
+            Log.e(TAG, "expand failed. expandable_view is not initialized");
+            return false;
+        }
 
-		if (!isInitialized) {
-			Log.e(TAG, "expand failed. expandable_view is not initialized");
-			return false;
-		}
+        // store the last height
+        lastHeight = this.getHeight();
 
-		lastHeight = view.getHeight();
-		Log.d(TAG, "expandCreate() called");
+        // resize the view
+        this.setResizeAnimation(new ResizeAnimation((View) this, originalWidth,
+                lastHeight, originalWidth, expandedCreateHeight,
+                DURATION_OF_ANIMATION));
 
-		view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
-				view.getHeight(), originalWidth, expandedCreateHeight,
-				DURATION_OF_ANIMATION));
+        anim.setAnimationListener(new AnimationListener() {
 
-		anim.setAnimationListener(new AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
 
-			@Override
-			public void onAnimationRepeat(Animation animation) {
-			}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // TODO Auto-generated method stub
+                isExpanded = true;
 
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				// TODO Auto-generated method stub
-				isExpanded = true;
+            }
+        });
+        this.startAnimation(anim);
 
-			}
-		});
-		this.startAnimation(anim);
+        return true;
+    }
 
-		return true;
-	}
+    public boolean expandCreate(MyExpandableViewGroup view) {
 
-	public boolean collapse(MyExpandableViewGroup view) {
+        if (!isInitialized) {
+            Log.e(TAG, "expand failed. expandable_view is not initialized");
+            return false;
+        }
 
-		if (!isInitialized) {
-			Log.e(TAG, "collapse failed. expandable_view is not initialized");
-			return false;
-		}
+        lastHeight = view.getHeight();
+        Log.d(TAG, "expandCreate() called");
 
-		Log.d(TAG, "collapse() called");
-		lastHeight = view.getHeight();
+        view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
+                view.getHeight(), originalWidth, expandedCreateHeight,
+                DURATION_OF_ANIMATION));
 
-		view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
-				view.getHeight(), originalWidth, originalHeight,
-				DURATION_OF_ANIMATION));
+        anim.setAnimationListener(new AnimationListener() {
 
-		this.startAnimation(anim);
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-		this.isExpanded = false;
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
 
-		return true;
-	}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                // TODO Auto-generated method stub
+                isExpanded = true;
 
-	public boolean isExpanded() {
-		return isExpanded;
-	}
+            }
+        });
+        this.startAnimation(anim);
 
-	@Override
-	public void onMyProposalUpdate(Proposal proposal) {
-		// TODO Auto-generated method stub
-		Toast.makeText(getContext(), "I should expand", Toast.LENGTH_SHORT)
-				.show();
-	}
+        return true;
+    }
 
-	private void toast(String str) {
-		Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
-	}
+    public boolean collapse(MyExpandableViewGroup view) {
+
+        if (!isInitialized) {
+            Log.e(TAG, "collapse failed. expandable_view is not initialized");
+            return false;
+        }
+
+        Log.d(TAG, "collapse() called. resizing from height " + view.getHeight() + " to " + collapsedCreateHeight);
+        lastHeight = view.getHeight();
+
+        view.setResizeAnimation(new ResizeAnimation((View) view, originalWidth,
+                view.getHeight(), originalWidth, collapsedCreateHeight,
+                DURATION_OF_ANIMATION));
+
+        this.startAnimation(anim);
+
+        this.isExpanded = false;
+
+        return true;
+    }
+
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    @Override
+    public void onMyProposalUpdate(Proposal proposal) {
+        // TODO Auto-generated method stub
+        Toast.makeText(getContext(), "I should expand", Toast.LENGTH_SHORT)
+                .show();
+    }
+
+    private void toast(String str) {
+        Toast.makeText(getContext(), str, Toast.LENGTH_SHORT).show();
+    }
 
 }

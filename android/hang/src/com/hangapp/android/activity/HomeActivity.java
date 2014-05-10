@@ -70,6 +70,8 @@ import com.hangapp.android.util.TabsAdapter;
 public final class HomeActivity extends BaseActivity implements
 		ProposalChangedListener {
 
+    private static final String TAG = HomeActivity.class.getSimpleName();
+
 	// UI stuff.
 	private NoSlideViewPager mViewPager;
 	private static TabsAdapter mTabsAdapter;
@@ -164,6 +166,7 @@ public final class HomeActivity extends BaseActivity implements
 				for (int i = 0; i < bar.getTabCount(); i++) {
 					if (TabsAdapter.getTabInfo().get(i) == tag) {
 						mViewPager.setCurrentItem(i);
+                        Log.d(TAG, "calling setupMyFragment from TabListener");
 						ProposalsFragment.setupMyFragment(database, getSupportFragmentManager());
 					}
 				}

@@ -60,6 +60,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate called");
 
 		// Instantiate dependencies.
 		database = Database.getInstance();
@@ -156,17 +157,23 @@ public class ProposalsFragment extends SherlockFragment implements
 			Log.d(TAG, "proposal isActive");
 //			fragment = new MyProposalFragment();
 			fragment = myProposalFragment;
+            expandableView.resize(expandableView, MyExpandableViewGroup.Resize.EXISTING);
 			database.addMyProposalListener((MyProposalListener) fragment);
 		} else {
 			Log.d(TAG, "proposal is NOT active");
 //			fragment = new CreateProposalFragment();
 			fragment = createProposalFragment;
+            expandableView.resize(expandableView, MyExpandableViewGroup.Resize.DEFAULT);
 		}
 
 		// Update my proposal area on the Proposals tab
 		FragmentTransaction ft = fm.beginTransaction();
 		ft.replace(R.id.fragment_myy_proposal, fragment);
 		ft.commit();
+
+        // resize expandableView
+    //    expandableView.resize(expandableView, MyExpandableViewGroup.Resize.CREATE);
+
 	}
 
 	@Override
@@ -183,6 +190,7 @@ public class ProposalsFragment extends SherlockFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+        Log.d(TAG, "onResume called");
 
 		database.addIncomingBroadcastsListener(this);
 		database.addSeenProposalListener(this);
@@ -203,7 +211,7 @@ public class ProposalsFragment extends SherlockFragment implements
 
         Log.d(TAG, "about to call expandableView.initialize");
 		expandableView.initialize(getActivity(), database);
-        Log.d(TAG, "about to call expandableView.expand");
+    //    Log.d(TAG, "about to call expandableView.expand");
     //    expandableView.expand(expandableView);
 		
 //		expandView();
@@ -385,8 +393,8 @@ public class ProposalsFragment extends SherlockFragment implements
 		viewIsExpanded = expandableView.collapse(expandableView);
 	}
 
-	public static void expandView() {
-		viewIsExpanded = expandableView.expand(expandableView);
-	}
+//	public static void expandView() {
+//		viewIsExpanded = expandableView.expand();
+//	}
 
 }
