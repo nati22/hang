@@ -5,19 +5,19 @@
     android:layout_height="match_parent"
     android:background="@color/DarkGray"
     android:orientation="vertical"
-    android:weightSum="1.0" >
+    android:weightSum="100" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
+        android:layout_weight="63"
         android:orientation="horizontal" >
 
         <include
             android:id="@+id/userProfileIcon"
             android:layout_width="120dip"
             android:layout_height="120dip"
-            android:layout_marginTop="5dip"
+            android:layout_marginTop="10dip"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             layout="@layout/cell_user_icon" />
@@ -58,7 +58,8 @@
     <TextView
         android:id="@+id/userName"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="12"
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:text="Michael Jordan"
@@ -69,22 +70,13 @@
     <LinearLayout
         android:id="@+id/linLayoutBroadcastButtonHolder"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="25"
         android:layout_below="@id/userName"
         android:layout_marginTop="10dp"
         android:orientation="horizontal"
         android:padding="2dp"
         android:weightSum="1.0" >
-
-        <TextView
-            android:id="@+id/textViewIncomingButton"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:text="## \nIncoming"
-            android:textColor="@color/White"
-            android:textSize="16dp" />
 
         <TextView
             android:id="@+id/textViewOutgoingButton"
@@ -93,6 +85,16 @@
             android:layout_weight="0.5"
             android:gravity="center"
             android:text="## \nOutgoing"
+            android:textColor="@color/White"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/textViewIncomingButton"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="## \nIncoming"
             android:textColor="@color/White"
             android:textSize="16dp" />
     </LinearLayout>

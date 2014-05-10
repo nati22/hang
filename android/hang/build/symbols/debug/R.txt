@@ -821,7 +821,7 @@ int id textViewFriendsListHeader 0x7f070062
 int id textViewFriendsName 0x7f070046
 int id textViewIncomingBroadcastName 0x7f070063
 int id textViewIncomingBroadcastStatus 0x7f070064
-int id textViewIncomingButton 0x7f0700b2
+int id textViewIncomingButton 0x7f0700b3
 int id textViewInterested 0x7f0700cc
 int id textViewLocationAt 0x7f07006c
 int id textViewLoginScreenLogo 0x7f0700de
@@ -836,7 +836,7 @@ int id textViewMyProposalStartTime 0x7f07004e
 int id textViewNoProposal 0x7f0700bd
 int id textViewOutgoingBroadcastName 0x7f070066
 int id textViewOutgoingBroadcastStatus 0x7f070067
-int id textViewOutgoingButton 0x7f0700b3
+int id textViewOutgoingButton 0x7f0700b2
 int id textViewProposalDescription 0x7f0700c5
 int id textViewProposalDescription1 0x7f07009c
 int id textViewProposalHowSoon 0x7f0700a0

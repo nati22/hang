@@ -5839,12 +5839,12 @@ true
                 path="/Users/ntessema/Documents/workspace/hang/android/hang/build/exploded-aar/android/google-play-services/unspecified/res/values-be/values.xml"
                 qualifiers="be" >
                 <string
-                    name="common_google_play_services_unsupported_text"
-                    msgid="3542578567569488671" >"Службы Google Play, да якiх прывязаны некаторыя прыкладаннi, не падтрымлiваюцца на вашай прыладзе. Па дапамогу звярнiцеся да вытворцы."
-                </string>
-                <string
                     name="common_google_play_services_unknown_issue"
                     msgid="4762332809710093730" >"Невядомая праблема са службамі Google Play."
+                </string>
+                <string
+                    name="common_google_play_services_unsupported_text"
+                    msgid="3542578567569488671" >"Службы Google Play, да якiх прывязаны некаторыя прыкладаннi, не падтрымлiваюцца на вашай прыладзе. Па дапамогу звярнiцеся да вытворцы."
                 </string>
                 <string
                     name="common_google_play_services_update_title"
@@ -6323,20 +6323,20 @@ true
                     msgid="2429381841831957106" >"Sign in with Google"
                 </string>
                 <string
-                    name="common_google_play_services_update_text"
-                    msgid="448354684997260580" >"This app won\'t run unless you update Google Play services."
-                </string>
-                <string
-                    name="common_signin_button_text"
-                    msgid="9071884888741449141" >"Sign in"
-                </string>
-                <string
                     name="common_google_play_services_update_title"
                     msgid="6006316683626838685" >"Update Google Play services"
                 </string>
                 <string
                     name="common_google_play_services_enable_text"
                     msgid="7627896071867667758" >"This app won\'t work unless you enable Google Play services."
+                </string>
+                <string
+                    name="common_google_play_services_update_text"
+                    msgid="448354684997260580" >"This app won\'t run unless you update Google Play services."
+                </string>
+                <string
+                    name="common_signin_button_text"
+                    msgid="9071884888741449141" >"Sign in"
                 </string>
                 <string
                     name="common_google_play_services_unsupported_title"
@@ -10419,7 +10419,7 @@ true
                 qualifiers="" >
                 <string
                     name="com.crashlytics.android.build_id"
-                    translatable="false" >3e21e38d-392b-41fb-9d6f-cb11e9f76167
+                    translatable="false" >b9ade4ab-ddb2-4548-8021-89da264d62ae
                 </string>
             </file>
             <file

@@ -1634,7 +1634,7 @@ containing a value of this type.
         public static final int textViewFriendsName=0x7f070046;
         public static final int textViewIncomingBroadcastName=0x7f070063;
         public static final int textViewIncomingBroadcastStatus=0x7f070064;
-        public static final int textViewIncomingButton=0x7f0700b2;
+        public static final int textViewIncomingButton=0x7f0700b3;
         public static final int textViewInterested=0x7f0700cc;
         public static final int textViewLocationAt=0x7f07006c;
         public static final int textViewLoginScreenLogo=0x7f0700de;
@@ -1649,7 +1649,7 @@ containing a value of this type.
         public static final int textViewNoProposal=0x7f0700bd;
         public static final int textViewOutgoingBroadcastName=0x7f070066;
         public static final int textViewOutgoingBroadcastStatus=0x7f070067;
-        public static final int textViewOutgoingButton=0x7f0700b3;
+        public static final int textViewOutgoingButton=0x7f0700b2;
         public static final int textViewProposalDescription=0x7f0700c5;
         public static final int textViewProposalDescription1=0x7f07009c;
         public static final int textViewProposalHowSoon=0x7f0700a0;

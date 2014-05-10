@@ -845,7 +845,7 @@
     <!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/res/values/com_crashlytics_export_strings.xml -->
     <eat-comment />
 
-    <string name="com.crashlytics.android.build_id" translatable="false">3e21e38d-392b-41fb-9d6f-cb11e9f76167</string>
+    <string name="com.crashlytics.android.build_id" translatable="false">b9ade4ab-ddb2-4548-8021-89da264d62ae</string>
     <!-- From: file:/Users/ntessema/Documents/workspace/hang/android/hang/build/exploded-aar/android.facebook-android-sdk-3.6.0/facebook/unspecified/res/values/values.xml -->
     <eat-comment />
 
