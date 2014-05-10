@@ -24,9 +24,11 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v8.renderscript.Allocation;
 import android.support.v8.renderscript.Element;
+import android.support.v8.renderscript.RSRuntimeException;
 import android.support.v8.renderscript.RenderScript;
 import android.support.v8.renderscript.ScriptIntrinsicBlur;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
@@ -40,6 +42,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.facebook.widget.ProfilePictureView;
 import com.hangapp.android.R;
@@ -269,56 +272,68 @@ public final class FeedFragment extends SherlockFragment implements
 						output));
 			}
 
-			// set background (blur && resize)
-			// if (!imageViewFBbg.isBackgroundSet()) {
-			Bitmap regBitmap = fbDrawable.getBitmap().copy(
-					fbDrawable.getBitmap().getConfig(), true);
+            try {
+                // set background (blur && resize)
+                // if (!imageViewFBbg.isBackgroundSet()) {
+                Bitmap regBitmap = fbDrawable.getBitmap().copy(
+                        fbDrawable.getBitmap().getConfig(), true);
 
-			final RenderScript rs = RenderScript.create(getActivity());
-			final Allocation inputIMG = Allocation.createFromBitmap(rs, regBitmap,
-					Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
-			final Allocation outputIMG = Allocation.createTyped(rs,
-					inputIMG.getType());
-			final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
-					Element.U8_4(rs));
-			script.setRadius(12.f /* e.g. 3.f */);
-			script.setInput(inputIMG);
-			script.forEach(outputIMG);
-			outputIMG.copyTo(regBitmap);
+                final RenderScript rs = RenderScript.create(getActivity());
+                final Allocation inputIMG = Allocation.createFromBitmap(rs, regBitmap,
+                        Allocation.MipmapControl.MIPMAP_NONE, Allocation.USAGE_SCRIPT);
+                final Allocation outputIMG = Allocation.createTyped(rs,
+                        inputIMG.getType());
+                final ScriptIntrinsicBlur script = ScriptIntrinsicBlur.create(rs,
+                        Element.U8_4(rs));
+                script.setRadius(12.f /* e.g. 3.f */);
+                script.setInput(inputIMG);
+                script.forEach(outputIMG);
+                outputIMG.copyTo(regBitmap);
 
-			// add tint TODO: have preset setting for stale status bg brightness
-			ImageFilters imgFilter = new ImageFilters();
-			regBitmap = imgFilter.applyBrightnessEffect(regBitmap, -55);
+                // add tint TODO: have preset setting for stale status bg brightness
+                ImageFilters imgFilter = new ImageFilters();
+                regBitmap = imgFilter.applyBrightnessEffect(regBitmap, -55);
 
-			// Figure out dimensions to crop
-			{
-				int picWidth = regBitmap.getWidth();
-				int picHeight = regBitmap.getHeight();
+                // Figure out dimensions to crop
+                {
+                    int picWidth = regBitmap.getWidth();
+                    int picHeight = regBitmap.getHeight();
 
-				Log.d("", TAG + " screen dimens = " + intHostFragmentWidth + ", "
-						+ intHostFragmentHeight);
-				Log.d("", TAG + " pic dimens = " + picWidth + ", " + picHeight);
+                    Log.d("", TAG + " screen dimens = " + intHostFragmentWidth + ", "
+                            + intHostFragmentHeight);
+                    Log.d("", TAG + " pic dimens = " + picWidth + ", " + picHeight);
 
-				// crop
-				regBitmap = Bitmap.createBitmap(regBitmap, picWidth / 4,
-						picHeight / 4, picWidth / 2, picHeight / 2);
+                    // crop
+                    regBitmap = Bitmap.createBitmap(regBitmap, picWidth / 4,
+                            picHeight / 4, picWidth / 2, picHeight / 2);
 
-			}
-			if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                }
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
 
-				linLayoutHostFragment.setBackground(new BitmapDrawable(
-						getResources(), regBitmap));
+                    linLayoutHostFragment.setBackground(new BitmapDrawable(
+                            getResources(), regBitmap));
 
-				// imageViewFBbg.setImageBitmap(regBitmap);
-				linLayoutHostFragment.backgroundIsSet(true);
-			} else {
+                    // imageViewFBbg.setImageBitmap(regBitmap);
+                    linLayoutHostFragment.backgroundIsSet(true);
+                } else {
 
-				linLayoutHostFragment.setBackgroundDrawable(new BitmapDrawable(
-						getResources(), regBitmap));
+                    linLayoutHostFragment.setBackgroundDrawable(new BitmapDrawable(
+                            getResources(), regBitmap));
 
-				// imageViewFBbg.setImageBitmap(regBitmap);
-				linLayoutHostFragment.backgroundIsSet(true);
-			}
+                    // imageViewFBbg.setImageBitmap(regBitmap);
+                    linLayoutHostFragment.backgroundIsSet(true);
+                }
+            } catch (RSRuntimeException e) {
+                Log.e(TAG, "e.getMessage: " + e.getMessage());
+                Log.d(TAG, "Setting background to a neutral color.");
+                linLayoutHostFragment.setBackgroundColor(getResources().getColor(R.color.DarkCyan));
+
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(userFBiconBg.getHeight(), userFBiconBg.getHeight());
+                params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                params.setMargins(0, 10, 0, 0);
+                userFBiconBg.setLayoutParams(params);
+                userFBiconBg.setGravity(Gravity.CENTER);
+            }
 			// }
 
 			/*

@@ -106,7 +106,7 @@ public class MyExpandableViewGroup extends RelativeLayout implements
 
             Log.d(TAG, "Determining whether to resize expandableView");
             // check if needs to be expanded
-            if (database != null && database.getMyProposal().isActive()) {
+            if (database != null && database.getMyProposal() != null && database.getMyProposal().isActive()) {
                 Log.d(TAG, "expanding to EXISTING height");
                 resize(this, Resize.EXISTING);
 
