@@ -17,6 +17,7 @@
             android:id="@+id/userProfileIcon"
             android:layout_width="120dip"
             android:layout_height="120dip"
+            android:layout_marginTop="5dip"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
             layout="@layout/cell_user_icon" />
@@ -81,7 +82,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="25 \nOutgoing"
+            android:text="## \nIncoming"
             android:textColor="@color/White"
             android:textSize="16dp" />
 
@@ -91,7 +92,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="13 \nIncoming"
+            android:text="## \nOutgoing"
             android:textColor="@color/White"
             android:textSize="16dp" />
     </LinearLayout>

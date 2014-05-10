@@ -88,14 +88,16 @@ public class MyExpandableViewGroup extends RelativeLayout implements
             onClick = new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toast("clicked");
+                    Log.d(TAG, "expandableView clicked");
+            //        toast("clicked");
                     if (!isExpanded) {
 
                         MyExpandableViewGroup view = (MyExpandableViewGroup) v;
                         // expand(view);
                         resize(view, Resize.CREATE);
                     } else {
-                        toast("expanded already");
+                        Log.d(TAG, "already expanded.");
+                    //    toast("expanded already");
                     }
                 }
             };
@@ -109,7 +111,8 @@ public class MyExpandableViewGroup extends RelativeLayout implements
                 resize(this, Resize.EXISTING);
 
             } else {
-                toast("NOT expanding");
+                Log.d(TAG, "not expanding.");
+            //    toast("NOT expanding");
             }
 
             isInitialized = true;
@@ -290,8 +293,9 @@ public class MyExpandableViewGroup extends RelativeLayout implements
     @Override
     public void onMyProposalUpdate(Proposal proposal) {
         // TODO Auto-generated method stub
-        Toast.makeText(getContext(), "I should expand", Toast.LENGTH_SHORT)
-                .show();
+//        Toast.makeText(getContext(), "I should expand", Toast.LENGTH_SHORT)
+//                .show();
+        Log.e(TAG, "onMyProposalUpdate called...but I don't have any code yet!");
     }
 
     private void toast(String str) {
